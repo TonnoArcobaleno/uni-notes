@@ -1219,7 +1219,7 @@ Presi due spazi vettoriali $\V$ e $\W$, $\bm{\V \cong \W} \iff \bm{\dim \V = \di
     \item $\V \cong \W \implies \dim \V = \dim \W$ \\
     Banalmente, presa una base $\B = \{v_1, \ldots, v_n\}$ di $\V$, sappiamo per l'Osservazione \ref{oss-basi-isomorfismi} che $\B' = \{f(v_1), \ldots, f(v_n)\}$ è una base di $\W$, dunque $\dim \V = \dim \W$. $\blacksquare$
     \item $\V \cong \W \impliedby \dim \V = \dim \W$ \\
-    Se $\dim \V = \dim \W$, allora possiamo prendere due basi $\B = \{v_1, \ldots, v_n\}$ e $\C = \{w_1, \ldots, w_n\}$ rispettivamente di $\V$ e di $\W$. Prendiamo le applicazioni $X_\B: \V \longrightarrow \K^n$ e $X_\C: \W \longrightarrow \K^n$. Essendo queste due applicazioni lineari e biunivoche, per la Proposizione \ref{propos-corol-basi}, per l'Osservazione \ref{oss-def-isomorfismo} queste sono anche degli isomorfismi. Troviamo quindi che $\V \cong \K^n$ e $\W \cong K^n$. Per la proprietà 2) appena vista nelle Proprietà \ref{prop-isomorfismi}, troviamo anche che $\K^n \cong \W$, e per la proprietà 3) possiamo concludere che $\V \cong \W$. $\blacksquare$
+    Se $\dim \V = \dim \W$, allora possiamo prendere due basi $\B = \{v_1, \ldots, v_n\}$ e $\Bs = \{w_1, \ldots, w_n\}$ rispettivamente di $\V$ e di $\W$. Prendiamo le applicazioni $X_\B: \V \longrightarrow \K^n$ e $X_\Bs: \W \longrightarrow \K^n$. Essendo queste due applicazioni lineari e biunivoche, per la Proposizione \ref{propos-corol-basi}, per l'Osservazione \ref{oss-def-isomorfismo} queste sono anche degli isomorfismi. Troviamo quindi che $\V \cong \K^n$ e $\W \cong K^n$. Per la proprietà 2) appena vista nelle Proprietà \ref{prop-isomorfismi}, troviamo anche che $\K^n \cong \W$, e per la proprietà 3) possiamo concludere che $\V \cong \W$. $\blacksquare$
 \end{enumerate}
 
 \chapter{Matrici}
@@ -1541,7 +1541,7 @@ Possiamo quindi concludere che esiste un'unica matrice $A$ tale che $f = L_A$. $
 
 \begin{Definizione}[Matrice associata]
 \label{def-matrice-associata}
-Presa un'applicazione lineare $f: \V \longrightarrow \W$, una base $\B = \{v_1, \ldots, v_n\}$ di $\V$ e una base $\Bs = \{w_1, \ldots, w_m\}$ di $\W$, la \textbf{matrice associata} di $f$ $\bm{M_\Bs^\B(f)}$ è la matrice che ha come colonne le coordinate in base $\C$ dei vettori di $\B$, ossia 
+Presa un'applicazione lineare $f: \V \longrightarrow \W$, una base $\B = \{v_1, \ldots, v_n\}$ di $\V$ e una base $\Bs = \{w_1, \ldots, w_m\}$ di $\W$, la \textbf{matrice associata} di $f$ $\bm{M_\Bs^\B(f)}$ è la matrice che ha come colonne le coordinate in base $\Bs$ dei vettori di $\B$, ossia 
 \[
 \bm{M_\Bs^\B(f)}
 \begin{bmatrixb}
@@ -2368,7 +2368,7 @@ Essendo ora $A$ invertibile, noi sappiamo che $S$ può essere ritrasformata in $
 1_n \cdot x_n = c_n
 \end{cases}
 \]
-Dunque troviamo $\X = \C$, e dato che $A \cdot \X = 1_n$, troviamo che $\C = A^{-1}$. Siamo quindi passati da $[A|1_n]$ a $[1_n|A^{-1}]$. $\blacksquare$
+Dunque troviamo $\X = C$, e dato che $A \cdot \X = 1_n$, troviamo che $C = A^{-1}$. Siamo quindi passati da $[A|1_n]$ a $[1_n|A^{-1}]$. $\blacksquare$
 
 \Esempio \nopagebreak
 
