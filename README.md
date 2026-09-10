@@ -1,7 +1,5 @@
 # Lorenzo Ferraro - University Notes
 
-*Note: Scroll down for the English version.*
-
 ## 🇮🇹 Versione Italiana
 
 Questo repository costituisce un archivio personale di tutti i miei appunti universitari, scritti in **LaTeX**. L'obiettivo del progetto è mettere questi materiali a disposizione di chiunque ne possa avere bisogno, in modo totalmente gratuito. Non intende però sostituirsi ai testi ufficiali consigliati dai docenti nè alle lezioni, ma vuole essere uno strumento in più per lo studente.
