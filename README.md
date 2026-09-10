@@ -7,7 +7,7 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 ### 📚 Indice dei Corsi per Anno Accademico
 
 #### Anno Accademico 2025/2026
-*   
+*   [Algebra Lineare e Geometria](<Primo Anno/Algebra Lineare e Geometria/>)
 
 ### 🐛 Segnalazione Errori e Contatti
 
@@ -22,7 +22,7 @@ This repository serves as a personal archive of all my university notes, written
 ### 📚 Course Index by Academic Year
 
 #### Academic Year 2025/2026
-*   
+*   [Algebra Lineare e Geometria](<Primo Anno/Algebra Lineare e Geometria/>)
 
 ### 🐛 Reporting Errors and Contact
 
