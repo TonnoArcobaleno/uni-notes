@@ -1,4 +1,4 @@
-# 🎓 Lorenzo Ferraro - Appunti Universitari
+# Lorenzo Ferraro - University Notes
 
 *Note: Scroll down for the English version.*
 
@@ -30,11 +30,7 @@ This repository serves as a personal archive of all my university notes, written
 ### 📚 Course Index by Academic Year
 
 #### Academic Year 2025/2026
-*   [Course Name 1](inserisci_link_alla_cartella_o_file) — *Brief description or semester*
-*   [Course Name 2](inserisci_link_alla_cartella_o_file) — *Brief description or semester*
-
-#### Academic Year 2026/2027
-*   [Course Name 3](inserisci_link_alla_cartella_o_file) — *Brief description or semester*
+*  
 
 ### ⚖️ Terms of Use and Legal License
 
