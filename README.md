@@ -11,6 +11,12 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 #### Anno Accademico 2025/2026
 *   
 
+### 🐛 Segnalazione Errori e Contatti
+
+Gli appunti possono contenere refusi, imprecisioni o errori di trascrizione (come specificato anche all'interno dei singoli documenti). Se riscontri un errore o desideri suggerire una correzione, puoi farlo in due modi:
+1. Aprendo una **Issue** direttamente su questo repository GitHub.
+2. Contattandomi via email all'indirizzo: `ferraro.notes.issues@gmail.com` (canale preferito perché è più facile che io risponda in fretta).
+
 ### ⚖️ Termini d'Uso e Licenza Legale
 
 Tutto il materiale testuale, grafico e documentale presente all'interno di questo repository è protetto da diritto d'autore ed è rilasciato ufficialmente sotto la licenza **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)**.
@@ -23,6 +29,8 @@ In base a tale licenza, la consultazione, lo scaricamento e la modifica dei file
 
 > Per la consultazione del testo legale completo, si rimanda al file `LICENSE.md` incluso nella directory principale del progetto.
 
+---
+
 ## 🇬🇧 English Version
 
 This repository serves as a personal archive of all my university notes, written in **LaTeX**. The goal of the project is to make these materials available to anyone who might need them, completely free of charge. However, it is not intended to replace the official texts recommended by professors nor the lectures, but rather to serve as an additional tool for the student.
@@ -30,7 +38,13 @@ This repository serves as a personal archive of all my university notes, written
 ### 📚 Course Index by Academic Year
 
 #### Academic Year 2025/2026
-*  
+*   
+
+### 🐛 Reporting Errors and Contact
+
+The notes may contain typos, inaccuracies, or transcription errors (as also specified within the individual documents). If you find an error or wish to suggest a correction, you can do so in two ways:
+1. By opening an **Issue** directly on this GitHub repository.
+2. By contacting me via email at: `ferraro.notes.issues@gmail.com`(preferred channel, as I am more likely to reply quickly).
 
 ### ⚖️ Terms of Use and Legal License
 
@@ -38,7 +52,7 @@ All textual, graphical, and documentary material present within this repository 
 
 Under this license, the consultation, downloading, and modification of the files are permitted **exclusively** in compliance with the following mandatory conditions:
 
-1.  **Attribution (BY):** You must give appropriate credit, providing a link to the original source.
+1.  **Attribuzione (BY):** You must give appropriate credit, providing a link to the original source.
 2.  **NonCommercial (NC):** It is strictly forbidden to use, distribute, or reproduce any part of this archive for profit, including direct sales or uploading to paid note-sharing platforms.
 3.  **ShareAlike (SA):** If you remix, transform, or build upon the material, you must distribute your contributions under the same legal license.
 
