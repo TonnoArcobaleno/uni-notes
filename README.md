@@ -13,7 +13,7 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 
 Gli appunti possono contenere refusi, imprecisioni o errori di trascrizione (come specificato anche all'interno dei singoli documenti). Se riscontri un errore o desideri suggerire una correzione, puoi farlo in due modi:
 1. Aprendo una **Issue** direttamente su questo repository GitHub.
-2. Contattandomi via email all'indirizzo: `ferraro.issues@gmail.com` (canale preferito perchè è più facile che io risponda in fretta).
+2. Contattandomi via email all'indirizzo: `ferraro.notes.issues@proton.me` (canale preferito perché è più facile che io risponda in fretta).
 
 ## ­🇬🇧 English Version
 
@@ -28,6 +28,6 @@ This repository serves as a personal archive of all my university notes, written
 
 The notes may contain typos, inaccuracies, or transcription errors (as also specified within the individual documents). If you find an error or wish to suggest a correction, you can do so in two ways:
 1. By opening an **Issue** directly on this GitHub repository.
-2. By contacting me via email at: `ferraro.issues@gmail.com`(preferred channel, as I am more likely to reply quickly).
+2. By contacting me via email at: `ferraro.notes.issues@proton.me`(preferred channel, as I am more likely to reply quickly).
 
 > For the consultation of the complete legal text, please refer to the `LICENSE.md` file included in the main directory of the project.
