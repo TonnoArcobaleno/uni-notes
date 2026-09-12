@@ -8,6 +8,7 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 
 #### Anno Accademico 2025/2026
 *   [Algebra Lineare e Geometria](<Primo anno/Algebra Lineare e Geometria/Algebra Lineare e Geometria.pdf>)
+*   [Algoritmi I (in corso)](<Primo anno/Algoritmi I/Algoritmi I.pdf>)
 
 ### ­🐛 Segnalazione Errori e Contatti
 
@@ -23,6 +24,7 @@ This repository serves as a personal archive of all my university notes, written
 
 #### Academic Year 2025/2026
 *   [Algebra Lineare e Geometria](<Primo anno/Algebra Lineare e Geometria/Algebra Lineare e Geometria.pdf>)
+*   [Algoritmi I (in progress)](<Primo anno/Algoritmi I/Algoritmi I.pdf>)
 
 ### ­🐛 Reporting Errors and Contact
 
