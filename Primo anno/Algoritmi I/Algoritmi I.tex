@@ -1,0 +1,120 @@
+\documentclass[11pt, a4paper, titlepage, oneside]{scrbook}
+
+\usepackage{../Tarc/Tarc}
+\usepackage{../Tarc/Tarc-private}
+\graphicspath{{immagini/}}
+
+\title{Algoritmi I}
+\author{Lorenzo Ferraro}
+\date{\today}
+\setDegree{Informatica}
+
+\begin{document}
+
+\frontmatter
+\SapienzaCoverItalianoTriennale
+\InfoSegnalazioni
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{Introduzione}
+
+\section{Gli Algoritmi}
+
+La definizione di informatica proposta dall'ACM (Association for Computing Machinery) è: \textit{"L'informatica è la scienza degli algoritmi che descrivono e trasformano l'informazione: la loro teoria, analisi, progetto, efficienza, reallizazione e applicazione."} \\
+Ma cos'è un algoritmo?
+
+\begin{Definizione}[Algoritmo]
+\label{def-algoritmo}
+Un \textbf{algoritmo} è una sequenza di comandi \textit{elementari} e \textit{univoci} che terminano in un tempo finito e che operano su \textit{strutture dati}.
+\end{Definizione}
+
+Un comando è \textit{elementare} quando non può essere scomposto in comandi più semplici, mentre un comando è \textit{univoco} quando può essere interpretato in un solo modo. Le \textit{strutture dati} invece sono degli strumenti necessari al fine di gestire i dati veri e propri, consentendoci di leggerli e modificarli. Ci sono diverse strutture dati e non ne esiste una universale per tutti i problemi: per questo, in base al proprio problema bisogna scegliere la struttura dati più coerente.
+
+\section{Efficienza}
+
+\subsection{Tempo}
+
+Un algoritmo viene sempre eseguito in un tempo finito. Ciò però non significa che tutti gli algoritmi che rilasciano un output corretto siano dei buoni algoritmi. Infatti, uno degli aspetti più importanti quando si parla di un algoritmo è la sua \textbf{efficienza}, ovvero il tempo di esecuzione dell'algoritmo e la sua memoria richiesta (il tempo di esecuzione ha però spesso la priorità). Si potrebbe, però, pensare che un supercomputer molto veloce possa bilanciare la lentezza di un algoritmo, ma ciò è errato. Vediamo perché con un esempio. \\
+Prendiamo due computer V e L, dove V esegue $10^9$ operazioni al secondo mentre L ne esegue $10^7$, e abbiamo due algoritmi IS e MS, che rispettivamente richiedono di eseguire $n^2$ e $50 n \log n$ operazioni, con $n$ che indica la dimensione dell'input. Facciamo ora eseguire al computer veloce V l'algoritmo più lento IS e al computer lento IS l'algoritmo più velcoe MS, ponendo come input $n = 10^6$. Vediamo come si comportanto:
+\begin{itemize}
+    \item $V(IS) = \frac{2(10^6)^2}{10^9} = 2000s$ 
+    \item $L(MS) = \frac{50 \cdot 10^6 \log 10^6}{10^7} = 100s$
+\end{itemize}
+È facile notare come il computer più lento che esegue l'algoritmo più veloce sia una soluzione ben migliore rispetto al computer più veloce che esegue l'algoritmo più lento. Inoltre, più il valore di input $n$ aumenta, più questa differenza si fa evidente.
+
+\subsection{Spazio}
+Nell'esecuzione di un algoritmo, questo crea anche diverse risorse in memoria che occupano spazio. Questo spazio viene principalmente instanziato nella \textbf{memoria principale}, ossia la RAM. Ma, se non si ha abbastanza spazio nella RAM, si passa ad alloccare queste risorse nella \textbf{memoria secondaria}, ossia nell'SSD. Il dover accedere a questa memoria rende però molto più lento l'algoritmo, dato che ci sono sia dati sulla RAM che sull'SSD, e se c'è bisogno di fare un confronto tra loro, questo sarà lentissimo. Per questo, è necessario cercare di evitare algoritmi che consumino troppo spazio, altrimenti il rischio è quello di finire la RAM a disposizione.  
+
+\chapter{Costo computazionale}
+
+\section{Notazione asintotica}
+
+Cerchiamo ora un metodo efficace per poter confrontare due algoritmi che svolgono lo stesso lavoro, per poter capire quale dei due sia il più efficiente. Questa valutazione che faremo è utile, però, solo quando si parla di input molto grandi. 
+
+Prima di iniziare a confrontare algoritmi, bisogna conoscere la notazione asintotica.
+
+\begin{Definizione}[Notazione asintotica]
+\label{def-not-ast}
+A livello matematico, la \textbf{notazione asintotica} è uno strumento che permette di confrontare il tasso di crescita di una funzione rispetto a un'altra. Esistono 3 tipi di notazione asintotica:
+\begin{enumerate}
+    \item Notazione asintotica \textbf{O}, che ci permette di calcolare il limite asintotico \textit{superiore}
+    \item Notazione asintotica $\bm{\Omega}$, che ci permette di calcolare il limtie asintotico \textit{inferiore}
+    \item Notazione asintotica $\bm{\Theta}$, che ci permette di calcolare il limite asintotico \textit{stretto}
+\end{enumerate}
+\end{Definizione}
+
+\NB Prima di passare allo studio di queste tre diverse tipologie di notazione asintotica chiariamo bene una cosa: scrivere $f(n) = \O(g(n))$ e scrivere $f(n) \in \O(g(n))$ è la stessa identica cosa. Discorso analogo anche per le notazioni $\Omega$ e $\Theta$.
+
+\subsection{Notazione asintotica O}
+
+\begin{Definizione}[Notazione asintotica O]
+\label{def-notazione-asintotica-O}
+Date due funzioni $f(n), g(n) \geq 0$, si dice che $\bm{f(n) = \textbf{O}(n)}$ (o $f(n) \in \O(n)$) se \mbox{$\exists c > 0$ e $\exists n_0 \in \N: 0 \leq f(n) \leq c g(n) \enspace \forall n \geq n_0$}, ossia se da una certa $n_0$ in poi la funzione $\bm{f(n)}$ si trova sempre \textbf{sotto} la funzione $\bm{g(n)}$.
+\end{Definizione}
+
+\Esempi \nopagebreak
+
+$\bm{f(n) = 3n + 3}$ \nopagebreak
+\begin{itemize}
+    \item $\bm{f(n) = \textbf{O}(n^2)}$ dato che, se prendiamo $c = 1$, $3n + 3 \leq n^2 \enspace \forall n \geq 4$
+    \item $\bm{f(n) = \textbf{O}(n^2)}$ dato che, se prendiamo $c = 4$, $3n + 3 \leq 4n \enspace \forall n \geq 3$
+\end{itemize}
+
+\Separatore
+
+$\bm{f(n) = \sum_{i = 0}^m a_i n^i}$ con $a_m \geq 0$ (polinomio di grado $m$) \nopagebreak
+
+$\bm{f(n) = \textbf{O}(n^m)}$ dato che $f(n) = \sum_{i = 0}^m a_i n^i \leq \sum_{i \text{t.c.} a_i \geq 0} a_i n^i \leq n^m \sum_{i \text{t.c.} a_i \geq 0} a_i$, e se poniamo $c = \sum_{i  \text{t.c.} a_i \geq 0} a_i$, troviamo proprio che $f(n) \leq c n^m \enspace \forall n \geq 1$. 
+
+\begin{Proprieta}[Regole generali della notazione asintotica O]
+\label{prop-regole-generali-O}
+\begin{itemize}
+    \item $\bm{\log_a n = \textbf{O}(n^{\frac{1}{b}})}$, ossia un qualsiasi logaritmo è dominato da una qualunque radice
+    \item $\bm{n^{\frac{1}{a}} = \textbf{O}(n^b)}$ (con $a,b \geq 1$), ossia una qualsiasi radice è dominata da un qualunque polinomio
+    \item $\bm{n^a = \textbf{O}(b^n)}$ (con $b > 1$), ossia un polinomio è dominato da un qualunque esponenziale
+\end{itemize}
+\end{Proprieta}
+
+\subsection{Notazione asintotica \texorpdfstring{$\bm{\Omega}$}{}}
+
+\begin{Definizione}[Notazione asintotica $\bm{\Omega}$]
+\label{def-notazione-asintotica-Omega}
+Date due funzioni $f(n), g(n) \geq 0$, si dice che $\bm{f(n) = \Omega(n)}$ (o $f(n) \in \Omega(n)$) se \mbox{$\exists c > 0$ e $\exists n_0 \in \N: 0 \leq c g(n) \leq f(n) \enspace \forall n \geq n_0$}, ossia se da una certa $n_0$ in poi la funzione $\bm{f(n)}$ si trova sempre \textbf{sopra} la funzione $\bm{g(n)}$.
+\end{Definizione}
+
+
+
+\subsection{Notazione asintotica \texorpdfstring{$\bm{\Theta}$}{}}
+
+\begin{Definizione}[Notazione asintotica $\bm{\Omega}$]
+\label{def-notazione-asintotica-Theta}
+Date due funzioni $f(n), g(n) \geq 0$, si dice che $\bm{f(n) = \Theta(n)}$ (o $f(n) \in \Theta(n)$) se \mbox{$\exists c_1,c_2 > 0$ e $\exists n_0 \in \N: c_1 g(n) \leq f(n) \leq c_2 g(n) \enspace \forall n \geq n_0$}, ossia se da una certa $n_0$ in poi la funzione $\bm{f(n)}$ si trova sempre \textbf{tra} le funzioni $\bm{c_1g(n)}$ e $\bm{c_2 g(n)}$. \\
+\NB Per dimostrare che $f(n) = \Theta(g(n))$ basta dimostrare che $\bm{f(n) = \textbf{O}(g(n))}$ e $\bm{f(n) = \Omega(g(n))}$.
+\end{Definizione}
+
+
+
+\end{document}
