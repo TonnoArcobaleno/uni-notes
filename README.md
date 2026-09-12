@@ -2,7 +2,7 @@
 
 ## ­🇮🇹 Versione Italiana
 
-Questo repository costituisce un archivio personale di tutti i miei appunti universitari, scritti in **LaTeX**. L'obiettivo del progetto è mettere questi materiali a disposizione di chiunque ne possa avere bisogno, in modo totalmente gratuito. Non intende però sostituirsi ai testi ufficiali consigliati dai docenti nè alle lezioni, ma vuole essere uno strumento in più per lo studente.
+Questo repository costituisce un archivio personale di tutti i miei appunti universitari, scritti in **LaTeX**. L'obiettivo del progetto è mettere questi materiali a disposizione di chiunque ne possa avere bisogno, in modo totalmente gratuito. Non intende però sostituirsi ai testi ufficiali consigliati dai docenti né alle lezioni, ma vuole essere uno strumento in più per lo studente.
 
 ### ­📚 Indice dei Corsi per Anno Accademico
 
@@ -17,7 +17,7 @@ Gli appunti possono contenere refusi, imprecisioni o errori di trascrizione (com
 
 ## ­🇬🇧 English Version
 
-This repository serves as a personal archive of all my university notes, written in **LaTeX**. The goal of the project is to make these materials available to anyone who might need them, completely free of charge. However, it is not intended to replace the official texts recommended by professors nor the lectures, but rather to serve as an additional tool for the student.
+This repository serves as a personal archive of all my university notes, written in **LaTeX**. The goal of the project is to make these notes available to anyone who might need them, completely free of charge. However, it is not intended to replace the official texts recommended by professors nor the lectures, but rather to serve as an additional tool for the student.
 
 ### ­📚 Course Index by Academic Year
 
