@@ -105,7 +105,32 @@ $\bm{f(n) = \textbf{O}(n^m)}$ dato che $f(n) = \sum_{i = 0}^m a_i n^i \leq \sum_
 Date due funzioni $f(n), g(n) \geq 0$, si dice che $\bm{f(n) = \Omega(n)}$ (o $f(n) \in \Omega(n)$) se \mbox{$\exists c > 0$ e $\exists n_0 \in \N: 0 \leq c g(n) \leq f(n) \enspace \forall n \geq n_0$}, ossia se da una certa $n_0$ in poi la funzione $\bm{f(n)}$ si trova sempre \textbf{sopra} la funzione $\bm{g(n)}$.
 \end{Definizione}
 
+\Esempi \nopagebreak
 
+$\bm{f(n) = 2n^2 + 3}$ \nopagebreak
+
+\begin{itemize}
+    \item $\bm{f(n) = \Omega(n)}$ dato che, se prendiamo $c = 1$, $n \leq 2n^2 + 3 \enspace \forall n \geq 1$
+    \item $\bm{f(n) = \Omega(n^2)}$ dato che, se prendiamo $c = 1$, $n^2 \leq 2n^2 + 3 \enspace \forall n \geq 1$
+\end{itemize}
+
+\Separatore
+
+$\bm{f(n) = \sum_{i = 0}^m a_in^i}$ con $a_m \geq 0$ (polinomio di grado $m$) \nopagebreak
+
+$\bm{f(n) = \Omega(n^m)}$. Infatti, $f(n) = \sum_{i = 0}^m a_i n^i \geq a_m n^m + \sum_{i \text{t.c.} a_i  \leq 0} a_i n^i \geq a_m n^m + n^{m-1} \sum_{i \text{t.c} a_i \leq 0} a_i$. Ponendo ora $c' = \sum_{i \text{t.c} a_i \leq 0} a_i < 0$, troviamo che $f(n) \geq a_m n^m + c' n^{m-1}$. Abbiamo ora due possibilità:
+\begin{itemize}
+    \item $a_m c' > 0$, e allora si ha $f(n) = \Omega(n^m)$ dato che il coefficiente $a_m$ è maggiore alla somma di tutti i termini negativi, e dunque si ha che \mbox{$f(n) \geq a_m n^m + c'n^{m-1} \geq a_m n^m + c'n^m = n^m(a_m + c')$}, e ponendo quindi $c = a_m + c'$, troviamo che $f(n) \geq c n^m$. 
+    \item $a_m c' \leq 0$, e allora riscriviamo $a_m n^m + c' n^{m-1} = n^m (a_m + \frac{c'}{n})$. Aumentando sempre di più $n$, troviamo che $\frac{c'}{n}$ diventa sempre più piccolo, essendo $c'$ costante. Non appena passiamo una certa $n_0$, troviamo che \mbox{$\forall n \geq n_0 \enspace c = a_m + \frac{c'}{n} > 0$}, e dunque troviamo $f(n) \geq c n^m \enspace \forall n \geq n_0$. 
+\end{itemize}
+
+\begin{Proprieta}[Regole generali della notazione asintotica $\bm{\Omega}$]
+\label{prop-regole-generali-Gamma}
+\begin{itemize}
+    \item $\bm{n^{\frac{1}{a}}} = \Omega(\log_b n)$ (con $a > 1$), ossia una qualsiasi radice domina un qualsiasi logaritmo
+    \item $\bm{a^n = \Omega(n^b)}$ (con $a > 1$), ossia un qualsiasi esponenziale domina un qualunque polinomio
+\end{itemize}
+\end{Proprieta}
 
 \subsection{Notazione asintotica \texorpdfstring{$\bm{\Theta}$}{}}
 
@@ -114,6 +139,403 @@ Date due funzioni $f(n), g(n) \geq 0$, si dice che $\bm{f(n) = \Omega(n)}$ (o $f
 Date due funzioni $f(n), g(n) \geq 0$, si dice che $\bm{f(n) = \Theta(n)}$ (o $f(n) \in \Theta(n)$) se \mbox{$\exists c_1,c_2 > 0$ e $\exists n_0 \in \N: c_1 g(n) \leq f(n) \leq c_2 g(n) \enspace \forall n \geq n_0$}, ossia se da una certa $n_0$ in poi la funzione $\bm{f(n)}$ si trova sempre \textbf{tra} le funzioni $\bm{c_1g(n)}$ e $\bm{c_2 g(n)}$. \\
 \NB Per dimostrare che $f(n) = \Theta(g(n))$ basta dimostrare che $\bm{f(n) = \textbf{O}(g(n))}$ e $\bm{f(n) = \Omega(g(n))}$.
 \end{Definizione}
+
+\Esempi \nopagebreak
+
+$\bm{f(n) = 3n + 3}$ \nopagebreak
+
+$\bm{f(n) = \Theta(n)}$, sia perché $f(n) = \O(n)$ e $f(n) = \Omega(n)$, ma anche perché ponendo ad esempio $c_1 = 3$ e $c_2 = 4$ e $n_0 = 3$, troviamo che \mbox{$3n \leq 3n + 3 \leq 4n + 3 \enspace \forall n \geq 3$}.
+
+\Separatore
+
+$\bm{f(n) = \sum_{i = 0}^m a_i n^i}$ con $a_m \geq 0$ (polinomio di grado $m$) \nopagebreak
+
+$\bm{f(n) = \Theta(n^m)}$ dato che $f(n) = \O(n^m)$ e $f(n) = \Omega(n^m)$.
+
+\subsection{Calcolare la notazione asintotica utilizzando i limiti}
+
+Uno dei modi più semplici per calcolare la notazione asintotica è quello di usare i limiti. Calcolando infatti il limite
+\[
+\bm{\lim_{n \to +\infty} \left| \frac{f(n)}{g(n)} \right|}
+\]
+abbiamo tre possibili casi:
+\begin{itemize}
+    \item $\lim_{n \to +\infty} \abs{\frac{f(n)}{g(n)}} = k \in (0, +\infty)$, e allora si può dire che $\bm{f(n) = \Theta(g(n))}$
+    \item $\lim_{n \to +\infty} \abs{\frac{f(n)}{g(n)}} = +\infty$, e allora si può dire che $\bm{f(n) = \Omega(g(n))}$
+    \item $\lim_{n \to +\infty} \abs{\frac{f(n)}{g(n)}} = 0$, e allora si può dire che $\bm{f(n) = \textbf{O}(g(n))}$
+\end{itemize}
+
+\subsection{Algebra della notazione asintotica}
+
+\begin{Proprieta}[Regole della notazione asintotica]
+\label{prop-regole-notazione-asintotica}
+\NB Queste regole valgono per tutte le 3 notazioni, nonostante verrà usata solo la notazione O per gli esempi.
+
+\begin{enumerate}
+    \item $\forall k > 0$ e $\forall f(n) \geq 0$, $\bm{f(n) = \textbf{O}(g(n))} \implies \bm{kf(n) = \textbf{O}(g(n))}$
+    \item $\forall f(n), d(n) \geq 0$, $\bm{f(n) = \textbf{O}(g(n))}$ e $\bm{d(n) = \textbf{O}(h(n))} \implies$ $\bm{f(n) + d(n) = \textbf{O}(g(n)(h(n))) = \textbf{O}(\max\{g(n),h(n)\})}$
+    \item $\forall f(n), d(n) \geq 0$, $\bm{f(n) = \textbf{O}(g(n))}$ e $\bm{d(n) = \textbf{O}(h(n))} \implies \bm{f(n) d(n) = \textbf{O}(g(n) h(n))}$
+\end{enumerate}
+\end{Proprieta}
+
+\Dimostrazione \nopagebreak
+
+Dimostreremo queste tre regole con i limiti, ma possono essere dimostrati anche con la definizione generale.
+
+\begin{enumerate}
+    \item Se $f(n) = \O(g(n))$, allora $\lim_{n \to + \infty} \frac{f(n)}{g(n)}$. Se ora moltiplichiamo questo limite per $k$, notiamo che il limite rimane $0$, dunque anche $k f(n) = \text{O}(g(n))$. Procedimento analogo per le notazioni $\Omega$ e $\Theta$. $\blacksquare$
+    \item Se $f(n) = \O(g(n))$ e $d(n) = \O(h(n))$, allora $\lim_{n \to + \infty} \frac{f(n)}{g(n)} = 0$ e $\lim_{n \to + \infty}\frac{d(n)}{h(n)}$. Ponendo ora $k(n) = \max\{g(n), h(n)\}$, sappiamo che sicuramente $\lim_{n \to + \infty} \frac{f(n)}{k(n)} = \lim_{n \to +\infty} \frac{d(n)}{k(n)} = 0$. Dunque $\lim_{n \to +\infty} \left(  \frac{f(n)}{k(n)} + \frac{d(n)}{k(n)}\right) = \lim_{n \to +\infty} \frac{f(n) + d(n)}{k(n)} = 0$, ossia \mbox{$f(n) + d(n) = \O(k(n)) = \O(\max\{g(n), h(n)\})$}. Procedimento analogo per le notazioni $\Omega$ e $\Theta$. $\blacksquare$
+    \item Se $f(n) = \O(g(n))$ e $d(n) = \O(h(n))$, allora $\lim_{n \to + \infty} \frac{f(n)}{g(n)} = 0$ e $\lim_{n \to + \infty}\frac{d(n)}{h(n)}$. Dunque $\lim_{n \to +\infty} \frac{f(n) d(n)}{g(n)h(n)} = 0$, ossia $f(n) d(n) = \O(g(n) h(n))$. Proceidmento analogo per le notazioni $\Omega$ e $\Theta$. $\blacksquare$ 
+\end{enumerate}
+
+\subsection{Sommatorie notevoli}
+
+\begin{Proprieta}[Sommatorie notevoli]
+\label{prop-sommatorie-notevoli}
+\begin{enumerate}
+    \item $\bm{\sum_{i = 0}^n i = \Theta(n^2)}$ o più in generale $\sum_{i = 0}^n i^c = \Theta(n^{c+1}) \enspace \forall c \in \N$
+    \item $\bm{\sum_{i = 0}^n 2^i  = \Theta(2^n)}$ o più in generale $\sum_{i = 0}^n c^i = \Theta(c^n) \enspace \forall c > 1$ e \mbox{$\sum_{i = 0}^n c^i = \Theta(1) \enspace \forall c < 1$}
+    \item $\bm{\sum_{i = 0}^n i2^i = \Theta(n2^n)}$ o più in generale $\sum_{i = 0}^n i c^i = \Theta(n c^n) \enspace \forall c > 1$ e \mbox{$\sum_{i = 0}^n ic^i = \Theta(1) \enspace \forall c < 1$}
+    \item $\bm{\sum_{i = 1}^n \log i =  \Theta(n \log n)}$ o più in generale $\sum_{i = 1}^n \log_c i = \Theta(n \log_c n) \enspace \forall n \in \N$
+    \item $\bm{\sum_{i = 1}^n \frac{1}{i} = \Theta(\log n)}$
+\end{enumerate}
+\end{Proprieta}
+
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}
+    \item $\sum_{i = 0}^n i^c \approx \int_0^n x^c \ dx = \left[ \frac{x^{c+1}}{c+1}\right]_0^n = \frac{n^{c+1}}{c+1} = \Theta(n^{c+1})$. $\blacksquare$
+    \item Ricordando la serie geometrica $\sum_{i = 0}^n c^i = \frac{c^{n+1} - 1}{c-1}$, $\sum_{i = 0}^n c_i = \Theta(c^{n+1})$. Se però $c < 1$, allora $\lim_{n \to + \infty} \frac{c^{n+1} - 1}{c-1} = - \frac{1}{c-1}$. Questo valore è un costante positiva $K$, dunque troviamo che $\sum_{i = 0}^n c^i < K$, ossia $\sum_{i = 0}^n c^i = \Theta(1)$. $\blacksquare$
+    \item Ricordando la serie geometrica $\sum_{i = 0}^n c^i = \frac{c^{n+1} - 1}{c-1}$, se deriviamo entrambi i membri troviamo $\sum_{i = 0}^n i c^{i-1} = \frac{(n+1)c^n(c-1)-(c^{n+1}-1)}{(c-1)^2} = \frac{nc^{n+1} - nc^n - c^n + 1}{(c-1)^2}$, e moltiplicando entrambi i membri per $c$ troviamo che $\sum_{i = 0}^n i c^{i-1} = \frac{nc^{n+2} - n c^{n+1} - c^{n+1} + }{(c-1)^2}$. Se studiamo il limite con $n \to +\infty$, notiamo come il temrine che vinca sia effettivamente $nc^{n+2} = n c^n c^2$, e quindi troviamo che $\lim_{n \to +\infty} \sum_{i = 0}^n i c^i = \Theta(nc^n)$. Se però $c < 1$, allora $\lim_{n \to +\infty} c^{n+1} = 0$ e $\lim_{n \to +\infty} nc^{n+2} = 0$. Dunque $\lim_{n \to +\infty} \sum_{i = 0}^n i c^i = \frac{c}{(1-c)^2} = K$, ossia $\sum_{i = 0}^n ic^i = \Theta(1)$. $\blacksquare$
+    \item $\sum_{i = 1}^n \log_c n \approx \int_1^n \log_c x \ dx = \left[ x \log_c x - \frac{x}{\ln x}\right]_1^n = n \log_c n - \frac{n}{\lg  c} - \log_c 1 + \frac{1}{\ln c}$. Studiando il limite, troviamo che \mbox{$\lim_{n \to +\infty} \sum_{i = 1}^n \log_c n = \lim_{n \to +\infty} n \log_c n - \frac{n}{\ln c} - \log_c 1 + \frac{1}{\ln c} = \lim_{n \to + \infty} n \log_c n$}, dunque troviamo che $\sum_{i = 1}^n \log_c n = \Theta(n \log_c n)$. $\blacksquare$
+    \item $\sum_{i = 1}^n \frac{1}{i} \approx \int_1^n \frac{1}{x} \ dx = [\ln x]_1^n = \ln n - \ln 1 = \ln n = \frac{\log n}{\log e} = \Theta(\log e)$ dato che $\frac{1}{\log e}$ è una costante. $\blacksquare$
+\end{enumerate}
+
+\section{Costo computazionale}
+
+\begin{Definizione}[Costo computazionale]
+\label{def-costo-computazionale}
+Il \textbf{costo computazionale} di un'istruzione è la quantità di risorse (spazio o tempo, noi quasi sempre parleremo di costo computazionale temporale) impiegato dal processore per eseguirla.
+\end{Definizione}
+
+In base al tipo di istruzioni, queste hanno tutte un costo computazionale diverso.
+
+\begin{itemize}
+    \item \textbf{Operazioni elementari}: hanno come costo computazionale $\bm{\Theta(1)}$, ossia costo \textit{costante} che non dipende dall'input, tra cui ci sono  ad esempio operazioni aritmetiche, la lettura del valore di una variabile, la lettura della lunghezza di un array (che in python non viene calcolato ogni volta ma è un dato salvato) e così via.
+    \item \textbf{Istruzioni if/else}: hanno computazionali costo pari a: il \textbf{costo di verifica della condizione} (che spesso è però costante) + \textbf{il massimo dei costi tra le istruzioni dell'if e quelle dell'else}.
+    \item \textbf{Istruzioni iterative (cicli)}: hanno costo computazionale pari alla \textbf{somma dei costi di ciascuna iterazione}. Se tutte le iterazioni hanno lo stesso costo, il costo è pari al \textbf{prodotto del costo di una singola iterazione per il numero di iterazioni}. La condizione viene però valutata sempre una volta in più rispetto al numero di iterazioni, perché per uscire dal ciclo è necessario che l'ultimo controllo risulti negativo.
+\end{itemize}
+
+\begin{Definizione}[Costo computazionale di un algoritmo]
+\label{def-costo-computazionale-algoritmo}
+Il \textbf{costo computazionale di un algoritmo} ($\bm{T(n)}$) è pari alla somma dei costi delle istruzioni che lo compongono.
+\end{Definizione}
+
+Un algoritmo può avere tempi di esecuzioni differenti in base all'input. Parliamo in questo caso di costo computazionale migliore e peggiore.
+
+\begin{Definizione}[Caso migliore e peggiore]
+\label{def-caso-migliore-peggiore}
+Fissata una dimensione di input, prendiamo per calcolare il \textbf{caso migliore} l'input più favorevole al nostro algoritmo, mentre per il \textbf{caso peggiore} prendiamo quello più sfavorevole.
+\end{Definizione}
+
+\Esempi \nopagebreak
+
+\NB Tutti i codici scritti in questi appunti sono in \textit{Python/Pseudocodice}.
+
+\begin{lstlisting}[style=Python]
+def Calcolo_Polinomio(A,c): 
+    somma = A[0] # Costo costante
+    potenza = 1 # Costo costante
+    for i in range(1, len(A)): # n-1 iterazioni
+        potenza = c * potenza # Costo costante
+        somma += A[i] * potenza # Costo costante
+    return somma # Costo costante
+\end{lstlisting}
+
+Il costo computazionale totale è quindi dato dalla somma di tutti i costi delle singole operazioni e dal costo del ciclo for. Troviamo quindi che \mbox{$\bm{T(n)} = \Theta(1) + (n-1) \Theta(1) = \Theta(1) + \Theta(n) = \bm{\Theta(n)}$}.
+
+\Separatore
+
+\begin{lstlisting}[style=Python]
+def Esercizio(n):
+    n = abs(n) # Costo costante
+    t = s = n # Costo costante
+    p = 0 # Costo costante
+    while s > 1: # ? iterazioni
+        p += 1 # Costo costante
+        s /= 4 # Costo costante
+    while n - p > 0: # ? iterazioni
+        n -= p # Costo costante
+        t += 5 # Costo costante
+    return p # Costo costante
+\end{lstlisting}
+
+Studiamo il primo while e vediamo come varia il valore di $s$ e di $p$ col passare delle iterazione per capire il numero di queste.
+\[
+\begin{array}{c|cccc}
+    \text{it.} & 1^\circ & 2^\circ & \dots & k^\circ \\ \hline 
+    s & \frac{n}{4} & \frac{n}{16} & \dots & \frac{n}{4^k} \\
+    p & 1 & 2 & \dots & k
+\end{array}
+\]
+Dato che per uscire dal while è necessario che $s = 1$, poniamo $\frac{n}{4^k} = 1$. Troviamo quindi che $n = 4^k$, ossia $k = \log_4 n$. Dunque in questo while faremo $\log_4 n$ giri, ossia circa $\log n$ iterazioni, per un costo totale di $\Theta(\log n)$. \\
+Studiamo ora il secondo while e vediamo come varia la variabile $n$ per capire dopo quante iterazioni usciremo dal while.
+\[
+\begin{array}{c|cccc}
+    \text{it.} & 1^\circ & 2^\circ & \dots & k^\circ \\ \hline 
+    n & n- p & n - 2p & \dots & n - hp
+\end{array}
+\]
+Dato che per uscire dal while è necessario che $n-p = 0$, alla h-esima iterazione troviamo che $n - hp - p = 0$, ossia $n - p(h+1) = 0$. Ricordando che $p = k = \log_4 n$, troviamo che $n - \log_4 n (h+1) = 0$, ossia $h = \frac{n}{\log_4 n} - 1$. Dunque in questo while faremo $\frac{n}{\log_4 n} - 1$ giri, ossia circa $\frac{n}{\log n}$ iterazioni, per un costo totale pari a $\Theta(\frac{n}{\log n})$.
+
+Facendo ora la somma tra tutti i costi computazionali, troviamo che \mbox{$\bm{T(n)} = \Theta(1) + \Theta(\log n) + \Theta(\frac{n}{\log n}) = \bm{\Theta(\frac{n}{\log n})}$} (questo perché $\frac{n}{\log n}$ cresce molto più velocemente di $\log n$, dato che $n >> \log n$).
+
+\subsection{Costo computazionale e tempi di esecuzione}
+
+Vediamo ora a livello pratico quanto il costo computazionale possa modificarne i tempi di esecuzione. 
+
+Prendiamo un calcolatore in grado di eseguire un'operazione elementare in un nanosecondo (riuscendo quindi ad eseguire $10^9$ operazioni al secondo), e prendiamo un input di $n = 10^6$. Vediamo come si comportano alcuni algoritmi con diversi costi computazionali:
+\begin{itemize}
+    \item $\O(n)$: tempo di esecuzione = 1 millessimo di secondo
+    \item $\O(n \log n)$: tempo di esecuzione = 20 millessimi di secondo
+    \item $\O(n^2)$: tempo di esecuzione: 16 minuti e 40 secondi
+    \item $\O(2^n)$: tempo di esecuzione = circa $9,9 \cdot 10^{301029}$ secondi
+\end{itemize}
+
+È palese dunque l'enorme differenza che vi è tra i diversi costi computazionali: in particolare, il passaggio da $\O(n^2)$ e $\O(2^n)$ risulta molto drastico. 
+
+Dato che il tempo di esecuzione di $9,9 \cdot 10^{301029}$ è un tempo assurdo, proviamo a prendere un calcolatore più veloce per vedere se riusciamo a migliorare la situazione. \\
+Stabiliamo un tempo arbitrario $T$ e confrontiamo due calcolatorI: $C_1$ che è in grado di eseguire $10^k$ operazioni al secondo e $C_2$ che è in grado di eseguirne $10^{k+3}$. Dunque $C_2$ è 1000 volte più veloce di $C_1$. Prendiamo un input id $n = 1000$ per il calcolatore più lento e di $n = 1000 + x$ per il calcolatore più veloce. Dunque \mbox{$T = \frac{2^{1000}}{10^k} = \frac{2^{1000+x}}{10^{k+3}}$}, ossia $\frac{2^{1000 + x}}{2^{1000}} = 2^x = \frac{10^{k+3}}{10^k} = 10^3$, duqnue $x = \log (10^3) \approx 10$. Dunque prendendo un calcolatore 1000 volte più veloce riesce, ad aumentare l'input solo da 1000 a 1010: una differenza irrisoria. Risulta quindi evidente come un algoritmo con costo pari a $2^n$ sia un algoritmo veramente poco efficiente, soprattutto con input grandi. 
+ 
+
+\chapter{Ricerca}
+
+\section{Il problema della ricerca}
+
+Il problema della ricerca di un elemento in un insieme di dati in informatica è uno dei problemi storici più studiati, essendo molto comune. È utile quindi cecare un algoritmo che risolva questo problema nel modo più efficeinte possibile.
+
+In breve, questo problema consiste nel ricevere in input una serie di dati, come ad esempio un array \code{A} di $n$ valori, e un valore \code{v} da cercare. In output bisogna restituire l'indice \code{i} tale che \mbox{\code{A[i] = v}}, oppure un valore \code{None} o \code{-1} che indica che \code{v} non è presente nell'array.
+
+\section{Ricerca sequenziale}
+
+\begin{Definizione}[Ricerca sequenziale]
+\label{def-ricerca-sequenziale}
+Il metodo più intuitivo per risolvere questa tipologia di problemi è la \textbf{ricerca sequenziale}. L'idea è semplice:
+\begin{enumerate}[label=\arabic*°]
+    \item Si ispeziona uno per uno gli elementi dell'array;
+    \item li si confronta tutti con il valore \code{v};
+    \item si restituisce l'indice \code{i} appena si trova \code{v} (se lo si trova, altrimenti si restituisce \code{None}/\code{-1}).
+\end{enumerate}
+\end{Definizione}
+
+Il codice è molto semplice:
+
+\begin{lstlisting}[style=Python]
+def Ricerca_Sequenziale(A,v):
+    i = 0
+    while ((i < len(A)) and (A[i] != v)):
+        i += 1
+    if (i < len(A)):
+        return i
+    return None
+\end{lstlisting}
+
+Il costo computazionale qui dipende da dove si trova \code{v} all'interno dell'array. Nel \textbf{caso migliore}, ossia quando \code{v} si trova alla prima posizione dell'array, il costo è $\bm{\Theta(1)}$, mentre nel \textbf{caso peggiore}, ossia quando \code{v} non è presente nell'array, abbiamo invece un costo di $\bm{\Theta(n)}$. In generale, possiamo quindi dire che l'algoritmo ha un costo di $\bm{\textbf{O}(n)}$: questo significa che per alcuni input il costo è di $\Theta(n)$, ma non è sempre così.
+
+\begin{Definizione}[Caso medio]
+\label{def-caso-medio}
+Per trovare il \textbf{caso medio} di un algoritmo, bisogna calcolare la probabilità che ogni caso possibile si verifichi e moltiplicarla per il costo computazionale di quel caso specifico. \\
+Per rendere più semplici i calcoli, spesso si generalizzano tutti i casi indicandoli con la stessa probabilità $p$ e lo stesso costo computazionale $T(n)$. Dunque 
+\[
+\bm{T_{\textbf{medio}}(n) = p \sum_{i = 1}^k T(n)}
+\]
+\end{Definizione}
+
+Nel caso della ricerca sequenziale, il costo nel caso medio è pari a \mbox{$\bm{T_{\textbf{medio}}(n)} = \frac{1}{n} \sum_{i = 0}^{n-1} i = \frac{1}{n} \cdot \frac{n(n-2)}{2} = \frac{n-1}{2} = \bm{\Theta(n)}$}, pari al caso peggiore.
+
+\section{Ricerca binaria}
+
+\begin{Definizione}[Ricerca binaria]
+\label{def-ricerca-binaria}
+Un algoritmo migliore per risolvere questo problema è la \textbf{ricerca binaria}, che richiede però che la lista parta \textbf{ordinata}. Anche qui l'idea è semplice:
+\begin{enumerate}[label=\arabic*°]
+    \item Si ispeziona l'elemento centrale della lista;
+    \item se è uguale al valore cercato ci si ferma e si restituisce l'indice \code{i};
+    \item altrimenti si ripete lo stesso procedimento prendendo solo una metà della lisa: la metà sinistra se il valore centrale è più grande di \code{v}, o quella destra.
+\end{enumerate}
+\end{Definizione}
+
+Vediamo il codice:
+\begin{lstlisting}[style=Python]
+def Ricerca_Binaria(A,v):
+    a,b = 0
+    m = (a+b)//2
+    while (A[m] != v):
+        if (A[m] > v):
+            b = m - 1
+        else:
+            a = m + 1
+        if (a > b):
+            return None
+        m = (a+b)//2
+    return m
+\end{lstlisting}
+
+Anche qui il costo computazionale dipende da dove si trova \code{v} all'interno dell'array. Nel \textbf{caso migliore}, ossia quando \code{v} è l'elemento centrale dell'array, il costo è pari a $\bm{\Theta(1)}$. Nel \textbf{caso peggiore} invece, ossia quando \code{v} non è proprio presente nell'array, il costo è pari a $\bm{\Theta(\log n)}$, perché ad ogni giro la dimensione dell'array viene dimezzata, dunque per leggerlo tutto bastano $\log n$ iterazioni, con un costo ognuna di $\Theta(1)$. In generale, possiamo quindi dire che il costo della ricerca binaria è pari a $\bm{\textbf{O}(\log n)}$. 
+
+Dato che però caso migliore e peggiore anche in questo caso sono diversi, cerchiamo di studiare il caso medio. \\
+Partiamo col porre alcune condizioni che non cambiano in alcun modo il risultato finale, ma che ci facilitano molto i calcoli:
+\begin{itemize}
+    \item Il numero di elementi nell'array è una potenza di 2
+    \item \code{v} è presente nella lista
+    \item Tutte le posizioni tra 1 e $n$ sono equiprobabili.
+\end{itemize}
+
+Chiediamoci ora a ogni iterazioni quante posizioni dell'array stiamo effettivamente controllando. \\
+Alla prima iterazione controlliamo solo la posizione \code{n//2}, ossia solo 1 posizione. Alla seconda invece controlliamo \code{n//4} se \code{v < n//2} e \code{3n//4} se \code{v > n//2}, dunque 2 posizioni controllate. Alla terza iterazione controlliamo \code{n//8, 3n//8, 5n//8, 7n//8}, ossia 4 posizioni e così via. Alla i-esima iterazione controlliamo sempre $2^{i-1}$ posizioni. La probabilità quindi che l'algoritmo termini all'iterazione i è $\frac{2^{i-1}}{n}$, dunque il costo computazionale medoi è \mbox{$\bm{T_{\textbf{medio}}(n)} = \sum_{i = 1}^{\log n} \Theta(i) \frac{2^{i-1}}{n} = \Theta((\log n - 1) 2^{\log n}) \frac{1}{n} = \Theta(\frac{(\log n - 1) 2^{\log n} + 1}{n}) = \bm{\Theta(\log n)}$}, pari al costo nel caso peggiore. 
+
+\subsection{Applicazioni della ricerca binaria}
+
+Analizziamo il seguente esercizio:\\
+"Dato un array \code{A} di interi, ordinato in modo crescente e senza duplicati, e dati due valori \code{a} e \code{b} tali che $a \leq b$, si vuole sapere \textbf{quanti elementi di \codeb{A} sono compresi nell'intervallo [\codeb{a}, \codeb{b}]}." Vediamo come risolverlo.
+
+Per risolvere questo esercizio possiamo sfruttare la ricerca binaria: essendo infatti l'array ordinato, il numero di elementi di \code{A} compresi tra \code{a} e \code{b} è calcolabile facilmente se si conoscono le posizioni di \code{a} e \code{b} in \code{A}. Infatti, il numero di elementi sarà pari a $ind_B - ind_A + 1$. Vediamo come si traduce questo in codice:
+
+\begin{lstlisting}[style=Python]
+def Applicazione_Ricerca_Binaria(A,a,b):
+    ind_a = Ricerca_Binaria(A,a)
+    ind_b = Ricerca_Binaria(A,b)
+    if A[ind_A] < a:
+        ind_A += 1
+    if A[ind_B] > b:
+        ind_B -= 1
+    return ind_b - ind_A + 1
+\end{lstlisting}
+
+I due controlli sugli indici di \code{a} e \code{b} sono fondamentali: se infatti non dovessero essere presenti \code{a} o \code{b} nell'array, è importante non prendere nell'intervallo elementi più piccoli di \code{a} o più grandi di \code{b}.
+
+Il costo computazionale di questo algoritmo è pari a $\bm{\Theta(\log n)}$ in quasi tutti i casi. Quasi tutti perché in realtà esiste il caso migliore dove \code{a} e \code{b} vengono trovati al primo/secondo tentativo, ma è molto raro come caso (significherebbe trovare \code{a} all'indice $n//2$ e \code{b} all'indice $n//4$ o $3n//4$, o viceversa), che è un caso molto raro. 
+
+\section{Ricerca costante}
+
+L'ultimo algoritmo di ricerca di cui parliamo è la \textbf{ricerca costante}. Un algoritmo informatico che riesca a risolvere il problema della ricerca con un costo costante $\Theta(1)$ attraverso dei confronti purtroppo non esiste, ma sperimentando con il DNA si è scoperto un algoritmo simile in natura. Infatti, si è visto come una sonda in un frammento di DNA si riesca ad attaccare alla sua sequenza complementare senza perdere tempo e senza curaarsi della lunghezza del DNA, con un costo computazionale dunque costante.
+
+\chapter{Ricorsione}
+
+\section{Algoritmi ricorsivi}
+
+Studiamo un algoritmo alternativo che esegue la ricerca binaria.
+
+\begin{lstlisting}[style=Python]
+def Ricerca_Binaria_Ricorsiva(A,v,a,b):
+    if b is None:
+        b = len(A) - 1
+    if a > b:
+        return None
+    m = (a+b)//2
+    if A[m] == v:
+        return m
+    if v < A[m]:
+        return Ricerca_Binaria_Ricorsiva(A,v,a,m-1)
+    else:
+        return Ricerca_Binaria_Ricorsiva(A,v,m+1,b)
+\end{lstlisting}
+
+La cosa più interessante di questo algoritmo è che a tutti gli effetti \textit{richiama} sé stesso. Infatti se non ci troviamo nel caso dove \code{v == m}, allora l'algoritmo viene richiamato prendendo però solo la parte o destra o sinistra dell'array. Stiamo, dunque, utilizzando un algoritmo \textbf{ricorsivo}.
+
+\begin{Definizione}[Funzioni e algoritmi ricorsivi]
+\label{def-funzioni-algoritmi-ricorsivi}
+Una funzione matematica è detta \textbf{ricorsiva} se la sua definizione è espressa in termini di sé stessa. Questa deve però sempre avere un caso base. \\
+Un algoritmo è detto \textbf{ricorsivo} se è espresso in termini di sé stesso.\\
+\NB Un qualsiasi algoritmo ricorsivo può essere riscritto come un algoritmo iterativo.
+\end{Definizione}
+
+Un algoritmo ricorsivo è quindi un algoritmo la cui soluzione è costruita risolvendo uno o più sottoproblemi di dimensione minore e unendone le soluzioni. Questi sottoproblemi convergono in un sottoproblema che fa da \textbf{caso base}, du cui si conosce a priori la soluzione senza dover studiare nessun sottoproblema.
+
+\Esempio \nopagebreak
+
+Scrivere un algoritmo ricorsivo per \textbf{calcolare il fattoriale di un numero intero n}. \nopagebreak
+
+Vediamo prima il codice per poi studiarlo.
+
+\begin{lstlisting}[style=Python]
+def Fattoriale_Ricorsivo(n):
+    if n == 1:
+        return 1
+    return n * Fattoriale_Ricorsivo(n-1)
+\end{lstlisting}
+
+L'algoritmo sfrutta la definzione ricorsiva del fattoriale, dove infatti $n! = n \cdot (n-1)!$, per suddividere il problema in sottoproblemi. Il caso base in questo caso è quando \code{n == 1}, dato che $1! = 1$ .
+
+\subsection{Meglio un'algoritmo ricorsivo o iterativo?}
+
+Dato che tutti gli algoritmi ricorsivi possono essere riscritti come algoritmi iterativi, quando bisognerebbe scegliere un algoritmo iterativo e quando uno ricorsivo? Dipende molto dalla situazione.
+\begin{itemize}
+    \item Meglio un algoritmo \textbf{iterativo} se:
+    \begin{itemize}
+        \item è più efficiente
+        \item la soluzione iterativa è semplice e chiara tanto quanto quella ricorsiva 
+    \end{itemize}
+    \item Meglio un algoritmo \textbf{ricorsivo} se:
+    \begin{itemize}
+        \item è più efficiente
+        \item la formulazione del problema fa subito pensare a una risoluzione ricorsiva
+    \end{itemize}
+\end{itemize}
+
+Quando parliamo di efficienza in questo caso non parliamo strettamente di efficienza in termini di tempo, bensì in termini di \textbf{memoria}.
+
+\begin{Definizione}[Esigenze di memoria]
+\label{def-esigenze-di-memroia}
+Un'algoritmo ricorsivo avrà praticamente sempre \textbf{maggiori esigenze in termini di memoria} rispetto ai corrispettivi algoritmi iterativi, dato che lascia in sospeso molte chiamate aspettando che le successive vengano risolte.
+\end{Definizione}
+
+Se pensiamo ad esempio all'algoritmo del calcolo del fattoriale, per calcolare $10!$ dobbiamo prima calcolare $9!$, ma per risovlere $9!$ dobbiamo prima calcolare $8!$ e così via, fino ad arrivare al caso base. In totale, vi sono 9 chiamate in sospeso in attesa che le successive vengano risolte.
+
+\Esempi \nopagebreak
+
+Scrivere un algoritmo ricorsivo per \textbf{calcolare l'n-esimo numero di Fibonacci}. \nopagebreak
+
+Ricordiamo la definizione di numero di Fibonacci: $F(0) = F(1) = 1$ e $F(i) = F(i-1) + F(i-2)$ se $i > 1$. 
+
+\begin{lstlisting}[style=Python]
+def Fibonacci(n):
+    if n <= 1:
+        return 1
+    return Fibonacci(n-1) + Fibonacci(n-2)
+\end{lstlisting}
+
+Notiamo come ci sono ben due chiamate ricorsive nel nostro programma. Questo renderà più complessa e dispendiosa la risoluzione del problema con input molto grandi, dato che generà un numero esponenziale di sottoproblemi.
+
+\begin{Osservazione}[Osservazioni sull'algoritmo ricorsivo di Fibonacci]
+\label{oss-fibonacci}
+\begin{enumerate}
+    \item \textbf{Lo stesso calcolo viene effettuato più volte} (calcoliamo \code{Fibonacci(n-2)} sia per calcolare \code{Fibonacci(n)} che per calcolare \code{Fibonacci(n-1)} ad esempio).
+    \item \textbf{Occupiamo tanta memoria}, perché per poter calcolare \code{Fibonacci(n)} è necessario un numero di sottoproblemi elevatissimo ($2^{n-1}$), come avevamo già notato. 
+    \item Per risolvere il problema di dimensione $n$ bisogna risolvere \textbf{due problemi di dimensione molto simile} ($n-1$ e $n-2$).
+\end{enumerate}
+\end{Osservazione}
+
+Il costo computazionale di questo algoritmo non sappiamo ancora come calcolarlo (sono necessarie le equazioni di ricorrenza che vedremo più avanti), ma possiamo già notare una cosa. Se $n \leq 1$, allora il costo è $T(0) = T(1) = \Theta(1)$, altrimenti abbiamo un costo $T(n) = \Theta(1) + T(n-1) + T(n-2)$. Questa formula è molto simile alla definizione dei numeri di Fibonacci, che hanno un andamento esponenziale. Possiamo quindi aspettarci che anche l'algoritmo ricorsivo di Fibonacci abbia un \textbf{costo esponenziale}.
+
+Vediamo brevemente anche l'algoritmo iterativo per calcolare il numero di Fibonacci.
+
+\begin{lstlisting}[style=Python]
+def Fibonacci_iterativo(n):
+    if n <= 1:
+        return 1
+    fib_2 = 0
+    fib_1 = 1
+    for i in range(2, n+1):
+        fib_2, fib_1 = fib_1, fib_2 + fib_1
+    return fib_1
+\end{lstlisting}
+Questo algoritmo ha un costo in termini di tempo pari a $\Theta(n)$, e in termini di memoria pari a $\Theta(1)$.
+
+\Separatore
+
+Scrivere un algoritmo ricorsivo per \textbf{risolvere il problema delle Torri di Hanoi}. \nopagebreak
+
 
 
 

@@ -80,7 +80,7 @@ Definite ora queste operazioni, vediamo alcune loro proprietà.
     e per la proprietà 4) troviamo che $0_2 + 0_1 = 0_1$, ma sappiamo che $0_2 + 0_1  = 0_2$ per la definizione stessa di $0_2$. Dunque $0_2 = 0_1 = 0$. $\blacksquare$
     \item Poniamo $v,w_1,w_2 \in R$ tali che $v + w_1 = 0$ e $v + w _2 = 0$. Per la proprietà 1) sappiamo che $w_1 = w_1 + 0$, e sappiamo che $v + w_2 = 0$ per la definizione stessa di $v$ e $w_2$. 
     Troviamo quindi che $w_1 = w_1 + 0 = w_1 + (v + w_2)$ che è pari a $(w_1 + v) + w_2$ per la proprietà 2). Per la proprietà 4) troviamo quindi che $w_1 = (w_1 + v) + w_2 = 0 + w_2$ per la definizione stessa di $w_1$ e $v$ e dato che per la proprietà 1) $0 + w_2 = w_2$, troviamo che $w_1 = w_2 = w$. $\blacksquare$
-    \item Ponaimo $1_1, 1_2 \in R$ tali che $1_1 \cdot a = a$ e $1_2 \cdot a = a$. Allora $1_2 = 1_1 \cdot 1_2$, 
+    \item Poniamo $1_1, 1_2 \in R$ tali che $1_1 \cdot a = a$ e $1_2 \cdot a = a$. Allora $1_2 = 1_1 \cdot 1_2$, 
     e per la proprietà 7) troviamo che $1_2 \cdot 1_1 = 1_2$, ma sappiamo che $1_2 \cdot 1_1 = 1_1$ per la definizione stessa di $1_1$. Dunque $1_2 = 1_1 = 1$. $\blacksquare$
 \end{enumerate}
 
@@ -91,7 +91,7 @@ Definite ora queste operazioni, vediamo alcune loro proprietà.
 Un \textbf{anello commutativo con unità} (o più semplicemente \textbf{anello}) è un insieme $R$ con due operazioni ben definite, come possono essere le operazioni di somma e prodotto appena viste, che rispetta le Proprietà \ref{prop-somma-prod}.
 \end{Definizione}
 
-Anelli sono gli insiemi $\Z, \Q, \R$, con le operazioni classiche di somma e prodotto che tutti conoscimao, ma non l'insieme $\N$, dato che in questo insieme non è rispettata la proprietà 3), ossia l'esistenza dell'opposto.
+Anelli sono gli insiemi $\Z, \Q, \R$, con le operazioni classiche di somma e prodotto che tutti conosciamo, ma non l'insieme $\N$, dato che in questo insieme non è rispettata la proprietà 3), ossia l'esistenza dell'opposto.
 
 \begin{Definizione}[Campo]
 \label{def-campo}
@@ -170,7 +170,7 @@ Ora la domanda viene spontanea: questo insieme, con queste operazioni di somma e
 
 È facile notare che rispetta tutte le 8 proprietà viste in Proprietà \ref{prop-somma-prod} qualunque sia il valore di $n$, dunque è facile concludere che \textbf{è un anello}.\\ 
 Per essere però anche un campo, è necessario che, per ogni numero diverso da $0$, esista il suo \textit{inverso moltiplicativo}. Per verificarlo basta controllare se ogni riga (o colonna) che rappresenta una classe diversa da $[0]$, abbia il valore $[1]$. 
-Riprendendo l'esempio di prima con $n = 4$, la classe $[1]$ notiamo subito che ha come invderso moltiplicativo sé stessa, e la classe $[3]$ anche ha come inverso moltiplicativo se stessa. La classe $[2]$, invece, non ha mai il valore $[1]$, e questo significa che non ha inverso moltiplicativo. Dato che $[2] \neq [0]$, possiamo concludere che $\Z/(4)$ \textbf{non è un campo}.
+Riprendendo l'esempio di prima con $n = 4$, la classe $[1]$ notiamo subito che ha come inverso moltiplicativo sé stessa, e la classe $[3]$ anche ha come inverso moltiplicativo se stessa. La classe $[2]$, invece, non ha mai il valore $[1]$, e questo significa che non ha inverso moltiplicativo. Dato che $[2] \neq [0]$, possiamo concludere che $\Z/(4)$ \textbf{non è un campo}.
 Questo però non significa che non sia mai un campo: se $n$ è un \textit{numero primo} (che indichiamo con $p$), allora $\Z/(p)$ \textbf{è un campo}. In questo caso, al posto di scrivere $\Z/(p)$, scriviamo $\bm{\F_p}$.
 
 \section{Numeri complessi}
@@ -236,7 +236,7 @@ Il numero complesso $z = 3 + i$ viene qui rappresentato da un vettore lungo $\bm
 
 \begin{Definizione}[Rappresentazione polare]
 \label{def-rapp-pol}
-Possiamo scrivere tutti i numeri complessi come $\bm{z = \rho(\cos(\theta) + i \sin(\theta))}$, dove $\rho = \abs{z}$, che prende il nome \textbf{rappresentazione polare}.
+Possiamo scrivere tutti i numeri complessi come $\bm{z = \rho(\cos(\theta) + i \sin(\theta))}$, dove $\rho = \abs{z}$, che prende il nome di \textbf{rappresentazione polare}.
 \end{Definizione}
 
 È facile capire il perché guardando la rappresentazione geometrica dei numeri complessi: si può infatti notare che $a = \abs{z} \cdot \cos(\theta)$, e che $b = \abs{z} \cdot \sin(\theta)$, dunque $z = a + bi = \abs{z} (\cos(\theta) + i\sin(\theta))$.
@@ -299,7 +299,7 @@ Per quanto riguarda il modulo, sappiamo che $\abs{z^n} = \abs{z}^n = 1$, e che q
 Troviamo quindi che tutte le soluzioni complesse dell'equazione sono 
 \[z = \abs{z} \cdot(\cos(\theta) + i \sin(\theta)) = \cos\left(\frac{2k\pi}{n}\right) + i \sin\left(\frac{2k\pi}{n}\right)\]
 
-Nonostante sembri che abbiamo trovato un numero infinito di soluzioni, dato che $k \in \Z$, ma è facile notare che, non appena arriviamo a $k = n$, il valore di $z$ sarà pari al valore di quando $k = 0$. Troviamo quindi che le soluzioni dell'equazione sono in totale $n$, e sono  
+Nonostante sembri che abbiamo trovato un numero infinito di soluzioni, dato che $k \in \Z$, è facile notare che, non appena arriviamo a $k = n$, il valore di $z$ sarà pari al valore di quando $k = 0$. Troviamo quindi che le soluzioni dell'equazione sono in totale $n$, e sono  
 \[\bm{z = \cos\left(\frac{2k\pi}{n}\right) + i \sin\left(\frac{2k\pi}{n}\right)} \textbf{ con } \bm{0 \leq k \leq n-1}\]
 
 \begin{Proposizione}[Teorema fondamentale dell'algebra]
@@ -527,7 +527,7 @@ Banalmente, prendendo una tupla qualsiasi $\X = (x_1, x_2, x_3) \in \K^3$, quest
 \label{propos-comb-lin}
 Un sottoinsieme non vuoto $\W$ è un \textbf{sottospazio vettoriale} $\iff \forall v_1, v_2, \ldots, v_n \in \W$ \textbf{ogni combinazione lineare di tali vettori si trova in} $\bm{\W}$. 
 \end{Proposizione}
-In sostanza, verificando questa proprietà stiamo verificando contemporeanamente che $\W$ sia chiuso sia rispetto alla somma sia rispetto al prodotto per scalare.
+In sostanza, verificando questa proprietà stiamo verificando contemporaneamente che $\W$ sia chiuso sia rispetto alla somma sia rispetto al prodotto per scalare.
 
 \begin{Definizione}[SPAN]
 \label{def-Span}
@@ -778,7 +778,7 @@ Dal quale troviamo che $\bm{X_\B(v) = (\frac{a_1+a_2}{2}, \frac{a_1-a_2}{2})}$.
         Da ciò concludiamo che $\braket{v_1, \ldots, v_{i-1}, v_{i+1}, \ldots, v_n}$. A questo punto, se questi vettori sono linearmente indipendenti allora rappresentano una base di $\V$, altrimenti si continua con questo procedimento finché non si arriva ad una lista di vettori linearmente indipendenti, che formeranno quindi una base di $\V$.
     \end{enumerate}
     Possiamo quindi concludere che $\V$ ha una base. $\blacksquare$
-    \item Dato che $\V$ è finitamente generato, asappiamo che esistono $w_1, w_2, \ldots, w_m \in \V$ tali che $\braket{w_1, w_2, \ldots, w_m} = \V$. Dunque sicuramente anche $\braket{v_1, v_2, \ldots, v_n, w_1, w_2, \ldots, w_m} = \V$. Ci sono ora due possibilità:
+    \item Dato che $\V$ è finitamente generato, sappiamo che esistono $w_1, w_2, \ldots, w_m \in \V$ tali che $\braket{w_1, w_2, \ldots, w_m} = \V$. Dunque sicuramente anche $\braket{v_1, v_2, \ldots, v_n, w_1, w_2, \ldots, w_m} = \V$. Ci sono ora due possibilità:
     \begin{enumerate}[label=\arabic*°]
         \item Se $v_1, v_2, \ldots, v_n, w_1, w_2, \ldots, w_m$ sono linearmente indipendenti, allora banalmente \mbox{$\B = \{v_1, v_2, \ldots, v_n, w_1, w_2, \ldots, w_m\}$} è una base di $\V$.
         \item Se invece sono linearmente dipendenti significa che \mbox{$\exists \lambda_1, \lambda_2, \ldots, \lambda_n, \mu_1, \mu_2, \ldots, \mu_m \in \K$} tali che $\lambda_1 v_1 + \lambda_2 v_2 + \ldots + \lambda_n v_n + \mu_1 w_1 + \mu_2 w_2 + \ldots + \mu_m w_m = 0$ dove almeno uno tra i $\lambda_i$ e i $\mu_j$ è diverso da $0$, e dato che per ipotesi $\lambda_i \neq 0 \enspace \forall i \in \{1,2, \ldots, n\}$ essendo $v_1, v_2, \ldots, v_n$ linearmente indipendenti, troviamo che $\exists j \in \{1,2, \ldots, m\}$ tale che $\mu_j \neq 0$. 
@@ -810,7 +810,7 @@ La dimensione di uno spazio vettoriale \textit{può cambiare in base al campo su
 
 \begin{Osservazione}[]
 \label{oss-dimen}
-Preso $\V$ uno spazio vettoriale su $\K$ di dimensione $n$ e $\B = \{v_1, v_2, \ldots, v_n\}$ un'insieme di vettori di $\V$, se $\bm{\dim \V = \lvert \B \rvert}$ allora per dimostrare che $\B$ sia una \textbf{base} basta dimostrare che $\bm{\braket{v_1, v_2, \ldots, v_n} = \V}$ oppure che $\bm{v_1, v_2, \ldots, v_n}$ sono \textbf{linearmente indipendenti}. \\
+Preso $\V$ uno spazio vettoriale su $\K$ di dimensione $n$ e $\B = \{v_1, v_2, \ldots, v_n\}$ un insieme di vettori di $\V$, se $\bm{\dim \V = \lvert \B \rvert}$ allora per dimostrare che $\B$ sia una \textbf{base} basta dimostrare che $\bm{\braket{v_1, v_2, \ldots, v_n} = \V}$ oppure che $\bm{v_1, v_2, \ldots, v_n}$ sono \textbf{linearmente indipendenti}. \\
 In sostanza, se la cardinalità della lista di vettori è uguale alla dimensione dello spazio vettoriale, allora basta dimostrare \textbf{una sola delle due condizioni} necessarie affinché essa sia una base di $\V$.
 \end{Osservazione}
 
@@ -855,7 +855,7 @@ Preso $\V$ uno spazio vettoriale $\V$ su $\K$ finitamente generato e presi $\U, 
 
 \Dimostrazione \nopagebreak
 
-Sia $k = \dim (\U \cap \W)$. Prendiamo ora la base $\B_{\U \cap \W} = \{v_1, v_2, \ldots, v_k\}$ di $\U \cap \W$. Estendiamo tale base a una base di $\U$, trovando $\B_{\U} = \{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m\}$, e a una base di $\W$, trovando $\B_{\W} = \{v_1, v_2, \ldots, v_k, w_1, w_2, \ldots, w_p\}$. Dunque $\dim \U = k + m$ e $\dim \W = k + p$. A questo punto per dimostrare la formula di Grassmann non ci basta che dimostrare che $\B_{\U + \W} = \{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m, w_1, w_2, \ldots, w_p\}$ è una base di $\U + \W$: questo perché a quel punto avremmo trovato che $\dim (\U + \W) + \dim (\U \cap \W) = k + m + p + k = \dim \U + \dim \W$, che è proprio la formula di Grassmann.
+Sia $k = \dim (\U \cap \W)$. Prendiamo ora la base $\B_{\U \cap \W} = \{v_1, v_2, \ldots, v_k\}$ di $\U \cap \W$. Estendiamo tale base a una base di $\U$, trovando $\B_{\U} = \{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m\}$, e a una base di $\W$, trovando $\B_{\W} = \{v_1, v_2, \ldots, v_k, w_1, w_2, \ldots, w_p\}$. Dunque $\dim \U = k + m$ e $\dim \W = k + p$. A questo punto per dimostrare la formula di Grassmann ci basta dimostrare che $\B_{\U + \W} = \{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m, w_1, w_2, \ldots, w_p\}$ è una base di $\U + \W$: questo perché a quel punto avremmo trovato che $\dim (\U + \W) + \dim (\U \cap \W) = k + m + p + k = \dim \U + \dim \W$, che è proprio la formula di Grassmann.
 
 Innanzitutto cerchiamo di dimostrare che $\braket{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m, w_1, w_2, \ldots, w_p} = \U + \W$.\\
 Sappiamo che ogni elemento $z \in \U + \W$ può essere riscritto come $z = u + w$, come visto nella Definizione \ref{def-somm-sott-vett}. Poiché $u \in \braket{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m}$ e \mbox{$w \in \braket{v_1, v_2, \ldots, v_k, w_1, w_2, \ldots, w_p}$}, troviamo che $z \in \braket{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m, w_1, w_2, \ldots, w_p}$, e quindi troviamo che \mbox{$\braket{v_1, v_2, \ldots, v_k, u_1, u_2, \ldots, u_m, w_1, w_2, \ldots, w_p} = \U + \W$}.
@@ -963,9 +963,9 @@ Tutte le applicazioni lineari $f: \K^n \longrightarrow \K$ sono scritte nella fo
 
 Sappiamo che ogni vettore $\X \in \K^n$ può essere riscritto come $\X = \sum_{i = 1}^n x_i e_i$, essendo \mbox{$S = \{e_1, e_2, \ldots, e_n\}$} la base standard di $\K^n$. Per la proprietà 1) vista in Proprietà \ref{prop-app-lin}, sappiamo che $f(\X) = f(x_1 e_1 + x_2 e_2 + \ldots + x_n e_n) = x_1 f(e_1) + x_2 f(e_2) + \ldots + x_n f(e_n)$. Ponendo quindi $a_i = f(e_i)$, troviamo che $f(\X) = a_1 x_1 + a_2 x_2 + \ldots + a_n x_n = \sum_{i = 1}^n a_i x_i$. $\blacksquare$
 
-\begin{Definizione}[Insieme delle applicazioni lineaari]
+\begin{Definizione}[Insieme delle applicazioni lineari]
 \label{def-insieme-app-lin}
-Presi gli spazi vettoriali $\V$ e $\W$ su $\K$, chiamiamo $\bm{\mathcal{L}(\V, \W)}$ l'insimee delle applicazioni lineari da $\V$ a $\W$.
+Presi gli spazi vettoriali $\V$ e $\W$ su $\K$, chiamiamo $\bm{\mathcal{L}(\V, \W)}$ l'insieme delle applicazioni lineari da $\V$ a $\W$.
 \end{Definizione}
 
 Definiamo le operazioni di \textbf{somma} e \textbf{prodotto per scalare} per $\mathcal{L}(\V, \W)$.
@@ -1000,7 +1000,7 @@ Con le operazioni di somma e prodotto appena descritte, $\mathcal{L}(\V, \W)$ è
 
 \Dimostrazione \nopagebreak
 
-Per dimotrare che $\mathcal{L}(\V, \W)$ è uno spazio vettoriale, la prima osservazione vista in Osservazione \ref{oss-sott-vet-2} ci dice che basta dimostrare che questo abbia l'elemento nullo e che sia chiuso rispetto alla somma e al prodotto. \\
+Per dimostrare che $\mathcal{L}(\V, \W)$ è uno spazio vettoriale, la prima osservazione vista in Osservazione \ref{oss-sott-vet-2} ci dice che basta dimostrare che questo abbia l'elemento nullo e che sia chiuso rispetto alla somma e al prodotto. \\
 L'elemento nullo è presente dato che, presi $v_1, v_2 \in \V$ e $\lambda_1, \lambda_2 \in \K$, $\undzero(\lambda_1 v_1 + \lambda_2 v_2) = \undzero = \lambda_1 \undzero(v_1) + \lambda_2 \undzero(v_2)$, dove $\undzero$ è l'applicazione nulla che manda tutto in $\undzero$.\\ 
 Se poi prendiamo $f, g \in  \mathcal{L}(\V, \W)$, $v_1, v_2 \in \V$ e $\lambda_1, \lambda_2 \in \K$, allora 
 \begin{align*}
@@ -1083,18 +1083,18 @@ Per farlo, dimostriamo che $\D = \{f(w_1), \ldots, f(w_b)\}$ è una base di $Im(
     Partendo dall'equazione $\mu_1 f(w_1) + \ldots \mu_b f(w_b)$, essendo $f$ lineare troviamo \mbox{$f(\mu_1 w_1 + \ldots + \mu_b w_b) = \undzero$}, ossia \mbox{$\mu_1 w_1 + \ldots + \mu_b w_b$}. Troviamo quindi l'equazione \mbox{$\mu_1 w_1 + \ldots + \mu_b w_b = \lambda_1 v_1 + \ldots + \lambda_a v_a$}. Se spostiamo tutti i membri a sinistra, troviamo \mbox{$\lambda_1 v_1 + \ldots + \lambda_a v_a - \mu_1 w_1 - \ldots - \mu_b w_b = \undzero$}. Dato che $\Bs = \{v_1, \ldots, v_a, w_1, \ldots, w_b\}$ è una base di $\V$, sappiamo che questi vettori sono linearmente indipendenti. Dunque l'equazione che abbiamo appena trovato ha come unica soluzione la soluzione banale $\lambda_1 =  \ldots = \lambda_a = \mu_1 = \ldots = \mu_b = 0$. Dunque anche \mbox{$\mu_1 f(w_1) + \ldots + \mu_b f(w_b) = \undzero$} ha come unica soluzione $\mu_1 = \ldots = \mu_b = 0$, e quindi $f(w_1), \ldots, f(w_b)$ sono linearmente indipendenti.
 \end{itemize}
 
-Essendo quindi $\D$ una base di $Im(f)$, troviamo che $\dim Im(f) = b$ e quindi concludimao che $\dim \V = \dim \ker f + \dim Im(f)$. $\blacksquare$
+Essendo quindi $\D$ una base di $Im(f)$, troviamo che $\dim Im(f) = b$ e quindi concludiamo che $\dim \V = \dim \ker f + \dim Im(f)$. $\blacksquare$
 
 \begin{Proposizione}[Corollario]
 \label{corollario-dim-dominio-nucleo-im}
 Presa un'applicazione lineare $f: \V \longrightarrow \W$, con $\V$ e $\W$ finitamente generati, \mbox{$\bm{\dim \ker f \geq \dim \V - \dim \W}$}.
 \end{Proposizione}
 
-Questo è vero dato perché $Im(f)$ è un sottospazio di $\W$, dunque per la Proposizione \ref{propos-dim-spa-vet} $\dim Im(f) \leq \dim \W$, e dato che per la Proposizione \ref{propos-dim-dominio-dim-ker-dim-im} $\dim \ker f = \dim \V - \dim Im(f)$, troviamo che $\dim \ker f \geq \dim \V - \dim \W$.
+Questo è vero perché $Im(f)$ è un sottospazio di $\W$, dunque per la Proposizione \ref{propos-dim-spa-vet} $\dim Im(f) \leq \dim \W$, e dato che per la Proposizione \ref{propos-dim-dominio-dim-ker-dim-im} $\dim \ker f = \dim \V - \dim Im(f)$, troviamo che $\dim \ker f \geq \dim \V - \dim \W$.
 
 \begin{Proposizione}[]
 \label{propos-app-biunivoca-nucleo-nullo}
-Presa un'applicazione lienare $f: \V \longrightarrow \W$, con $\V$ e $\W$ finitamente generati tali che $\dim \V = \dim \W$, \mbox{$\bm{f}$ \textbf{è biunivoca} $\iff \bm{\ker f = \{\undzero\}}$}.
+Presa un'applicazione lineare $f: \V \longrightarrow \W$, con $\V$ e $\W$ finitamente generati tali che $\dim \V = \dim \W$, \mbox{$\bm{f}$ \textbf{è biunivoca} $\iff \bm{\ker f = \{\undzero\}}$}.
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -1108,7 +1108,7 @@ Presa un'applicazione lienare $f: \V \longrightarrow \W$, con $\V$ e $\W$ finita
 
 \begin{Proposizione}[Combinazione di applicazioni lineari]
 \label{propos-comb-app-lin}
-Prese due applicazioni lienari $g: \U \longrightarrow \V$ e $f: \V \longrightarrow \W$, $\bm{f \circ g: \U \longrightarrow \W}$ è \textbf{lineare}.
+Prese due applicazioni lineari $g: \U \longrightarrow \V$ e $f: \V \longrightarrow \W$, $\bm{f \circ g: \U \longrightarrow \W}$ è \textbf{lineare}.
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -1140,7 +1140,7 @@ Presa un'applicazione lineare $f: \V \longrightarrow \W$, questa è un \textbf{i
 
 \begin{Osservazione}[]
 \label{oss-def-isomorfismo}
-Un'isomorfismo è un'\textbf{applicazione lineare biunivoca} e viceversa.
+Un isomorfismo è un'\textbf{applicazione lineare biunivoca} e viceversa.
 \end{Osservazione}
 
 Infatti un isomorfismo per definizione è un'applicazione lineare, e dato che ammette un'inversa è per forza anche biunivoca. Questa osservazione ci sarà molto utile in futuro quando dovremo dimostrare l'isomorfismo di alcune applicazioni. 
@@ -1159,7 +1159,7 @@ Preso uno spazio vettoriale $\V$ e una sua base $\B = \{v_1, \ldots, v_n\}$, se 
 
 \begin{itemize}
     \item $\braket{f(v_1), \ldots, f(v_n)} = \W$ \\
-    Vogliamo quindi dimostrare che preso $w \in \W$, $w = \lambda_1 f(v_1) + \ldots + \lambda_n f(v_n)$. Essendo $f$ lineare, $w = f(\lambda_1 v_1 + \ldots + \lambda_n v_n)$, e dato che $\B = \{v_1, \ldots, v_n\}$ è una bse di $\V$, $\lambda_1 v_1 + \ldots + \lambda_n v_n = v \in \V$. Dunque troviamo $w = f(v)$. Essendo $f$ un isomorfismo, sappiamo che esiste l'applicazione lineare inversa di $f$, e che quindi questa è biiettiva e dunque suriettiva. Dunque abbiamo trovato che $\forall w \in \W \enspace \exists v \in \V$ tale che $f(v) = w$, e dato che $f(v) = \lambda_1 f(v_1) + \ldots + \lambda_n f(v_n)$, troviamo che $\braket{f(v_1), \ldots, f(v_n)} = \W$.
+    Vogliamo quindi dimostrare che preso $w \in \W$, $w = \lambda_1 f(v_1) + \ldots + \lambda_n f(v_n)$. Essendo $f$ lineare, $w = f(\lambda_1 v_1 + \ldots + \lambda_n v_n)$, e dato che $\B = \{v_1, \ldots, v_n\}$ è una base di $\V$, $\lambda_1 v_1 + \ldots + \lambda_n v_n = v \in \V$. Dunque troviamo $w = f(v)$. Essendo $f$ un isomorfismo, sappiamo che esiste l'applicazione lineare inversa di $f$, e che quindi questa è biiettiva e dunque suriettiva. Dunque abbiamo trovato che $\forall w \in \W \enspace \exists v \in \V$ tale che $f(v) = w$, e dato che $f(v) = \lambda_1 f(v_1) + \ldots + \lambda_n f(v_n)$, troviamo che $\braket{f(v_1), \ldots, f(v_n)} = \W$.
     \item $f(v_1), \ldots, f(v_n)$ sono linearmente indipendenti \\
     Vogliamo quindi dimostrare che l'equazione $\lambda_1 f(v_1) + \ldots + \lambda_n f(v_n) = \undzero$ ha come unica soluzione la soluzione banale. Essendo $f$ lineare, possiamo riscriverla come $f(\lambda_1 v_1 + \ldots + \lambda_n v_n) = \undzero$. Essendo $f$ un isomorfismo, questa è un'applicazione biiettiva e quindi iniettiva, dunque sappiamo che se $f(v) = \undzero$ allora $v = \undzero$. Dato che $v_1, \ldots, v_n$ sono linearmente indipendenti, l'unica soluzione all'equazione $\lambda_1 v_1 + \ldots + \lambda_n v_n = \undzero$ è la soluzione banale $\lambda_1 = \ldots = \lambda_n = 0$. Dunque $f(v_1), \ldots, f(v_n)$ sono linearmente indipendenti.
 \end{itemize}
@@ -1178,8 +1178,8 @@ Presi $\U, \V, \W$ spazi vettoriali su $\K$
 \Dimostrazione \nopagebreak
 
 \begin{enumerate}
-    \item Banalmente, essendo $id_\V : \V \longrightarrow \V$ un isomorfismo, troviamo che $\V$ è isomorfo con sè stesso. $\blacksquare$
-    \item Se $f: \V \longrightarrow \W$ è un isomorfismo, allora esiste l'appliazione lineare inversa $g: \W \longrightarrow \V$. Ma anche questa è un isomorfismo, che ha come applicazione lineare inversa $f$. Dunque anche $\W$ e $\V$ sono isomorfi. $\blacksquare$
+    \item Banalmente, essendo $id_\V : \V \longrightarrow \V$ un isomorfismo, troviamo che $\V$ è isomorfo a sé stesso. $\blacksquare$
+    \item Se $f: \V \longrightarrow \W$ è un isomorfismo, allora esiste l'applicazione lineare inversa $g: \W \longrightarrow \V$. Ma anche questa è un isomorfismo, che ha come applicazione lineare inversa $f$. Dunque anche $\W$ e $\V$ sono isomorfi. $\blacksquare$
     \item Se $f: \U \longrightarrow \V$ è un isomorfismo, e anche $g: \V \longrightarrow \W$ lo è, allora sappiamo che esistono $f^{-1}: \V \longrightarrow \U$ inversa di $f$ e $g^{-1}: \W \longrightarrow \V$ inversa di $g$. Per la proprietà 2) appena vista, sappiamo che anche $f^{-1}$ e $g^{-1}$ sono isomorfismi. Cerchiamo quindi di dimostrare che $h := g \circ f: \U \longrightarrow \W$ è un isomorfismo, la cui inversa è $h^{-1} := f^{-1} \circ g^{-1} : \W \longrightarrow \U$. 
     \begin{itemize}
         \item $h \circ h^{-1} = id_\W$ \\
@@ -1470,9 +1470,9 @@ Presi $\X, \Y \in \K^n$ e $\lambda, \mu \in \K$, verifichiamo che $L_A(\lambda \
 
 \Esempio \nopagebreak
 
-Presa una matrice $A \in M_{mn}(\K)$, calcolare la \textbf{dimensione} dell'insieme $\bm{\{\X \in \K^n \mid A \cdot \X = \undzero\}}$, ossia l'insieme delle soluzioni di un sistema di $m$ equazioni lienari omogenee in $n$ incognite che ha come coefficienti le entrate di $A$. \nopagebreak
+Presa una matrice $A \in M_{mn}(\K)$, calcolare la \textbf{dimensione} dell'insieme $\bm{\{\X \in \K^n \mid A \cdot \X = \undzero\}}$, ossia l'insieme delle soluzioni di un sistema di $m$ equazioni lineari omogenee in $n$ incognite che ha come coefficienti le entrate di $A$. \nopagebreak
 
-Possiamo notare che l'insieme appena descritto altro non è che il nucleo dell'appliazione lineare associata alla matrice $A$, ossia il nucleo di $L_A$. Dunque $\{\X \in \K^n \mid A \cdot \X = \undzero\} = \ker L_A$. Per la Proposizione \ref{corollario-dim-dominio-nucleo-im} troviamo che $\dim \ker L_A \geq \dim \K^n - \dim \K^m$, ossia $\bm{\dim \ker L_A \geq n - m}$. \\Questo significa che se $n > m$, allora $\dim \ker L_A \geq 1$ e dunque il sistema ha almeno una soluzione non banale. Questa è una affermazione che avevamo utilizzato senza dimostrarla, che è stata quindi dimostrata tramite questo esempio.
+Possiamo notare che l'insieme appena descritto altro non è che il nucleo dell'applicazione lineare associata alla matrice $A$, ossia il nucleo di $L_A$. Dunque $\{\X \in \K^n \mid A \cdot \X = \undzero\} = \ker L_A$. Per la Proposizione \ref{corollario-dim-dominio-nucleo-im} troviamo che $\dim \ker L_A \geq \dim \K^n - \dim \K^m$, ossia $\bm{\dim \ker L_A \geq n - m}$. \\Questo significa che se $n > m$, allora $\dim \ker L_A \geq 1$ e dunque il sistema ha almeno una soluzione non banale. Questa è un'affermazione che avevamo utilizzato senza dimostrarla, che è stata quindi dimostrata tramite questo esempio.
 
 \begin{Proposizione}[Lemmi]
 \label{lemmi-matrici-e-app-lin}
@@ -1498,7 +1498,7 @@ Presi due spazi vettoriali $\V$ e $\W$ su $\K$, con $\V$ finitamente generato:
          Banalmente, se poniamo $u = \sum_{i = 1}^n x_i v_i$ e $v = \sum_{i = 1}^n y_i v_i$, troviamo che
          \[f(\lambda u + \mu v) = \sum_{i = 1}^n (\lambda (x_i w_i) + \mu (y_i w_i)) = \lambda \sum_{i = 1}^n x_i w_i + \mu \sum_{i = 1}^n y_i w_i = \lambda f(u) + \mu f(v) \blacksquare\]
     \item $\B = \{v_1, \ldots, v_n\}$ non è una base di $\V$.
-    In questo caso, estendiamo $\B$ ad una base $\Bs = \{v_1, \ldots, v_n, u_1, \ldots, u_m\}$ di $\V$. A questo punto definiamo $f$ nello stesso modo in cui l'abbiamo definita prima, e, perla dimostrazione precedente, troviamo che $f$ è lineare. $\blacksquare$
+    In questo caso, estendiamo $\B$ ad una base $\Bs = \{v_1, \ldots, v_n, u_1, \ldots, u_m\}$ di $\V$. A questo punto definiamo $f$ nello stesso modo in cui l'abbiamo definita prima, e, per la dimostrazione precedente, troviamo che $f$ è lineare. $\blacksquare$
     \end{enumerate}
     \item Sia $v = \sum_{i = 1}^n x_i v_i \in \V$. Per la proprietà 1) vista nelle Proprietà \ref{prop-app-lin}, sappiamo che \mbox{$f(x_1 v_1 + \ldots + x_n v_n) = x_1 f(v_1) + \ldots + x_n f(v_n) = \sum_{i = 1}^n x_i f(v_i)$}. Per lo stesso ragionamento, troviamo che $g(v) = \sum_{i = 1}^n x_i g(v_i)$. Dato che per ipotesi $f(v_i) = g(v_i) \enspace \forall i \in \{1, \ldots, n\}$, troviamo che $f = g$. $\blacksquare$ 
 \end{enumerate}
@@ -1508,7 +1508,7 @@ Presi due spazi vettoriali $\V$ e $\W$ su $\K$, con $\V$ finitamente generato:
 Presi gli spazi vettoriali $\V$ e $\W$ su $\K$, con $\V$ finitamente generato, e presa la base $\B = \{v_1, \ldots, v_n\}$ di $\V$ e i vettori $w_1, \ldots, w_m \in \W$, \textbf{esiste un'unica applicazione lineare} $\bm{f}$ che va da $\V$ a $\W$ tale che $\bm{f(v_i) = w_i} \enspace \forall i \in \{1, \ldots, n\}$.
 \end{Proposizione}
 
-I due lemma visti in precedenza erano necessari proprio per arrivare a questa conclusione.
+I due lemmi visti in precedenza erano necessari proprio per arrivare a questa conclusione.
 
 \begin{Osservazione}[]
 \label{oss-L_A(e_i) = A_i}
@@ -1541,7 +1541,7 @@ Possiamo quindi concludere che esiste un'unica matrice $A$ tale che $f = L_A$. $
 
 \begin{Definizione}[Matrice associata]
 \label{def-matrice-associata}
-Presa un'applicazione lineare $f: \V \longrightarrow \W$, una base $\B = \{v_1, \ldots, v_n\}$ di $\V$ e una base $\Bs = \{w_1, \ldots, w_m\}$ di $\W$, la \textbf{matrice associata} di $f$ $\bm{M_\Bs^\B(f)}$ è la matrice che ha come colonne le coordinate in base $\Bs$ dei vettori di $\B$, ossia 
+Presa un'applicazione lineare $f: \V \longrightarrow \W$, una base $\B = \{v_1, \ldots, v_n\}$ di $\V$ e una base $\Bs = \{w_1, \ldots, w_m\}$ di $\W$, la \textbf{matrice associata} a $f$ $\bm{M_\Bs^\B(f)}$ è la matrice che ha come colonne le coordinate in base $\Bs$ dei vettori di $\B$, ossia 
 \[
 \bm{M_\Bs^\B(f)}
 \begin{bmatrixb}
@@ -1582,7 +1582,7 @@ Presa l'applicazione $\bm{p_\theta : V(\E^2)} \longrightarrow \bm{V(\E^2)}$, che
 
 
 \begin{minipage}[c]{0.60\textwidth}
-Prima di cercare la matrice associata, cerchiamo di capire graficamente cosa rappresenta la funzione $p_\theta$. Preso un vettore $\vv{AB}$ sul pinao, rappresentato qui a destra in blu, il vettore $p_\theta(\vv{AB})$ è lo stesso vettore traslato di un angolo $\theta$, rappresentato qui a destra in rosso. 
+Prima di cercare la matrice associata, cerchiamo di capire graficamente cosa rappresenta la funzione $p_\theta$. Preso un vettore $\vv{AB}$ sul piano, rappresentato qui a destra in blu, il vettore $p_\theta(\vv{AB})$ è lo stesso vettore traslato di un angolo $\theta$, rappresentato qui a destra in rosso. 
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -1662,7 +1662,7 @@ Vogliamo quindi dimostrare che $M_\Bs^\B$ è un'applicazione lineare biiettiva, 
      \undzero & \text{se } k \neq j 
     \end{cases}
     \]
-    Per dimostrare che $\dim \mathcal{L}(\V, \W) = n \cdot m$ è sufficiente quindi dimostare che \mbox{$\D = \{f_{ij} \mid i \in \{1, \ldots, m\} \text{ e } j \in \{1, \ldots, n\}\}$} è una sua base.
+    Per dimostrare che $\dim \mathcal{L}(\V, \W) = n \cdot m$ è sufficiente quindi dimostrare che \mbox{$\D = \{f_{ij} \mid i \in \{1, \ldots, m\} \text{ e } j \in \{1, \ldots, n\}\}$} è una sua base.
     \begin{itemize}
         \item $\braket{f_{11}, \ldots, f_{mn}} = \mathcal{L}(\V, \W)$ \\
         Preso $f \in \mathcal{L}(\V, \W)$, $f(v_j) \in \W$ sicuramente, dunque possiamo riscriverlo come $f(v_j) = \sum_{i = 1}^m a_{ij} w_i$ essendo $\Bs = \{w_1, \ldots, w_m\}$ una base di $\W$.
@@ -1750,7 +1750,7 @@ p_1 & 0 & 0 & 0 & 0  \\
 Il \textbf{rango} $\bm{rg(f)}$ di un'applicazione lineare $f:\V \longrightarrow \W$, dove $\V$ e $\W$ sono spazi vettoriali su $\K$ finitamente generati, è la \textbf{dimensione della sua immagine}.
 \end{Definizione}
 
-\NB Per comodità scriveremo quasi sempre $Im(A)$ al posto di $Im(L_A)$, oppure anche $\ker (A) = \ker (L_A)$. È quasi scontanto che si parli ovviamente di $L_A$ e non della matrice stessa $A$ perché questi concetti hanno senso se riferiti ad un'applicazione lineare (basta rivedersi la definizione di rango o nucleo per notare subito che sono riferiti ad un'applicazione lineare).  
+\NB Per comodità scriveremo quasi sempre $Im(A)$ al posto di $Im(L_A)$, oppure anche $\ker (A) = \ker (L_A)$. È quasi scontato che si parli ovviamente di $L_A$ e non della matrice stessa $A$ perché questi concetti hanno senso se riferiti ad un'applicazione lineare (basta rivedersi la definizione di rango o nucleo per notare subito che sono riferiti ad un'applicazione lineare).  
 
 \begin{Proposizione}[]
 \label{propos-immagine-combinazione-lineare-colonne}
@@ -1764,7 +1764,7 @@ Per dimostrare questa proposizione, dimostriamo prima che $Im(A) \subset \braket
     \item $Im(A) \subset \braket{A_1, \ldots, A_n}$ \\
     Prendiamo $\Y \in Im(A)$. Sappiamo che esiste quindi $\X \in \K^n$ tale che $L_A(\X) = A \cdot \X = \Y$. Essendo $S = \{e_1, \ldots, e_n\}$ la base canonica di $\K^n$, troviamo che $\X = e_1 x_1 + \ldots + e_n x_n$, dunque $\Y = A \cdot (e_1 x_1 + \ldots + e_n x_n) = x_1 \cdot (A e_1) + \ldots + x_n \cdot (A e_n) = x_1 A_1 + \ldots x_n A_n$. Questo significa che tutti gli elementi in $Im(A)$ sono scrivibili come combinazione lineare delle colonne di $A$, ossia $Im(A) \subset \braket{A_1, \ldots, A_n}$.
     \item $Im(A) \subset \braket{A_1, \ldots, A_n}$ \\
-    Prenidamo $\Y \in \braket{A_1, \ldots, A_n}$. Sappiamo che esistono qunidi $\lambda_1, \ldots, \lambda_n \in \K$ tali che $\Y = \lambda_1 A_1 + \ldots + \lambda_n A_n = \lambda_1 \cdot (A e_1) + \ldots + \lambda_n \cdot A(e_n) = A (\lambda_1 e_1 + \ldots + \lambda_n e_n)$. Dato che $S = \{e_1, \ldots, e_n\}$ è la base canonica di $\K^n$, troviamo che $\lambda_1 e_1 + \ldots + \lambda_n e_n \in \K^n$. Definiamo quindi $\X = \lambda_1 e_1 + \ldots + \lambda_n e_n$. Troviamo quindi che $\Y = A \cdot \X = L_A(\X)$, ossia $\Y \in Im(A)$. 
+    Prendiamo $\Y \in \braket{A_1, \ldots, A_n}$. Sappiamo che esistono quindi $\lambda_1, \ldots, \lambda_n \in \K$ tali che $\Y = \lambda_1 A_1 + \ldots + \lambda_n A_n = \lambda_1 \cdot (A e_1) + \ldots + \lambda_n \cdot A(e_n) = A (\lambda_1 e_1 + \ldots + \lambda_n e_n)$. Dato che $S = \{e_1, \ldots, e_n\}$ è la base canonica di $\K^n$, troviamo che $\lambda_1 e_1 + \ldots + \lambda_n e_n \in \K^n$. Definiamo quindi $\X = \lambda_1 e_1 + \ldots + \lambda_n e_n$. Troviamo quindi che $\Y = A \cdot \X = L_A(\X)$, ossia $\Y \in Im(A)$. 
 \end{itemize}
 Possiamo quindi concludere che $Im(A) = \braket{A_1, \ldots, A_n}$. $\blacksquare$
 
@@ -1868,8 +1868,8 @@ Presa $A \in M_{mn}(\K)$, ci sono due possibilità:
     \item $A^1 \neq \undzero$
 \end{enumerate} 
 Se $A^1 \neq \undzero$, allora sappiamo che almeno una colonna è non nulla. Prendiamo questa colonna e la scambiamo con la prima colonna, eseguendo un'operazione elementare 1). Ora, per la riga 1 dobbiamo eliminare tutti gli elementi su questa linea di tutte le colonne che non siano la prima. \\
-Per ogni colonna $i$ aggiungiamo un certo $\lambda A_1$ tale che $\lambda_1 a_{11} = - a_{1i}$. In questo modo, tutta la riga $1$ sarà uguale a $0$ trannè che per $a_{11}$. \\
-Ora se guardaimo la sotto matrice $(m - 1) \times (n - 1)$ togliendo la prima riga e la prima colonna, ripetendo lo stesso passaggio troviamo che anche la seconda riga è tutta nulla dalla terza entrata in poi. Continuando così con tutte le rige, troviamo una nuova matrice $S$ a scala per colonne.
+Per ogni colonna $i$ aggiungiamo un certo $\lambda A_1$ tale che $\lambda_1 a_{11} = - a_{1i}$. In questo modo, tutta la riga $1$ sarà uguale a $0$ tranne che per $a_{11}$. \\
+Ora se guardiamo la sottomatrice $(m - 1) \times (n - 1)$ togliendo la prima riga e la prima colonna, ripetendo lo stesso passaggio troviamo che anche la seconda riga è tutta nulla dalla terza entrata in poi. Continuando così con tutte le righe, troviamo una nuova matrice $S$ a scala per colonne.
 
 Dobbiamo ora verificare che $Im(A) = Im(S)$. Se vediamo le colonne di $A$ come dei vettori $v_1, \ldots, v_n$, possiamo riscriverci tutte e 3 le operazioni elementari utilizzando questi vettori. Quindi
 \begin{enumerate}
@@ -1881,7 +1881,7 @@ Dobbiamo ora verificare che $Im(A) = Im(S)$. Se vediamo le colonne di $A$ come d
 Dobbiamo dimostrare che, in tutti e tre i casi, lo SPAN generato dai vettori a sinistra è identico allo SPAN generato dai vettori a destra (questo perché per la Proposizione \ref{propos-immagine-combinazione-lineare-colonne}).
 \begin{enumerate}
     \item $\braket{v_1, \ldots, v_n} = \braket{v_1, \ldots, v_{i-1}, v_j, v_{i+1}, \ldots, v_{j-1}, v_i, v_{j+1}, \ldots, v_n}$ \\ 
-    Questa è la più banale, dato che modificare l'ordine dei vettori in una lista dei vettori, lo SPAN di essi non cambia mai.
+    Questa è la più banale, dato che, modificando l'ordine dei vettori in una lista, lo SPAN di essi non cambia mai.
     \item  $\braket{v_1, \ldots, v_n} = \braket{v_1, \ldots, v_j + \lambda v_k, \ldots, v_n}$ \\
     Dimostriamo prima che $\braket{v_1, \ldots, v_n} \subset \braket{v_1, \ldots, v_j + \lambda v_k, \ldots, v_n}$ e poi dimostriamo che $\braket{v_1, \ldots, v_n} \supset \braket{v_1, \ldots, \lambda v_j, \ldots, v_n}$ per dimostrare che questi sono uguali.
     \begin{itemize}
@@ -1895,9 +1895,9 @@ Dobbiamo dimostrare che, in tutti e tre i casi, lo SPAN generato dai vettori a s
     Anche qui cerchiamo di dimostrare sia che $\braket{v_1, \ldots,v_n} \subset \braket{v_1, \ldots, \lambda v_j, \ldots, v_n}$ e poi dimostriamo che $\braket{v_1, \ldots, v_n} \supset \braket{v_1, \ldots, \lambda v_j, \ldots, v_n}$. 
     \begin{itemize}
         \item $\braket{v_1, \ldots, v_n} \subset \braket{v_1, \ldots, \lambda v_j, \ldots, v_n}$ \\
-        Tutti i generatori dello SPAN a sinistra si trovano tra i generatori dello SPAN di destra fatta eccezione per $v_j$, ma è facile dimostrare che anche lui appartiene allo SPAN. Se infatti nella combinazione lineare $\lambda_1 v_1 + \ldots + \lambda_j (\lambda v_j) + \ldots + \lambda_n v_n$ poiniamo \mbox{$\lambda_i = 0 \enspace \forall i \in \{1, \ldots, n\}$} tali che $i \neq j$, e poniamo $\lambda_j = \frac{1}{\lambda}$, troviamo proprio l'ultimo generatore che ci mancava $v_j$. 
+        Tutti i generatori dello SPAN a sinistra si trovano tra i generatori dello SPAN di destra fatta eccezione per $v_j$, ma è facile dimostrare che anche lui appartiene allo SPAN. Se infatti nella combinazione lineare $\lambda_1 v_1 + \ldots + \lambda_j (\lambda v_j) + \ldots + \lambda_n v_n$ poniamo \mbox{$\lambda_i = 0 \enspace \forall i \in \{1, \ldots, n\}$} tali che $i \neq j$, e poniamo $\lambda_j = \frac{1}{\lambda}$, troviamo proprio l'ultimo generatore che ci mancava $v_j$. 
         \item $\braket{v_1, \ldots, v_n} \supset \braket{v_1, \ldots, \lambda v_j, \ldots, v_n}$ \\
-        Anche qui notiamo che tutti i generatori dello SPAN a destra si trovano tra i generatori dello SPAN di sinistra fatta eccezione per $\lambda v_j$, ma è facile dimostrare che anche lui appartiene allo SPAN. Se infatti nella combinazione lineare $\lambda_1 v_1 + \ldots + \lambda_n v_n$ poiniamo \mbox{$\lambda_i = 0 \enspace \forall i \in \{1, \ldots, n\}$} tali che $i \neq j$, e poniamo $\lambda_j = \lambda$, troviamo proprio l'ultimo generatore che ci mancava $\lambda_j v_j$. 
+        Anche qui notiamo che tutti i generatori dello SPAN a destra si trovano tra i generatori dello SPAN di sinistra fatta eccezione per $\lambda v_j$, ma è facile dimostrare che anche lui appartiene allo SPAN. Se infatti nella combinazione lineare $\lambda_1 v_1 + \ldots + \lambda_n v_n$ poniamo \mbox{$\lambda_i = 0 \enspace \forall i \in \{1, \ldots, n\}$} tali che $i \neq j$, e poniamo $\lambda_j = \lambda$, troviamo proprio l'ultimo generatore che ci mancava $\lambda_j v_j$. 
     \end{itemize}
     Possiamo quindi concludere che $\braket{v_1, \ldots, v_n} = \braket{v_1, \ldots, \lambda v_j, \ldots, v_n}$.
 \end{enumerate}
@@ -2010,7 +2010,7 @@ Dimostriamo questa proposizione per induzione.
     \item Ipotesi induttiva \\
     Assumiamo la proposizione vera per un prodotto tra $n-1$ matrici.
     \item Passo induttivo \\
-    Prendiamo questa volta $n$ matrici $A_1, \ldots, A_n \in M_{nn}(\K)$. Sappiamo ovviamente che \mbox{$(A_1 \cdot \ldots \cdot A_{n-1} \cdot A_n) = ((A_1 \cdot \ldots \cdot A_{n-1}) \cdot A_n)^t$}, e dato che $A_1 \cdot \ldots \cdot A_{n-1}$ è sempre una matrice, possiamo vedere questo prodotto come un prodotto tra due matrici, e avendo già dimostrato il caso base possiamo dire che la trasposta del prodotto tra queste due matrici è il prodotto delle trasposte in ordine ivnerso, ossia \mbox{$((A_1 \cdot \ldots \cdot A_{n-1}) \cdot A_n)^t = A_n^t \cdot (A_1 \cdot \ldots \cdot A_{n-1})^t$}. Per ipotesi induttiva, sappiamo che \mbox{$(A_1 \cdot \ldots \cdot A_{n-1})^t =  A_{n-1}^t \cdot \ldots \cdot A_1$}, dunque troviamo che \mbox{$(A_1 \cdot \ldots A_n)^t = A_n^t \cdot \ldots \cdot A_1^t$.} $\blacksquare$
+    Prendiamo questa volta $n$ matrici $A_1, \ldots, A_n \in M_{nn}(\K)$. Sappiamo ovviamente che \mbox{$(A_1 \cdot \ldots \cdot A_{n-1} \cdot A_n) = ((A_1 \cdot \ldots \cdot A_{n-1}) \cdot A_n)^t$}, e dato che $A_1 \cdot \ldots \cdot A_{n-1}$ è sempre una matrice, possiamo vedere questo prodotto come un prodotto tra due matrici, e avendo già dimostrato il caso base possiamo dire che la trasposta del prodotto tra queste due matrici è il prodotto delle trasposte in ordine inverso, ossia \mbox{$((A_1 \cdot \ldots \cdot A_{n-1}) \cdot A_n)^t = A_n^t \cdot (A_1 \cdot \ldots \cdot A_{n-1})^t$}. Per ipotesi induttiva, sappiamo che \mbox{$(A_1 \cdot \ldots \cdot A_{n-1})^t =  A_{n-1}^t \cdot \ldots \cdot A_1$}, dunque troviamo che \mbox{$(A_1 \cdot \ldots A_n)^t = A_n^t \cdot \ldots \cdot A_1^t$.} $\blacksquare$
 \end{itemize}
 
 \begin{Definizione}[Matrice a scala per righe]
@@ -2025,7 +2025,7 @@ Presa una matrice $S \in M_{mn}(\K)$ a scala per righe, con pivot sulle colonne 
 \bm{\phi S: \ker S} &\longrightarrow \bm{\K^{n-r}} \\
 \bm{(x_1, \ldots, x_n)} &\longmapsto \bm{(x_1, \ldots, x_{j_1 - 1}, x_{j_1 + 1}, \ldots, x_{j_r - 1}, x_{j_r + 1}, \ldots, x_n)}
 \end{align*}
-che prende un vettore nel nucleo di $S$ e ne ritorna un'altro con gli stessi vettori tolti quelli sugli indici $j_1, \ldots, j_r$, è un \textbf{isomorfismo}. 
+che prende un vettore nel nucleo di $S$ e ne ritorna un altro con gli stessi vettori tolti quelli sugli indici $j_1, \ldots, j_r$, è un \textbf{isomorfismo}. 
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -2057,7 +2057,7 @@ Per dimostrare che $\phi S$ è un isomorfismo, per l'Osservazione \ref{oss-def-i
     p_r x_{j_r} + s_{r j_r + 1} x_{j_r + 1} \ldots + s_{rn} x_n &= 0 \\
     \end{cases}
     \]
-    Risolvendo dal basso verso l'altro, troviamo che $p_r x_{j_r} = -(\text{somma di costanti note})$, ossia troviamo $x_{j_r} = k$ dove $k$ è un termine noto. Risalendo tutto il sistema troviamo tutti i valori di $x_{j_k}$, ma tutti i restanti valori $x_i$ tali che $i \neq j_k \enspace \forall k \in \{1, \ldots, r\}$ non sono in alcun modo vincolati dal sistema. Possiamo quindi porre questi valori pari a $y_i$, arrivando quindi a dire che $\phi S(\X) = \Y$. Dunque $\phi S$ è suriettiva. 
+    Risolvendo dal basso verso l'alto, troviamo che $p_r x_{j_r} = -(\text{somma di costanti note})$, ossia troviamo $x_{j_r} = k$ dove $k$ è un termine noto. Risalendo tutto il sistema troviamo tutti i valori di $x_{j_k}$, ma tutti i restanti valori $x_i$ tali che $i \neq j_k \enspace \forall k \in \{1, \ldots, r\}$ non sono in alcun modo vincolati dal sistema. Possiamo quindi porre questi valori pari a $y_i$, arrivando quindi a dire che $\phi S(\X) = \Y$. Dunque $\phi S$ è suriettiva. 
 \end{itemize}
 Essendo quindi $\phi S$ lineare, iniettiva e suriettiva, e quindi biettiva, possiamo concludere che è un isomorfismo. $\blacksquare$
 
@@ -2076,7 +2076,7 @@ In poche parole, per un sistema lineare omogeneo con più variabili che equazion
 
 \Dimostrazione \nopagebreak
 
-Se $n > m$, allora $n > r$, dato che $m \geq r$. Dunque $n-r \geq n- m \geq 1$, ossia esiste una variabile libera, che si trova in una colonna senza pivot. Questo singifica che quella variabile non deve essere per forza $0$, e che quindi $\X \neq 0$. $\blacksquare$
+Se $n > m$, allora $n > r$, dato che $m \geq r$. Dunque $n-r \geq n- m \geq 1$, ossia esiste una variabile libera, che si trova in una colonna senza pivot. Questo significa che quella variabile non deve essere per forza $0$, e che quindi $\X \neq 0$. $\blacksquare$
 
 \begin{Proposizione}[]
 \label{propos-arrivare-matrice-a-scala-per-righe}
@@ -2218,7 +2218,7 @@ Questa definizione ci sarà utile solamente per una dimostrazione che faremo tra
 
 \begin{Definizione}[Equazioni cartesiane di un sottospazio]
 \label{def-eq-cart-sott}
-Preso uno spazio vettoriale $\V$ e un suo sottospazio vettoriale $\W$, esistono $\bm{f_1, \ldots, f_d}$ applicazioni lienari da $\V$ a $\K$ tali che \mbox{$\bm{\W = \{v \in \V \mid f_1(v) = \ldots = f_d(v) = \undzero\}}$}, ossia \mbox{$\bm{\W = \ker f_\lambda}$} dove
+Preso uno spazio vettoriale $\V$ e un suo sottospazio vettoriale $\W$, esistono $\bm{f_1, \ldots, f_d}$ applicazioni lineari da $\V$ a $\K$ tali che \mbox{$\bm{\W = \{v \in \V \mid f_1(v) = \ldots = f_d(v) = \undzero\}}$}, ossia \mbox{$\bm{\W = \ker f_\lambda}$} dove
 \begin{align*}
 \bm{f_\lambda: \V} &\longrightarrow \bm{\K^d} \\
 \bm{v}  &\longmapsto \bm{(f_1(v), \ldots, f_d(v))}
@@ -2233,14 +2233,14 @@ Preso uno spazio vettoriale $\W$ e un suo sottospazio vettoriale $\W$, è \textb
 \Dimostrazione \nopagebreak
 
 Sia $\B = \{w_1, \ldots, w_m\}$ una base di $\W$. Estendiamo questa base a \mbox{$\Bs = \{w_1, \ldots, w_m, v_1, \ldots, v_d\}$}, base di $\V$. Troviamo quindi che $d = \dim \V - m$. Poniamo ora $f_i = v_i^* \enspace \forall i \in \{1, \ldots, d\}$ (ha senso perché $v_1, \ldots, v_d$ fanno parte di una base di $\V$). Definiamo ora il sottospazio vettoriale \mbox{$\U = \{v \in \V \mid f_1(v) = \ldots = f_d(v) = \undzero\}$}. Sappiamo che $w_i \in \ker f_j$ dato che $w_i \neq v_j$ e $f_j = v_j^*$, dunque notiamo subito come $\W \subset \U$, dato che tutti i suoi generatori si trovano in $\U$. Non ci manca quindi che dimostrare che $\U \subset \W$. \\
-Prendiamo un vettore $u \in \U$. Essendo $\Bs$ una base di $\V$, ed essendo $\U$ un sottospazio vettoriale di $\V$, possiamo dire che $u = \sum_{i = 1}^m x_i w_i + \sum_{k = 1}^d y_k v_k$. Dunque \mbox{$f_j(u) = v_j^*(u) = \sum_{i = 1}^m x_i v_j^*(w_i) + \sum_{k = 1}^d y_k v_j^*(v_k)$}. La prima sommatoria, per quello detto prima, sappiamo che è pari a $0$, e della seconda sommatoria l'unico termine che rimane è $y_j$, dato che $v_j^*(v_j) = 1$. Dunque troviamo che $f_j(u) = y_j$, e dato che $u \in \U$, troviam oche $y_j = 0$. Dato che questo vale $\forall j \in \{1, \ldots, d\}$, troviamo che $u = \sum_{i = 1}^m x_i w_i$, ossia $u \in \W$. Dunque $\U \subset \W$. \\
+Prendiamo un vettore $u \in \U$. Essendo $\Bs$ una base di $\V$, ed essendo $\U$ un sottospazio vettoriale di $\V$, possiamo dire che $u = \sum_{i = 1}^m x_i w_i + \sum_{k = 1}^d y_k v_k$. Dunque \mbox{$f_j(u) = v_j^*(u) = \sum_{i = 1}^m x_i v_j^*(w_i) + \sum_{k = 1}^d y_k v_j^*(v_k)$}. La prima sommatoria, per quello detto prima, sappiamo che è pari a $0$, e della seconda sommatoria l'unico termine che rimane è $y_j$, dato che $v_j^*(v_j) = 1$. Dunque troviamo che $f_j(u) = y_j$, e dato che $u \in \U$, troviamo che $y_j = 0$. Dato che questo vale $\forall j \in \{1, \ldots, d\}$, troviamo che $u = \sum_{i = 1}^m x_i w_i$, ossia $u \in \W$. Dunque $\U \subset \W$. \\
 Possiamo quindi concludere che $\W = \U = \{v \in \V \mid f_1(v)  = \ldots = f_d(v) = \undzero\}$. 
 
 \Esempio \nopagebreak
 
-Preso il sottospazio vettoriale $\R^4 \supset \bm{\W = \braket{(-1,0,3,2),(1,-1,1,-1),(1,-2,5,0)}}$, trovare delle \textbf{equazioni cartesinae di} $\bm{\W}$. \nopagebreak
+Preso il sottospazio vettoriale $\R^4 \supset \bm{\W = \braket{(-1,0,3,2),(1,-1,1,-1),(1,-2,5,0)}}$, trovare delle \textbf{equazioni cartesiane di} $\bm{\W}$. \nopagebreak
 
-Prima di inizare a risolvere l'esercizio, è bene notare una cosa: nel testo è richiesto di trovare \textit{delle} equazioni cartesiane di $\W$, non \textit{le} equazioni cartesiane di $\W$. Questo perché le equazioni cartesiane di un sottospazio vettoriale sono effettivamente infinite. Vedremo il perché alla fine dell'esercizio non appena le avremo trovate.
+Prima di iniziare a risolvere l'esercizio, è bene notare una cosa: nel testo è richiesto di trovare \textit{delle} equazioni cartesiane di $\W$, non \textit{le} equazioni cartesiane di $\W$. Questo perché le equazioni cartesiane di un sottospazio vettoriale sono effettivamente infinite. Vedremo il perché alla fine dell'esercizio non appena le avremo trovate.
 
 Cerchiamo quindi una funzione
 \begin{align*}
@@ -2340,12 +2340,12 @@ Presa una matrice $A \in M_{nn}(\K)$:
     \item $A$ è invertibile $\implies \dim \ker A = 0$ \\
     Prendiamo $v \in \ker A$. Sappiamo quindi che $A \cdot v = \undzero$. Poiché $A$ è invertibile, sappiamo che esiste $A^{-1}$, dunque ha senso moltiplicare entrambi i lati dell'equazione per $A^{-1}$. Troviamo quindi $A^{-1} (A \cdot v) = A^{-1} \cdot \undzero = \undzero$. Dato che $A^{-1} (A \cdot v) = (A^{-1} \cdot A) v$, e dato che $A^{-1} \cdot A = 1_n$, troviamo che $1_n v = \undzero$, ossia $v = \undzero$. Dunque $\ker A = \{\undzero\}$, ossia $\dim \ker A = 0$. $\blacksquare$
     \item $A$ è invertibile $\impliedby \dim \ker A = 0$ \\
-    Se $\dim \ker A = 0$, allora sappiamo che $L_A$ è iniettiva. Dato che $\dim \K^n = \dim \ker A + \dim Im(A) = \dim Im(A)$, troviamo che $\dim Im(A) = n$, ed essendo $Im(A)$ un sottospazio vettoriale di $\K^n$, per la Proposizione \ref{propos-dim-spa-vet} troviamo che $Im(A) = \K^n$. Dunque $L_A$ è anche suriettiva, e quindi è biiettiva. Essendo biiettiva e lienare, $L_A$ è un isomorfismo, che per definizione ammette sempre un'applicazione lineare inversa $L_A^{-1}$. La matrice associata a $L_A^{-1}$ è proprio la matrice inversa di $A$, ossia $A^{-1}$. Dunque $A$ è invertibile. $\blacksquare$
+    Se $\dim \ker A = 0$, allora sappiamo che $L_A$ è iniettiva. Dato che $\dim \K^n = \dim \ker A + \dim Im(A) = \dim Im(A)$, troviamo che $\dim Im(A) = n$, ed essendo $Im(A)$ un sottospazio vettoriale di $\K^n$, per la Proposizione \ref{propos-dim-spa-vet} troviamo che $Im(A) = \K^n$. Dunque $L_A$ è anche suriettiva, e quindi è biiettiva. Essendo biiettiva e lineare, $L_A$ è un isomorfismo, che per definizione ammette sempre un'applicazione lineare inversa $L_A^{-1}$. La matrice associata a $L_A^{-1}$ è proprio la matrice inversa di $A$, ossia $A^{-1}$. Dunque $A$ è invertibile. $\blacksquare$
 \end{enumerate}
 
 \begin{Proposizione}[Trovare l'inversa di una matrice]
 \label{propos-trovare-inversa}
-Presa una matrice $A \in M_{nn}(\K)$ invertibile, per trovare la sua inversa $\bm{A^{-1}}$ prendiamo $\bm{[A|1_n]}$, e trasofrmiamo con delle operazioni sulle righe $A$ in una matrice a scala per righe $S$, e ripetiamo le stesse operazioni su $1_n$. Troviamo quindi $\bm{[S|B]}$, e, facendo altre operazioni su $S$ per trasofrmarla in $1_n$, e ripetendo le stesse operazioni anche su $B$, troviamo $\bm{[1_n | A^{-1}]}$, trovando quindi $A^{-1}$.
+Presa una matrice $A \in M_{nn}(\K)$ invertibile, per trovare la sua inversa $\bm{A^{-1}}$ prendiamo $\bm{[A|1_n]}$, e trasformiamo con delle operazioni sulle righe $A$ in una matrice a scala per righe $S$, e ripetiamo le stesse operazioni su $1_n$. Troviamo quindi $\bm{[S|B]}$, e, facendo altre operazioni su $S$ per trasformarla in $1_n$, e ripetendo le stesse operazioni anche su $B$, troviamo $\bm{[1_n | A^{-1}]}$, trovando quindi $A^{-1}$.
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -2359,7 +2359,7 @@ A \cdot x_n  = e_n
 \end{cases}
 \]
 
-Per poter risolvere questo sistema, possiamo usare l'eliminazione di Guass: prendiamo $[A|e_1]$ e trasformiamo $A$ in una matrice a scala per righe $S$, trovando $[S|B_1]$. Dato che però questo proceidmento lo dobbiamo ripetere per tutti i vettori $e_i$, possiamo farlo una sola volta trasformando $[A|e_1, \ldots, e_n] = [A|1_n]$ in $[S|B]$. \\
+Per poter risolvere questo sistema, possiamo usare l'eliminazione di Guass: prendiamo $[A|e_1]$ e trasformiamo $A$ in una matrice a scala per righe $S$, trovando $[S|B_1]$. Dato che però questo procedimento lo dobbiamo ripetere per tutti i vettori $e_i$, possiamo farlo una sola volta trasformando $[A|e_1, \ldots, e_n] = [A|1_n]$ in $[S|B]$. \\
 Essendo ora $A$ invertibile, noi sappiamo che $S$ può essere ritrasformata in $1_n$. Questo perché $S$ ha $n$ pivot su $n$ righe, che si trovano quindi lungo la diagonale, essendo $S$ a scala per righe, dunque basta eliminare tutti gli elementi sopra la diagonale e dividere ogni riga per il proprio pivot per trovare $1_n$. Dunque da $[S|B]$ possiamo arrivare a $[1_n | C]$. Dal sistema originale troviamo quindi
 \[
 \begin{cases}
@@ -2434,7 +2434,7 @@ $\bm{A}$ \textbf{invertibile} $\iff \bm{\{A_1, \ldots, A_n\}}$ \textbf{sono line
 
 \begin{enumerate}[label=\arabic*°]
     \item $A$ è invertibile $\implies$ $\{A_1, \ldots, A_n\}$ sono linearmente indipendenti \\
-    Per verificare che i vettori colonna di $A$ siano linearmente indipendenti dobbiamo dimostrare che l'equazione $\lambda_1 A_1 + \ldots + \lambda_n A_n = A \cdot \Lambda = \undzero$ ha come unica soluzione la soluzione banale. Dato che $A$ è invertibile, sappiamo che esiste $A^{-1}$. Se molitplichiamo entrambi i membri dell'equazione per $A^{-1}$ troviamo l'equazione $A^{-1}(A \cdot \Lambda) = A^{-1} \cdot \undzero = \undzero$. Dato che $A^{-1}(A \cdot \Lambda) = (A^{-1} \cdot A)\Lambda$, e dato che $A^{-1} \cdot A = 1_n$, troviamo che $1_n \Lambda = \undzero$, ossia $\Lambda = \undzero$, ossia trovimao che l'unica soluzione all'equazione iniziale è la soluzione banale, dunque i vettori colonna di $A$ sono linearmente indipendenti. $\blacksquare$
+    Per verificare che i vettori colonna di $A$ siano linearmente indipendenti dobbiamo dimostrare che l'equazione $\lambda_1 A_1 + \ldots + \lambda_n A_n = A \cdot \Lambda = \undzero$ ha come unica soluzione la soluzione banale. Dato che $A$ è invertibile, sappiamo che esiste $A^{-1}$. Se molitplichiamo entrambi i membri dell'equazione per $A^{-1}$ troviamo l'equazione $A^{-1}(A \cdot \Lambda) = A^{-1} \cdot \undzero = \undzero$. Dato che $A^{-1}(A \cdot \Lambda) = (A^{-1} \cdot A)\Lambda$, e dato che $A^{-1} \cdot A = 1_n$, troviamo che $1_n \Lambda = \undzero$, ossia $\Lambda = \undzero$, ossia troviamo che l'unica soluzione all'equazione iniziale è la soluzione banale, dunque i vettori colonna di $A$ sono linearmente indipendenti. $\blacksquare$
     \item $A$ è invertibile $\impliedby$ $\{A_1, \ldots, A_n\}$ sono linearmente indipendenti \\
     Affinché $A$ sia invertibile è necessario che esista una matrice $A^{-1}$ tale che $A \cdot A^{-1} = 1_n$. Sappiamo che $A^{-1} = [A_1^{-1}, \ldots, A_n^{-1}]$ e che $1_n = [e_1, \ldots, e_n]$, dunque l'equazione $A \cdot A^{-1} = 1_n$ possiamo riscriverla come il sistema
     \[
@@ -2488,7 +2488,7 @@ Presa la base $\{B_1, \ldots, B_n\}$ di $\K^n$ e la matrice $B = [B_1, \ldots, B
 
 \Dimostrazione \nopagebreak
 
-Banalmente, dato che la colonna j-esima di $M_S^\B(Id_\V)$ è $X_S(Id_\V(B_j)) = X_S(B_j)$, e dato che $X_S(B_j) = B_j$, troviamo prorpio che $M_S^\B(Id_\V) = B$. $\blacksquare$ 
+Banalmente, dato che la colonna j-esima di $M_S^\B(Id_\V)$ è $X_S(Id_\V(B_j)) = X_S(B_j)$, e dato che $X_S(B_j) = B_j$, troviamo proprio che $M_S^\B(Id_\V) = B$. $\blacksquare$ 
 
 \begin{Osservazione}[]
 \label{oss-matrice-cambiamento-base-passare-per-due-basi}
@@ -2515,7 +2515,7 @@ M_S^\B(Id_\V) = \begin{bmatrix}
 \end{bmatrix}
 \]
 
-Con un po di calcoli è facile trovare che 
+Con un po' di calcoli è facile trovare che 
 \[M_\Bs^S(Id_\V) =  M_S^\Bs(Id_\V)^{-1}
 \begin{bmatrix}
     -2 & 11 & -2 \\
@@ -2580,7 +2580,7 @@ Per essere una relazione d'equivalenza la relazione di coniugio deve essere rifl
     \item Riflessività \\
     $A \sim A$ è sempre vera dato che $A = 1_n^{-1} \cdot A \cdot 1_n = 1_n \cdot A = A$. 
     \item Simmetria \\
-    Preso $A \sim B$, dimostriamo che $B \sim A$. $A \sim B$ significa che $A = G^{-1} \cdot B \cdot G$. Moltiplicando ambo i memrbi per $G$ e poi per $G^{-1}$, troviamo che $G \cdot A \cdot G^{-1} = B$. Siccome $G = (G^{-1})^{-1}$, troviamo che $B \sim A$.
+    Preso $A \sim B$, dimostriamo che $B \sim A$. $A \sim B$ significa che $A = G^{-1} \cdot B \cdot G$. Moltiplicando ambo i membri per $G$ e poi per $G^{-1}$, troviamo che $G \cdot A \cdot G^{-1} = B$. Siccome $G = (G^{-1})^{-1}$, troviamo che $B \sim A$.
     \item Transitività \\
     Preso $A \sim B$ e $B \sim C$ dimostriamo che $A \sim C$. $A \sim B$ significa che $A = G^{-1} \cdot B \cdot G$ e $B \sim C$ significa che $B = H^{-1} \cdot C \cdot H$. Troviamo quindi che $A = G^{-1} \cdot B \cdot G = G^{-1} \cdot H^{-1} \cdot C \cdot G \cdot H$. Presa la matrice $H \cdot G$, la Proposizione \ref{propos-inversa-prodotto} ci dice che l'inversa di questa è esattamente $G^{-1} \cdot H^{-1}$. Dunque troviamo $A = (H \cdot G)^{-1} \cdot C \cdot (H \cdot G)$, ossia $A \sim C$.
 \end{itemize}
@@ -2607,7 +2607,7 @@ Presa la base $\B = \{(1,1), (1,-1)\}$ di $\K^2$ e la matrice \nopagebreak
 \]
 trovare $\bm{M_\B^\B(L_B)}$. \nopagebreak
 
-Ricordiamo che per l'Osservazione \ref{oss-B = M_S^S(L_B)} $B = M_S^S(L_B)$, e che per l'Osservazione \ref{oss-matrice-diagonalizzata-M_C^C(f) = M M M} \mbox{$M_B^B(L_B) = M_\B^S(Id) \cdot M_S^S(L_B) \cdot M_S^\B(Id)$} (per comodità spesso da ora in avati scriveremo $Id$ per indicare l'applicazione identità). Sappiamo inoltre per l'Osservazione \ref{oss-invertibilita-matrice-cambiamento-base} che $M_\B^S(Id) = M_S^\B(Id)^{-1}$, e che per la Proposizione \ref{propos-matrice-cambiamento-base-base-standard} 
+Ricordiamo che per l'Osservazione \ref{oss-B = M_S^S(L_B)} $B = M_S^S(L_B)$, e che per l'Osservazione \ref{oss-matrice-diagonalizzata-M_C^C(f) = M M M} \mbox{$M_B^B(L_B) = M_\B^S(Id) \cdot M_S^S(L_B) \cdot M_S^\B(Id)$} (per comodità spesso da ora in avanti scriveremo $Id$ per indicare l'applicazione identità). Sappiamo inoltre per l'Osservazione \ref{oss-invertibilita-matrice-cambiamento-base} che $M_\B^S(Id) = M_S^\B(Id)^{-1}$, e che per la Proposizione \ref{propos-matrice-cambiamento-base-base-standard} 
 \[M_S^\B(Id) = \begin{bmatrix}
     1 & 1 & \\
     1 & -1
@@ -2748,7 +2748,7 @@ Questo sistema si risolve solo ponendo $y_1 = y_2 = 0$. Troviamo quindi che $v_1
 \begin{Definizione}[Autospazi, autovalori e autovettori]
 \label{def-autospazi-autovalori-autovettori}
 Preso uno spazio vettoriale $\V$ e un endomorfismo $f$ su $\V$, chiamiamo \mbox{$\bm{V_\lambda(f) = \ker (\lambda Id_\V - f)} = \{v \in \V \mid f(v) = \lambda v\}$} l'\textbf{autospazio} associato all'\textbf{autovalore} $\lambda$ se $\bm{V_\lambda(f) \neq \{\undzero\}}$. \\
-Tutti i vettori dell'autospazio $\V_\lambda(f)$ diversi dal vettore nullo sono detti \textbf{autovettori di autovettore} $\bm{\lambda}$. 
+Tutti i vettori dell'autospazio $\V_\lambda(f)$ diversi dal vettore nullo sono detti \textbf{autovettori di autovalore} $\bm{\lambda}$. 
 \end{Definizione}
 
 \begin{Osservazione}[]
@@ -2811,7 +2811,7 @@ Tutti gli \textbf{autovalori} di $f$ sono i valori della matrice diagonale $M_\B
 \begin{Osservazione}[]
 \label{oss-diagonalizzabile-esiste-base}
 $\bm{f}$ \textbf{diagonalizzabile} $\iff$ \textbf{esiste una base} $\bm{\B}$ \textbf{di} $\bm{\V}$ \textbf{i cui vettori sono autovettori di} $\bm{f}$. \\
-\NB $M_\B^\B(f)$ è una matrice diagonale le cui entrate sono gli autovalori corrispondenti agli vettori di $\B$.
+\NB $M_\B^\B(f)$ è una matrice diagonale le cui entrate sono gli autovalori corrispondenti ai vettori di $\B$.
 \end{Osservazione}
 
 \Dimostrazione \nopagebreak
@@ -2929,7 +2929,7 @@ M_S^\B(Id) = [v_1, v_2] = \begin{bmatrix}
     -1 & -2
 \end{bmatrix}
 \]
-Per calcolare ora $M_\B^S(Id)$ non ci basta che ricordare che $M_\B^S(Id) = M_S^\B(Id)$. Seguendo il procedimento descritto nella Proposizione \ref{propos-trovare-inversa}, troviamo che 
+Per calcolare ora $M_\B^S(Id)$ ci basta ricordare che $M_\B^S(Id) = M_S^\B(Id)$. Seguendo il procedimento descritto nella Proposizione \ref{propos-trovare-inversa}, troviamo che 
 \[
 M_\B^S(Id) = \begin{bmatrix}
     2 & 1\\
@@ -3037,7 +3037,7 @@ A = \begin{bmatrix}
 
 \section{Definizioni}
 
-\begin{Definizione}[Sottomartice complementare]
+\begin{Definizione}[Sottomatrice complementare]
 \label{def-sottomatrice-complementare}
 Presa una matrice $A \in M_{nn}(\K)$ e presi gli indici $i,j \in \{1, \ldots, n\}$, la \textbf{sottomatrice complementare} associata a $(i,j)$ è la sottomatrice $\bm{A^i_j} \in M_{(n-1)(n-1)}$ ottenuta da $A$ eliminando la riga $i$ e la colonna $j$.
 \end{Definizione}
@@ -3117,12 +3117,12 @@ Presa una matrice $A \in M_{nn}(R)$
 \end{enumerate}
 
 
-\begin{Proprieta}[Operazoni elementari sulle colonne e determinante]
+\begin{Proprieta}[Operazioni elementari sulle colonne e determinante]
 \label{prop-oper-elem-determinante}
 \begin{enumerate}
     \item \textit{Scambio tra due colonne}: il determinante \textbf{cambia segno}
     \item \textit{Aggiungere a una colonna il multiplo di un'altra}: il determinante \textbf{non cambia}
-    \item \textit{Moltipicare una colonna per uno scalare non nullo}: il determinante \textbf{viene moltiplicato per lo stesso scalare}
+    \item \textit{Moltiplicare una colonna per uno scalare non nullo}: il determinante \textbf{viene moltiplicato per lo stesso scalare}
 \end{enumerate}
 \end{Proprieta}
 
@@ -3190,7 +3190,7 @@ Vediamo degli esempi con quest'applicazione dove viene preso come spazio vettori
     (1, x_2, 1) &\longmapsto \Phi(1, x_2, 1) = 1
     \end{align*}
     quest'applicazione non è lineare, dato che $f(\undzero) \neq \undzero$.
-    \item Se prendiamo invece l'applicazione $\Phi(x_1, x_2, x_3) = 5 \cdot x_1 \cdot x_2 \cdot x_3$, quest'applicazione è \textbf{multilineare}. Infatti, se blocchiamo $\bar{x}_2$ e $\bar{x}_3$, troviamo che $\Phi(x_1, \bar{x}_2, \bar{x}_3) = x_1 \cdot 5\bar{x}_2 \bar{x}_3 = Cx_1$, dove $C = 5 \bar{x}_2 \bar{x}_3$ è una costante. È facile notare come quest'applicazione è lineare, e questo proceidmento può essere ripetuto anche per le variabili $x_2$ e $x_3$. Dunque $\Phi$ è effettivamente multilineare.  
+    \item Se prendiamo invece l'applicazione $\Phi(x_1, x_2, x_3) = 5 \cdot x_1 \cdot x_2 \cdot x_3$, quest'applicazione è \textbf{multilineare}. Infatti, se blocchiamo $\bar{x}_2$ e $\bar{x}_3$, troviamo che $\Phi(x_1, \bar{x}_2, \bar{x}_3) = x_1 \cdot 5\bar{x}_2 \bar{x}_3 = Cx_1$, dove $C = 5 \bar{x}_2 \bar{x}_3$ è una costante. È facile notare come quest'applicazione è lineare, e questo procedimento può essere ripetuto anche per le variabili $x_2$ e $x_3$. Dunque $\Phi$ è effettivamente multilineare.  
 \end{itemize}
 
 \begin{Proposizione}[]
@@ -3204,12 +3204,12 @@ Presi gli spazi vettoriali $\K^d$ e $\K^e$, tutte le applicazioni su questi due 
 
 \Dimostrazione \nopagebreak
 
-Dimostriamo prima che questa applicazione sia multilinare e poi dimostriamo che tutte le applicazioni multilineari su $\K^d$ e $\K^e$ cadano in questo caso.\\ 
-Dobbiamo quindi dimostrare che qunado blocchiamo la $Y$ l'applicazione $f(X) = \sum_{i = 1}^d x_i (\sum_{j = 1}^e a_{ij} \bar{y}_j)$ è lineare e che allo stesso modo $f(Y) = \sum_{j = 1}^e y_j (\sum_{i = 1}^d a_{ij} \bar{x}_i)$ è lineare. Dato che $\sum_{j = 1}^e a_{ij} \bar{y}_j$ e $\sum_{i = 1}^d a_{ij} \bar{x}_i$ sono delle somme di costanti, dobbiamo semplciemente dimostrare che $f(X) = \sum_{i = 1}^d C_i x_i$ e che $f(Y) = \sum_{j = 1}^e D_j y_j$ sono lineari, e questo è evidente. Dunque $\Phi$ è un'applicazione multilineare. 
+Dimostriamo prima che questa applicazione sia multilineare e poi dimostriamo che tutte le applicazioni multilineari su $\K^d$ e $\K^e$ cadano in questo caso.\\ 
+Dobbiamo quindi dimostrare che quando blocchiamo la $Y$ l'applicazione $f(X) = \sum_{i = 1}^d x_i (\sum_{j = 1}^e a_{ij} \bar{y}_j)$ è lineare e che allo stesso modo $f(Y) = \sum_{j = 1}^e y_j (\sum_{i = 1}^d a_{ij} \bar{x}_i)$ è lineare. Dato che $\sum_{j = 1}^e a_{ij} \bar{y}_j$ e $\sum_{i = 1}^d a_{ij} \bar{x}_i$ sono delle somme di costanti, dobbiamo semplicemente dimostrare che $f(X) = \sum_{i = 1}^d C_i x_i$ e che $f(Y) = \sum_{j = 1}^e D_j y_j$ sono lineari, e questo è evidente. Dunque $\Phi$ è un'applicazione multilineare. 
 
 Per dimostrare che tutte le applicazioni multilineari su $\K^d$ e $\K^e$ cadono in questo caso, dobbiamo dimostrare che questo è l'unico tipo di applicazioni multilineari. \\
 Se prendiamo una base $\B = \{v_1, \ldots, v_d\}$ di $\K^d$ e una base $\Bs = \{w_1, \ldots, w_e\}$ di $\K^e$, troviamo che $X = \sum_{i = 1}^d x_i v_i$ e $Y = \sum_{j = 1}^e y_j w_j$. Dunque $\Phi(X, Y) = \Phi(\sum_{i = 1}^d x_i v_i, \sum_{j = 1}^e y_j w_j)$. Dobbiamo quindi dimostrare che $\Phi(X, Y) = \sum_{i = 1}^d \sum_{j = 1}^e x_i y_j \Phi(v_i, w_j)$. \\
-Espandendo $X$ troviamo che $\Phi(X,Y) = \Phi(x_1 v_1 + \ldots + x_d v_d, Y) =  \sum_{i = 1}^d x_i \Phi(v_i, Y)$. Ripetendo lo stesso passaggio espandendo $Y$, troviamo proprio che \mbox{$\Phi(X, Y) = \sum_{i = 1}^d \sum_{j = 1}^e x_i y_j \Phi(v_i, w_j)$}, come volevamo dimsotrare.
+Espandendo $X$ troviamo che $\Phi(X,Y) = \Phi(x_1 v_1 + \ldots + x_d v_d, Y) =  \sum_{i = 1}^d x_i \Phi(v_i, Y)$. Ripetendo lo stesso passaggio espandendo $Y$, troviamo proprio che \mbox{$\Phi(X, Y) = \sum_{i = 1}^d \sum_{j = 1}^e x_i y_j \Phi(v_i, w_j)$}, come volevamo dimostrare.
 
 Possiamo dunque concludere che qualsiasi applicazione multilineare può essere ricondotta alla forma $\sum_{i = 1}^d \sum_{j = 1}^e a_{ij} x_i y_j$. $\blacksquare$
 
@@ -3269,7 +3269,7 @@ Presa un'applicazione $\Phi$ su $m$ spazi vettoriali, \\
 Chiamiamo $\bm{\Multilin (\V_1 \times \ldots \times \V_m, \K)}$ \textbf{l'insieme delle applicazioni multilineari} che vanno da $\V_1, \ldots, \V_m$ a $\K$.
 \end{Definizione}
 
-Definiamo ora le operazioni di somma e prodtto per scalare per questo insieme.
+Definiamo ora le operazioni di somma e prodotto per scalare per questo insieme.
 
 \bigskip
 
@@ -3296,12 +3296,12 @@ Con le operazioni di somma e prodotto per scalare appena descritte, $\bm{\Multil
 \Dimostrazione \nopagebreak
 
 Sappiamo già che $\Multilin$ è chiuso rispetto a somma e prodotto per la Proposizione \ref{propos-multilineareità-di-un-applicazione}, dunque dobbiamo solo verificare che $\undzero$ sia in $\Multilin$. \\
-Per dimostrare che $\undzero \in \Multilin$ dobbiamo dimostare che 
+Per dimostrare che $\undzero \in \Multilin$ dobbiamo dimostrare che 
 \[
 \undzero(v_1, \ldots, \alpha x + \beta y, \ldots, v_m) = \alpha \undzero (v_1, \ldots, x, \ldots, v_m) + \beta \undzero(v_1, \ldots, y, \ldots, v_m)
 \]
 Ma questo è evidente, dato che l'applicazione nulla $\undzero$ manda tutto in $\undzero$, dunque questa uguaglianza si semplifica in $\undzero = \undzero$. Dunque $\undzero \in \Multilin$. \\
-Possiamo quindi concludere che $\Multilin$ è uno spazio vettorialie. $\blacksquare$
+Possiamo quindi concludere che $\Multilin$ è uno spazio vettoriale. $\blacksquare$
 
 \begin{Definizione}[Applicazioni multilineari alternanti]
 \label{def-app-multilin-altern}
@@ -3421,7 +3421,7 @@ Preso uno spazio vettoriale $\V$ finitamente generato su $\K$, con $\dim \V = n$
 
 \Dimostrazione \nopagebreak
 
-Per l'Osservazione \ref{oss-def-isomorfismo}, ci basta dimostrare che $ev_\B$ è un'applciazione lineare e biunivoca.
+Per l'Osservazione \ref{oss-def-isomorfismo}, ci basta dimostrare che $ev_\B$ è un'applicazione lineare e biunivoca.
 \begin{enumerate}[label=\arabic*°]
     \item $ev_\B$ è lineare \\
     Presi $\lambda, \mu \in \K$ e $\Phi, \Psi \in \Alt(\V^n, \K)$, 
@@ -3438,11 +3438,11 @@ Per l'Osservazione \ref{oss-def-isomorfismo}, ci basta dimostrare che $ev_\B$ è
     Per dimostrare che $ev_\B$ è biunivoca, dimostriamo che è iniettiva e suriettiva.
     \begin{enumerate}[label=\arabic*°]
         \item $ev_\B$ è iniettiva \\
-        Essendo $ev_\B$ lineare, per la Proposizione \ref{propos-applicazione-lineare-iniettiva-nucleo} basta dimostrare che $\ker ev_\B = \{\undzero\}$, dove $\undzero$ è l'applicazione nulla che manda tutto in $\undzero$. Affinché un'applicazione mulilineare si trovi nel nucleo di $ev_\B$, è necessario che $\Phi(\bar{v}_1, \ldots, \bar{v}_n) = \undzero$. \\
-        Dato che $\B$ è una base di $\V$, presi i vettori $v_1, \ldots, v_n \in \V$ possiamo riscriverli come combinazione lineare dei vettori di questa base. Dunque \mbox{$\Phi(v_1, \ldots, v_n) = \Phi(\sum_{j = 1}^n a_{1j} \bar{v}_j, \ldots, \sum_{j = 1}^n a_{nj} \bar{v}_j)$}. Ora, applicando tante volte la multilineareità di $\Phi$, possiamo arrivare a dire che \mbox{$\Phi(v_1, \ldots, v_n) = \sum_{1 \leq j_i \leq n} a_{1 j_1} \cdot \ldots \dots a_{nj_n} \Phi(\bar{v}_{j_1}, \ldots, \bar{v}_{j_n})$}. Dato che $\Phi$ è anche alternante, se esistono due vettori identici in questa base, allora sappiamo già che $\Phi(\bar{v}_1, \ldots, \bar{v}_n) = \undzero$. Dunque, nella sommatoria precedente, rimangono solo i termini dove $j_1, \ldots, j_n$ sono tutti distinti (ma in ordine comunque sparso), e dunque diventa \mbox{$\Phi(v_1, \ldots, v_n) = \sum_{\sigma \in \mathrm{Perm}_{(n)}} a_{1 \sigma_{(1)}} \cdot \ldots \cdot a_{n \sigma_{(n)}} \cdot \Phi(\bar{v}_{\sigma_{(1)}}, \ldots, \bar{v}_{\sigma_{(n)}})$}, dove $\sigma$ rapprsenta quindi tutte le possibili permutazioni di $j_1, \ldots, j_n$ e $\sigma_{(i)}$ rappresenta l'i-esimo elemento della permutazione. 
+        Essendo $ev_\B$ lineare, per la Proposizione \ref{propos-applicazione-lineare-iniettiva-nucleo} basta dimostrare che $\ker ev_\B = \{\undzero\}$, dove $\undzero$ è l'applicazione nulla che manda tutto in $\undzero$. Affinché un'applicazione multilineare si trovi nel nucleo di $ev_\B$, è necessario che $\Phi(\bar{v}_1, \ldots, \bar{v}_n) = \undzero$. \\
+        Dato che $\B$ è una base di $\V$, presi i vettori $v_1, \ldots, v_n \in \V$ possiamo riscriverli come combinazione lineare dei vettori di questa base. Dunque \mbox{$\Phi(v_1, \ldots, v_n) = \Phi(\sum_{j = 1}^n a_{1j} \bar{v}_j, \ldots, \sum_{j = 1}^n a_{nj} \bar{v}_j)$}. Ora, applicando tante volte la multilineareità di $\Phi$, possiamo arrivare a dire che \mbox{$\Phi(v_1, \ldots, v_n) = \sum_{1 \leq j_i \leq n} a_{1 j_1} \cdot \ldots \dots a_{nj_n} \Phi(\bar{v}_{j_1}, \ldots, \bar{v}_{j_n})$}. Dato che $\Phi$ è anche alternante, se esistono due vettori identici in questa base, allora sappiamo già che $\Phi(\bar{v}_1, \ldots, \bar{v}_n) = \undzero$. Dunque, nella sommatoria precedente, rimangono solo i termini dove $j_1, \ldots, j_n$ sono tutti distinti (ma in ordine comunque sparso), e dunque diventa \mbox{$\Phi(v_1, \ldots, v_n) = \sum_{\sigma \in \mathrm{Perm}_{(n)}} a_{1 \sigma_{(1)}} \cdot \ldots \cdot a_{n \sigma_{(n)}} \cdot \Phi(\bar{v}_{\sigma_{(1)}}, \ldots, \bar{v}_{\sigma_{(n)}})$}, dove $\sigma$ rappresenta quindi tutte le possibili permutazioni di $j_1, \ldots, j_n$ e $\sigma_{(i)}$ rappresenta l'i-esimo elemento della permutazione. 
         Ora, se analizziamo $\Phi(\bar{v}_{\sigma_{(1)}}, \ldots, \bar{v}_{\sigma_{(n)}})$, possiamo notare che per passare da questo a $\Phi(\bar{v}_1, \ldots, \bar{v}_n)$ non vengono fatte altro che una composizione di trasposizioni (ossia una composizione di scambi di vettori). Quando scambiamo due vettori, per l'Osservazione \ref{oss-inversa-app-multil-alt} sappiamo che $\Phi$ cambia segno. Dunque, in base al numero di vettori scambiati, troviamo che \mbox{$\Phi(\bar{v}_{\sigma_{(1)}}, \ldots, \bar{v}_{\sigma_{(n)}}) = \pm \Phi(\bar{v}_1, \ldots, \bar{v}_n) = \undzero$}. Dunque $\Phi(v_1, \ldots, v_n) = \undzero$, e quindi $\ker ev_\B = \{\undzero\}$.
         \item $ev_\B$ è suriettiva \\
-        Dato che $ev_\B$ è iniettiva, troviamo che $\dim \Alt(\V^n, \K) = \dim \ker (ev_\B) + \dim Im (ev_\B)$, e dato che $\ker (ev_\B) = \{\undzero\}$, troviamo che $\dim \ker (ev_\B) = 0$ e dunque \mbox{$\dim \Alt(\V^n, \K) = \dim Im(ev_\B)$}. Dunque, per dimostrare che $ev_\B$ è suriettiva, basta dimostrare che $\dim Alt(\V^n, \K) = \dim \K = 1$. Per fare ciò, ci basta dimostrare che esiste un'applicazione multilineare alternante $\Phi$ tale che $ev_\B(\Phi) \neq 0$. Infatti, dato che $ev_\B$ è iniettiva, sappiamo che $\dim \Alt(\V^n, \K) \leq \dim \K = 1$, dunque ci basta dimostare che $\dim \Alt(\V^n, \K) \geq 1$, ossia trovare una $\Phi$ tale che $ev_\B(\Phi) \neq 0$. Un'applicazione del genere è $\Phi(v_1, \ldots, v_n) = \det [X_\B(v_1), \ldots, X_\B(v_n)]$, che ha senso dato che il determinante è un'applicazione multilineare alternante. Se calcoliamo ora $ev_\B(\Phi)$, troviamo che \mbox{$ev_\B(\Phi) = \det [X_\B(\bar{v}_1), \ldots, X_\B(\bar{v}_n)] = \det 1_n = 1$}, dato che $X_\B(\bar{v}_i) = e_i$. 
+        Dato che $ev_\B$ è iniettiva, troviamo che $\dim \Alt(\V^n, \K) = \dim \ker (ev_\B) + \dim Im (ev_\B)$, e dato che $\ker (ev_\B) = \{\undzero\}$, troviamo che $\dim \ker (ev_\B) = 0$ e dunque \mbox{$\dim \Alt(\V^n, \K) = \dim Im(ev_\B)$}. Dunque, per dimostrare che $ev_\B$ è suriettiva, basta dimostrare che $\dim Alt(\V^n, \K) = \dim \K = 1$. Per fare ciò, ci basta dimostrare che esiste un'applicazione multilineare alternante $\Phi$ tale che $ev_\B(\Phi) \neq 0$. Infatti, dato che $ev_\B$ è iniettiva, sappiamo che $\dim \Alt(\V^n, \K) \leq \dim \K = 1$, dunque ci basta dimostrare che $\dim \Alt(\V^n, \K) \geq 1$, ossia trovare una $\Phi$ tale che $ev_\B(\Phi) \neq 0$. Un'applicazione del genere è $\Phi(v_1, \ldots, v_n) = \det [X_\B(v_1), \ldots, X_\B(v_n)]$, che ha senso dato che il determinante è un'applicazione multilineare alternante. Se calcoliamo ora $ev_\B(\Phi)$, troviamo che \mbox{$ev_\B(\Phi) = \det [X_\B(\bar{v}_1), \ldots, X_\B(\bar{v}_n)] = \det 1_n = 1$}, dato che $X_\B(\bar{v}_i) = e_i$. 
     \end{enumerate}
     Dunque $ev_\B$ è biunivoca. $\blacksquare$
 \end{enumerate}
@@ -3467,7 +3467,7 @@ e cerchiamo di dimostrare che tale applicazione è multilineare alternante nelle
 
 \begin{enumerate}[label=\arabic*°]
     \item $f$ è multilineare nelle colonne \\
-    Per dimostrare che $f$ è multilineare nelle colonne di $M$, dobbiamo verificare che $f$ sia lineare in tutte le colonne di $M$. Dato che il proceidmento è identico per ogni colonna di $M$, lo dimostreremo solo per la prima colonna.  \\
+    Per dimostrare che $f$ è multilineare nelle colonne di $M$, dobbiamo verificare che $f$ sia lineare in tutte le colonne di $M$. Dato che il procedimento è identico per ogni colonna di $M$, lo dimostreremo solo per la prima colonna.  \\
     Prese due vettori colonne $C,D \in M_{n1}(\K)$ e $\lambda, \mu \in \K$, vogliamo dimostrare che \mbox{$f([\lambda C + \mu D, \ldots, M_n]) = \lambda f([C, \ldots, M_n]) + \mu f([D, \ldots, M_n])$}, ossia
     \[ \det
     \begin{bmatrix}
@@ -3541,7 +3541,7 @@ g: M_{nn}(\K) &\longrightarrow \K \\
 M &\longmapsto \det A \cdot \det M
 \end{align*}
 
-Dato che $A$ è una matrice fissata, $\det A$ è una costante, dunque $g \in \Alt(\V^n, \K)$, essendo un multiplo di $f$. Essendo $S = \{e_1, \ldots, e_n\}$ una base di $\K^n$, ed essendo l'applicazione $ev_\B$ un'isomorfismo, come visto nella Proposizione \ref{propos-ev_B isomorfismo}, dato che $g(e_1, \ldots, e_n) = f(e_1, \ldots, e_n)$, per il Corollario \ref{corollario-applicazioni-lineari-matrici} troviamo che $f = g$, ossia \mbox{$\det (A \cdot M) = \det A \cdot \det M$}. $\blacksquare$
+Dato che $A$ è una matrice fissata, $\det A$ è una costante, dunque $g \in \Alt(\V^n, \K)$, essendo un multiplo di $f$. Essendo $S = \{e_1, \ldots, e_n\}$ una base di $\K^n$, ed essendo l'applicazione $ev_\B$ un isomorfismo, come visto nella Proposizione \ref{propos-ev_B isomorfismo}, dato che $g(e_1, \ldots, e_n) = f(e_1, \ldots, e_n)$, per il Corollario \ref{corollario-applicazioni-lineari-matrici} troviamo che $f = g$, ossia \mbox{$\det (A \cdot M) = \det A \cdot \det M$}. $\blacksquare$
 
 \begin{Proposizione}[Proposizione]
 \label{propos-matrici-coniugate-stesso-determinante}
@@ -3568,7 +3568,7 @@ Questa definizione ha senso dato che per il Corollario \ref{corollario-det M B^B
 \begin{Definizione}[Sviluppo di Laplace secondo riga i]
 \label{def-sviluppo di Laplace riga}
 Presa una matrice $A \in M_{nn}(\K)$ e una riga $i$ di $A$, $\bm{\det A = \sum_{j = 1}^n (-1)^{i+j} \cdot a_{ij} \cdot \det A_j^i}$. \\
-\NB Questa è una generalizzazione dello sviluppo che abbiamo usato fino ad ora, dove prendavamo sempre la riga n-esima. 
+\NB Questa è una generalizzazione dello sviluppo che abbiamo usato fino ad ora, dove prendevamo sempre la riga n-esima. 
 \end{Definizione}
 
 \begin{Proposizione}[]
@@ -3855,7 +3855,7 @@ $\bm{\det M_\sigma} \in \{1, -1\}$.
 
 \Dimostrazione \nopagebreak
 
-Banalmnente, non essendo $M_\sigma$ altro che una permutazione delle colonne di $1_n$, troviamo proprio che $\det M_\sigma = \pm \det 1_n = \pm 1$. $\blacksquare$  \\
+Banalmente, non essendo $M_\sigma$ altro che una permutazione delle colonne di $1_n$, troviamo proprio che $\det M_\sigma = \pm \det 1_n = \pm 1$. $\blacksquare$  \\
 In particolare, $\det M_\sigma = 1$ se il numero di scambi tra le colonne di $M_\sigma$ per arrivare a $1_n$ è pari, ed invece $-1$ se il numero è dispari.
 
 \begin{Definizione}[Segno di una permutazione]
@@ -3880,12 +3880,12 @@ Dato che una permutazione $\sigma$ è una composizione di trasposizioni ($\sigma
 \bm{\epsilon(\sigma)} = 
 \begin{cases}
 \bm{1} & \enspace \textbf{se } \bm{d} \textbf{ è pari} \\
-\bm{-1} & \enspace \textbf{se } \bm{d} \textbf{ è dipari} \\
+\bm{-1} & \enspace \textbf{se } \bm{d} \textbf{ è dispari} \\
 \end{cases}
 \]
 \end{Osservazione}
 
-Ci si potrebbe chiedere perché non abbiamo direttamente definito il segno di una permutazione in questo modo. Non era possibile farlo perché semplicemente non sapevamo se il numero di trasposizioni con cui si può scrivere una permutazione è sempre pari o dispari: avremmo ad esempio potuto trovare una permutazione $\sigma = \tau_1 \circ \tau_2 = \tau_1' \circ \tau_2' \circ \tau_3'$. In questo caso, il segno di $\sigma$ sarebbe $\pm 1$, il che non ha senso. Questa osservazione è quindi la dimostrazione che \textit{ogni combinazioni di trasposizioni che forma una permutazione $\sigma$ con segno $1$ avrà un numero pari di trasposizioni, altrimenti se il segno è $-1$ allorà avrà un numero dispazi di traspoziioni}.
+Ci si potrebbe chiedere perché non abbiamo direttamente definito il segno di una permutazione in questo modo. Non era possibile farlo perché semplicemente non sapevamo se il numero di trasposizioni con cui si può scrivere una permutazione è sempre pari o dispari: avremmo ad esempio potuto trovare una permutazione $\sigma = \tau_1 \circ \tau_2 = \tau_1' \circ \tau_2' \circ \tau_3'$. In questo caso, il segno di $\sigma$ sarebbe $\pm 1$, il che non ha senso. Questa osservazione è quindi la dimostrazione che \textit{ogni combinazione di trasposizioni che forma una permutazione $\sigma$ con segno $1$ avrà un numero pari di trasposizioni, altrimenti se il segno è $-1$ allora avrà un numero dispari di trasposizioni}.
 
 
 \begin{Proposizione}[]
@@ -4046,7 +4046,7 @@ Preso un endomorfismo $f$ dello spazio vettoriale $\V$, e presi $v_1, \ldots, v_
 \Dimostrazione \nopagebreak
 
 Per assurdo, poniamo $v_1, \ldots, v_n$ linearmente dipendenti. Sappiamo quindi che esiste un minimo $m$ tale che $1 \leq i_1 \leq \ldots \leq i_m \leq n$, con $v_{i_1}, \ldots, v_{i_m}$ linearmente dipendenti. Quindi, sappiamo che se prendiamo $m-1$ vettori tra questi, sicuramente saranno linearmente indipendenti, essendo $m$ il minimo. \\
-Dunque esisono $\mu_1, \ldots, \mu_m \in K$ tali che $\mu_1 v_{i_1}+ \ldots + \mu_m v_{i_m} = \undzero$ con almeno un $\mu_j \neq 0$. Essendo però $m$ il minimo, in realtà possiamo dire che tutti i $\mu_j$ sono diversi da $0$, dato che se questo non fosse vero, allora avremmo un numero di vettori linearmente dipendenti minore di $m$, il che è impossibile per definizione di $m$. \\
+Dunque esistono $\mu_1, \ldots, \mu_m \in K$ tali che $\mu_1 v_{i_1}+ \ldots + \mu_m v_{i_m} = \undzero$ con almeno un $\mu_j \neq 0$. Essendo però $m$ il minimo, in realtà possiamo dire che tutti i $\mu_j$ sono diversi da $0$, dato che se questo non fosse vero, allora avremmo un numero di vettori linearmente dipendenti minore di $m$, il che è impossibile per definizione di $m$. \\
 Chiamiamo ora $\lambda_k$ l'autovalore di $v_{i_k}$. Dunque sappiamo che $f(v_{i_k}) = \lambda_k v_{i_k}$. Dunque troviamo che \mbox{$f(\undzero) = f(\mu_1 v_{i_1} + \ldots + \mu_m v_{i_m}) = \mu_1 \lambda_1 v_{i_1} + \ldots + \mu_m \lambda_m v_{i_m} = \undzero$}. Dato che $\mu_1 v_{i_1} +\ldots + \mu_m v_{i_m} = \undzero$, troviamo che sicuramente anche $\lambda_m (\mu_1 v_{i_1} + \ldots + \mu_m v_{i_m}) = \undzero$. Dunque 
 \begin{align*}
  \mu_1 \lambda_1 v_{i_1} + \ldots + \mu_m \lambda_m v_{i_m} - \lambda_m (\mu_1 v_{i_1} + \ldots + \mu_m v_{i_m}) &= \undzero \\
@@ -4075,13 +4075,13 @@ Concludiamo quindi che $f$ è diagonalizzabile. $\blacksquare$
 
 \begin{Definizione}[Molteplicità Algebrica]
 \label{def-molteplicità}
-Preso uno scalare $\lambda_0 \in K$ di un'endomorfismo $f$, la \textbf{molteplicità algebrica} di $\lambda_0$, indicata con il simbolo $\bm{\mathrm{mult}_{\lambda_0}(P_f)}$ è il \textbf{massimo intero} $\bm{m \geq 1}$ tale che $\bm{(\lambda - \lambda_0)^m}$ \textbf{divida il polinomio caratteristico} $\bm{P_f}$. 
+Preso uno scalare $\lambda_0 \in K$ di un endomorfismo $f$, la \textbf{molteplicità algebrica} di $\lambda_0$, indicata con il simbolo $\bm{\mathrm{mult}_{\lambda_0}(P_f)}$ è il \textbf{massimo intero} $\bm{m \geq 1}$ tale che $\bm{(\lambda - \lambda_0)^m}$ \textbf{divida il polinomio caratteristico} $\bm{P_f}$. 
 \end{Definizione}
 È facile capire come se $\mathrm{mult}_{\lambda_0}(P_f) \geq 1$ allora $\lambda_0$ è un autovalore di $f$, dato che questo è a tutti gli effetti una radice di $P_f$, e per la Proposizione \ref{propos-polinomio-autovalori-radici} sappiamo che questo lo rende un autovalore di $f$.
 
 \begin{Proposizione}[]
 \label{propos-dim V < mult}
-Preso un'endomorfismo $f$ di uno spazio vettoriale $\V$, $\bm{\lambda_0}$ \textbf{autovalore di} $\bm{f} \implies$ \mbox{$\bm{\dim \V_{\lambda_0}(f) \leq \mathrm{mult}_{\lambda_0}(P_f)}$}.
+Preso un endomorfismo $f$ di uno spazio vettoriale $\V$, $\bm{\lambda_0}$ \textbf{autovalore di} $\bm{f} \implies$ \mbox{$\bm{\dim \V_{\lambda_0}(f) \leq \mathrm{mult}_{\lambda_0}(P_f)}$}.
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -4163,7 +4163,7 @@ con le Proprietà \ref{prop-somma-punto-vettore}. \\
 \NB Spesso indicheremo il gruppo di traslazioni dello spazio affine $\S$ con il simbolo $\bm{V(\S)}$.
 \end{Definizione}
 
-È facile capire come lo \textit{spazio euclideo} sia uno affine con gruppo delle traslazioni $V(\E^3)$.
+È facile capire come lo \textit{spazio euclideo} sia uno spazio affine con gruppo delle traslazioni $V(\E^3)$.
 
 \Esempio \nopagebreak
 
@@ -4223,7 +4223,7 @@ Prendiamo il caso della ricerca di un punto medio $M$ tra due punti. Il problema
 \includegraphics[width=0.8\textwidth, valign=t]{Punto medio.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-È però possibile notare che, qualsiasi punto $O \in \S$ noi prendiamo come origine, il punto medio tra $P_0$ e $P_1$ sarà sempre lo stesso (cosa abbastanza ovvia, dato che la metà di un segmento è sempre la stessa). Il grafico a sinistra ci aiuta molto a capire questa cosa: sia che prendiamo $Q$ come orgiine, sia che prendiamo $R$, il punto medio $M$ è sempre nella stessa identica posizione.
+È però possibile notare che, qualsiasi punto $O \in \S$ noi prendiamo come origine, il punto medio tra $P_0$ e $P_1$ sarà sempre lo stesso (cosa abbastanza ovvia, dato che la metà di un segmento è sempre la stessa). Il grafico a sinistra ci aiuta molto a capire questa cosa: sia che prendiamo $Q$ come origine, sia che prendiamo $R$, il punto medio $M$ è sempre nella stessa identica posizione.
 \end{minipage}
 
 L'idea è quindi quella di dimostrare che, per calcolare il punto medio, non sia necessario prendere un'origine fissa, dato che un qualsiasi punto nello spazio può funzionare come origine. 
@@ -4250,7 +4250,7 @@ Q + \sum_{i = 0}^d \lambda_i \vv{QP_i} - \sum_{i = 0}^d \lambda_i \vv{RP_i} &= Q
 
 \begin{Definizione}[Combinazione affine di punti]
 \label{def-combinazione-affine-punti}
-Preso uno spazio affine $\S$ su $\K$, i coefficienti $\lambda_0, \ldots, \lambda_d \in \K$ tali che $\sum_{i = 0}^d \lambda_i = 1$ e i punti $P_0, \ldots, P_d \in \S$. allora
+Preso uno spazio affine $\S$ su $\K$, i coefficienti $\lambda_0, \ldots, \lambda_d \in \K$ tali che $\sum_{i = 0}^d \lambda_i = 1$ e i punti $P_0, \ldots, P_d \in \S$, allora
 \[
 \bm{\sum_{i = 0}^d \lambda_i P_i = Q + \sum_{i = 0}^d \lambda_i} \vvbm{QP_i}
 \]
@@ -4269,7 +4269,7 @@ L: \K^n &\longrightarrow \V \\
 (\lambda_1, \ldots, \lambda_n)
 \end{align*}
 
-Questa prende un vettore di $\K^n$ con $n$ coefficienti e restituisce la combinazione lineare tra i vettori $v_1, \ldots, v_n$ con i coefficienti del vettore. Se quindi prendiamo un vettore $\Lambda = (\mu_1, \ldots, \mu_n) \in \ker L$, allora sappiamo che $\mu_1 v_1 + \ldots + \mu_n v_n = \undzero$. Dato che $L$ è un'applicazione lineare, per la Proposizione \ref{propos-applicazione-lineare-iniettiva-nucleo} sappiammo che questa è iniettiva se e solo se $\ker L = \{\undzero\}$, ossia se l'unico vettore di coefficienti tale che $\lambda_1 v_1 + \ldots + \lambda_n v_n = \undzero$ è il vettore $(\lambda_1, \ldots, \lambda_n) = (0,\ldots,0)$. Possiamo quindi dare una nuova definizione di vettori linearmente dipendenti.
+Questa prende un vettore di $\K^n$ con $n$ coefficienti e restituisce la combinazione lineare tra i vettori $v_1, \ldots, v_n$ con i coefficienti del vettore. Se quindi prendiamo un vettore $\Lambda = (\mu_1, \ldots, \mu_n) \in \ker L$, allora sappiamo che $\mu_1 v_1 + \ldots + \mu_n v_n = \undzero$. Dato che $L$ è un'applicazione lineare, per la Proposizione \ref{propos-applicazione-lineare-iniettiva-nucleo} sappiamo che questa è iniettiva se e solo se $\ker L = \{\undzero\}$, ossia se l'unico vettore di coefficienti tale che $\lambda_1 v_1 + \ldots + \lambda_n v_n = \undzero$ è il vettore $(\lambda_1, \ldots, \lambda_n) = (0,\ldots,0)$. Possiamo quindi dare una nuova definizione di vettori linearmente dipendenti.
 
 \begin{Definizione}[Dipendenza lineare tra vettori]
 \label{def-dipendenza-lineare-vettori}
@@ -4319,14 +4319,14 @@ P_0(\mu_1 - \lambda_1 + \mu_2 - \lambda_2) + P_1(\lambda_1 - \mu_1) + P_2(\lambd
 (P_1 - P_0)(\lambda_1 - \mu_1) + (P_2 - P_0)(\lambda_2 - \mu_2) &= \undzero 
 \end{align*}
 
-Dato che $P_1 - P_0 = \vv{P_0P_1}$ e allo stesso modo $P_2 - P_0 = \vv{P_0P_2}$, troviamo che \mbox{$\vv{P_0P_1}(\lambda_1 - \mu_1) + \vv{P_0P_2}(\lambda_2 - \mu_2) = \undzero$}. Affinché $\varphi_{P_0,P_1,P_2}$ sia iniettiva, è necessario che $\lambda_1 = \mu_1$ e che $\lambda_2 = \mu_2$. Per dimostrare ciò, ci basta dimostrare che $\vv{P_0P_1}$ e $\vv{P_0P_2}$ sinao lineramente indipendenti. Questo è vero se e solo se $P_0,P_1$ e $P_2$ non sono sulla stessa retta. Dunque concludiamo che $P_0,P_1$ e $P_2$ sono linearmente indipendenti solo quando \textbf{non si trovano sulla stessa retta}.
+Dato che $P_1 - P_0 = \vv{P_0P_1}$ e allo stesso modo $P_2 - P_0 = \vv{P_0P_2}$, troviamo che \mbox{$\vv{P_0P_1}(\lambda_1 - \mu_1) + \vv{P_0P_2}(\lambda_2 - \mu_2) = \undzero$}. Affinché $\varphi_{P_0,P_1,P_2}$ sia iniettiva, è necessario che $\lambda_1 = \mu_1$ e che $\lambda_2 = \mu_2$. Per dimostrare ciò, ci basta dimostrare che $\vv{P_0P_1}$ e $\vv{P_0P_2}$ siano linearmente indipendenti. Questo è vero se e solo se $P_0,P_1$ e $P_2$ non sono sulla stessa retta. Dunque concludiamo che $P_0,P_1$ e $P_2$ sono linearmente indipendenti solo quando \textbf{non si trovano sulla stessa retta}.
 
 \begin{Osservazione}[]
 \label{oss-punti-indipendenti}
 $\bm{P_0,\ldots,P_d}$ sono punti \textbf{linearmente indipendenti} $\iff \vvbm{P_0P_1}\bm{, \ldots, }\vvbm{P_0P_d}$ sono \textbf{linearmente indipendenti}
 \end{Osservazione}
 
-Questa osservazione ci viene dall'esempio precedente con i 3 punti in $\E^3$, e ci semplifica molto il verificare se $d+1$ vettori sono linerarmente indipendenti o meno, dovendo solo verificare l'indipendenza di $d$ vettori.
+Questa osservazione ci viene dall'esempio precedente con i 3 punti in $\E^3$, e ci semplifica molto il verificare se $d+1$ vettori sono linearmente indipendenti o meno, dovendo solo verificare l'indipendenza di $d$ vettori.
 
 \section{Sottospazi affini}
 
@@ -4345,7 +4345,7 @@ Preso un sottospazio vettoriale $\V$ di $\K^n$, $\bm{\V}$ è anche un \textbf{so
 \Dimostrazione \nopagebreak
 
 La dimostrazione è evidente: infatti, se poniamo $\overline{\X} = \undzero$, troviamo che $A^n(\K) \supset \T = \undzero + \V = \V$. $\blacksquare$ \\
-È importante però sottolineare che il contrario non è sempre vero: infatti, se prendiamo il sottospazio vettorile $\W = \{\undzero\}$ di $\K^n$, e $\overline{\X} \neq 0$, allora $\T = \overline{\X} + \V = \{\overline{\X}\} \not\ni \undzero$, dunque $\T$ non può essere un sottospazio vettoriale di $\K^n$. 
+È importante però sottolineare che il contrario non è sempre vero: infatti, se prendiamo il sottospazio vettoriale $\W = \{\undzero\}$ di $\K^n$, e $\overline{\X} \neq 0$, allora $\T = \overline{\X} + \V = \{\overline{\X}\} \not\ni \undzero$, dunque $\T$ non può essere un sottospazio vettoriale di $\K^n$. 
 
 \begin{Proposizione}[]
 \label{propos-sottospazio-affine}
@@ -4389,9 +4389,9 @@ $\bm{\dim \langle P_0,\ldots,P_d \rangle \leq d}$ e in particolare \\ $\bm{\dim 
 
 Sappiamo che $\dim \braket{P_0,\ldots,P_d} = \dim \braket{\vv{P_0P_1}, \ldots, \vv{P_0,P_d}}$ e dato che $\dim \braket{\vv{P_0P_1}, \ldots, \vv{P_0,P_d}} \leq d$, dove in particolare $\dim \braket{\vv{P_0P_1}, \ldots, \vv{P_0P_d}} = d \iff \vv{P_0P_1}, \ldots, \vv{P_0P_d}$ sono linearmente indipendenti, troviamo che $\dim \braket{P_0, \ldots, P_d} \leq d$. $\blacksquare$
 
-È anche grazie a quest'osservazione che riusciamo a dimostrar ein modo formale l'Osservazione \ref{oss-punti-indipendenti}. Infatti, se $\vv{P_0P_1},\ldots,\vv{P_0P_d}$ sono linearmente indipendenti allora $\dim \braket{P_0,\ldots,P_d} = d$, e dunque $P_0,\ldots,P_d$ sono linearmente indipendenti, dato che $\ker \braket{\vv{P_0P_1},\ldots,\vv{P_0P_d}} = 0$ e dunque $\varphi$ è iniettiva. 
+È anche grazie a quest'osservazione che riusciamo a dimostrare in modo formale l'Osservazione \ref{oss-punti-indipendenti}. Infatti, se $\vv{P_0P_1},\ldots,\vv{P_0P_d}$ sono linearmente indipendenti allora $\dim \braket{P_0,\ldots,P_d} = d$, e dunque $P_0,\ldots,P_d$ sono linearmente indipendenti, dato che $\ker \braket{\vv{P_0P_1},\ldots,\vv{P_0P_d}} = 0$ e dunque $\varphi$ è iniettiva. 
 
-\section{Applciazioni affini e coordinate affini}
+\section{Applicazioni affini e coordinate affini}
 \subsection{Applicazioni affini}
 
 \begin{Definizione}[Applicazione affine]
@@ -4462,7 +4462,7 @@ Possiamo dire che le equazioni parametriche funzionano come un'applicazione che 
 Preso un sottospazio affine $\S$ di dimensione $n$, un riferimento affine $R = RA(O,\B)$ e un sottospazio affine $\T = P_0 + \W$ di dimensione $d < n$, le \textbf{equazioni cartesiane} sono un sistema di $n-d$ equazioni lineari che ci permettono di verificare se un punto $\X = (x_1, \ldots, x_n) \in \S$ appartenga a $\T$.
 \end{Definizione}
 
-Riprendendo l'esempio visto in precedenza con le equazioni parametriche, abbiamo che $\T = \{(4t + 1, 2-t, 3) \mid t \in \K\}$. Dato che $\dim \S = 3$ e $\dim \T = 1$, il sistema avrà du eequazioni. Affinché $\X = (x_1, x_2, x_3) \in \T$, c'è bisogno di risolvere il sistema
+Riprendendo l'esempio visto in precedenza con le equazioni parametriche, abbiamo che $\T = \{(4t + 1, 2-t, 3) \mid t \in \K\}$. Dato che $\dim \S = 3$ e $\dim \T = 1$, il sistema avrà due equazioni. Affinché $\X = (x_1, x_2, x_3) \in \T$, c'è bisogno di risolvere il sistema
 \[
 \begin{cases}
     x_1 = 1 + 4t \\
@@ -4486,11 +4486,11 @@ Possiamo dire che le equazioni cartesiane funzionano come un'applicazione che pr
 
 \section{Nozioni preliminari}
 
-Prima di parlare di forme quadratiche, forma bilineari simmetriche e spazi vettoriali euclidei, è fondamentale conoscere queste due definizioni, che ora vediamo riguardo lo spazio euclideo ma che poi estenderemo a tutti gli spazi vettoriali.
+Prima di parlare di forme quadratiche, forme bilineari simmetriche e spazi vettoriali euclidei, è fondamentale conoscere queste due definizioni, che ora vediamo riguardo lo spazio euclideo ma che poi estenderemo a tutti gli spazi vettoriali.
 
 \begin{Definizione}[Prodotto scalare euclideo su $\bm{V(\E^3)}$]
 \label{def-prodotto-scalare-euclideo-E^3}
-Presi due vettori $v,w \in V(\E^3)$, definiamo il prodotto scalare euclideo di $v,w$ come $ \bm{\langle v,w \rangle =} \normbm{v} \bm{\cdot} \normbm{w} \bm{\cdot \cos(\theta)}$, dove $\norm{v}$ prende il nome di \textbf{norma} e indica la \textbf{lunghezza} di $v$ nel nostro sistema di riferimentom e $0 \leq \theta \leq \pi$ indica il più piccolo angolo compreso tra $v$ e $w$.
+Presi due vettori $v,w \in V(\E^3)$, definiamo il prodotto scalare euclideo di $v,w$ come $ \bm{\langle v,w \rangle =} \normbm{v} \bm{\cdot} \normbm{w} \bm{\cdot \cos(\theta)}$, dove $\norm{v}$ prende il nome di \textbf{norma} e indica la \textbf{lunghezza} di $v$ nel nostro sistema di riferimento e $0 \leq \theta \leq \pi$ indica il più piccolo angolo compreso tra $v$ e $w$.
 \end{Definizione}
 
 Da questa definizione è facile convincersi che
@@ -4526,7 +4526,7 @@ dove $a_{ij} \in \K$. Questo altro non è che un \textit{polinomio omogeneo} in 
 \NB Cambiando base $\B$ si ottengono polinomi anche molto diversi tra loro, ma tutti sempre omogenei e di grado $2$.
 \end{Definizione}
 
-Un'esempio di forma quadratica è l'applicazione
+Un esempio di forma quadratica è l'applicazione
 \begin{align*}
 Q: V(\E^3) &\longrightarrow R \\
 v &\longmapsto \norm{v}^2
@@ -4586,7 +4586,7 @@ Con le operazioni di somma e prodotto per scalare appena descritte, $\bm{Q(\V)}$
 
 Sia $\B = \{v_1, \ldots, v_n\}$ una base di $\V$. Per prima cosa, dobbiamo assicurarci che l'applicazione nulla $\undzero$ si trovi in $Q(\V)$. Dunque dobbiamo verificare che \mbox{$\undzero(x_1 v_1 + \ldots + x_n v_n) = \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j = 0$}. Questo è vero se prendiamo $a_{ij} = 0 \enspace \forall i,j$. Dunque $\undzero \in Q(\V)$ ($\undzero$ è anch'esso un polinomio di grado 2 omogeneo, semplicemente con i coefficienti tutti nulli). \\
 Dobbiamo poi dimostrare che $Q(\V)$ è un insieme chiuso rispetto alla somma, ossia che prese due forme quadratiche $Q_1, Q_2 \in Q(\V)$, $(Q_1 + Q_2) \in Q(\V)$. Essendo $\B$ una base di $\V$, troviamo che \mbox{$(Q_1 + Q_2)(v) = Q_1(v) + Q_2(v) = Q_1(\sum_{i = 1}^n x_i v_i) + Q_2(\sum_{i = 1}^n x_i v_i)$}. Dato che sia $Q_1$ che $Q_2$ sono delle forme quadratiche, troviamo che \mbox{$(Q_1 + Q_2)(v) = \sum_{1 \leq i \leq n} b_{ij} x_i x_j + \sum_{1 \leq i \leq j  \leq n} c_{ij}x_i x_j = \sum_{1 \leq i \leq j \leq n} (b_{ij} + c_{ij} x_i x_j)$}. Ponendo ora $a_{ij} = b_{ij} + c_{ij}$, troviamo che $(Q_1 + Q_2)(v) = \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j$, ossia $(Q_1 + Q_2)(v) \in Q(\V)$. \\
-Dobbiamo infine dimostrare che $Q(\V)$ è un insieme chiuso rispetto al prodotto per scalare, ossia che presa una forma quadratica $Q \in Q(\V)$ e preso uno scalare $\lambda \in \K$, $\lambda Q \in Q(\V)$, $\lambda Q \in Q(V)$. Dato che \mbox{$\lambda Q(v) = \lambda Q(\sum_{i = 1}^n x_i v_i) = \lambda \sum_{1 \leq i \leq j \leq n} b_{ij} x_i x_j = \sum_{1 \leq i \leq j \leq n} (\lambda b_{ij}) x_i x_j$}. Ponendo ora $a_{ij} = \lambda b_{ij}$, troviamo che $\lambda Q(v) = \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j$, ossia che $\lambda Q \in Q(\V)$.\\
+Dobbiamo infine dimostrare che $Q(\V)$ è un insieme chiuso rispetto al prodotto per scalare, ossia che presa una forma quadratica $Q \in Q(\V)$ e preso uno scalare $\lambda \in \K$, $\lambda Q \in Q(\V)$. Dato che \mbox{$\lambda Q(v) = \lambda Q(\sum_{i = 1}^n x_i v_i) = \lambda \sum_{1 \leq i \leq j \leq n} b_{ij} x_i x_j = \sum_{1 \leq i \leq j \leq n} (\lambda b_{ij}) x_i x_j$}. Ponendo ora $a_{ij} = \lambda b_{ij}$, troviamo che $\lambda Q(v) = \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j$, ossia che $\lambda Q \in Q(\V)$.\\
 Possiamo quindi concludere che $Q(\V)$ è uno spazio vettoriale. $\blacksquare$
 
 \section{Forme bilineari simmetriche e forme quadratiche}
@@ -4595,7 +4595,7 @@ Possiamo quindi concludere che $Q(\V)$ è uno spazio vettoriale. $\blacksquare$
 
 \begin{Osservazione}[]
 \label{oss-forma-bilineare-quadratica}
-Preso uno spazio vettoriale $\V$ finitamente generato su $\K$ e presa una \textbf{forma bilineare} $F: \V \times \V \longrightarrow \K$, ossia un'applciazione bilineare, allora l'applicazione
+Preso uno spazio vettoriale $\V$ finitamente generato su $\K$ e presa una \textbf{forma bilineare} $F: \V \times \V \longrightarrow \K$, ossia un'applicazione bilineare, allora l'applicazione
 \begin{align*}
 \bm{q_F: \V} &\longrightarrow \bm{\K} \\
 \bm{v} &\longmapsto \bm{F(v,v)}
@@ -4605,7 +4605,7 @@ Preso uno spazio vettoriale $\V$ finitamente generato su $\K$ e presa una \textb
 
 \Dimostrazione \nopagebreak
 
-Prendiamo una base $\B = \{v_1, \ldots, v_n\}$ di $\V$. Dunque sappiamo che $q_F(v) = q_F(\sum_{i = 1}^n x_i v_i) = F(\sum_{i = 1}^n x_i v_i, \sum_{j = 1}^n x_j v_j)$. Essendo $F$ una forma bilineare, sappiamo che $F(\sum_{i = 1}^n x_i v_i, \sum_{j = 1}^n x_j v_j) = \sum_{1 \leq i,j \leq n} x_i x_j F(v_i, v_j)$. Questa non è altro che la definizione di un'applicazione bilineare. INfatti, nonostante ci siano dei termini in più, ossia quando $i > j$, basta semplicemente porre 
+Prendiamo una base $\B = \{v_1, \ldots, v_n\}$ di $\V$. Dunque sappiamo che $q_F(v) = q_F(\sum_{i = 1}^n x_i v_i) = F(\sum_{i = 1}^n x_i v_i, \sum_{j = 1}^n x_j v_j)$. Essendo $F$ una forma bilineare, sappiamo che $F(\sum_{i = 1}^n x_i v_i, \sum_{j = 1}^n x_j v_j) = \sum_{1 \leq i,j \leq n} x_i x_j F(v_i, v_j)$. Questa non è altro che la definizione di un'applicazione bilineare. Infatti, nonostante ci siano dei termini in più, ossia quando $i > j$, basta semplicemente porre 
 \[
 a_{ij} = 
 \begin{cases}
@@ -4662,7 +4662,7 @@ Dobbiamo poi dimostrare che $\Bil(\V)$ è un insieme chiuso rispetto alla somma,
 \end{align*}
 dunque troviamo che $(F+G) \in \Bil(\V)$. \\
 Dobbiamo infine dimostrare che $\Bil(\V)$ è un insieme chiuso rispetto al prodotto per scalare, ossia che presa una forma bilineare $F \in \Bil(\V)$ e uno scalare $\lambda \in \K$, $\lambda F \in \Bil(\V)$. Dato che \mbox{$\lambda F(\alpha u + v, w) = \lambda \cdot F(\alpha u + v, w) = \lambda \cdot (\alpha F(u,w) + F(v,w)) = \alpha \lambda F(u,w) + \lambda F(v,w)$}, troviamo proprio che $\lambda F \in \Bil(\V)$. \\
-Possiamo quindi concludere che $\Bil(\V)$ è uno spazio vettorile. $\blacksquare$
+Possiamo quindi concludere che $\Bil(\V)$ è uno spazio vettoriale. $\blacksquare$
 
 \begin{Definizione}[Forma bilineare simmetrica]
 \label{def-forma-bilineare-simmetrica}
@@ -4708,7 +4708,7 @@ L'applicazione
 Dobbiamo quindi dimostrare che $\Phi$ è un'applicazione lineare ed è biiettiva.
 
 \begin{itemize}
-    \item $\Phi$ è lienare \\
+    \item $\Phi$ è lineare \\
     Per dimostrare che $\Phi$ è lineare, dobbiamo dimostrare che, prese due forme bilineari simmetriche $F,G \in \Bil^+(\V)$ e due scalari $\lambda, \mu \in \K$, $\Phi(\lambda F + \mu G) = \lambda \Phi(F) + \mu \Phi(G) = \lambda q_F + \mu q_G$. \\
     Con un po' di manipolazione algebrica possiamo concludere proprio che
     \begin{align*}
@@ -4729,7 +4729,7 @@ Dobbiamo quindi dimostrare che $\Phi$ è un'applicazione lineare ed è biiettiva
         (v,w) &\longmapsto \frac{1}{2}(Q(v+w) - Q(v) - Q(w)) 
         \end{align*}
         Se riusciamo ora a verificare che $F \in \Bil^+(\V)$, allora abbiamo dimostrato che $q_F = Q$. Infatti, \mbox{$q_F = F(v,v) = \frac{1}{2} (Q(v+v) - Q(v) - Q(v)) = \frac{1}{2}Q(2v) - Q(v)$}, e dato che, presa una base $\B = \{v_1, \ldots, v_n\}$ di $\V$, $Q(v) = Q(\sum_{i = 1}^n x_i v_i) = \sum_{1 \leq i \leq j \leq n}^n a_{ij} x_i x_j$, essendo $Q$ una forma quadratica, troviamo che \mbox{$Q(2v) = \sum_{1 \leq i \leq j \leq n} a_{ij} 2x_i 2x_j = 4 \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j = 4 Q(v)$}. Dunque troviamo che $q_F = \frac{1}{2} Q(2v) - Q(v) = 2Q(v) - Q(v) = Q(v)$. \\
-        Per verificare che $F \in \Bil^+(\V)$, dobbiamo verificare che $F$ è bilineare e che è simmetrica. È evidente che questa sia simmetrica, dato che \mbox{$F(v,w) = \frac{1}{2}(Q(v+w) - Q(v) - Q(w)) = \frac{1}{2}(Q(w+v) - Q(w) - Q(v)) = F(w,v)$}. Per dimsotrare che è invece bilineare, prendiamo $F(v,w)$ e la base $\B$ usata in precedenza. Dato che $v = \sum_{i = 1}^n x_i v_i$ e $w = \sum_{i = 1}^n y_i v_i$, troviamo che 
+        Per verificare che $F \in \Bil^+(\V)$, dobbiamo verificare che $F$ è bilineare e che è simmetrica. È evidente che questa sia simmetrica, dato che \mbox{$F(v,w) = \frac{1}{2}(Q(v+w) - Q(v) - Q(w)) = \frac{1}{2}(Q(w+v) - Q(w) - Q(v)) = F(w,v)$}. Per dimostrare che è invece bilineare, prendiamo $F(v,w)$ e la base $\B$ usata in precedenza. Dato che $v = \sum_{i = 1}^n x_i v_i$ e $w = \sum_{i = 1}^n y_i v_i$, troviamo che 
         \begin{align*}
         Q(v+w) &= \sum_{1 \leq i \leq j \leq n} a_{ij}(x_i + y_i) (x_j + y_j)  \\
          &= \sum_{1 \leq i \leq j \leq n} a_{ij}(x_ix_j + x_i y_j + y_i x_j + y_i y_j) \\
@@ -4749,7 +4749,7 @@ Dobbiamo quindi dimostrare che $\Phi$ è un'applicazione lineare ed è biiettiva
          &= \alpha \frac{1}{2} \sum_{1 \leq i \leq j \leq n} a_{ij} (z_i y_j + y_i z_j) + \frac{1}{2} \sum_{1 \leq i \leq j \leq n} a_{ij}(x_i y_j + y_i x_j) \\
          &= \alpha F(u,w) + F(v,w)
         \end{align*}
-        Ripetendo lo stesso procedimento a secondo membro, dimsotriamo la bilinearità di $F$. \\
+        Ripetendo lo stesso procedimento a secondo membro, dimostriamo la bilinearità di $F$. \\
         Dunque $F \in \Bil^+(\V)$, e dunque $\Phi$ è suriettiva, dato che abbiamo dimostrato che per ogni $Q \in Q(\V)$ esiste una $F \in \Bil^+(\V)$ tale che $q_F = Q$.
     \end{itemize}
     Dunque $\Phi$ è biiettiva. $\blacksquare$
@@ -4821,7 +4821,7 @@ $\bm{F \in \Bil^+(\V)} \iff \bm{M_\B(F)}$ \textbf{è simmetrica}, ossia $M_\B(F)
     \end{bmatrix} = M_\B(F)^t \quad \blacksquare
     \]
     \item $F \in \Bil^+(\V) \impliedby M_\B(F)$ è simmetrica \\
-    Chiamiamo per comodità $X = X_\B(v)$, $Y = X_\B(w)$ e $A = M_\B(F)$. Dato che $F \in \Bil^+(\V)$, sapiamo per la Proposizione \ref{propos-matrice-gram-prodotto} che $F(v,w) = X^t \cdot A \cdot Y$. Dato che $X^t \in M_{1n}(\K), A \in M_{nn}(\K)$ e $Y \in M_{n1}(\K)$, $X^t \cdot A \cdot Y \in M_{11}(\K)$. Dato che la matrice di Gram è simmetrica, sappiamo che $F(v_i, v_j) = F(v_i, v_j)^t$ sempre. Dato che $\B$ è una base di $\V$, troviamo che \mbox{$F(v,w) = F(\sum_{i = 1}^n x_i v_i, \sum_{j = 1}^n y_j v_j) = \sum_{1 \leq i, j \leq n} x_i y_j F(v_i, v_j) = \sum_{1 \leq i,j \leq n} x_i y_j F(v_i, v_j)^t = F(v,w)^t$}. Dunque
+    Chiamiamo per comodità $X = X_\B(v)$, $Y = X_\B(w)$ e $A = M_\B(F)$. Dato che $F \in \Bil^+(\V)$, sappiamo per la Proposizione \ref{propos-matrice-gram-prodotto} che $F(v,w) = X^t \cdot A \cdot Y$. Dato che $X^t \in M_{1n}(\K), A \in M_{nn}(\K)$ e $Y \in M_{n1}(\K)$, $X^t \cdot A \cdot Y \in M_{11}(\K)$. Dato che la matrice di Gram è simmetrica, sappiamo che $F(v_i, v_j) = F(v_i, v_j)^t$ sempre. Dato che $\B$ è una base di $\V$, troviamo che \mbox{$F(v,w) = F(\sum_{i = 1}^n x_i v_i, \sum_{j = 1}^n y_j v_j) = \sum_{1 \leq i, j \leq n} x_i y_j F(v_i, v_j) = \sum_{1 \leq i,j \leq n} x_i y_j F(v_i, v_j)^t = F(v,w)^t$}. Dunque
     \begin{align*}
     F(v,w) &= F(v,w)^t \\
     &= (X^t \cdot A \cdot Y)^t \\
@@ -4831,9 +4831,9 @@ $\bm{F \in \Bil^+(\V)} \iff \bm{M_\B(F)}$ \textbf{è simmetrica}, ossia $M_\B(F)
     Concludiamo quindi che $F \in \Bil^+(\V)$. $\blacksquare$
 \end{enumerate}
 
-\begin{Definizione}[Matrice associata di una forma quadratica]
+\begin{Definizione}[Matrice associata a una forma quadratica]
 \label{def-matrice-associata-forma-quadratica}
-Presa una forma quadratica $Q \in Q(\V) = \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j$, una forma bilineare simmetrica $F \in \Bil^+(\F)$ tale che $q_F = Q$ e presa una base $\B$ di $\V$, la \textbf{matrice associata in} $\bm{\B}$ della forma quadratica $Q$, ossia la matrice di Gram della forma bilineare $F$, è la matrice
+Presa una forma quadratica $Q \in Q(\V) = \sum_{1 \leq i \leq j \leq n} a_{ij} x_i x_j$, una forma bilineare simmetrica $F \in \Bil^+(\F)$ tale che $q_F = Q$ e presa una base $\B$ di $\V$, la \textbf{matrice associata in} $\bm{\B}$ alla forma quadratica $Q$, ossia la matrice di Gram della forma bilineare $F$, è la matrice
 \[
 \bm{M_\B(F) = } \begin{bmatrixb}
     a_{11} & \frac{1}{2} a_{12} & \dots & \frac{1}{2}a_{1n} \\
@@ -4898,7 +4898,7 @@ M_\Bs(F) &= M_\B^\Bs(Id) \cdot M_\B(F) \cdot M_\B^\Bs(Id) \quad \blacksquare
 
 \begin{Definizione}[Matrici congruenti]
 \label{def-matrici-congruenti}
-Due matrici $A,B \in M^+_{nn}(\K)$ (dove $M^+_{nn}(\K)$ indica l'insieme delle matrici $n \times n$ simemtriche) sono \textbf{congruenti} se esiste una matrice $G \in GL_n(\K)$ tale che $\bm{A = G^t \cdot B \cdot G}$. 
+Due matrici $A,B \in M^+_{nn}(\K)$ (dove $M^+_{nn}(\K)$ indica l'insieme delle matrici $n \times n$ simmetriche) sono \textbf{congruenti} se esiste una matrice $G \in GL_n(\K)$ tale che $\bm{A = G^t \cdot B \cdot G}$. 
 \end{Definizione}
 
 È quindi evidente come le matrici $M_\B(F)$ e $M_\Bs(F)$ siano matrici congruenti.
@@ -4950,7 +4950,7 @@ Possiamo quindi concludere che la relazione di congruenza è una relazione d'equ
 
 \begin{Definizione}[Forma bilineare definita positiva]
 \label{def-forma-bilineare-definita-positiva}
-Preso uno spazio vettoriale $\V$ su $\R$ e una forma bilineare simmetrica $F \in \Bil^+(\V)$, questa è \textbf{definita positiva} se, perso $v \neq \undzero$, $\bm{F(v,v) > 0}$.
+Preso uno spazio vettoriale $\V$ su $\R$ e una forma bilineare simmetrica $F \in \Bil^+(\V)$, questa è \textbf{definita positiva} se, preso $v \neq \undzero$, $\bm{F(v,v) > 0}$.
 \end{Definizione}
 
 \begin{Definizione}[Prodotto scalare euclideo]
@@ -4960,7 +4960,7 @@ Preso uno spazio vettoriale $\V$ su $\R$, il \textbf{prodotto scalare euclideo s
 
 \begin{Definizione}[Spazio vettoriale euclideo]
 \label{def-spazio-vettoriale-euclideo}
-Uno \textbf{spazio vettoriale eucldeo} è uno spazio vettoriale su $\R$ con prodotto scalare euclideo (è quindi uno spazio vettoriale dove è definito il prodotto scalare euclideo). Lo indichiamo con il simbolo $\bm{(\V, \langle , \rangle)}$.
+Uno \textbf{spazio vettoriale euclideo} è uno spazio vettoriale su $\R$ con prodotto scalare euclideo (è quindi uno spazio vettoriale dove è definito il prodotto scalare euclideo). Lo indichiamo con il simbolo $\bm{(\V, \langle , \rangle)}$.
 \end{Definizione}
 
 Abbiamo già visto che il prodotto scalare euclideo dello spazio euclideo è definito come \mbox{$\braket{v,w} = \norm{v} \cdot \norm{w} \cdot \cos(\theta)$}. Notiamo subito come, se $v \neq 0$, $\braket{v,v} > 0$ dato che $\norm{v} > 0$ (perché $\norm{v}$ rappresenta la lunghezza del vettore $v$ e quindi non può mai essere negativa) e $\cos(\theta) = \cos(0) = 1$.
@@ -4968,7 +4968,7 @@ Abbiamo già visto che il prodotto scalare euclideo dello spazio euclideo è def
 Altri due esempi importanti da ricordare sono:
 \begin{itemize}
     \item $\V = \R^n$ con $\braket{X,Y} := X^t \cdot Y = \sum_{i = 1}^n x_i y_i$. Questo prodotto in particolare prende il nome di \textbf{prodotto scalare standard}.
-    \item $\V = C^0([a,b])$ (ossia l'insieme delle funzioni conitnue nell'intervallo $[a,b]$), dove $a,b \in \R$, con \mbox{$\braket{f,g} := \int_a^b f(t) g(t) \ dt$}.
+    \item $\V = C^0([a,b])$ (ossia l'insieme delle funzioni continue nell'intervallo $[a,b]$), dove $a,b \in \R$, con \mbox{$\braket{f,g} := \int_a^b f(t) g(t) \ dt$}.
 \end{itemize}
 
 \begin{Proposizione}[Corollario]
@@ -5056,7 +5056,7 @@ Preso uno spazio affine $\S$ su $\R$ e un prodotto scalare euclideo $\braket{,}$
 In uno spazio vettoriale euclideo $(\V, \braket{,})$ due vettori $v,w$ sono detti \textbf{ortogonali} ($\bm{v \perp w}$) se $\braketbm{v,w} \bm{= 0}$. 
 \end{Definizione}
 
-Ad esempio, nello spazio vettoriale $\V = C^0([-\pi, \pi])$, le funzioni $1, \sin t, \cos t, \sin 2t, \cos 2t, \ldots, \sin kt, \cos kt$ con $k \in \N$ sono funzioni a due a due ortogonali. Infatti, funzioni una pari e una dispari, il cui prodotto è sempre una funzione dispari. Dunque $\braket{f,g} = \int_{-\pi}^\pi f(t) g(t) \ dt = 0$.
+Ad esempio, nello spazio vettoriale $\V = C^0([-\pi, \pi])$, le funzioni $1, \sin t, \cos t, \sin 2t, \cos 2t, \ldots, \sin kt, \cos kt$ con $k \in \N$ sono funzioni a due a due ortogonali. Infatti, tra queste funzioni ci sono sempre una pari e una dispari, il cui prodotto è sempre una funzione dispari. Dunque $\braket{f,g} = \int_{-\pi}^\pi f(t) g(t) \ dt = 0$.
 
 \begin{Definizione}[Base ortonormale]
 \label{def-base-ortonormale-totale}
@@ -5238,7 +5238,7 @@ Preso uno spazio vettoriale $\V$ sul campo dei numeri complessi $\C$, \mbox{$\bm
     \item $F,G \in \Bil^+(\V)$ sono equivalenti $\implies rg(F) = rg(G)$ \\
     Già dimostrato nel Corollario \ref{corol-rango-forme-equivalenti}.
     \item $F,G \in \Bil^+(\V)$ sono equivalenti $\impliedby rg(F) = rg(G)$ \\
-    Sappiamo per la Proposizione \ref{propos-base-ortogonale} che per $F$ esiste una base F-ortogonale $\B = \{v_1, \ldots, v_n\}$ e che per $G$ anche esiste una base G-ortogonale $\Bs = \{w_1, \ldots, w_n\}$. Per l'Osservazione \ref{oss-MB-diagonale} che $M_\B(F)$ e $M_\Bs(G)$ sono entrambe matrici diagonali con coefficienti sulla diagonale pari rispettivamente a $\lambda_i = F(v_i,v_i) \neq 0$ e a $\mu_i = G(w_i,w_i) \neq 0 \enspace \forall i \in \{1, \ldots, r\}$ dove $r$ è il rango di $F$ e $G$. Prendiamo ora due nuove basi $\B' = \{v_1', \ldots, v_n'\}$ dove
+    Sappiamo per la Proposizione \ref{propos-base-ortogonale} che per $F$ esiste una base F-ortogonale $\B = \{v_1, \ldots, v_n\}$ e che per $G$ anche esiste una base G-ortogonale $\Bs = \{w_1, \ldots, w_n\}$. Per l'Osservazione \ref{oss-MB-diagonale} sappiamo che $M_\B(F)$ e $M_\Bs(G)$ sono entrambe matrici diagonali con coefficienti sulla diagonale pari rispettivamente a $\lambda_i = F(v_i,v_i) \neq 0$ e a $\mu_i = G(w_i,w_i) \neq 0 \enspace \forall i \in \{1, \ldots, r\}$ dove $r$ è il rango di $F$ e $G$. Prendiamo ora due nuove basi $\B' = \{v_1', \ldots, v_n'\}$ dove
     \[
     v_i' =
     \begin{cases}
@@ -5298,7 +5298,7 @@ Presa una forma bilineare simmetrica $F \in \Bil^+(\V)$ questa è \textbf{defini
 
 \begin{Definizione}[Segnatura positiva e negativa di $\bm{F}$]
 \label{def-segnatura-positiva}
-Presa una forma bilineare simmetrica $F \in \Bil^+(F)$, la \textbf{segnatura positiva} $\bm{\sigma_+(F)}$ è la \textbf{massima dimensione} di un sottospazio $\W \subset \V$ tale che la restrizione $F|_\W$ (la forma bilineare ottenuta da $F$ usando come dominio il sottoinsieme $\W \times \W$ al posto del sottoinsieme $\V \times \V$) è \textbf{defintia positiva}. \\
+Presa una forma bilineare simmetrica $F \in \Bil^+(F)$, la \textbf{segnatura positiva} $\bm{\sigma_+(F)}$ è la \textbf{massima dimensione} di un sottospazio $\W \subset \V$ tale che la restrizione $F|_\W$ (la forma bilineare ottenuta da $F$ usando come dominio il sottoinsieme $\W \times \W$ al posto del sottoinsieme $\V \times \V$) è \textbf{definita positiva}. \\
 La \textbf{segnatura negativa} $\bm{\sigma_-(F)}$ è invece la \textbf{massima dimensione} di un sottospazio $\W \subset \V$ tale che la restrizione  $F|_\W$ sia \textbf{definita negativa}.
 \end{Definizione}
 
