@@ -10,6 +10,9 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 *   [Algebra Lineare e Geometria](<Primo anno/Algebra Lineare e Geometria/Algebra Lineare e Geometria.pdf>)
 *   [Algoritmi I (in corso)](<Primo anno/Algoritmi I/Algoritmi I.pdf>)
 
+## Anno Accademico 2026/2027
+*   [Sistemi Operativi (in corso)](<Secondo anno/Sistemi Operativi/Sistemi Operativi.pdf>)
+
 ### ­🐛 Segnalazione Errori e Contatti
 
 Gli appunti possono contenere refusi, imprecisioni o errori di trascrizione (come specificato anche all'interno dei singoli documenti). Se riscontri un errore o desideri suggerire una correzione, puoi farlo in due modi:
@@ -25,6 +28,9 @@ This repository serves as a personal archive of all my university notes, written
 #### Academic Year 2025/2026
 *   [Algebra Lineare e Geometria](<Primo anno/Algebra Lineare e Geometria/Algebra Lineare e Geometria.pdf>)
 *   [Algoritmi I (in progress)](<Primo anno/Algoritmi I/Algoritmi I.pdf>)
+
+## Academic Year 2026/2027
+*   [Sistemi Operativi (in progress)](<Secondo anno/Sistemi Operativi/Sistemi Operativi.pdf>)
 
 ### ­🐛 Reporting Errors and Contact
 
