@@ -1,0 +1,388 @@
+\documentclass[11pt, a4paper, titlepage, oneside]{scrbook}
+
+\usepackage{../Tarc/Tarc}
+\usepackage{../Tarc/Tarc-private}
+\graphicspath{{immagini/}}
+
+\title{Sistemi Operativi}
+\author{Lorenzo Ferraro}
+\date{\today}
+\setDegree{Informatica}
+
+\begin{document}
+
+\frontmatter
+\SapienzaCoverItalianoTriennale
+\InfoSegnalazioni
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{Architettura dell'Hardware}
+
+\section{Von Neumann Architecture}
+
+Prima di entrare nel vivo del corso, è bene fare un'introduzione riguardo l'archiettura dell'hardware. Questo perché i sistemi operativi si pongono come \textbf{ponte} tra hardware e software. 
+
+\begin{Definizione}[Von Neumann Architecture]
+\label{def-von-neuman-architecture}
+L'\textbf{Architettura Von Nuemann} è il fondamento teorico di tutte le architetture hardware dei computer moderni. Si basa su diversi principi:
+\begin{itemize}
+    \item Le istruzioni e i dati \textbf{si trovano nello stesso spazio in memoria}
+    \item Le istruzioni sono \textbf{sequenziali}: vengono lette una ad una dalla memoria per poi essere eseguite dalla CPU
+\end{itemize}
+Le componenti principali che la compongono sono:
+\begin{itemize}
+    \item \textbf{Processing Unit}, dove si trovano la \textbf{ALU} (un circuito digitale dove vengono svolti i calcoli algerici più semplici) e i \textbf{registri} (piccolissime e velocissime unità di memoria volatile)
+    \item \textbf{Control Unit}
+    \item \textbf{Memoria RAM} dove si trovano i dati e le istruzioni
+    \item \textbf{Mass Storage / External I/0}
+    \item \textbf{System Bus}, il quale collega tutti gli altri componenti e li fa lavorare insieme
+\end{itemize}
+\end{Definizione}
+
+La Control Unit e la Processing Unit si trovano nella CPU, e comunicano con la RAM e con i dispositivi I/O tramite il System Bus.
+
+\begin{Osservazione}[Von Neumann Bottleneck]
+\label{oss-von-neumann-bottleneck}
+Un classico problema dell'Architettura Von Neumann si verifica quando la RAM e la CPU comunicano: essendo la CPU molto più veloce, quando queste lavorano la RAM non riesce a tenere il passo, e dato che la CPU ha bisogno dei dati che si trovano in RAM, si ritrova spesso ad \textbf{aspettare inutilmente}, rendendo questa architettura non sempre efficiente.
+\end{Osservazione}
+
+Per risolvere questo problema è importante cercare di non accedere alla memoria se non strettamente necessario, sfruttando la cache ad esempio.
+
+\begin{Definizione}[Harvard Architecture]
+\label{def-Harvard-Architecture}
+Esiste un'altra scuola di pensiero riguardo l'architettura hardware: l'\textbf{Architettura Harvard}. La differenza più importante rispetto all'Architettura Von Neumann è che qui i dati e le istruzioni \textbf{non si trovano nello stesso spazio in memoria}.
+\end{Definizione}
+
+\begin{Definizione}[System Bus]
+\label{def-system-bus}
+Il \textbf{System bus} (o Internal Bus) è l'insieme di cavi che permette alla CPU, alla memoria e all'I/O di comunicare fra loro. Questo si divide in 3 componenti principali:
+\begin{itemize}
+    \item \textbf{Address Bus}, che contiene l'indirizzo di memoria del dato richiesto dalla CPU
+    \item \textbf{Data Bus}, che trasposta effettivamente i dati
+    \item \textbf{Control Bus}, che trasposta il comando da eseguire sul dato
+\end{itemize}
+\end{Definizione}
+
+L'\textbf{Address Bus} è \textbf{unidirezionale}, dato che viaggia sempre dalla CPU verso la memoria e mai il contrario. La \textbf{Bus width} è il numero linee fisiche che compongono il bus. Con \textbf{N} linee si riesce ad ottenere un numero massimo di $\bm{2^N}$ locazioni uniche. Fino a qualche anno fa erano comuni i sistemi a 32 bit, ma essendo diventati troppo limitanti si è passati ai modelli a 64 bit. Questi, in realtà, sono troppo anche per gli hardware moderni, e dunque per risparmiare si usano spesso dei modelli fisici a 48 bit, molto più che sufficienti.
+
+Il \textbf{Data Bus} è \textbf{bidirezionale}, dato che il dato può sia arrivare alla CPU (se lo si vuole leggere), sia partire da essa (se lo si vuole scrivere). La \textbf{Bus width} indica quanti bit si possono trasferire in un singolo clock cycle. La \textbf{Word Size} invece è la quantità di bit con cui la CPU elabora i dati (da cui si dividono i processori a 32 bit o a 64 bit). 
+
+Il \textbf{Control Bus} può trasportare diversi messaggi, tra cui i più comuni sono:
+\begin{itemize}
+    \item \textbf{MEMR}/\textbf{MEMW} (Memory Read/Memory Write), che permettono di leggere/scrivere dati in memoria
+    \item \textbf{IOR}/\textbf{IOW} ((I/O Read)/(I/O Write)), che permettono di comunicare con i dispositivi I/O
+    \item \textbf{Bus Reques}/\textbf{Bus Grant}, che permettono al DMA controller di usare il Bus
+    \item \textbf{Interrupt Signals}, messaggi mandati dai componenti hardware di notificare la CPU di un evento. 
+\end{itemize}
+
+\section{Ciclo delle istruzioni}
+
+\begin{Definizione}[Ciclo delle istruzioni]
+\label{def-ciclo-istruzioni}
+Il \textbf{ciclo delle istruzioni} è alla base di ogni operazione di un computer, che lo esegue fin dall'avvio. Si divide in tre passaggi:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Fetch}
+    \item \textbf{Decode}
+    \item \textbf{Execute}
+\end{enumerate}
+\end{Definizione}
+
+\subsection{Fetch}
+
+Durante la fase di Fetch, la CPU copia il valore del \textbf{PC} (Program Counter), che contiene l'indirizzo di memoria dove si trova la prossima istruzione da eseguire, nel \textbf{MAR} (Memory Address Register) e lo inserisce anche nell'address bus. A questo punto la Control Unit manda un comando di Memory Read al control bus. Si legge dunque l'indirizzo di memoria dell'istruzione e i dati interessati da questa istruzione vengono inseriti nel data bus. La CPU li legge e li inserisce nel \textbf{IR} (Instruction Register). Infine, il PC viene incrementato così da contenere al suo interno la prossima istruzione.
+
+\subsection{Decode}
+
+Durante la fase di decodifica, la Control Unit legge i bit che si trovano nell'Instruction Register. Identifica l'\textbf{Opcode} (Operation Code), ossia l'operazione da eseguire che può essere ad esempio \code{ADD} o \code{LOAD}, e gli \textbf{Operands}, ossia i registri, gli indirizzi di memoria o i valori semplici su cui eseguire tale operazione. A questo punto sempre la Control Unit prepara la ALU e i registri per eseguire tale operazione.
+
+\subsection{Execute}
+
+Durante la fase di esecuzione, in base al tipo di istruzione vi sono tre possibili scenari:
+\begin{enumerate}
+    \item Se l'istruzione è aritmetica, come ad esempio l'istruzione \code{add \%eax, \%ebx} (vedremo ogni tanto del codice assembley, non è essenziale ma può aiutare a capire di cosa si sta parlando. In questo caso, stiamo facendo una somma tra i valori contenuti all'interno di due registri, \code{eax} e \code{ebx}), parliamo di \textbf{ALU operations}, dato che è la ALU che se ne occupa, facendo l'operazione e scrivendo il risultato finale.
+    \item Se l'istruzione è una \code{load/store}, come ad esempio l'istruzione \code{mov (\%rax), \%rcx} (stiamo muovendo il valore del registro \code{\%rax} nel registro \code{\%rcx} performando dunque un'operazione di \code{load}), parliamo di \textbf{Memory operations}, dove la CPU legge/scrive dati nella RAM usando MAR o MDR.
+    \item Se l'istruzione è un \code{jump/branch}, come ad esempio l'istruzione \code{jmp 0x4010a0} (stiamo saltando all'indirizzo \code{0x4010a0}), parliamo di \textbf{Control flow}, dove il Program Counter viene aggiornato direttamente all'indirizzo indicato, modificando il flow di esecuzione.
+\end{enumerate}
+
+\section{CPU}
+
+\begin{Definizione}[CPU]
+\label{def-CPU}
+La \textbf{CPU} è il cervello del computer, che esegue le operazioni in memoria. Questo è diviso in tre blocchi principali:
+\begin{itemize}
+    \item \textbf{Datapath}, che contiene i registri e la ALU
+    \item \textbf{Control Unit}, che prende le istruzioni e le decodifica, e in base a queste gestisce il datapath
+    \item \textbf{Internal Bus}, che collega i registri, la ALU e la CU (Control Unit)
+\end{itemize}
+\end{Definizione}
+
+La \textbf{Datapath} performa le operazioni aritmetiche (somma, sottrazione, moltiplicazione e divisione) e \textbf{bitwise} (\code{ADD,OR,XOR,NOT} e gli shift), grazie alla ALU, e ha al suo interno i \textbf{GPRs} (General-Purpose Registers), che sono delle celle di memoria interne alla CPU per mantenere dati così da non dover sempre accedere alla memoria, risparmiando tempo. 
+
+
+La \textbf{Control Unit} gestisce il datapath e gli dice \textbf{come} e \textbf{quando} agire. Prende in input l'Instruction Register, dei segnali di clock o dei flags, e in base a questi manda in output segnali diversi alla ALu, ai registri, o ai sistemi di I/O. È il coordinatore della CPU.
+
+\section{CPU Registers}
+
+Abbiamo visto nel datapath i registri, che sono piccolissime e velocissime unità di memoria nella CPU. Si dividono in due macrogruppi:
+\begin{itemize}
+    \item \textbf{User-visible registers} (ossia i \textbf{General-Purpose}), che sono richiamabili direttamente tramite assembly (come i registri \code{\%rax} e \code{\%rbx} visti prima)
+    \item \textbf{Control \& Status registers} (ossia i \textbf{Special-Purpose}), che sono usati dalla Control Unit per modificare il flusso di esecuzione
+\end{itemize}
+
+\subsection{General-Purpose Registers}
+
+In base al tipo di CPU questi registri sono salvati con nomi differenti:
+\begin{itemize}
+    \item Per le CPU con architettura \code{x86-64} vi sono 16 registri chiamati \code{\%rax, \%rbx, \%rcx, \%rdx, \%rsi, \%rdi, \%rdp, \%rsp} e poi da \code{\%r8} fino a \code{r\%15}
+    \item Per le CPU con architettura  \code{ARM64} vi sono 31 registri che vanno da \code{x0} a \code{x30}
+\end{itemize}
+
+\subsection{Special-Purpose Registers}
+
+Vi sono molti Special-Purpose Registers, come ad esempio il Program Counter, l'Instruction Register, lo Stack Pointer, il MAR e l'MDR e il PSR. Vediamoli più nello specifico:
+\begin{itemize}
+    \item Il \textbf{Program Counter}, come già detto, contiene l'indirizzo di memoria per la prossima istruzione da eseguire.
+    \item L'\textbf{Instruction Register} contiene l'istruzione da eseguire.
+    \item Lo \textbf{Stack Pointer} mantiene l'indirizzo di memoria della cima della call stack
+    \item Il \textbf{MAR} (Memory Address Register) contiene l'indirizzo che sta venendo letto o scritto sulla RAM. È strettamente collegato all'address bus.
+    \item l'\textbf{MDR} (Memory Data Register, o anche detto MBR, ossia Memory Buffer Register) contiene i dati letti dalla RAM o che devono esser scritti sulla RAM. È strettamente collegato al data bus.
+    \item Il \textbf{PSR} (Program Status Register) contiene i bit flag che indicano lo stato della CPU e l'ultima operazione effettuata dall'ALU. Tra le flag più note ci sono:
+    \begin{itemize}
+        \item \textbf{Zero Flag} (Z), che diventa 1 se l'ultima operazione dell'ALU ha restituito 0 come valore
+        \item \textbf{Sign/Negative Flag} (S/N), che diventa 1 se l'ultimo risultato era negativo
+    \end{itemize}
+    Queste flag sono fondamentali per eseguire if e cicli: infatti, per controllare ad esempio se due valori \code{x} e \code{y} siano uguali, il computer effettua una sottrazione e verifica se il risultato sia zero grazie proprio alla Zero Flag.
+\end{itemize} 
+
+\section{Instruction Pipelining}
+
+\begin{Definizione}[Pipelining]
+\label{def-pipelining}
+Nei processori più semplici, ogni istruzione deve essere presa, decodificata e eseguita prima di poter passare alla prossima. Questo però non è molto efficiente, e per questo oggi si utilizza una tecnica nota come \textbf{pipelining} dove più istruzioni vengono eseguite contemporaneamente.
+\end{Definizione}
+
+\begin{Proprieta}[RISC 5-Stage Pipeline]
+\label{prop-RISC-5-stage-pipeline}
+Una pipeline standard si divide in \textbf{5 stage}:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{IF} (Instruction Fetch): si prende l'istruzione
+    \item \textbf{ID} (Instruction Decode): si decodifica l'istruzione
+    \item \textbf{EX} (Execute): si esegue l'istruzione
+    \item \textbf{MEM} (Memory Access): si legge o si scrivono i dati dell'operazione (eseguita solo se necessaria)
+    \item \textbf{WB} (Writeback): scrive il risultato nel registro di destinazione
+\end{enumerate}
+\end{Proprieta}
+
+\begin{Proprieta}[Pipeline Hazards]
+\label{prop-pipeline-hazard}
+
+Tramite il Pipelining l'output ideale sarebbe di eseguire un'istruzione per clock cycle, ma questo è spesso quasi impossibile perché vi sono diversi \textbf{hazards} che rallentano la pipeline. Si dividono in:
+\begin{itemize}
+    \item \textbf{Structural Hazards}, quando due istruzioni diverse hanno bisogno dello stesso hardware fisico e duqnue non possono essere eseguite contemporaneamente.
+    \item \textbf{Data Hazards}, quando un'istruzione dipende dal risultato di un'altra e dunque deve aspettare che questa finisca.
+    \item \textbf{Control Hazards}, quando il PC viene modificato da un \code{jump/branch}, modificando il flusso di esecuzione e rendendo le istruzioni prese inutili. Per risolvere tali problemi molte CPU moderne utilizzano i \textbf{branch predictors}, che provano a indovinare il risultato di un branch. Possono essere molto utili, ma quando questi dovessero sbagliare si perderebbe ancora più tempo del normale. 
+\end{itemize}
+\end{Proprieta}
+
+\begin{Definizione}[Instruction Set Architectures]
+\label{def-ISA}
+La \textbf{ISA} (Instruction Set Architectures) definisce l'interfaccia tra hardware e software. Vi sono due possibili scelte molto diverse:
+\begin{itemize}
+    \item \textbf{CISC} (Complex Instruction Set Computer), che ha una lunga lista di istruzioni già pronte, come ad esempio gli Intel x86/x86-64
+    \item \textbf{RISC} (Reduced Instruction Set Computer), che ha invece un set di istruzioni più semplici , come ad esempio gli ARM (Apple M-series)
+\end{itemize}
+\end{Definizione}
+
+\section{CPU Performance}
+
+\begin{Definizione}[Processori multicore]
+\label{def-processori-multicore}
+Per superare i limiti di potenza, si è pensato di \textbf{usare più processori} (\textbf{core}) su un singolo dispositivo. \\
+Ogni core è una CPU indipendente che può far partire il proprio ciclo di istruzioni indipendentemente dalle altre.
+\end{Definizione}
+
+\begin{Definizione}[Clock]
+\label{def-clock}
+Ogni CPU lavora in base al proprio \textbf{System Clock}. Esiste il \textbf{Clock period}, che è la durata di un singolo clock cycle (come ad esempio 0.25 ns), e la \textbf{Clock Frequency}, ossia il numero di cicli di Clock al secondo, misurato in Hz e che si calcola banalmente prendendo il reciproco del periodo.
+\end{Definizione}
+
+Le istruzioni più semplici impiegano anche un solo ciclo, ma quelle più complesse possono impiegarne anche molti. Esiste quindi il \textbf{CPI}, ossia il numero di cicli medio per istruzione, e anche il \textbf{IPC}, ossia il numero di istruzioni per ciclo (che non è altro che l'inverso del CPI). Avendo più core, i processori moderni riescono nelle condizioni ideali anche a superare il limite di un istruzione per ciclo, ottenendo quindi un valore di IPC $>1$.
+
+\begin{Osservazione}[Memory wall]
+\label{oss-memory-wallò}
+Negli anni, i processori sono migliorati in modo esponenziale, al contrario della DRAM, che ha avuto un miglioramento molto più lineare. Questo gap ha portato alla creazione di un \textbf{memory wall}: la CPU si ritrova spesso ad aspettare la RAM che è troppo lenta. \\
+Abbiamo già visto in breve questo problema quando abbiamo parlato del Von Neumann Bottleneck. 
+\end{Osservazione}
+
+Per risolvere questo problema, si è creata una \textbf{struttura gerarchica delle memorie}:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Registri} (tempo: $<1ns$, capacità: $<1$KiB)
+    \item \textbf{L1 Cache} (tempo: $1ns$, capacità: $32/64$KiB)
+    \item \textbf{L2 Cache} (tempo: $3ns$, capacità: $256/512$KiB)
+    \item \textbf{L3 Cache} (tempo: $10ns$, capacità: $8/64$MiB)
+    \item \textbf{RAM} o Memoria Principale (tempo: $60 ns$, capacità: $8/64$GiB)
+    \item \textbf{SSD} (tempo: $10 \mu s$, capacità: $256$GiB$/2$TiB)
+    \item \textbf{HDD} (tempo: $10 ms$, capacità: $1/10$TiB)
+\end{enumerate}
+
+È evidente che i registri sono molto più veloci di un SSD o della memoria RAM, ma sono anche meno capienti, e più costosi. Infatti, il costo di tutte queste memorie diminuisce scendendo giù nella gerarchia, rendendo l'HDD il meno costoso e i registri i più costi.
+
+\subsection{Principio di località}
+
+\begin{Proprieta}[Principio di località]
+\label{prop-principio-località}
+Quando si accede a un indirizzo in memoria, è molto probabile che bisognerà accedervi anche nel breve futuro. Per questo, si salva queste informazioni in memoria cache per potervi accedere più velocemente senza dover tornare nella RAM. Questa viene detta \textbf{località temporale}. \\
+Allo stesso modo, se si accede a un indirizzo in memoria, è molto probabile che bisognerà accedere anche agli indirizzi a lui vicino. Per questo, si salvano anche questi nella cache. Questa viene detta \textbf{località spaziale}.
+\end{Proprieta}
+
+Prendiamo questo codice in C come esempio:
+\begin{lstlisting}[style=C]
+int sum = 0;
+for (int i = 0; i < 1000; i++){
+    sum += array[i];
+}
+\end{lstlisting}
+
+Per la località temporale, le variabili \code{sum} e \code{i} sono salvate nei registri o nella L1 cache, così da non dover riaccedere alla DRAM. Allo stesso modo, per la località spaziale, è molto probabile che anche i valori \code{array[1], array[2]...} saranno richiesti in un breve futuro, dunque la CPU salva quanti più possibili di questi valori riempiendo una linea di L1 cache, di 64 bytes. Dato che ogni \code{int} in C occupa 4 byte, si salveranno in totale 16 valori dell'array, da \code{array[0]} a \code{array[15]}. In questo modo accediamo una sola volta alla DRAM al posto di 16.
+
+\subsection{RAM}
+
+\begin{Definizione}[RAM]
+\label{def-RAM}
+La memoria \textbf{RAM} si divide in due sottocategorie:
+\begin{enumerate}
+    \item \textbf{SRAM} (Static RAM), veloce ma costosa. Usata per le cache delle CPU
+    \item \textbf{DRAM} (Dynamic RAM), lenta  ma più economica. Usata per la memoria principale (quando si parla di RAM si intende quasi sempre la DRAM)
+\end{enumerate}
+\end{Definizione}
+
+Fisicamente, la RAM è un \textbf{vettore lineare di locazioni}. Nella maggior parte delle architetture l'indirizzamento è al byte: a ogni indirizzo univoco corrisponde esattamente un singolo byte (8 bit). La CPU può comunque richiedere accessi a parole di 4 o 8 byte, accedendo a una sequenza di indirizzi contigui.
+
+\subsection{Cache}
+
+\begin{Definizione}[Linee di cache]
+\label{def-linee-cache}
+Le cache non operano sui singoli byte, ma su strutture chiamate \textbf{linee di cache}. Questi sono blocchi (di solito di 64 byte), che contengono:
+\begin{itemize}
+    \item Un \textbf{valid bit}, che indica se i dati salvati sono validi o meno
+    \item I \textbf{tag bit}, utile per identificare la singola linea
+    \item I \textbf{data block}, ossia gli effettivi 64 byte copiati dalla RAM
+\end{itemize}
+\end{Definizione}
+
+Quando la CPU richiede un accesso in memoria, ci sono due possibilità:
+\begin{itemize}
+    \item \textbf{Cache Hit}: la CPU trova l'indirizzo nel giro di 1/2 cicli.
+    \item \textbf{Cache Miss}: la CPU non trova la l'indirizzo nella cache, dunque è costretta a cercarla nella DRAM, arrivando a impiegare fino a 100 cicli di clock.
+\end{itemize}
+
+Cerchiamo di calcolare la AMAT (Avarege Memory Access Time), ossia il tempo medio per accedere a un indirizzo di memoria.
+\[
+\text{AMAT} = \text{Hit Time} + (\text{Miss Rate} \times \text{Miss Penalty})
+\]
+
+Più il Miss Rate aumenta più questo valore aumenta, rendendo l'intero processo più lento.
+
+\begin{Osservazione}[Cache Coherence Problem]
+\label{oss-cache-coherence-problem}
+Nei sistemi multicore, ogni core ha un suo L1 cache. Questo però crea un \textbf{problema di coerenza}: se il Core 0 e il Core 1 hanno lo stesso valore X, ma il core 1 lo aggiorna modificandone il valore, il core 0 non avrà il valore aggiornato.
+\end{Osservazione}
+
+Per risolvere questo problema vi sono i \textbf{coherence protocols}, che invalidano o aggiornano le copie nelle altre cache ogni volta che si presenta questo problema. 
+
+\begin{Proprieta}[Cache Write Policies]
+\label{prop-cache-write-policies}
+Quando la CPU scrive sulla cache, vi sono due modi per aggiornare anche la RAM con il nuovo valore:
+\begin{itemize}
+    \item \textbf{Write-Through Policy}: la CPU scrive in contemporanea sia sulla Cache che sulla RAM. Dunque la RAM è sempre aggiornata, ma ogni operazione di scrittura diventa più lenta dovendo ogni volta accedere alla RAM.
+    \item \textbf{Write-Back Policy}: la CPU aggiorna solo la Cache line, che viene marcata come \textit{Dirty}, e la RAM viene aggiornata solo quando la cache va eliminata. Dunque le operazioni di memoria sono veloci, ma la RAM contiene valori vecchi.
+\end{itemize}
+\end{Proprieta}
+
+\subsection{Cache Line Mapping Policies}
+
+Vi sono diversi modi per mappare un blocco RAM a una specifica sezione della cache:
+\begin{enumerate}
+    \item \textbf{Direct Mapped}
+    \item \textbf{Fully Associative}
+    \item \textbf{Set Associative}
+\end{enumerate}
+
+Il \textbf{Direct Mapped} è l'approccio più semplice: l'indice della cache viene mappato usando l'aritmetica modulare:
+\[
+\text{Cache Slot} = \text{Block Address} \ \% \ \text{Numero di slot della cache}
+\]
+
+Se il numero di slot per la cache è 4, avremo quindi che i blocchi $0,4,8, \ldots$ andranno allo slot $0$, quelli $1,5,9,\ldots$ allo slot $1$ e così via. In questo caso vi è un problema chiamato \textbf{cache thrashing}: se vi sono due blocchi che devono andare allo stesso slot, è possiible che questi ogni volta si rubino il posto a vicenda. Se ad esempio inizialmente serve il blocco 0, questo andrà nello slot cache 0. Quando serve il blocco 4, anche questo deve andare nello slot 0, dunque viene tolto il blocco 0 per far spazio al blocco 4. Se poi servirà nuovamente il blocco 0, bisognerà togliere il blocco 4 per fargli spazio e così via.
+
+Il \textbf{Fully Associative} è invece l'apporccio più libero: ogni blocco può andare dove vuole. Non vi è alcun cache thrashing, ma richiede ricerce in parallelo per controllare ogni singola linea di cache finché non si trova quella che serve. Questo è molto costoso e lento, rendendo questa tecnica utile solo per strutture molto piccole.
+
+Il \textbf{Set Associative} è un compromesso tra il Direct Mapped e il Fully Associative. La cache viene organizzata in N insiemi, che contengono un valore di blocchi prestabilito (ad esempio, in un 4-way Set Associative ogni insieme ha 4 blocchi). Un blocco viene poi associato a uno di questi insiemi tramite l'aritmetica modulare:
+\[
+\text{Set Index} = \text{Block Address} \ \% \ \text{Numero insiemi}
+\]
+
+Questo riduce notevolmente il cache thrashing (dato che vi è spazio per più di un blocco allo stesso indice), e allo stesso tempo mantiene velocità accettabili.
+
+\subsection{Memoria Secondaria}
+
+Vi sono due tipi di memoria secondaria:
+\begin{itemize}
+    \item \textbf{HDD} (Hard Disk Drivers), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, ruoti, e legga/scriva sulla superficia meccanica. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
+    \item \textbf{SSD} (Solid State Drivers), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
+\end{itemize}
+
+\section{I/O}
+
+Un computer ha senso solo se comunica con strumenti esterni. Vi sono ad esempio i \textbf{dispositivi di storage}, come ad esempio gli SSD o gli HDD, o le \textbf{interfacce utente}, come la tastiera o il mouse. Indipendentemente dal tipo, ogni dispositivo di I/O è gestito da due layer:
+\begin{itemize}
+    \item \textbf{Device Controller} (Hardware), un microchip che espone dei nuovi registri alla CPU da poter controllare
+    \item \textbf{Device Driver} (Software), un modulo nel sistema operativo che dice alla CPU come comunicare con tale dispositivo.
+\end{itemize}
+
+La CPU, per comunciare con il Device Controller, ha due possibilità:
+\begin{itemize}
+    \item \textbf{PMIO} (Port-Mapped I/O), delle istruzioni della CPU dedicate all'I/O. Ad esempio, nelle CPU con architettura x86, vi sono i comandi \code{in} e \code{out} per riferirsi in modo chiaro ai dispositivi I/O.
+    \item \textbf{MMIO} (Memory-Mapped I/O), dove i registri del device di I/O vengono mappati direttamente nella memoria fisica, potendo così utilizzare dei normali puntatori per accedervi.
+\end{itemize}
+Ad oggi, l'MMIO è lo standard.
+
+\begin{Proprieta}[Registri del Device Controller]
+\label{prop-registri-device-controller}
+Nel Device Controller vi sono 3 tipi di registri:
+\begin{itemize}
+    \item \textbf{Status Register}: read-only dato che riporta lo status del dispostivo
+    \item \textbf{Command Register}: write-only dato che contiene le istruzioni per il dispositivo
+    \item \textbf{Data Register}: read/write dato che contiene i dati mandati o ricevuti
+\end{itemize}
+\end{Proprieta}
+
+\subsection{I/O Transfer Protocols}
+
+La CPU ha tre diversi protocolli per comunciare con un dispositivo I/O:
+\begin{itemize}
+    \item \textbf{Programmed I/O} (\textbf{Polling})
+    \item \textbf{Interrupt-Driven I/O}
+    \item \textbf{DMA} (Direct Memory Access)
+\end{itemize}
+
+Il \textbf{Programmed I/O}, più comunemente chiamato \textbf{Polling}, è il metodo più semplice: semplicemente, se la CPU vuole ad esempio leggere qualcosa su un dispostiivo I/O, legge lo Status Register del suo Device Controller, e se lo stato è "Busy" continua a chiederlo, finché non lo è più e può finalmente leggerei dati dal Data Register. Dunque semplicemente la CPU continua a chiedere al dispositivo i dati finché questo non è libero e può darglieli. Questo processo prende il nome di \textit{busy-waiting}. Il problema più grande di questo protocollo è che la CPU è impegnata al 100\%.
+
+L'\textbf{Interrupt-Driven I/O} risolve il problema del busy-waiting: semplicemente, sono direttamente i dispositivi di I/O ad avvertire la CPU di esser pronti. Dunque la CPU manda la richiesta al device, e mentre aspetta esegue altre istruzioni. Quando il dispositivo manda l'ok, inviando un segnale su una \textbf{Interrupt Line}, la CPU mette in pausa l'esecuzione, e passa al \textbf{IVT} (Interrupt Vector Table), un array di puntatori che gli indica dove trovare la corretta \textbf{ISR} (Interrupt Service Routine), che è una speciale funzione che salva tutti i flags e i registers e li ripristina alla fine dell'esecuzione dell'istruzione. Vi sono due problemi con questo protocollo: 
+\begin{itemize}
+    \item salvare/ripristinare i registri e i flags richiede tempo
+    \item se si ha un dispositivo molto veloce, è possibile che la CPU sia sempre interrotta perché le istruzioni iniziate finsicono subito, finendo così per utilizzarne il 100\% solo per spostarsi da un'istruzione all'altra.
+\end{itemize}
+
+Il \textbf{DMA} (Direct Memory Access) consinste nel delegare il trasferimento ad un controller hardware a parte, chiamato appunto \textbf{DMA controller}. Se per esempio bisogna spostare 4 KiB dal Disco alla RAM, la CPU può delegare tale operazione al DMA controller che lo farà senza dover coinvolgere la CPU. Alla fine, il DMA controller crea un singolo segnale che invia alla CPU per avvisare della fine del trasferimento. Il più grande problema del DMA è che condivide il bus di sistema con la CPU, dunque se la CPU deve accedere alla RAM spesso finisce per dover aspettare il DMA controller. 
+
+La soluzione dunque è quella di sfruttare le potenzialità di tutti e 3 i protocolli, usando uno o l'altro in base alla situazione. Ad esempio, per operazioni veloci e semplici il polling è la migliore opzione, mentre per dispositivi lenti, come la tastiera, l'Interrupt-Driven I/O ha più senso. 
+
+
+
+
+
+\end{document}
