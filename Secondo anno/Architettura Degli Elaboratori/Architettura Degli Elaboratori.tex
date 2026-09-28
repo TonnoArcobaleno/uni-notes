@@ -27,12 +27,12 @@ Il sistema numerico usato normalmente è il sistema numerico \textbf{decimale} (
 
 \begin{Definizione}[Sistema binario]
 \label{def-sistema-binario}
-Il sistema \textbf{binario} rappresenta ogni numero tramite solo due cifre: \textbf{0} e \textbf{1}. Ogni cifra rappresenta una potenza di \textbf{2}: $1101_2 = 1 \cdot 2^3 + 1 \cdot 2^2 + 0 \cdot 2^1 + 1 \cdot 2^0 = 8 + 4 + 1 = 13$. 
+Il sistema \textbf{binario} rappresenta ogni numero tramite solo due cifre: \textbf{0} e \textbf{1}. Ogni cifra rappresenta una potenza di \textbf{2}: $1101_2 = 1 \cdot 2^3 + 1 \cdot 2^2 + 0 \cdot 2^1 + 1 \cdot 2^0 = 8 + 4 + 1 = 13_{10}$. 
 \end{Definizione}
 
 \begin{Definizione}[Sistema esadecimale]
 \label{def-sistema-esadecimale}
-Il sistema \textbf{esadecimale} rappresenta ogni numero tramite tutte le \textbf{10 cifre} e tramite le lettere che vanno dalla \textbf{A} alla \textbf{F} (che rappresentano i numeri da 10 a 15). Ogni cifra rappresenta una potenza di \textbf{16}: $4AF_{16} = 15 \cdot 16^0 + 10 \cdot 16^1 + 4 \cdot 16^2 =  15 + 160 + 1024 = 1199$.
+Il sistema \textbf{esadecimale} rappresenta ogni numero tramite tutte le \textbf{10 cifre} e tramite le lettere che vanno dalla \textbf{A} alla \textbf{F} (che rappresentano i numeri da 10 a 15). Ogni cifra rappresenta una potenza di \textbf{16}: $4AF_{16} = 15 \cdot 16^0 + 10 \cdot 16^1 + 4 \cdot 16^2 =  15 + 160 + 1024 = 1199_{10}$.
 \end{Definizione}
 
 \subsection{Convertire i numeri tra i diversi sistemi numerici}
@@ -46,6 +46,8 @@ Abbiamo visto come convertire qualsiasi numero in binario/esadecimale in decimal
         \item Metodo: dividere il numero per 2 e posizionare il resto appena ottenuto a sinistra della rappresentazione binaria. Ad esempio, $68/2 = 34 + 0 \longrightarrow 34/2 =  17 + 0 \longrightarrow 17/2 = 8 + 1 \longrightarrow 8/2 = 4 + 0 \longrightarrow 4/2 = 2 + 0 \longrightarrow 2/2 = 1 + 0 \longrightarrow 1/2 = 0 + 1$, dunque $68_{10} = 1000100_2$.
     \end{enumerate}
     \item \textbf{Decimale} $\longrightarrow$ \textbf{Esadecimale}: dividere  il numero per 16 e posizionare il resto appena ottenuto a sinistra della rappresentazione esadecimale. Ad esempio, $68/16 = 4 + 4 \longrightarrow 4/16 = 0 + 4$, dunque $68_{10} = 44_{16}$.
+    \item \textbf{Esadecimale} $\longrightarrow$ \textbf{Binario}: passare da esadecimale a binario è molto semplice. Bisogna prendere ogni cifre dell'esadecimale e convertirla singolarmente in binario su 4 bit. Ad esempio, $F3A_{16} = 111100111010_2$, dato che $F = 1111$, $3 = 0011$ e $A = 1010$. Questo metodo è valido per passare da una qualsiasi base potenza di 2 al binario: basta convertire ogni cifra in un numero di bit pari all'esponente di tale potenza. Con l'esadecimale ne prendiamo 4 ($16 = 2^4$), con la base 8 invece ne usiamo solo 3 ($8 = 2^3$).
+    \item \textbf{Binario} $\longrightarrow$ \textbf{Esadecimale}: anche passare da binario a esadecimale è molto semplice. Bisogna partire da destra e dividere il numero in gruppi da 4 bit. Si trasformano poi tutti i gruppi nella corrispondente cifra esadecimale e si riscrivono nello stesso ordine. Ad esempio, $100100_2 = 24_{16}$, dato che $0100_2 = 4_{16}$ e $10_2 = 2_{16}$. Questo metodo è valido per passare dal binario a una qualsiasi base potenza di 2: basta dividere il numero in gruppi di lunghezza pari all'esponente di tale potenza. Per l'esadecimale i gruppi sono lunghi 4 ($16 = 2^4$), per la base 32 sono invece lunghi 5 ($32 = 2^5$).
 \end{itemize}
 
 \begin{Proprieta}[Potenze di 2]
