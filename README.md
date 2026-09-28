@@ -11,6 +11,9 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 *   [Algoritmi I (in corso)](<Primo anno/Algoritmi I/Algoritmi I.pdf>)
 
 #### Anno Accademico 2026/2027
+*   [Algoritmi II (in corso)](<Secondo anno/Algoritmi II/Algoritmi II.pdf>)
+*   [Architettura degli Elaboratori (in corso)](<Secondo anno/Architettura degli Elaboratori/Architettura degli Elaboratori.pdf>)
+*   [Basi di Dati (in corso)](<Secondo anno/Basi di Dati/Basi di Dati.pdf>)
 *   [Sistemi Operativi (in corso)](<Secondo anno/Sistemi Operativi/Sistemi Operativi.pdf>)
 
 ### ­🐛 Segnalazione Errori e Contatti
@@ -30,6 +33,9 @@ This repository serves as a personal archive of all my university notes, written
 *   [Algoritmi I (in progress)](<Primo anno/Algoritmi I/Algoritmi I.pdf>)
 
 #### Academic Year 2026/2027
+*   [Algoritmi II (in progress)](<Secondo anno/Algoritmi II/Algoritmi II.pdf>)
+*   [Architettura degli Elaboratori (in progress)](<Secondo anno/Architettura degli Elaboratori/Architettura degli Elaboratori.pdf>)
+*   [Basi di Dati (in progress)](<Secondo anno/Basi di Dati/Basi di Dati.pdf>)
 *   [Sistemi Operativi (in progress)](<Secondo anno/Sistemi Operativi/Sistemi Operativi.pdf>)
 
 ### ­🐛 Reporting Errors and Contact
