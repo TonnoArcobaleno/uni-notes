@@ -608,6 +608,299 @@ Un'associazione R(X,Y) è \textbf{totale su X} se per ogni elemento x di X esist
 
 Ad esempio, l'associazione Frequenta(Studenti, Corsi) è totale su Corsi, dato che non può esistere un corso non frequentato da nessuno (verrebbe cancellato), ed è totale anche su Studenti (non esiste studente che non partecipi a nessun corso: in tal caso non sarebbe uno studente). Mentre l'associazione NatoA(Persone, Città) è totale su Persone, dato che ogni persona è nata per forza in una città, ma parziale su Città, dato che può esistere una città dove non è nato nessuno.
 
+\subsection{Realizzare una vera base di dati}
+
+In una base di dati sono quindi individuabili due componenti:
+\begin{itemize}
+    \item \textbf{lo schema}, ossia la struttura di rappresentazione dei dati (\textit{aspetto intensionale}), che rimane invariante nel tempo
+    \item \textbf{l'instanza}, ossia i valori attuali che sono salvati nel DB (\textit{aspetto estensionale}), che possono cambiare anche molto rapidamente
+\end{itemize}
+
+Per creare una base di dati è necessario costruire in totale 3 schemi:
+\begin{itemize}
+    \item \textbf{Schema concettuale} (per la progettazione concettuale)
+    \item \textbf{Schema logico} (per la progettazione logica)
+    \item \textbf{Schema fisico} (per la progettazione fisica)
+\end{itemize}
+
+Gli schemi logici e fisici sono creati prendendo in input quello a loro precedente, mentre lo schema concettuale prende in input i dati analizzati. Nel prossimo capitolo vedremo come creare uno schema concettuale.
+
+\chapter{Progettazione concettuale}
+
+\section{Il modello Entità-Relazione}
+
+\begin{Definizione}[Modello Entità-Relazione]
+\label{def-modello-ER}
+Il \textbf{modello Entità-Relazione} (o \textbf{ER}) è il più diffuso modello concettuale.
+\end{Definizione}
+
+Avevamo già accenato a questo modello nelle pagine precedenti, ma ora lo studieremo nel dettaglio. I suoi costrutti principali sono:
+\begin{itemize}
+    \item \textbf{Entità} (ossia \textit{classi di oggetti})
+    \item \textbf{Relazioni} (ossia le \textit{associazioni})
+    \item \textbf{Attributi} (ossia le \textit{proprietà} delle entità o delle relazioni)
+\end{itemize}
+
+\NB Avevamo già parlato del concetto di entità nella Definzione \ref{def-entità}, ma lì avevamo descritto un'entità come un singolo elemento nel mondo reale, mentre in questo modello parliamo di una classe di elementi. Per indicare un singolo elemento che fa parte di questa classe usiamo il nome di \textbf{istanza} (o \textbf{occorrenza}) di entità. Nello schema concettuale, però, non rappresentiamo mai le singole istanze ma sempre le entità. Esistono poi anche le occorrenze di associazione, ossia una n-tupla ordinata di occorrenze di entità legate tra loro da questa associazione.
+
+\begin{Proprieta}[Convenzioni per i nomi di entità e associazioni]
+\label{prop-convenzioni-nomi-entita-associazioni}
+Il nome di un'\textbf{entità} deve essere \textit{espressivo} e \textit{al singolare}. \\
+Il nome di un'associazione deve essere \textit{espressivo}, \textit{al singolare} e deve essere \textit{un sostantivo} se possibile, cercando di evitare i ver
+\end{Proprieta}
+
+Vediamo alcuni esempi di schemi ER molto basilari: \nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Schema ER associazione normale.png}
+\caption{Un'associazione tra due entità}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Schema ER due associazioni.png}
+\caption{Due associazioni diverse tra due entità}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textwidth]{Schema ER associazione n-aria.png}
+\caption{Un associazione tra 3 entità}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Schema ER associazione ricorsiva.png}
+\caption{Un'associazione sulla stessa entità (\textbf{ricorsiva})}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Schema ER associazione ricorsiva asimmetrica.png}
+\caption{Un'associazione ricorsiva \textbf{asimmetrica}}
+\end{figure}
+
+\begin{Definizione}[Attributo]
+\label{def-attributo}
+Un'\textbf{attributo} è una proprietà di un'entità o di un'associazione.
+\end{Definizione}
+Negli schemi ER non sono scritti tutti gli attributi, ma solo \textbf{quelli di interesse}. Ad esempio, in uno schema ER riguardo un'università, per l'entità studenti non salveremo il colore degli occhi, perché non è un attributo che ci interessa.
+
+\begin{Definizione}[Attributo composto]
+\label{def-att-comp}
+Un \textbf{attributo composto} è un raggruppamento di attributi di una stessa entità o associazione che sono collegati fra loro e possono essere usati come un atrtibuto unico.
+\end{Definizione}
+
+Ad esempio, per un'entità persona un'attributo composto classico è il suo \textbf{indirizzo}, che si divide in attributi più semplici quali via, numero civico e CAP.
+
+
+Vediamo con un esempio come si rappresentano graficamente gli attributi:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Schema ER con attributi.png}
+\end{figure}
+
+\section{Cardinalità, identificatori e generalizzazione}
+
+\subsection{Cardinalità}
+
+\begin{Definizione}[Cardinalità di una associazione]
+\label{def-cardinalità-associazione}
+La \textbf{cardinalità di una associazione} è una \textbf{coppia di valori} che si associa ad ogni entità che partecipa all'associazione, che specifica il \textbf{minimo} e il \textbf{massimo} di occorrenze dell'altra (o altre) entità a cui può essere associata.
+\end{Definizione}
+
+Ad esempio, l'associazione Studente --- Esame --- Corso, per lo studente la cardinalità è (0,N), dato che uno studente può dare minimo 0 esami e massimo N esami (ossia un numero indeterminato di esami), mentre per l'entità Corso la cardinalità sarà ad esempio (1,25), ipotizzando che un corso abbia minimo un esame e massimo 25 (25 è un numero arbitrario che abbiamo deciso ora per questo esempio).
+
+\begin{Proprieta}[Valori della cardinalità]
+\label{prop-valori-cardinalità}
+In realtà, per la cardinalità si usano per convenzione solo \textbf{3 simboli}:
+\begin{itemize}
+    \item Per la cardinalità \textbf{minima} si usano solo lo \textbf{0}, che indica che un'instanza potrebbe anche non partecipare a nessuna associazione, come uno studente che non ha ancora effettuato esami, o l'\textbf{1}, che invece indica che ogni instanza deve partecipare per forza ad almeno un'associazione, come l'entità Corso che deve per forza avere almeno un esame. 
+    \item Per la caridnalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'instanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'instanza può partecipare ad un numero indeterminato di instanze.
+\end{itemize}\end{Proprieta}
+
+\begin{Proprieta}[Classficazione di associazioni]
+\label{prop-classificazione-associazioni}
+In base alle cardinalità \textbf{massime}, nelle associazioni a 2 possiamo distinguere tre tipi di associazioni:
+\begin{itemize}
+    \item \textbf{uno a uno}
+    \item \textbf{uno a molti}
+    \item \textbf{molti a molti}
+\end{itemize}
+\end{Proprieta}
+
+Vediamo alcuni esempi:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Associazione uno a uno.png}
+\caption{Associazione uno a uno}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Associazione uno a molti.png}
+\caption{Associazioni uno a molti}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Associazione molti a molti.png}
+\caption{Associazione molti a molti}
+\end{figure}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Cardinalità attributi.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+È possibile associare la cardinalità anche agli attributi. In questo caso, abbiamo un impiegato che ha 0 o più automobili, e che ha uno e un solo nome e una e una sola età (la cardinalità uno a uno è omessa).
+\end{minipage}
+
+\subsection{Identificatori}
+
+\begin{Definizione}[Identificatore di un'entità]
+\label{def-identificatore-entita}
+Esistono poi gli \textbf{identificatori} delle entità, che permettono di identificare in modo univoco le istanze di un'entità. Sono costituiti da
+\begin{itemize}
+    \item uno o più attributi dell'entità (\textbf{identificatori interni})
+    \item una o più entità esterne attraverso delle associazioni (\textbf{identificatori esterni})
+\end{itemize}
+\end{Definizione}
+
+\noindent
+\begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Identificatore interno da solo.png}
+    \captionof{figure}{Singolo identificatore interno}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{Più identificatori interni.png}
+    \captionof{figure}{Più identificatori interni}
+\end{minipage}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Identificatore esterno.png}
+\caption{Identificatore esterno}
+\end{figure}
+
+In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Università e Studente. 
+
+\begin{Osservazione}[Osservazioni sugli dentificatori]
+\label{oss-osservazioni-identificatori}
+\begin{itemize}
+    \item Ogni entità deve avere \textbf{almeno un identificatore}
+    \item Un'identificatore esterno è possibile solo se l'entità partecipa all'associazione con cardinalità \textbf{(1,1)}
+    \item Un'associazione \textbf{non ha bisogno di un identificatore}, dato che è già identificata univocamente dalla combinazione degli identificatori delle entità che lega
+\end{itemize}
+\end{Osservazione}
+
+\subsection{Generalizzazione}
+
+\begin{Definizione}[Generalizzazione]
+\label{def-generalizzazione}
+La \textbf{generalizzazione} è un costrutto che mette in relazione una o più entità ($E_1, \ldots, E_n$) con un'entità genitore $E$ che le comprende come casi particolari. Dunque $E_1, \ldots, E_n$ hanno tutti le stesse caratteristiche di $E$ più altre caratteristiche personali.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Generalizzazione.png}
+\caption{Esempio di generalizzazione con 3 entità specializzazioni}
+\end{figure}
+
+\begin{Proprieta}[Proprietà delle generalizzazioni]
+\label{prop-generalizzazioni}
+Presa un'entità padre $E$ e delle entità figlie $E_1, \ldots, E_n$:
+\begin{itemize}
+    \item ogni proprietà di $E$ è \textbf{significativa} per $E_1, \ldots, E_n$, ossia viene \textbf{ereditata} 
+    \item ogni occorrenza di $E_1, \ldots, E_n$ è \textbf{un'occorrenza anche di} $\bm{E}$
+    \item ogni occorrenza di $E$ può essere \textbf{un'occorrenza di 0 o più entità tra} $\bm{E_1, \ldots, E_n}$.
+    \item se una generalizzazione ha solo una figlia si parla di \textbf{sottoinsieme}
+\end{itemize}
+\end{Proprieta}
+
+\begin{Proprieta}[Classificazione delle generalizzazioni]
+\label{prop-classificazione-generalizzazioni}
+Una generalizzazione è:
+\begin{itemize}
+    \item \textbf{totale} se ogni occorrenza del padre è un'occorrenza di almeno una delle figlie, altrimenti è \textbf{parziale}
+    \item \textbf{esclusiva} se ogni occorrenza del padre è al più un'occorrenza di una delle figlie, altrimenti è \textbf{sovrapposta}
+\end{itemize}
+Queste proprietà ricordano molto le Proprietà \ref{prop-vincoli-sottoclassi} viste per le sottoclassi.
+\end{Proprieta}
+
+\section{Analisi dei requisiti e progettazione concettuale}
+
+Vediamo ora un esempio concreto.
+
+"Si vuole realizzare una base di dati per una società che eroga corsi, di cui vogliamo rappresentare i dati dei partecipanti e dei docenti. Per gli studenti (circa 5000), identificati da un codice, si vuole memorizzare il codice fiscale, il cognome, l'età, il sesso, il luogo di nascita, il nome dei loro attuali datori di lavoro, i posto dove hanno lavorato in precedenza insieme al periodo, l'indirizzo, il numero di telefono, i corsi che hanno frequentato (che in totale sono circa 200) e il giudizio finale. Rappresentiamo poi anche i seminari che stanno attualmente frequentando e, per ogni giorno, i luoghi e le ore dove sono tenute le lezioni. I corsi hanno un codice, un titolo e possono avere varie edizioni con date di inizio e fine e numero di partecipanti. Se gli studenti sono liberi professionisti, voglaimo conoscere l'area di interesse e, se lo possiedono, il tiolo. Per quelli che invece lavorano alle dipendenze di altri, vogliamo conoscere il livello e la posizione ricoperta. Per gli insegnanti (circa 300), rappresentiamo il cognome, l'età, il posto dove sono nati, il nome del corso che insegnano, quelli che hanno insegnato nel passato e quelli che possono insegnare. Rappresentiamo anche tutti i loro recapiti telefonici. I docenti possono essere dipendenti interni della società o collaboratori esterni."
+
+Sembrano un sacco di informazioni, ma per questo è fondamentale schematizzare questo testo e prendere solo ciò di veramente interessante. Costruiamo innanzitutto un glossario dei termini per rendere il testo più chiaro:
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|m{6.5cm}|c|c|}
+\hline
+\textbf{Termine} & \textbf{Descrizione} & \textbf{Sinonimi} & \textbf{Collegamenti} \\ \hline
+Partecipante & Persona che partecipa ai corsi & Studente & Corso, Societ\`a \\ \hline
+Docente & Docente dei corsi. Pu\`o essere esterno & Insegnante & Corso \\ \hline
+Corso & Corso organizzato dalla societ\`a. Pu\`o avere pi\`u edizioni. & Seminario & Docente \\ \hline
+Societ\`a & Ente presso cui i partecipanti lavorano o hanno lavorato & Posti & Partecipante \\ \hline
+\end{tabular}
+\end{table}
+
+Riorganizziamo ora le frasi in base a ciò che dicono.
+
+\begin{itemize}
+    \item Contesto \textbf{generale}: Si vuole creare una base di dati per una società che eroga corsi, di cui vogliamo sapere i dati dei partecipanti e dei docenti.
+    \item Riguardo i \textbf{partecipanti}: I partecipanti (circa 5000) sono identificati da un codice. Di loro rappresentiamo del loro codice fiscale, cognome, età, sesso, città di nascita, i nomi dei loro attuali datori di lavoro e di quelli precedenti e le date di inizio e eventuale fine rapporto, le edizioni dei corsi che stanno frequentando e quelli che hanno frequentato, e la votazione generale in decimi.
+    \item Riguardo i \textbf{datori di lavoro}: Dei datori di lavoro presenti e passati dei partecipanti rappresentiamo il nome, l'indirizzo e il numero di telefono.
+    \item Riguardo i \textbf{corsi}: Dei i corsi (circa 200) rappresentiamo il titolo, il codice e le varie edizioni con date di inizio e fine e, per ogni edizione, rappresentiamo il numero di partecipanti, i giorni della settimana, le aule e le ore dove sono tenute le lezioni.
+    \item Riguardo i \textbf{tipi di partecipanti}: Dei partecipanti liberi professionisti rappresentiamo l'area di interesse e l'eventuale titolo personale. Per i dipedenti invece rappresentiamo il loro livello e la loro posizione ricoperta.
+    \item Riguardo i \textbf{docenti}: Dei i docenti (circa 300) rappresentiamo il cognome, l'età, la città di nascita, il numero di telefono, il titolo del corso che insegnano, di quelli che hanno insegnato e di quelli che possono insegnare. Questi possono essere dipendenti interni o collaboratori esterni.
+\end{itemize}
+
+Cerchiamo di capire ora quale costrutto del modello ER utilizzare in base alla situazione:
+\begin{itemize}
+    \item Se ha proprietà significative e descrive oggetti autonomi, allora è un'\textbf{entità}
+    \item Se è semplice e non ha proprietà ma è invece una proprietà di un oggetto autonomo, allora è un \textbf{attributo}
+    \item Se mette in relazione due o più concetti è un'\textbf{associazione}
+    \item Se è un caso particolare di un altro è una \textbf{specializzazione}
+\end{itemize}
+
+\begin{Definizione}[Strategie di progetto]
+\label{def-strategie-di-progetto}
+Vi sono due possibili strategie adottabili:
+\begin{itemize}
+    \item \textbf{top-down}: partiamo da pochi concetti generali e li raffiniamo man mano rendendoli sempre più precisi
+    \item \textbf{bottom-up}: partiamo da concetti già dettagliati per poi generalizzare sempre di più
+\end{itemize}
+Di solito, però, si tende a seguire una strategia \textbf{mista}: si individuano i concetti, si crea uno scheletro e si divide il progetto in aree, dove ciascuna area è sviluppata nel dettaglio. 
+\end{Definizione}
+
+Quando si crea lo scheletro del progetto si devono individuare i concetti più importanti, che possono essere quelli più citati oppure quelli esplicitamente dichiarati come tali e li si organizza in uno schema concettuale. Questo schema deve essere corretto, completo, leggibile e minimale. Proviamo a modellare lo schema concettuale del contesto generale del database visto in precedenza:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Schema concettuale contesto generale.png}
+\end{figure}
+
+Modifichiamo ora questo schema concettuale aggiungendo le informazioni riguardanti anche tutti gli altri elementi del database.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Schema ER completo.png}
+\caption{Schema ER completo}
+\end{figure}
+
+Questo schema può sembrare enorme, ma vediamo passo passo come è stato possibile realizzarlo velocemente e senza impazzire.
+
+
+
 
 
 \end{document}

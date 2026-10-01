@@ -4,7 +4,7 @@
 \usepackage{../Tarc/Tarc-private}
 \graphicspath{{immagini/}}
 
-\title{Sistemi Operativi}
+\title{Architettura degli Elaboratori}
 \author{Lorenzo Ferraro}
 \date{\today}
 \setDegree{Informatica}
@@ -19,9 +19,9 @@
 
 \mainmatter
 
-\chapter{Introduzione}
+\chapter{Sistemi numerici}
 
-\section{Sistemi numerici}
+\section{Introduzione ai sistemi numerici}
 
 Il sistema numerico usato normalmente è il sistema numerico \textbf{decimale} (o in base 10). In questo, ogni cifra rappresenta una potenza di \textbf{10}: $5374_{10} = 5 \cdot 10^3 + 3 \cdot 10^2 + 7 \cdot 10^1 + 4 \cdot 10^0$. Esistono, oltre a questo sistema, anche molti altri sistemi in basi diverse, tra cui il sistema \textbf{binario} e il sistema \textbf{esadecimale}.
 
@@ -116,7 +116,7 @@ Con questa implementazione si risolvono entrambi i problemi del Segno e Ampiezza
 
 dove l'uno inziale non si conta dato che stiamo parlando di numeri a 4 bit.
 
-\begin{Proprieta}[Convertire un numero in un numero negativo tramite il Complemento a 2]
+\begin{Proprieta}[Convertire un numero nell'opposto tramite il Complemento a 2]
 \label{prop-trasformare-complemento-2}
 Preso un numero in binario possiamo facilmente trasformarlo nell'opposto tramite il Complemento a 2. Infatti, basta \textbf{invertire i bit} e \textbf{aggiungere 1}. Preso ad esempio $6_{10} = 0110_{2}$, troviamo che $-6_{10} = 1001_2 + 1 = 1010 = -6_{10}$.
 \end{Proprieta}
@@ -259,6 +259,257 @@ Ad esempio, $-7_{10} = 1001 \bm{>>} 2 = 0010 = 2_{10}$ è uno \textbf{shift logi
 \label{propos-caloclare-decimale-post-shift}
 Preso un numero $A_{10}$, effettuando uno shift a \textbf{sinistra} di $N$ posizioni, troviamo che $\bm{A_{10} << N = A_{10} \cdot 2^n}$. Se invece si effettua uno shift a \textbf{destra}, troviamo che $\bm{A >> N = A / 2^N}$.  
 \end{Proposizione}
+
+\section{Numeri con la virgola}
+
+Siamo riusciti a rappresentare numeri interi senza segno e con il segno, ma dobbiamo ora rappresentare i \textbf{numeri con la virgola}. Abbiamo due possibili rappresentazioni: 
+\begin{itemize}
+    \item \textbf{Virgola fissa}
+    \item \textbf{Virgola mobile}
+\end{itemize}
+
+\subsection{Rappresentazione a virgola fissa}
+
+\begin{Proprieta}[Rappresentazione a virgola fissa]
+\label{prop-rappr-virgola-fissa}
+La rappresentazione a \textbf{virgola fissa} è una tecnica usata dai computer per rappresentare i numeri con la virgola. Si divide il numero in due sezioni: una rappresenta la parte intera, mentre l'altra rappresena la \textbf{parte decimale}. Il numero di bit per la parte intera e quello per la parte decimale deve essere deciso a priori. Ad ogni cifra della parte frazionaria corrisponde una \textbf{potenza di due negativa}, partendo da $2^{-1}$.
+\end{Proprieta}
+
+\Esempio \nopagebreak
+
+Rappresentare $\bm{6.75}$ utilizzando \textbf{4 bit interi e 4 bit frazionari} (ossia per la parte decimale). \nopagebreak
+
+Sappiamo già che $6_{10} = 0110_2$. Per la parte decimale, abbiamo 4 cifre  che ci permettono di calcolare tutti i valori da 0 a 1 con salti di $1/16$. $0.75$ diventa quindi $1100$, dato che $1100 = 1 \cdot 2^{-1} + 1 \cdot 2^{-2} = 0.5 + 0.25 =  0.75$. Dunque troviamo che $\bm{6.75 = 01101100}$.
+
+In generale, per convertire da decimale a binario un numero con la virgola si possono usare entrambi i metodi già visti in precedenza, con una differenza per il 2° metodo: infatti, non dovremo più dividere per 2, ma dovremo moltiplicare la parte decimale per 2, e se questo numero è minore di uno allora segniamo 0, altrimenti segniamo 1 e sottraiamo 1 al valore ottenuto. Nell'esempio di prima, $0.75 \cdot 2 = 1.5 \geq 1$, dunque segniamo 1 e sottraiamo 1 ottenendo $0.5$. Ora, dato che $0.5 \cdot 2 = 1$, segniamo 1 e sottraiamo 1, ottenendo 0, dunque tutte le cifre rimanenti sono 0, e otteniamo quindi il valore $1100$.
+
+\subsection{Numeri con la virgola con segno}
+
+Dobbiamo ora combinare la rappresentazione a virgola fissa con il segno e ampiezza e con il complemento a 2.
+
+\begin{itemize}
+    \item Con il \textbf{segno e ampiezza} è facilissimo: semplicemente il primo bit della parte intera sarà riservato al segno.
+    \item Con il \textbf{complemento a 2} bisogna utilizzare l'algoritmo visto nella Proprietà \ref{prop-trasformare-complemento-2}. 
+\end{itemize}
+
+Ad esempio, il numero $-7.5$ diventa con il segno e ampiezza $\bm{11111000}$, mentre con il complemento a 2 bisogna prima calcolare $7.5$, che è $0111000$, poi invertire i bit e sommare 1, trovando quindi come valore $\bm{10001000}$. Questo valore ha senso dato che $1 \cdot -2^3 + 1 \cdot 2^{-1} = -8 + 0.5 = -7.5$.
+
+\begin{Proposizione}[]
+\label{propos-numeri-decimali}
+Utilizzare 4 bit per la parte decimale di un numero significa togliergli 4 bit per la parte intera. È quindi come se lo stessimo \textbf{dividendo per} $\bm{2^4 = 16}$. Dunque un qualsiasi numero a 8 bit con la rappresentazione a virgola fissa è pari a quello stesso numero calcolato con 8 bit di parte intera diviso per 16.
+\end{Proposizione}
+Riprendendo l'esempio di $-7.5$, $10001000$ con 8 bit di parte intera diventa $-120$, e infatti $-7.5 = -120/16$.
+
+\subsection{Rappresentazione a virgola mobile}
+
+Per studiare la rappresentazione a virgola mobile è necessario consocere la \textbf{notazione scientifica}.
+
+\begin{Definizione}[Notazione scientifica]
+\label{def-notazione-scientifica}
+La \textbf{notazione scientifica} è una tecnica usata per rappresentare i numeri nella forma $\bm{\pm M \times B^E}$, dove $M$ è la \textbf{mantissa}, $B$ è la base e $E$ è l'esponente. \\
+\NB In un sistema a base n, $\bm{1 \leq M < n}$. Dunque ad esempio nel sistema decimale la mantissa è compresa tra 1 e 10.
+\end{Definizione}
+
+Ad esempio, nel nostro sistema decimale scriveremmo $2437 = 2.437 \times 10^3$. 
+
+\begin{Proprieta}[Rappresentazione a virgola mobile]
+\label{prop-rappresentazione-virgola-mobile}
+La rappresentazione a \textbf{virgola mobile} è una tecnica usata dai computer per rappresentare i numeri con la virgola che sfrutta la \textbf{notazione scientifica}. Si stabilisce un numero di bit a priori per rappresentare un numero, come ad esempio \textbf{32 bit}, e si dividono questi bit per rappresentare il \textbf{segno} (che richiede un bit), l'\textbf{esponente} (che, in una rappresentazione a 32 bit, richiede 8 bit) e la \textbf{mantissa} (che si prende il resto dei bit, ossia 23 in una rappresentazione a 32 bit). La base, trovandoci in un sistema binario, è ovviamente \textbf{2}.
+\end{Proprieta}
+
+Per usare questa rappresentazione bisogna:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Convertire il numero da decimale a binario}
+    \item \textbf{Scriverlo nella notazione scientifica binaria} (vedremo ora come farlo)
+    \item \textbf{Scriverlo nella notazione segno-esponente-mantissa}
+\end{enumerate}
+
+Vi sono però altre due importanti considerazioni da fare:
+\begin{itemize}
+    \item l'1 inziale della mantissa è \textbf{sottointeso}. Questo perché è sempre presente in tutti i numeri dato che $M \geq 1$.
+    \item l'esponente è \textbf{polarizzato}, ossia non si usa l'esponente base ma gli si aggiunge un certo \textbf{bias}, che nel caso dei numeri a 32 bit vale 127. Questo lo si fa per poter rappresentare anche gli esponenti negativi.
+\end{itemize}
+
+\Esempio \nopagebreak
+
+Rappresentare il numero $\bm{-228}_{10}$ usando la \textbf{rappresentazione a virgola mobile con 32 bit}. \nopagebreak
+
+Per prima cosa, quindi, convertiamo $228$ in binario (il segno non ci interessa, vi è un bit apposta in questa rappresentazione che se ne occupa): $228_{10} = 11100100_2$. A questo punto dobbiamo scriverlo nella notazione scientifica binaria, in un processo che prende il nome di \textbf{normalizzazione}: $11100100_2 = 1.11001_2 \times 2^7$. Aggiungiamo il bias all'esponente che diventa $127 + 7 = 134$, e riscriviamo tale numero nella sua rappresentazione a 32 bit finale:
+\[
+1 | 10000110 | 11001000000000000000000_2
+\]
+
+il cui valore esadecimale è $0xC3640000$ (dove $0x$ indica l'inizio del valore esadecimale).
+
+Vi sono diverse convenzioni da stabilire per questa rappresentazione, dunque si utilizza uno standard che prende il nome di \textbf{IEEE 754}.
+
+\begin{Definizione}[IEEE 754]
+\label{def-IEEE754}
+L'\textbf{IEEE 754} è lo standard utilizzato per la rappresentazione a virgola mobile.
+\end{Definizione}
+
+Racchiudiamo in questa tabella tutti i casi speciali della rappresentazione a virgola mobile, che sono stati così standardizzati sotto l'IEEE 754.
+
+\begin{center}
+\begin{tabular}{|l|c|c|l|}
+\hline
+Number & Sign & Exponent & Fraction \\
+\hline
+\textbf{0} & Indifferente & 00000000 & 00000000000000000000000 \\
+\hline
+$\bm{\infty}$ & 0 & 11111111 & 00000000000000000000000 \\
+\hline
+$\bm{-\infty}$ & 1 & 11111111 & 00000000000000000000000 \\
+\hline
+\textbf{NaN} & Indifferente & 11111111 & non-zero \\
+\hline
+\textbf{Denormalizzati} & Indifferente & 00000000 & $M \neq 0$ \\
+ & & & $(-1)^s \times 2^{-126} \times 0.m$ \\
+\hline
+\end{tabular}
+\end{center}
+
+Dunque lo 0 si rappresenta con il codice esadecimale 0x00000000 o il codice 0x80000000 (vi sono anche qui, come nel Segno e Ampiezza, due rappresentazioni per esso). \\
+Quando invece vogliamo rappresentare un operazione indefinita, come $\infty - \infty$ o $0/0$. \\
+Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché voglio rappresentare numeri ancora più piccoli di $10^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \times 10^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
+
+\begin{Proprieta}[Livello di precisione]
+\label{prop-livello-di-precisione}
+In base al numero di bit, si può raggiungere un livello di precisione più o meno alto. Vi sono 3 standard conosciuti:
+\begin{itemize}
+    \item \textbf{Half-Precision} (16 bit)
+    \item \textbf{Single-Precision} (32 bit, ciò che utilizzeremo noi)
+    \item \textbf{Double-Precision} (64 bit)
+\end{itemize}
+\end{Proprieta}
+
+\subsection{Arrotondare numeri a virgola mobile}
+
+Abbiamo già affrontato il problema dell'overflow, ossia quando un numero sfora il numero di bit consenti (esiste poi anche l'\textbf{underflow}, ossia quando un numero è così piccolo da non poterlo rappresentare). Questo problema è risolvibile in parte grazie alla sign-extension o alla zero-extension, ma ci sono numeri che da un sistema binario non sono rappresentabili. Ad esempio, $1/3$ non è rappresentabile: si avrebbe bisogno di un numero di bit infinito. È per questo che in informatica spesso bisogna \textbf{arrotondare}.
+
+\begin{Proprieta}[Arrotondare]
+\label{prop-arrotondare}
+Esistono quattro modi per arrotondare un numero:
+\begin{enumerate}
+    \item per \textbf{difetto}
+    \item per \textbf{eccesso}
+    \item più \textbf{vicino allo zero} (ossia se è positivo per difetto, se è negativo per eccesso)
+    \item al \textbf{più vicino possibile} (default, e in caso di parità arrotonda al valore il cui bit meno significativo è pari, ossia 0)
+\end{enumerate}
+\end{Proprieta}
+
+Per capire meglio questi concetti, vediamo come arrotondare $1.100101$ ($1.578125$) a solo 3 bit dopo la virgola con tutti e 4 i modi.
+
+\begin{enumerate}
+    \item $\bm{1.100}$
+    \item $\bm{1.101}$
+    \item $\bm{1.100}$
+    \item $\bm{1.101}$ (dato che la parte scartata $101$ è maggiore della metà dell'intervallo $100$)
+\end{enumerate}
+
+\subsection{Addizione con i numeri in virgola mobile}
+
+L'addizione tra numeri in virgola mobile segue dei passaggi molto specifici:
+\begin{enumerate}[label=\arabic*°]
+    \item Si estraggono l'esponente e i bit frazionari
+    \item Si comparano gli esponenti, e si shifta la mantissa più piccola se necessario
+    \item Si sommano le mantisse
+    \item Si normalizza la mantissa e si aggiusta l'esponente se necessario
+    \item Si arrotonda il risultato
+    \item Si riscrive il numero nel formato a virgola mobile
+\end{enumerate}
+
+Può sembrare difficile, ma vediamo un esempio per chiarirci le idee. Sommiamo i numeri $0x3FC00000$ e $0x40500000$.
+
+Per prima cosa dobbiamo quindi estrarre l'esponente e i bit frazionari di entrambi i numeri:
+\begin{align*}
+3FC00000_{16} &= 0|01111111|10000000000000000000000 \\
+40500000_{16} &= 0|10000000|10100000000000000000000
+\end{align*}
+
+La mantissa del primo numero è quindi $1.1$, mentre per il secondo è $1.101$. Gli esponenti sono rispettivamente $127$ e $128$, ossia $0$ e $1$ tolto il bias, e dato che $0 - 1= - 1$, dobbiamo fare uno shift verso destra della mantissa del primo numero di 1. Dunque $1.1 >> 1 = 0.11 \ (\times 2^1)$. Possiamo ora sommare le due mantisse:
+
+\[
+\begin{array}{rccccc}
+& & 0. & 1 & 1 & + \\
+& 1 & 1 & 0 & 1 & = \\
+\hline
+1 & 0. & 0 & 1 & 1 &
+\end{array}
+\]
+
+Dobbiamo ora normalizzare la mantissa: $10.011 \times 2^1 = 1.0011 \times 2^2$. Non serve arrotondare nulla, dato che i bit frazionari sono ben meno di 23, dunque possiamo riscrivere tutto nel formato a virgola mobile:
+\[
+0|10000001|00110000000000000000000 = 0x4098000_{16}
+\]
+
+Se invece prendiamo due numeri con segno opposto, come ad esempio $0x40C00000$ e $0xC0200000$. 
+
+Per prima cosa estraiamo l'esponente e i bit frazionari:
+\begin{align*}
+40C00000_{16} &= 0|10000001|10000000000000000000000 \\
+C0200000_{16} &= 1|10000000|01000000000000000000000
+\end{align*}
+
+La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\times 2^2)$. Possiamo ora sottarre (dato che la seconda è negativa) le due mantisse :
+
+\[
+\begin{array}{rcccc}
+1. & 0 & 0 & 0 & - \\
+0. & 1 & 0 & 1 & = \\
+\hline
+0. & 1 & 1 & 1 &
+\end{array}
+\]
+
+Dobbiamo ora normalizzare la mantissa: $0.111 \times 2^2 = 1.11 \times 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
+\[
+0|10000000|11000000000000000000000 = 0x40600000
+\]
+
+\subsection{Moltiplicazione con numeri in virgola mobile}
+
+Anche la moltiplicazione tra numeri in virgola mobile è abbastanza schematica:
+\begin{enumerate}[label=\arabic*°]
+    \item Si estraggono gli esponenti e i bit frazionari
+    \item Si sommano gli esponenti (togliendo poi un bias, dato che sennò ne avremmo due)
+    \item Si fa il prodotto tra le mantisse
+    \item Si calcola il segno (se i segni sono discordi allora è -, altrimenti è +)
+    \item Si normalizza il tutto se necessario
+    \item Si riscrive il numero nel formato a virgola mobile
+\end{enumerate}
+
+Proviamo a moltiplicare $0x4040000$ e $0x40200000$.
+
+Per prima cosa estraiamo quindi l'esponente e i bit frazionari da entrambi i numeri:
+\begin{align*}
+40400000_{16} &= 0|10000000|10000000000000000000000 \\
+40200000_{16} &= 0|10000000|01000000000000000000000
+\end{align*}
+
+La mantissa del primo numero è 1.1, mentre quella del secondo è 1.01. Gli esponenti sono entrambi 128, dunque l'esponente finale è $128+128-127 = 129$. Eseguiamo ora il prodotto tra le mantisse:
+\[
+\begin{array}{rccccc}
+& & 1. & 1 & 0 & \times \\
+& & 1. & 0 & 1 & = \\
+\hline
+& & 1 & 1 & 0 & + \\
+& 0 & 0 & 0 & & \\
+1 & 1 & 0 & & & = \\
+\hline
+1. & 1 & 1 & 1 & 0
+\end{array}
+\]
+Non dovendo normalizzare nulla, possiamo riscrivere tutto nel formato a virgola mobile:
+\[
+0|10000001|11100000000000000000000 = 0x40F00000
+\]
+
+
+
+
+
+
 
 
 \end{document}

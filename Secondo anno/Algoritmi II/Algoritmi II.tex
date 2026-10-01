@@ -83,7 +83,7 @@ Questo classico quesito è risolvibile usando i grafi. Infatti, possiamo schemat
 
 \begin{Definizione}[Passeggiata]
 \label{def-passeggiata}
-Una \textbf{passeggiata} in un grafo è una \textbf{sequenza} del tipo $v_0 e_0 v_1 e_1 \ldots v_n e_n$, dove $v_i$ e $v_{i+1}$ indicano due vertici collegati dall'arco $e_i$. \\
+Una \textbf{passeggiata} in un grafo è una \textbf{sequenza} del tipo $v_0 e_1 v_1 e_2 \ldots v_{n-1} e_n v_n$, dove $v_i$ e $v_{i+1}$ indicano due vertici collegati dall'arco $e_i$. \\
 Una passeggiata è detta \textbf{chiusa} se $\bm{v_0 = v_n}$.
 \end{Definizione}
 
@@ -206,7 +206,7 @@ Nel nostro caso abbiamo quindi uno schema del tipo
 \end{itemize}
 \end{Proprieta}
 
-In realtà, per la memorizzazione e la visita avremmo un costo pari a $\Theta(n + \sum_{v \in V} \deg(v))$, ma dato che $\Theta(n + \sum_{v \in V} \deg(v)) = \Theta(n + 2m) = \Theta(n+m)$ non abbiamo problemi.
+In realtà, per la memorizzazione e la visita avremmo un costo pari a $\Theta(n + \sum_{v \in V} \deg(v))$, ma dato che $\Theta(n + \sum_{v \in V} \deg(v)) = \Theta(n + 2m) = \Theta(n+m)$, i conti tornano perfettamente.
 
 Per i grafi diretti, invece, ci sono 3 possibilità:
 \begin{enumerate}
@@ -341,6 +341,7 @@ Questa versione, però, non è la più efficiente. Infatti, controllare che un e
 
 \begin{lstlisting}[style=Python]
 def trovaCicloEfficiente(G):
+    n = numero di nodi di G
     L = lista vuota
     Vis = [0] * n
     x = nodo qualsiasi con grado 2
@@ -364,5 +365,322 @@ def trovaCicloEfficiente(G):
 
 In questo caso usiamo quindi un array di supporto dove controlliamo se un nodo è già stato visitato o meno, riducendo il controllo della condizione del while da $\O(n)$ a $\O(1)$, abbassando quindi il costo temporale a $\textbf{O}\bm{(n)}$. Il costo spaziale invece rimane identico in entrambi i casi: $\textbf{O}\bm{(n)}$.
 
+\section{Cercare un cammino da x a y}
+
+Presi due nodi x e y in un grafo G, cerchiamo ora un algoritmo per poter trovare un cammino tra loro. Abbiamo due possibilità:
+\begin{itemize}
+    \item \textbf{DFS} (depth-first-search): partendo dal nodo x, passiamo ad uno dei suoi vicini non visitati fino a trovare un nodo i cui vicini sono tutti già visitati. A questo punto torniamo indietro fino ad un nodo che ha ancora vicini non visitati e continuiamo la ricerca fino a trovare il nodo y.
+    \item \textbf{BFS} (breath-first-search): partendo dal nodo x, controlliamo tutti i suoi vicini possibili segnandoli come visitati, e ripeto la stessa cosa per ogni vicino fino a trovare il nodo y. 
+\end{itemize}
+
+\subsection{DFS}
+
+Studiamo in particolare l'algoritmo DFS (sulla BFS invece torneremo più avanti).
+
+Abbiamo quindi bisogno di un modo per controllare se un nodo sia stato controllato o meno in tempo costante. Possiamo usare un array \code{Vis}, di lunghezza n, dove
+\[
+Vis[v_i] =
+\begin{cases}
+1 & \text{se }v_i \text{è stato visitato}\\
+0 & \text{se }v_i \text{non è stato visitato}
+\end{cases}
+\]
+
+Per salvare invece il nostro cammino momentaneo usiamo una \textbf{pila} (o stack). Questa ci permette di poter aggiungere ad ogni passo il nuovo vertice che stiamo studiando e ci permette di ripercorrere al contrario questo cammino quando siamo arrivati ad un nodo con vicini tutti già visitati. Vediamo quindi un primo algoritmo per la DFS:
+\begin{lstlisting}[style=Python]
+DFS(G, x):
+    n = numero di nodi di G
+    Vis = [0] * n
+    S = stack nuovo
+    S.push(x)
+    Vis[x] = 1
+    while S != 0:
+        y = S.top()
+        if esiste z vicino di y tale che Vis[z] == 0:
+            S.push(z)
+            Vis[z] = 1
+        else:
+            S.pop()
+    return Vis
+\end{lstlisting}
+
+\begin{Proposizione}[]
+\label{propos-DFS}
+Presi due nodi x e y in un grafo, y è raggiungibile da x $\implies$ $\codeb{Vis[y] = 1}$
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Se y è raggiungibile da x allora sappiamo già che esiste un cammino $x e_1 v_1 \ldots v_{k-1} e_k y$, ossia un cammino da x a y. Poniamo ora per assurdo che, dopo aver eseguito il nostro algoritmo di DFS, abbiamo \code{Vis[y] = 0}. Questo significa che esiste un indice i tale che \code{V[}$v_i$\code{] = 1} e \mbox{\code{V[}$v_{i+1}$\code{] = 0}}. Questo significa che $v_i$ è stato visitato, ma dato che l'algoritmo finisce solo quando \code{S != 0}, significa che $v_i$ è stato tolto dallo stack, ma questo si verifica solo quando tutti i vicini di $v_i$ sono stati visitati. Dunque anche $v_{i+1}$  è stato visitato, e dunque \code{Vis[}$v_{i+1}$\code{] = 1}. Abbiamo quindi trovato un assurdo, dunque nel nostro cammino non esiste un indice tale che \code{V[}$v_i$\code{] = 1} e \mbox{\code{V[}$v_{i+1}$\code{] = 0}}, dunque esiste un cammino tra x e y. $\blacksquare$
+
+Questo algoritmo quindi ritorna un'array \code{Vis} che ci dice tutti i nodi visitati: non ci dice direttamente se esiste un cammino tra x e y, ma se entrambi i nodi in Vis sono segnati con il valore 1 allora sicuramente questo cammino esiste (possiamo dirlo proprio grazie alla Proposizione \ref{propos-DFS}).
+
+Vediamo come funziona il nostro algoritmo con il seguente grafo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Grafo esempio DFS.png}
+\end{figure}
+
+Studiamo come ad ogni iterazione del ciclo while si modificano la pila S e l'array Vis.
+\begin{enumerate}[label=\arabic*°]
+    \item \code{S = \{1\}} e \code{Vis = [1,0,0,0,0,0]}
+    \item \code{S = \{1,2\}} e \code{Vis = [1,1,0,0,0,0]}
+    \item \code{S = \{1,2,3\}} e \code{Vis = [1,1,1,0,0,0]}
+    \item \code{S = \{1,2,3,5\}} e \code{Vis = [1,1,1,0,1,0]}
+    \item \code{S = \{1,2,3,5,6\}} e \code{Vis = [1,1,1,0,1,1]}
+    \item \code{S = \{1,2,3,5\}} e \code{Vis = [1,1,1,0,1,1,1]}
+    \item \code{S = \{1,2,3,5,4\}} e \code{Vis = [1,1,1,1,1,1]}    
+    \item \code{S = \{1,2,3,5\}} e \code{Vis = [1,1,1,1,1,1]}
+    \item \code{S = \{1,2,3\}} e \code{Vis = [1,1,1,1,1,1]}
+    \item \code{S = \{1,2\}} e \code{Vis = [1,1,1,1,1,1]}
+    \item \code{S = \{1\}} e \code{Vis = [1,1,1,1,1,1]}
+    \item \code{S = \{\}} e \code{Vis = [1,1,1,1,1,1]} $\implies$ Ritorniamo l'array \code{Vis = [1,1,1,1,1,1]}
+\end{enumerate}
+
+Questo algoritmo ha un costo computazionale pari a $\textbf{O}(n^2)$. Infatti, il while esegue un totale di $2n-1$ iterazioni, dato che nella pila S vengono inseriti $n-1$ nodi e ne vengono poi eliminati $n$, e dato che per ogni iterazione abbiamo un costo pari a $\O(\deg(y))$ (dato che dobbiamo cercare un vicino z tale che \code{Vis[z] == 0}, operazione che può richiedere nel caso peggiore $\O(\deg n)$), dove $y$ è il nodo in cima alla pila in quella iterazione, che arriva nel caso peggiore a valere $\O(n)$, troviamo che $T(n) = \O(n^2)$. 
+
+Possiamo però migliorare questa complessità temporale tenendo i vicini di ogni nodo in una lista puntata. Vediamo quindi un algoritmo alternativo per la DFS:
+
+\begin{lstlisting}[style=Python]
+DFS_Alternativo(G,x):
+    n = numero di nodi di G
+    Vis = [0] * n
+    S = stack nuovo
+    S.push(x)
+    Vis[x] = 1
+    while S != 0:
+        y = S.top()
+        while y.adiacenti != 0:
+            z = y.adiacenti[0]
+            y.adiacenti.remove(z)
+            if Vis[z] == 0:
+                Vis[z] = 1
+                S.push(z)
+                break
+        if S.top() == y: # y non ha vicini ancora non visitati
+            S.pop()
+    return Vis 
+\end{lstlisting}
+
+A prima vista anche questo algoritmo sembra avere una complessità di $\O(n^2)$: infatti, nel while interno iteriamo nel caso peggiore $\deg(y)$ volte, dunque abbiamo per $2n-1$ iterazioni un costo di $\O(\deg y) = \O(n)$, e quindi $T(n) = \O(n^2)$. Ma proviamo a studiarne il costo da un'altra prospettiva: prendiamo un signolo vertice y del grafo e studiamo quanto costa questo vertice all'algoritmo. \\
+Preso $y$, sappiamo che nel caso peggiore ci costerà al nostro algoritmo $\O(\deg(y))$ (ossia quando tutti i suoi vicini sono già stati visitati). Dunque possiamo dire che ogni nodo y ha costo $\O(\deg (y))$. Dato che il nostro algoritmo itera 1 volta (in realtà 2, ma sappiamo che una costante moltiplicativa non influisce nel calcolo del costo computazionale, duqnue la ignoriamo) su ogni nodo, dunque possiamo dire che $T(n) = \O(\sum_{y \in \V} \deg(y)) = \O(m)$. Dato che però il nostro while ha costo minimo $\O(n)$ ($n$ iterazioni di un while hanno infatti sempre un costo minimo di $\O(n)$, che troviamo quando le operazioni all'interno del while hanno costo $\O(1)$), possiamo dire che $\bm{T(n) =} \textbf{O}\bm{(n + m)}$. Questo ragionamento sul codice visto prima non funziona invece: infatti, per ogni vicino di y li dobbiamo scorrere uno ad uno ogni volta, anche se li abbiamo già visti, portando il costo del singolo nodo a $\O(\deg^2(y))$. 
+
+\NB Negli algoritmi futuri useremo quasi sempre come DFS non questo ma l'altro algoritmo in costo $\O(n^2)$ per semplicità.
+
+\subsection{DFS nei grafi non connessi}
+
+\begin{Definizione}[Complemento]
+\label{def-complemento}
+In un grafo non connesso i suoi \textbf{complementi} sono i suoi tanti sottografi connessi.
+\end{Definizione}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Grafo non connesso componenti.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Ad esempio, in questo grafo vi sono due componenti: uno formato dai nodi 1, 4 e 5, e uno formato dai nodi 2, 3 e 6.
+\end{minipage}
+
+Vogliamo modificare ora la DFS per creare un nuovo algoritmo che ritorni l'array \code{Comp} lungo n, dove all'indice i vi è segnato il numero del componente in cui si trova il nodo i.
+
+\begin{lstlisting}[style=Python]
+DFS_Componenti(G):
+    n = numero di nodi di G
+    Comp = [0] * n
+    x = nodo qualsiasi
+    contatore = 0
+    while x != -1:
+        contatore += 1
+        S = stack nuovo
+        S.push(x)
+        Comp[x] = contatore
+        while S!= 0:
+            y = S.top()
+            if esiste z vicino di y tale che Comp[z] == 0:
+                Comp[z] = contatore
+                S.push(z)
+            else:
+                S.pop()
+        x = -1
+        for i in range(n):
+            if Comp[i] == 0:
+                x = i
+                break
+    return Comp
+\end{lstlisting}
+
+Riprendendo il grafo non connesso visto sopra, nella prima iterazione del ciclo while avremmo \code{Comp = [1,0,0,1,1,0]}, e alla seconda e ultima iterazione avremmo invece \code{Comp = [1,2,2,1,1,2]}.
+
+\subsection{DFS Ricorsivo}
+
+L'algoritmo DFS può essere riscritto anche come algoritmo ricorsivo:
+\begin{lstlisting}[style=Python]
+DFS_Ricorsivo(G,x,Vis):
+    while esiste un vicino y adiacente a x tale che Vis[y] == 0:
+        Vis[y] = 1
+        DFS_Ricorsivo(G,x,P)
+\end{lstlisting}
+
+La complessità di questo algoritmo rimane $\textbf{O}\bm{(n+m)}$ per lo stesso ragionamento già visto per il \code{DFS\_Alternativo}.
+
+\subsection{Alberi di ricerca}
+
+\begin{Definizione}[Albero di ricerca]
+\label{def-albero-ricerca}
+Un'\textbf{albero di ricerca} è un sottografo aciclico e connesso generato durante una visita (come la DFS) formato solo da archi che portano alla scoperta di nuovi nodi. Ha come \textbf{radice} un nodo del grafo e include quindi solo tutti i nodi raggiungibili da tale vertice.
+\end{Definizione}
+
+Un albero di ricerca si memorizza tramite \textbf{vettore dei padri}, ossia un'array di lunghezza n dove all'i-esima posizione si trova il nodo da cui parte un arco per arrivare al nodo i-esimo. 
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Albero di ricerca.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Ad esempio, in questo albero di ricerca il vettore padri sarebbe \code{P = [5,5,6,5,5,2]}.
+\end{minipage}
+
+Notiamo come la radice nel vettore padri abbia come valore sé stessa: dunque per trovarla basta solo trovare l'indice i del vettore tale che \code{P[i] == i}. Notiamo anche che non tutti i valori sono presenti: infatti, mancano l'1 il 4 e il 3. Questo succederà in ogni albero di ricerca: infatti, essendo aciclico, ci sarà sempre almeno un nodo che non avrà alcun "figlio", ossia a cui arriviamo da un suo arco. Questi nodi prendono il nome di \textbf{foglie}.
+
+Studiamo ora un algoritmo per trovare la \textbf{distanza dalla radice} di un nodo x in un albero di ricerca. La distanza dalla radice è il numero di archi del cammino che porta dal nodo x alla radice.
+
+\begin{lstlisting}[style=Python]
+Distanza_Radice(P,x):
+    r = 0
+    for i in range(len(P)):
+        if P[i] == i:
+            r = i
+            break
+    con = 0
+    while r != x:
+        con += 1
+        r = P[r]
+    return con
+\end{lstlisting}
+
+Il costo di questo algoritmo è $\O(h)$, dove h indica l'\textbf{altezza} dell'albero, ossia la massima distanza tra la radice e una delle foglie. Se ci troviamo in un albero degenere (ossia un albero lineare, dove si ha un numero di archi totali pari a $n-1$), il costo può arrivare a $\O(n)$.
+
+\subsection{Problema degli esami}
+
+Vogliamo risolvere il seguente problema:
+
+"Presi n esami e m studenti, vogliamo dividere gli esami in due settimane in modo tale che nessuno studente abbia 2 esami la stessa settimana. \NB Uno studente ha sempre due esami da affrontare."
+
+Trasformiamo questo problema in un problema con i grafi: i vertici saranno i diversi esami, mentre gli archi che li collegano saranno gli studenti. Se ad esempio abbiamo 4 studenti e 4 esami, un grafo potrebbe essere il seguente:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Problema esami.png}
+\end{figure}
+
+Essendoci in questo caso un ciclo a 3, notiamo subito come il problema non sia risolvibile: infatti, i nodi 1 2 e 3 non possono mai stare insieme, ma avendo solo 2 settimane questo non è possibile. Vediamo ora un altro esempio invece:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Problema esami 2.png}
+\end{figure}
+
+Partiamo col dire che, preso un nodo x, se esiste una soluzione a questo problema sicuramente esiste una soluzione con x nella prima settimana. Questo è ovvio dato che se esiste una soluzione con x nella seconda, basta scambiare tutti i nodi tra una settimana e l'altra e avremo una soluzione con x nella prima settimana. Dunque possiamo partire col posizionare il nodo 1 nella settimana 1 ad esempio. Ora, tramite una DFS, visitiamo tutti i nodi del grafo e li mettiamo alternati nelle diverse settimane. Troveremo quindi i nodi \{1,3,5,7\} nella prima settimana e i nodi \{2,4,6,8\} nella seconda settimana. Questo però non basta: dobbiamo verificare che per ogni arco nel grafo che collega due nodi questi non siano nella stessa settimana. La DFS controlla solo alcuni archi, non tutti, quindi questo controllo è fondamentale. Nel nostro caso la soluzione data non è contraddetta da nessun arco, dunque è corretta. Vediamo come si traduce questo ragionamento in codice.
+
+\begin{lstlisting}[style=Python]
+Esami(G):
+    n = numero di nodi di G
+    x = nodo qualsiasi
+    n = numero di nodi di G
+    Part = [0] * n
+    Part[x] = 1
+    S = stack nuovo
+    S.push(x)
+    while S != 0:
+        y = S.top()
+        if esiste un vicino z di y tale che Part[z] == 0:
+            Part[z] = 3 - Part[y] # In questo modo alterniamo 1 e 2
+            S.psuh(z)
+        else:
+            S.pop()
+    for arco uv in G:
+        if Part[u] == Part[v]:
+            return false
+    return Part
+\end{lstlisting}
+
+\subsection{DFS per i grafi diretti}
+
+L'algoritmo della DFS per i grafi diretti rimane praticamente invariato, se non per la condizione dell'\code{if}, che diventa \code{if esiste un vicino con arco (y,z) e Vis[z] == 0}. In questi grafi, però, gli alberi di ricerca prendono il nome di \textbf{arborescenza}: è un grafo aciclico connesso che ha per ogni nodo un solo cammino possibile dalla radice a esso. 
+
+Tramite questi grafi connessi si possono risolvere problemi di questo genere:
+
+"Un processo è diviso in una serie di lavoretti $x_1, \ldots, x_n$ con delle dipendenze tra loro, del tipo $x_i$ va prima di $x_j$. Trovare un ordine dei lavoretti che rispetti tutte le dipendenze."
+
+I vertici saranno i diversi lavoretti, mentre gli archi sono le dipendenze. Ad esempio, se $x_1$ viene prima di $x_2$, lo indicheremo con un'arco diretto da $x_2$ a $x_1$ (indichiamo con la freccia chi viene prima). Se ad esempio abbiamo la lista di lavoretti $x_1, x_2, x_3, x_4$ con queste dipendenze
+\begin{itemize}
+    \item $x_1$ prima di $x_2$
+    \item $x_3$ prima di $x_2$
+    \item $x_3$ prima di $x_1$
+    \item $x_4$ prima di $x_3$
+\end{itemize}
+ 
+allora il grafo sarà di questo tipo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Grafo diretto problema.png}
+\end{figure}
+
+In questo caso la soluzione sarebbe $x_4$ --- $x_3$ ---- $x_1$ ---- $x_2$. Questo ordine viene detto \textbf{ordine topologico del grafo}. È importante capire che se il nostro grafo avesse avuto un \textbf{ciclo diretto} (ossia un cammino dove il vertice iniziale e finale coincidono), allora non avremmo avuto soluzione.
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Ciclo diretto problema.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Ad esempio, in questo grafo non è possibile trovare un ordine topologico: i nodi $x_1$, $x_2$ e $x_3$ si trovano in un ciclo diretto, dunque non è possibile stabilire chi debba venire prima.
+\end{minipage}
+
+\begin{Proposizione}[]
+\label{propos-grafo-cicli-diretti}
+Preso un grafo G diretto, se \textbf{non ci sono cicli diretti} $\implies$ \textbf{esiste un vertice v senza archi uscenti}.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Per dimostrare questa proposizione dimostriamo che se ogni vertice ha archi uscenti allora c'è un ciclo diretto. Questo ha senso perché dimostrare che $A \implies B$ è uguale a dimostrare che $\neg A \impliedby \neg B$.
+
+Prendiamo il seguente codice:
+\begin{lstlisting}[style=Python]
+Trova_Ciclo_Diretto(G): # In G ogni nodo ha un arco uscente
+    L = lista vuota
+    x = nodo qualsiasi
+    L.append(x)
+    next = x.neighbors[0]
+    while (next not in L):
+        L.append(next)
+        u = next.neighbors[0]
+        next = u
+    while L[0] != next:
+        L.remove(L[0])
+    return L
+\end{lstlisting}
+
+Poiché tutti i nodi hanno un arco uscente, \code{x.neighbors[0]} è sempre un'operazione sensata. La lista che ci verrà restituita dall'algoritmo è un cammino con il primo e l'ultimo nodo uguali, dunque è un ciclo diretto. Dunque, preso un grafo diretto G con tutti i vertici aventi almeno un arco uscente, questo ha sicuramente un ciclo diretto. $\blacksquare$
+
+Vogliamo ora invece trovare un'algoritmo che trovi un'ordine topologico di un grafo diretto aciclico. Per la Proposizione \ref{propos-grafo-cicli-diretti} sappiamo che esiste sicuramente un vertice senza archi uscenti. Prendiamo questo vertice, lo segniamo, e lo eliminiamo dal grafo. A questo punto, dato che l'algoritmo non ha cicli diretti, sicuramente vi è un altro nodo che non ha più archi uscenti. Lo prendiamo, lo segniamo e lo cancelliamo, e continuiamo così fino ad aver ricavato un ordine topologico. Se vi sono più nodi senza archi uscenti nello stesso momento basta prendere uno dei nodi in modo casuale: infatti, in uno stesso grafo possono esserci anche più ordini topologici diversi. \\
+Vediamo il codice:
+\begin{lstlisting}[style=Python]
+Ordine_Topologico(G): # G è un grafo diretto aciclico
+    n = numero di nodi di G
+    L = [0] * n
+    while G != 0:
+        v = vertice senza archi uscenti
+        L.append(v)
+        cancellare v da G
+    return L
+\end{lstlisting}
+
+\NB Questo algoritmo è un algoritmo distruttivo per il grafo: alla fine G sarà vuoto, dunque il grafo va prima salvato per poter eseguire questo algoritmo.
+
+Il costo computazionale di questo algoritmo è $\textbf{O}\bm{(n (n+m))}$. Infatti, il ciclo while esegue $\O(n)$ iterazioni, e trovare un nodo senza archi uscenti costa $\O(n)$, mentre eliminarlo costa $\O(m)$ (dato che devo eliminare quel nodo da tutte le liste di adiacenza degli altri vertici). Dunque il costo diventa $\O(n(n+m))$.
 
 \end{document}

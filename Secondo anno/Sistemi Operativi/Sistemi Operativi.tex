@@ -19,9 +19,11 @@
 
 \mainmatter
 
-\chapter{Architettura dell'Hardware}
+\chapter{Introduzione}
 
-\section{Von Neumann Architecture}
+\section{Architettura dell'Hardware}
+
+\subsection{Von Neumann Architecture}
 
 Prima di entrare nel vivo del corso, è bene fare un'introduzione riguardo l'archiettura dell'hardware. Questo perché i sistemi operativi si pongono come \textbf{ponte} tra hardware e software. 
 
@@ -78,7 +80,7 @@ Il \textbf{Control Bus} può trasportare diversi messaggi, tra cui i più comuni
     \item \textbf{Interrupt Signals}, messaggi mandati dai componenti hardware di notificare la CPU di un evento. 
 \end{itemize}
 
-\section{Ciclo delle istruzioni}
+\subsection{Ciclo delle istruzioni}
 
 \begin{Definizione}[Ciclo delle istruzioni]
 \label{def-ciclo-istruzioni}
@@ -90,15 +92,15 @@ Il \textbf{ciclo delle istruzioni} è alla base di ogni operazione di un compute
 \end{enumerate}
 \end{Definizione}
 
-\subsection{Fetch}
+\subsubsection*{Fetch}
 
 Durante la fase di Fetch, la CPU copia il valore del \textbf{PC} (Program Counter), che contiene l'indirizzo di memoria dove si trova la prossima istruzione da eseguire, nel \textbf{MAR} (Memory Address Register) e lo inserisce anche nell'address bus. A questo punto la Control Unit manda un comando di Memory Read al control bus. Si legge dunque l'indirizzo di memoria dell'istruzione e i dati interessati da questa istruzione vengono inseriti nel data bus. La CPU li legge e li inserisce nel \textbf{IR} (Instruction Register). Infine, il PC viene incrementato così da contenere al suo interno la prossima istruzione.
 
-\subsection{Decode}
+\subsubsection*{Decode}
 
 Durante la fase di decodifica, la Control Unit legge i bit che si trovano nell'Instruction Register. Identifica l'\textbf{Opcode} (Operation Code), ossia l'operazione da eseguire che può essere ad esempio \code{ADD} o \code{LOAD}, e gli \textbf{Operands}, ossia i registri, gli indirizzi di memoria o i valori semplici su cui eseguire tale operazione. A questo punto sempre la Control Unit prepara la ALU e i registri per eseguire tale operazione.
 
-\subsection{Execute}
+\subsubsection*{Execute}
 
 Durante la fase di esecuzione, in base al tipo di istruzione vi sono tre possibili scenari:
 \begin{enumerate}
@@ -107,7 +109,7 @@ Durante la fase di esecuzione, in base al tipo di istruzione vi sono tre possibi
     \item Se l'istruzione è un \code{jump/branch}, come ad esempio l'istruzione \code{jmp 0x4010a0} (stiamo saltando all'indirizzo \code{0x4010a0}), parliamo di \textbf{Control flow}, dove il Program Counter viene aggiornato direttamente all'indirizzo indicato, modificando il flow di esecuzione.
 \end{enumerate}
 
-\section{CPU}
+\subsection{CPU}
 
 \begin{Definizione}[CPU]
 \label{def-CPU}
@@ -124,7 +126,7 @@ La \textbf{Datapath} performa le operazioni aritmetiche (somma, sottrazione, mol
 
 La \textbf{Control Unit} gestisce il datapath e gli dice \textbf{come} e \textbf{quando} agire. Prende in input l'Instruction Register, dei segnali di clock o dei flags, e in base a questi manda in output segnali diversi alla ALu, ai registri, o ai sistemi di I/O. È il coordinatore della CPU.
 
-\section{CPU Registers}
+\subsection{CPU Registers}
 
 Abbiamo visto nel datapath i registri, che sono piccolissime e velocissime unità di memoria nella CPU. Si dividono in due macrogruppi:
 \begin{itemize}
@@ -132,7 +134,7 @@ Abbiamo visto nel datapath i registri, che sono piccolissime e velocissime unit�
     \item \textbf{Control \& Status registers} (ossia i \textbf{Special-Purpose}), che sono usati dalla Control Unit per modificare il flusso di esecuzione
 \end{itemize}
 
-\subsection{General-Purpose Registers}
+\subsubsection*{General-Purpose Registers}
 
 In base al tipo di CPU questi registri sono salvati con nomi differenti:
 \begin{itemize}
@@ -140,7 +142,7 @@ In base al tipo di CPU questi registri sono salvati con nomi differenti:
     \item Per le CPU con architettura  \code{ARM64} vi sono 31 registri che vanno da \code{x0} a \code{x30}
 \end{itemize}
 
-\subsection{Special-Purpose Registers}
+\subsubsection*{Special-Purpose Registers}
 
 Vi sono molti Special-Purpose Registers, come ad esempio il Program Counter, l'Instruction Register, lo Stack Pointer, il MAR e l'MDR e il PSR. Vediamoli più nello specifico:
 \begin{itemize}
@@ -157,7 +159,7 @@ Vi sono molti Special-Purpose Registers, come ad esempio il Program Counter, l'I
     Queste flag sono fondamentali per eseguire if e cicli: infatti, per controllare ad esempio se due valori \code{x} e \code{y} siano uguali, il computer effettua una sottrazione e verifica se il risultato sia zero grazie proprio alla Zero Flag.
 \end{itemize} 
 
-\section{Instruction Pipelining}
+\subsection{Instruction Pipelining}
 
 \begin{Definizione}[Pipelining]
 \label{def-pipelining}
@@ -196,7 +198,7 @@ La \textbf{ISA} (Instruction Set Architectures) definisce l'interfaccia tra hard
 \end{itemize}
 \end{Definizione}
 
-\section{CPU Performance}
+\subsection{CPU Performance}
 
 \begin{Definizione}[Processori multicore]
 \label{def-processori-multicore}
@@ -230,7 +232,7 @@ Per risolvere questo problema, si è creata una \textbf{struttura gerarchica del
 
 È evidente che i registri sono molto più veloci di un SSD o della memoria RAM, ma sono anche meno capienti, e più costosi. Infatti, il costo di tutte queste memorie diminuisce scendendo giù nella gerarchia, rendendo l'HDD il meno costoso e i registri i più costi.
 
-\subsection{Principio di località}
+\subsubsection*{Principio di località}
 
 \begin{Proprieta}[Principio di località]
 \label{prop-principio-località}
@@ -248,7 +250,7 @@ for (int i = 0; i < 1000; i++){
 
 Per la località temporale, le variabili \code{sum} e \code{i} sono salvate nei registri o nella L1 cache, così da non dover riaccedere alla DRAM. Allo stesso modo, per la località spaziale, è molto probabile che anche i valori \code{array[1], array[2]...} saranno richiesti in un breve futuro, dunque la CPU salva quanti più possibili di questi valori riempiendo una linea di L1 cache, di 64 bytes. Dato che ogni \code{int} in C occupa 4 byte, si salveranno in totale 16 valori dell'array, da \code{array[0]} a \code{array[15]}. In questo modo accediamo una sola volta alla DRAM al posto di 16.
 
-\subsection{RAM}
+\subsubsection*{RAM}
 
 \begin{Definizione}[RAM]
 \label{def-RAM}
@@ -261,7 +263,7 @@ La memoria \textbf{RAM} si divide in due sottocategorie:
 
 Fisicamente, la RAM è un \textbf{vettore lineare di locazioni}. Nella maggior parte delle architetture l'indirizzamento è al byte: a ogni indirizzo univoco corrisponde esattamente un singolo byte (8 bit). La CPU può comunque richiedere accessi a parole di 4 o 8 byte, accedendo a una sequenza di indirizzi contigui.
 
-\subsection{Cache}
+\subsubsection*{Cache}
 
 \begin{Definizione}[Linee di cache]
 \label{def-linee-cache}
@@ -302,7 +304,7 @@ Quando la CPU scrive sulla cache, vi sono due modi per aggiornare anche la RAM c
 \end{itemize}
 \end{Proprieta}
 
-\subsection{Cache Line Mapping Policies}
+\subsubsection*{Cache Line Mapping Policies}
 
 Vi sono diversi modi per mappare un blocco RAM a una specifica sezione della cache:
 \begin{enumerate}
@@ -327,7 +329,7 @@ Il \textbf{Set Associative} è un compromesso tra il Direct Mapped e il Fully As
 
 Questo riduce notevolmente il cache thrashing (dato che vi è spazio per più di un blocco allo stesso indice), e allo stesso tempo mantiene velocità accettabili.
 
-\subsection{Memoria Secondaria}
+\subsubsection*{Memoria Secondaria}
 
 Vi sono due tipi di memoria secondaria:
 \begin{itemize}
@@ -335,7 +337,7 @@ Vi sono due tipi di memoria secondaria:
     \item \textbf{SSD} (Solid State Drivers), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
 \end{itemize}
 
-\section{I/O}
+\subsection{I/O}
 
 Un computer ha senso solo se comunica con strumenti esterni. Vi sono ad esempio i \textbf{dispositivi di storage}, come ad esempio gli SSD o gli HDD, o le \textbf{interfacce utente}, come la tastiera o il mouse. Indipendentemente dal tipo, ogni dispositivo di I/O è gestito da due layer:
 \begin{itemize}
@@ -360,7 +362,7 @@ Nel Device Controller vi sono 3 tipi di registri:
 \end{itemize}
 \end{Proprieta}
 
-\subsection{I/O Transfer Protocols}
+\subsubsection*{I/O Transfer Protocols}
 
 La CPU ha tre diversi protocolli per comunciare con un dispositivo I/O:
 \begin{itemize}
@@ -381,8 +383,105 @@ Il \textbf{DMA} (Direct Memory Access) consinste nel delegare il trasferimento a
 
 La soluzione dunque è quella di sfruttare le potenzialità di tutti e 3 i protocolli, usando uno o l'altro in base alla situazione. Ad esempio, per operazioni veloci e semplici il polling è la migliore opzione, mentre per dispositivi lenti, come la tastiera, l'Interrupt-Driven I/O ha più senso. 
 
+\section{Introduzione ai sistemi operativi}
 
+\subsection{Cos'è il sistema operativo?}
 
+\begin{Definizione}[Sistema Operativo]
+\label{def-sistema-operativo}
+Un \textbf{sistema operativo} (OS) è una collezione di sistemi software con l'obiettivo di gestire le risorse hardware e offrire dei servizi alle applicazioni.
+\end{Definizione}
+
+Si può considerare il sistema operativo come il primo software che il computer avvia e che viene eseguito in una modalità privilegiata che prende il nome di \textbf{modalità kernel}, che rivedremo più avanti.
+
+I vantaggi del sistema operativo sono molteplici:
+\begin{itemize}
+    \item Senza di esso, dovremmo scrivere applicazioni che si occupano ad esempio anche di scrivere e leggere i dati direttamente sul disco o di gestire direttamente gli indirizzi della RAM. Con esso invece viene creata un'astrazione più semplice e pulita che tutte le app possono usare: 
+\begin{itemize}
+    \item non ci sono più settori numerati sulla memoria secondaria ma \textbf{file} e \textbf{cartelle}
+    \item non c'è più memoria RAM da gestire direttamente ma ci sono \textbf{spazi di indirizzamento virtuali}
+    \item non ci sono più le interfacce network ma ci sono i \textbf{socket}
+\end{itemize} 
+    \item La gestione delle risorse del computer è lasciata a lui. Decide quali programmi possono usare la CPU e per quanto tempo, non lascia nessuna applicazione senza risorse per troppo tempo e ottimizza questo utilizzo per minimizzare gli sprechi.
+    \item Gestisce, inoltre, tutti i programmi in esecuzione. Isola le diverse applicazioni, in modo tale che due applicazioni si ostacolino a vicenda, previene che queste modificano codice o impostazioni di sistema e, se un'applicazione crasha, evita di far crashare tutto il sistema. 
+\end{itemize}
+
+\begin{Definizione}[Kernel]
+\label{def-kernel}
+Il \textbf{kernel} (nucleo) è la componente centrale del sistema operativo. È il primo software caricato dal computer ed è sempre attivo.
+\end{Definizione}
+
+\begin{Proprieta}[Obiettivi sistema operativo]
+\label{prop-obiettivi-sistema-operativo}
+Gli obiettivi del sistema operativo sono molti:
+\begin{itemize}
+    \item \textbf{Virtualizzazione}, ossia la pratica di far apparire le risorse fisiche come delle risorse logiche
+    \item \textbf{Concorrenza}, ossia il saper gestire contemporaneamente più processi senza problemi mantenendo i dati consistenti
+    \item \textbf{Persistenza}, ossia l'abilità di salvare i dati su dei sistemi progettati per il lungo termine (dato che la RAM è volatile, bisogna salvare spesso i dati e in modo veloce sulla memoria secondaria)
+    \item \textbf{Sicurezza e isolazione}, ossia l'abilità di gestire la sicurezza dei file e gli spazi di memoria dei diversi processi
+    \item \textbf{Efficienza}, ossia l'abilità di dare priorità ad aspetti diversi in base alla circostanza
+\end{itemize}
+\end{Proprieta}
+
+Esistono due tipi di virtualizzazione:
+\begin{itemize}
+    \item \textbf{CPU Virtualization}, dove l'OS trasforma una singola CPU fisica in molte CPU virtuali (detti processi o \textit{thread}, che vedremo meglio tra poco)
+    \item \textbf{Memory Virtualization}, dove l'OS da a ogni processo il suo personale spazio di memoria virtuale da poter usare
+\end{itemize}
+
+Per quanto riguarda invece la sicurezza, come già accenato prima è necessario che ogni programma abbia il suo spazio di memoria virtuale a cui gli altri non possono accedere, e se un singolo programma crasha deve crashare solo lui e non tutto il sistema. Inoltre, in un sistema multi-user, per i file protetti è necessario controllare che l'utente che vuole accedervi abbia l'autorizzazione necessaria per poterlo fare.
+
+Infine, per quanto riguarda l'efficienza, è importante capire che il SO fa sempre dei "\textit{trade-off}", ossia deve scegliere se dare priorità a una cosa piuttosto che a un altra. La domanda più classica è: "Velocità o sicurezza?" Purtroppo è necessario scegliere: se infatti si vuole la sicurezza, allora bisognerà aumentare i controlli e dunque la velocità diminuirà, altrimenti se si vuole aumentare quest'ultima il nostro sistema diventerà più vulnerabile.
+
+\subsubsection*{Storia del sistema operativo}
+
+I primi computer negli anni 40 e 50 non avevano neppure un sistema operativo. Si usavano delle schede perforate dove veniva scritto il codice binario, si runnava il codice e lo si debuggava sul momento. La potenza della CPU era praticamente inespressa: doveva infatti rimanere ad aspettare un sacco di tempo l'input umano.
+
+Alla fine degli anni 50 si vede un \textbf{primo prototipo di sistema operativo}: infatti i programmatori potevano caricare più programmi da eseguire insieme, e il sistema operativo si sarebbe occupato di gestirne il flusso: caricava il primo programma, lo eseguiva, e poi caricava il secondo e così via. La CPU, però, rimaneva assai limitata dal sempre troppo lento input umano.
+
+Per eliminare questo spreco di tempo per la CPU, si è pensato negli anni 60 di far lavorare la CPU anche mentre aspetta un input umano. Ad esempio, se il programma 1 aveva bisogno di un input, la CPU non avrebbe più aspettato inutilmente ma avrebbe iniziato a eseguire il programma 2. Questo aumentava molto l'efficienza, ma anche il carico sul sistema operativo, che ora doveva isolare la memoria di più programmi e doveva gestire lo switch tra un programma e l'altro della CPU.
+
+Negli anni 70 si iniziano a vedere i primi sistemi di \textbf{timesharing} (come UNIX): la CPU, tramite un clock interno, cicla tra i diversi utenti attivi che possono interagire con la macchina tramite un proprio terminale. Dato che lo switch tra le macchine avviene in millisecondi, all'utente sembra di avere la macchina tutta per sé, potendo quindi usare una sola CPU in contemporanea tra più persone senza alcun delay notabile. Questo crea ancora più pressioni sul sistema operativo che deve ora molti nuovi problemi.  
+
+Dagli anni 80 ad oggi abbiamo visto sempre più sistemi: negli anni 80 arrivano i PC (Personal Computers), con però diversi problemi di sicurezza, come MS-DOS, mentre dagli anni 90 ad oggi sono arrivati i sistemi operativi che tutti conosciamo, come Windows o macOS. Per i telefoni vi sono invece iOS e Android, che prioritizzano l'efficienza elettrica e la sicurezza al resto.
+
+\subsection{Astrazioni}
+
+\begin{Definizione}[Astrazione]
+\label{def-astrazione}
+Un'\textbf{astrazione} è una vista semplificata di un sistema complesso che espone solo alcuni dettagli mentre nasconde le meccaniche più complesse.
+\end{Definizione}
+
+\begin{Definizione}[Processo]
+\label{def-processo}
+L'astrazione più importante del sistema operativo è il \textbf{processo}, che è un'\textbf{instanza di un programma}.
+\end{Definizione}
+
+Per capire bene cos'è il processo, basti pensare che il programma è il codice statico che si trova sulla memoria secondaria che noi scarichiamo, mentre un processo rappresenta il programma in esecuzione in un determinato momento. 
+
+\begin{Definizione}[Thread]
+\label{def-thread}
+Dentro un programma possono esserci dei \textbf{thread}, che è la più piccola unità di esecuzione gestibile in modo autonomo dal SO. 
+\end{Definizione}
+
+Tutti i thread di uno stesso processo hanno lo stesso spazio di memoria e gli stesso file, ma ogni thread ha un proprio \textit{PC} (dato che ogni thread può eseguire azioni indipendentemente dagli altri, ha bisogno di un proprio Program Counter che gli dice quali istruzioni eseguire), stack e un registro di stato.
+
+\subsubsection*{Astrazione della memoria Principale}
+
+La nostra RAM fisica è una griglia di celle: per gestire meglio questo spazio, il sistema operativo la astrae in \textbf{spazio di indirizzamento}. Ogni processo ha un range di indirizzi che va da $0$ a $2^{N-1}$ in base al sistema (nei sistemi a 64 bit si arriva fino a $2^{64-1}$ indirizzi diversi). Ogni indirizzo virtuale viene poi mappato ad un indirizzo fisico unico. Due processi A e B possono avere quindi lo stesso indirizzo di memoria virtuale 0x1000 (nel proprio spazio di indirizzamento) mappato a due indirizzi fisici differenti (rispettivamente 0x7fff000 e 0x8aaa000, ad esempio). 
+
+Questa gestione della memoria è tutta opera del sistema operativo, e viene fatta per tre motivi:
+\begin{itemize}
+    \item \textbf{Facilità d'uso}: è molto più facile assumere che il primo indirizzo in memoria sia 0 e non un indirizzo fisico reale
+    \item \textbf{Isolazione}: in questo modo se un programma sbaglia qualche reference e crasha, crasha solo lui e non tutto il sistema
+    \item \textbf{Efficienza}: il sistema operativo carica solo le parti attualmente utili del processo, così da risparmiare risorse
+\end{itemize}
+
+\subsubsection*{Astrazione della memoria Secondaria}
+
+Le memorie secondarie operano su blocchi fisici e settori. Per rendere questi blocchi di dati più comodi il sistema operativo li astrae in \textbf{file}, ossia degli array di bytes a cui viene dato un nome e che possono essere letti o scritti. Per organizzare questi file vi sono poi le \textbf{cartelle}, ossia dei file speciali che contengono file o altre cartelle. Si creare dunque un \textit{albero gerarchico delle cartelle}, dove se una cartella contiene un'altra significa che si trova nella gerarchia a un livello più in alto. Sarà poi il sistema operativo a trasforare i percorsi come \code{/home/Utente/file.txt} in degli indirizzi fisici di memoria.
+
+\subsection{Supporto Hardware}
 
 
 \end{document}
