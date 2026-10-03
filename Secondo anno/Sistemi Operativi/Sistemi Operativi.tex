@@ -481,7 +481,84 @@ Questa gestione della memoria è tutta opera del sistema operativo, e viene fatt
 
 Le memorie secondarie operano su blocchi fisici e settori. Per rendere questi blocchi di dati più comodi il sistema operativo li astrae in \textbf{file}, ossia degli array di bytes a cui viene dato un nome e che possono essere letti o scritti. Per organizzare questi file vi sono poi le \textbf{cartelle}, ossia dei file speciali che contengono file o altre cartelle. Si creare dunque un \textit{albero gerarchico delle cartelle}, dove se una cartella contiene un'altra significa che si trova nella gerarchia a un livello più in alto. Sarà poi il sistema operativo a trasforare i percorsi come \code{/home/Utente/file.txt} in degli indirizzi fisici di memoria.
 
-\subsection{Supporto Hardware}
+\subsection{Dual-Mode}
+
+Il sistema operativo, essendo solo software, ha bisogno di un supporto hardware per evitare che l'utente possa toccare sezioni del computer che non lo riguardano. Per questo motivo, le CPU moderne hanno due diverse modalità di operazioni:
+\begin{itemize}
+    \item \textbf{modalità utente} (non privilegiata), usata per eseguire le applicazioni dell'utente e che non ha accesso a tutto
+    \item \textbf{modalità kernel} (privilegiata), ussata per eseguire codice del sistema operativo e che ha accesso completo a tutte le istruzioni della CPU
+\end{itemize}
+
+Nelle architetture x86 in relatà oltre alla modalità utente e la modalità kernel vi sono due modalità intermedie per i driver dei dispositivi. Questi quattro livelli sono chiamati \textbf{anelli}, ma nella pratica i SO moderni utilizzano solo l'anello 0 (modalità kernel) e l'anello 3 (modalità utente), spostando i driver o in uno o nell'altro in base alla situazione. Questo rende i sistemi operativi più \textbf{semplici e chiari}, e soprattuttto li rende più \textbf{accessibili} a diverse CPU, che ad oggi supportano solo l'utilizzo di due livelli. \\
+Per sapere in che modalità ci troviamo, la CPU usa un \textbf{bit modalità} che si trova in un registro di stato, e che vale \textbf{0} per la \textbf{modalità kernel} e \textbf{1} per la \textbf{modalità utente}. Quando si vuole eseguire un'istruzione, la CPU controlla prima se nella modalità attuale questa istruzione è eseguibile o meno. 
+
+
+\begin{Definizione}[Istruzioni]
+\label{def-istruzioni}
+Le \textbf{istruzioni privilegiate} sono le istruzioni che la CPU può esegurie solo se si trova nella modalità kernel. Alcune istruzioni privilegiate sono ad esempio lo spegnimento della CPU, oppure modificare il puntatore del MMU o mandare segnali a dei registri hardware. 
+
+Le \textbf{istruzioni non privilegiate} sono invece le istruzioni che la CPU può eseguire sempre, anche in modalità utente. Alcune istruzioni non privilegiate sono ad esempio le istruzioni aritmetiche (\code{add,sub,mult,div}) o le istruzioni logice (\code{and,or,xor}).
+\end{Definizione}
+
+Se ad esempio la CPU in modalità utente decodifica un'istruzione non privilegiata, la CPU non la esegue e l'hardware triggera un \textbf{GPF} (General Protection Fault) o un'Eccezione. La CPU switcha automaticamente alla modalità kernel e passa al gestore delle eccezioni del kernel, che termina il processo.
+
+Per cambiare dalla modalità utente a quella utente ci sono solo 3 modi:
+\begin{itemize}
+    \item \textbf{Chiamate di sistema / traps}: l'utente richiede al sistema operativo di eseguirgli per lui un'istruzione privilegiata
+    \item \textbf{Eccezioni}: il programma dell'utente fa qualcosa di illegale
+    \item \textbf{Interruzioni hardware}: un dispositivo esterno manda un segnale di interruzione
+\end{itemize}
+
+Per cambiare da quella kernel a quella utente invece il kernel deve prima salvare tutte le informazioni per poter poi eseguire una serie di istruzioni in modo \textit{atomico} (ossia deve eseguire un set di istruzioni tutte insieme, se una fallisce nessuna deve essere eseguita):
+\begin{enumerate}[label=\arabic*°]
+    \item Ripristina il PC
+    \item Imposta il bit di modalità a 1
+    \item Riprende le istruzioni del programma
+\end{enumerate}
+
+\subsection{Chiamate di sistema}
+
+Un programma per funzionare ha però bisogno di eseguire delle istruzioni privilegiate (altrimenti non potrebbe salvare nulla in memoria, ad esempio). Per questo nascono le \textbf{chiamate di sistema}.
+
+\begin{Definizione}[Chiamate di sistema]
+\label{def-chiamate-sistema}
+Le \textbf{chiamate di sistema} (\textbf{system calls}, syscalls o traps) sono delle richieste che le applicazioni fanno al kernel per eseguire istruzioni privilegiate. 
+\end{Definizione}
+
+A differenza delle chiamate di libreria, che si possono eseguire interamente in modalità utente e sono molto veloci, le chiamate di sistema sono significativamente più lente perché coinvolgono anche il kernel. Esistono, però, delle chiamate di libreria dette \textbf{wrappers}, le quali al loro interno eseguono una chiamata di sistema. Spesso nel codice non si utilizzano le system calls in modo diretto ma dei wrappers, così da non dover scivere in assembley (linguaggio delle chiamate di sistema).
+
+Quando ad esempio un'applicazione chiamata una funzione \code{read()}, succedono diverse cose:
+\begin{enumerate}[label=\arabic*°]
+    \item Il wrapper copia gli argomenti negli specifici registri della CPU
+    \item Il numero identificativo della chiamata di sistema viene inserito in \code{\%rax}
+    \item Il wrapper esegue la syscall
+    \item La CPU prende dal vettore delle syscall la chiamata che gli serve, cambia la modalità in modalità kernel, e va all'indirizzo del gestore centralle delle syscall, ossia il punto di di ingresso unico per tutte le syscall
+    \item Il kernel valida gli argomenti, esegue la syscall, e mette il valore di ritorno in \code{\%rax}, ed esegue \code{sysret}, che permette di ritornare rapidamente alla modalità utente
+\end{enumerate}
+
+Il wrapper ha tre metodi per poter passare i parametri al kernel:
+\begin{itemize}
+    \item \textbf{Registri}
+    \item \textbf{Puntatore stack}: se i registri sono pieni si passa a questi solo un puntatore che punta ad un blocco di memoria
+    \item \textbf{Stack utente}: gli argomenti sono passati allo stack utente
+\end{itemize}
+
+La regola numero uno riguardo le chiamate di sistema è quella di \textbf{non fidarsi mai dell'input dell'utente}. Infatti, prima di far partire una syscall la CPU deve sempre validare i parametri della chaimata. Deve controllare se i puntatori puntano a spazi di memoria validi o se il processo ha i permessi necessari per fare quella determinata azione ad esempio.
+
+\subsubsection*{Perché le chiamate di sistema sono così costose per il computer?}
+
+Abbiamo visto come le chiamate di sistema siano decisamente più lente delle chiamate di libreria. Questo succede per diversi motivi:
+\begin{itemize}
+    \item Bisogna passare dalla modalità utente alla modalità kernel e nuovamente alla modalità utente
+    \item Bisogna salvare tutti i parametri della chiamata nei registri o nei vari stack, e se vi sono puntatori che puntano a blocchi di memoria secondaria questi possono rallentare di molto l'operazione
+    \item Bisogna pulire la cache e i registri ogni volta così da averli pronti per le prossime chiamate
+\end{itemize}
+
+Per questo si cerca di limitare la frequenza delle system calls tramite un processo che prende il nome di \textbf{buffering}.
+
+
+
+
 
 
 \end{document}

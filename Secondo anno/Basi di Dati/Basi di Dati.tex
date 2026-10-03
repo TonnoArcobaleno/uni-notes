@@ -666,7 +666,7 @@ Vediamo alcuni esempi di schemi ER molto basilari: \nopagebreak
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.55\textwidth]{Schema ER associazione n-aria.png}
-\caption{Un associazione tra 3 entità}
+\caption{Un'associazione tra 3 entità}
 \end{figure}
 
 \begin{figure}[H]
@@ -731,7 +731,7 @@ In base alle cardinalità \textbf{massime}, nelle associazioni a 2 possiamo dist
 \end{itemize}
 \end{Proprieta}
 
-Vediamo alcuni esempi:
+Vediamo alcuni esempi: \nopagebreak
 
 \begin{figure}[H]
 \centering
@@ -788,7 +788,7 @@ Esistono poi gli \textbf{identificatori} delle entità, che permettono di identi
 \caption{Identificatore esterno}
 \end{figure}
 
-In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Università e Studente. 
+In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Università e Studente. Studente in questo caso è un'\textbf{entità debole}, dato che la sua identificazione dipende da un'associazione con un'entità esterna.
 
 \begin{Osservazione}[Osservazioni sugli dentificatori]
 \label{oss-osservazioni-identificatori}
@@ -886,18 +886,210 @@ Quando si crea lo scheletro del progetto si devono individuare i concetti più i
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textwidth]{Schema concettuale contesto generale.png}
-\end{figure}
-
-Modifichiamo ora questo schema concettuale aggiungendo le informazioni riguardanti anche tutti gli altri elementi del database.
-
-\begin{figure}[H]
-\centering
 \includegraphics[width=1\textwidth]{Schema ER completo.png}
 \caption{Schema ER completo}
 \end{figure}
 
 Questo schema può sembrare enorme, ma vediamo passo passo come è stato possibile realizzarlo velocemente e senza impazzire.
+
+Partiamo con le informazioni generali: vogliamo creare una base di dati per una società che eroga corsi, e vogliamo i dati di partecipanti e dei docenti. Già qui è facile trovare 3 entità principali: Corso, Docente e Partecipante. 
+
+Riguardo i partecipanti sappiamo che sono identificati dal codice e che hanno vari attributi (codice fiscale, cognome, età, sesso, città di nascita e votazione in decimi). Di loro vogliamo conoscere gli attuali datori di lavoro  e quelli precedenti, con tanto di date di inizio e fine rapporto. Vogliamo poi sapere le edizioni dei corsi che stanno o hanno frequentato. Abbiamo quindi una serie di attributi per questi partecipanti, e troviamo due nuove entità: Datore e Edizione corso. A questo punto lo schema avrebbe più o meno questo aspetto:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Schema ER corsi parziale.png}
+\caption{Schema ER parziale}
+\end{figure}
+
+Vediamo alcune cardinalità di questo schema parziale:
+
+\begin{itemize}
+    \item Edizione Corso --- \textbf{(1,1)} Tipologia ---  \textbf{(0,N)} Corso \\
+    Un corso può avere più edizioni o nessuna, dato che un corso appena aggiunto non ha edizioni. Ma un'edizione di un corso si riferisce a uno e un solo corso sempre.
+    \item Datore --- \textbf{(0,N)} Impiego corrente \textbf{(0,1)}--- Partecipante \\
+    Un partecipante può avere nel proprio impiego 0 datori (se è un libero professionista) o un datore (se è un dipendente). E un datore può avere 0 dipendenti che attualmente lavorano per lui e svolgono corsi o più di 1. Nel caso ne avesse 0, questo datore potrebbe esser comunque salvato nel database nel caso un suo dipendente passato sia un partecipante.
+    \item Edizione corso --- \textbf{(0,N)} Docenza corrente \textbf{(0,1)} -- Docente \\
+    Un'edizione di un corso può avere 0 docenti correnti (se non gli sono ancora stati assegnati), o più di 1 (quando un corso è insegnato da più docenti). Ma un docente può insegnare nello stesso momento 0 o al massimo 1 corso.
+\end{itemize}
+
+Aggiungendo sempre più informazioni riguardo i corsi, i docenti, i partecipanti e i datori di lavoro si arriva pian piano ad avere uno schema ER come quello visto sopra.
+
+\chapter{Progettazione logica}
+
+\section{Modello relazionale}
+
+\begin{Definizione}[Modello relazionale]
+\label{def-modello-relazionale-2}
+Il \textbf{modello relazionale} è un modello logico basato sulla nozione matematica di relazione. \\
+\NB Queste relazioni si traducono in modo naturale in tabelle, e per questo al posto di dire tabelle dirermo sempre relazioni.
+\end{Definizione}
+
+\begin{Definizione}[Dominio]
+\label{def-dominio}
+Un \textbf{dominio} $\bm{D}$ è un \textbf{insieme} (finito o infinito) di valori. \\
+Presi $D_1, \ldots, D_k$ domini, 
+\[
+\bm{D_1 \times \ldots \times D_k = \{(v_1,\ldots, v_k) \mid v_1 \in D_1, \ldots, v_k \in D_k\}}
+\]
+\end{Definizione}
+
+\begin{Definizione}[Relazioni matematiche]
+\label{def-relazioni-matematiche}
+Una relazione matematica è un qualsiasi \textbf{sottoinsieme} del prodotto cartesiano di uno o più domini. Una relazione sottoinsieme di un prodotto cartesiano tra $k$ domini si dice di \textbf{grado} $\bm{k}$. Gli elementi di una relazione sono \textbf{tuple} (o n-tuple o ennuple), e il numero di tuple in una relazione è la sua \textbf{cardinalità}. Ogni tupla di una relazione di grado $k$ ha $\bm{k}$ \textbf{componenti ordinate}, ma non c'è ordinamento tra le tuple, e le tuple di una relazione sono \textbf{tutte distinte}. Le possibili relazioni matematiche di un prodotto cartesiano tra k domini sarà $\bm{2^n}$, dove $n$ è il prodotto tra il numero degli elementi presenti nei diversi domini.
+\end{Definizione}
+
+Vediamo un esempio. Presi i domini $D_1 = \{\text{bianco,nero}\}$ e $D_2 = \{0,1,2\}$, \mbox{$D_1 \times D_2 = \{(\text{bianco}, 0), (\text{bianco}, 1), (\text{bianco}, 2), (\text{nero}, 0),(\text{nero}, 1),(\text{nero}, 2), \}$}. Una relazione di grado 2 e cardinalità 3 è ad esempio la relazione $r = \{(\text{bianco}, 0), (\text{nero}, 0), (\text{nero}, 2)\}$. $t = (\text{nero}, 0)$ è una delle tuple del prodotto cartesiano, e con \code{t[i]} indichiamo l'i-esimo elemento della tupla (\code{t[1] = nero}). Possiamo anche prendere più elementi di una stessa tupla: a esempio \code{t[1,2] = (nero, 0)} prende il primo e il secondo elemento della tupla (nel nostro esempio funziona poco, ma con n-ple ha più senso questa notazione). Se prendiamo un'altra tupla \code{t = (0,1,2,3)}, \code{t[1,3] = (0,2)}. Inoltre, con questi domini abbiamo $2^6$ possibili relazioni.
+
+Un'altro esempio può essere anche la tabella
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Paolo & Rossi & 2 & 26.5 \\
+\hline
+Lionel & Messi & 10 & 24.5 \\
+\hline
+\end{tabular}
+\end{center}
+
+In questo caso abbiamo 4-ple con 2 String, un Integer e un Real. Ma non avendo informazioni su cosa rappresentano questi dati la tabella ci è inutile. Per questo è necessario dare i nomi alle tabelle:
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Nome} & \textbf{Cognome} & \textbf{Esami sostenuti} & \textbf{Media} \\
+\hline
+Paolo & Rossi & 2 & 26.5 \\
+\hline
+Lionel & Messi & 10 & 24.5 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{Definizione}[Attributi]
+\label{def-attributo-2}
+Un \textbf{attributo} è una coppia di valori: un \textbf{nome} $A$ e un \textbf{dominio} $dom(A)$. Preso R un insieme di attributi, questo prende il nome di \textbf{schema di relazione}, e una ennupla è definibile come una \textit{funzione} su R che ad ogni attributo associa un elemento del dominio. Se $t$ è un'ennupla di R e A è un attributo in R, allora \codeb{t[A]} indica il valore assunto dalla funzione $t$ in corrispondenza del attributo A. \\
+\NB Se una relazione è chiamata $R$ e i suoi attributi sono $A_1, \ldots, A_k$, lo schema è indicato scrivendo $\bm{R(A_1, \ldots, A_k)}$.
+\end{Definizione}
+
+Presa una tabella (o schema di relazione), le diverse righe sono le tuple della relazione, sono tutte diverse dalle altre ma sono omogenee (ossia provengono dallo stesso dominio). Le colonne sono i diversi domini e hanno dei nomi univoci all'interno della tabella, che prendono il nome di \textbf{nomi degli attributi}. \\
+Lo schema di relazione è invariabile nel tempo, mentre le diverse istanze possono cambiare anche spesso. 
+
+\begin{Definizione}[Schema di base di dati]
+\label{def-schema-base-di-dati}
+Uno \textbf{schema di base di dati} è un insieme di schemi di relazione con nomi diversi. Uno schema di base di dati relazionale è quindi un insieme $\{R_1, \ldots, R_n\}$ di schemi di relazione.
+\end{Definizione}
+
+\begin{minipage}[c]{0.55\textwidth}
+\centering
+\begin{tabular}{|l|l|r|}
+\hline
+\textbf{Città} & \textbf{Regione} & \textbf{Popolazione} \\
+\hline
+Roma & Lazio & 2.748.109 \\
+\hline
+Milano & Lombardia & 1.354.196 \\
+\hline
+Napoli & Campania & 913.462 \\
+\hline
+Torino & Piemonte & 841.600 \\
+\hline
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+Ad esempio, la basi di dati qui a sinistra ha 3 attributi, e il proprio schema è Info\_Città(Città, Regione, popolazione).
+\end{minipage}
+
+Nei modelli relazionali più recenti, le componenti di una relazione sono indicate dai nomi degli attributi e non dalla posizione. Scriviamo \code{t[}$A_i$\code{]} per indicare il valore dell'attributo di nome $A_i$, e non alla posizione $A_i$. Nell'esempio precedente per la seconda tupla avremmo che $t[\text{Regione}] = \text{Lombardia}$.
+
+\subsection{Chiavi}
+
+\begin{Definizione}[Chiave]
+\label{def-chiave}
+Una \textbf{chiave} di una relazione (non è detto che ce ne sia solo una) è un attributo o un insieme di attributi che \textbf{identificano univocamente} una tupla. Questi valori permettono di mettere in relazione dati in tabelle diverse. \\
+\NB Esiste sempre una chiave, dato che R è un insieme e quindi non può avere dei duplicati.
+\end{Definizione}
+
+Una relazione può avere anche più chiavi alternative. Di solito si sceglie quella più usata o composta da un numero minore di attributi che prende il nome di \textbf{chiave primaria}.
+
+Un insieme di attributi $X$ di una relazione R è una chiave di R se:
+\begin{enumerate}
+    \item Per ogni instanza di R non esistono due tuple distinte $t_1$ e $t_2$ tali che $t_1[X] = t_2[X]$.
+    \item Nessun sottoinsieme proprio (ossia un sottinsieme diverso da $X$ stesso) di $X$ soddisfa la prima condizione. La chiave è quindi un insieme minimale: funziona solo con tutti i suoi elementi, non se ne possono levare.
+\end{enumerate}
+
+Il problema è che per trovare una chiave secondo questa definizione dovrei generare \textbf{TUTTE} le possibili istanze di R. Questo non solo è spesso dispendioso, ma è a volte \textbf{impossibile}, se si hanno domini infiniti. Bisognerà quindi trovare un modo diverso per stabilire quali attributi usare come chiavi.
+
+\subsection{Riferimenti per valore}
+
+\begin{Definizione}[Riferimento per valore]
+\label{def-riferimento-per-valore}
+Il modello relazionale è basato su \textbf{riferimenti per valore}. Ciò significa che le correlazioni logiche tra tuple di relazioni diverse si stabiliscono confrontando i valori contenuti nei rispettivi attributi.
+\\ Dunque per collegare un'informazione memorizzata in una tabella a un'altra, si include una copia del valore della chiave primaria di una tabella all'interno dell'altra.
+\end{Definizione}
+
+Consideriamo ad esempio tre schemi di relazione:
+\begin{itemize}
+    \item \code{Studente}(\underline{Matricola}, Nome, Cognome)
+    \item \code{Corso}(\underline{CodiceCorso}, NomeCorso, CFU)
+    \item \code{Esame}(\underline{Matricola, CodiceCorso, Data}, Voto)
+\end{itemize}
+Nella tabella \code{Esame} non è presente alcun puntatore diretto alle righe di \code{Studente} o \code{Corso}: il legame è garantito unicamente dalla presenza dei campi \code{Matricola} e \code{CodiceCorso}, i cui valori puntano concettualmente ai corrispondenti valori presenti nelle altre due relazioni.
+
+\section{Passare dal modello concettuale a quello logico}
+
+Vogliamo ora tradurre lo schema concettuale in quello logico, rappresentandone i dati in mono corretto (e efficiente, ma ci concentreremo maggiormente sulla correttezza). Non è una traduzione semplice, perché non vi è una vera e propria procedura da seguire alla lettera. Questo perché vi sono diversi aspetti che non sono direttamente rappresentabili, e anche perché è necessario prestare attenzione alle prestazioni.
+
+\subsection{Ristrutturare lo schema ER}
+
+Per prima cosa dobbiamo semplificare la traduzione e ottimizzare le prestazioni (noi non lo faremo, dato che tralasceremo per questo corso l'aspetto dell'efficienza). Questo schema ER ristrutturato sarà meno concettuale perché si inizieranno a implementare più dettagli per facilitare il passaggio al modello logico.
+
+La ristrutturazione si divide in 4 attività:
+\begin{enumerate}
+    \item \textbf{Analisi delle ridondanze}: verifichiamo se nel nostro schema ER sono presenti oggetti non necessari
+    \item \textbf{Eliminazione delle generalizzazioni}: se possibile dobbiamo eliminare le generalizzazioni
+    \item \textbf{Unione più entità e relazioni insieme}
+    \item \textbf{Scelta degli identificatori primari}
+\end{enumerate}
+
+\subsubsection*{Analisi delle ridondanze}
+
+\begin{Definizione}[Ridondanza]
+\label{def-ridondanza}
+Una \textbf{ridondanza} in uno schema ER è un'informazione significativa ma \textbf{derivabile dalle altre}. 
+\end{Definizione}
+
+Vi sono
+\begin{itemize}
+    \item \textbf{attributi derivabili}, che possono essere derivati dalla stessa entità, da attributi di altre entità o relazioni o da operazioni di conteggio sulla partecipazioni ad associazioni
+    \item \textbf{relazioni derivabili} dalla composizione di altre relazioni in presenza di cicli
+\end{itemize}
+
+Un attributo \textbf{derivabile} lo vediamo quando abbiamo come attributi ad esempio l'importo lordo, l'IVA e l'importo netto: in questo caso uno tra i due importi è ridondante, dunque va eliminato.
+
+Un attributo \textbf{derivabile da un'altra entità} ad esempio è l'attributo importo totale di un entità Acquisto che è collegata tramite un'associazione a un'entità Prodotto che ha come unico attributo il prezzo. In questo caso importo totale è ridondante dato che possiamo calcolarlo sommando i prodotti tra il prezzo e la quantità di ogni prodotto.
+
+Un attributo \textbf{derivabile per conteggio} ad esempio è l'attributo numero di prodotti di un entità Acquisto che è collegata tramite un'associazione a un'entitò Prodotto che ha come unico attributo il prezzo. In questo caso il numero di prodotti è ridondante dato che possiamo calcolarlo contando le instanze di associazione riguardano quel determinato acquisto.
+
+\begin{minipage}[c]{0.60\textwidth}
+Una relazione \textbf{derivabile dovuta a un ciclo} ad esempio è l'associazione Docenza in questo schema ER. Infatti, non sta aggiungendo nulla di nuovo. Tramite le associazioni Frequenza e Insegmamento infatti possiamo capire se un insegnante insegna a uno studente o meno, rendendo ridondante l'associazione Docenza. 
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Ciclo relazione ridondante.png}
+\end{minipage}
+
+
+\subsubsection*{Eliminazione delle generalizzazioni}
+
+Il modello relazionale non permette la rappresentazion delle generalizzazioni, dato che le tabelle piatte utilizzate non permettono la definizione di sottotipi. Per questo dobbiamo eliminarle, e per farlo abbiamo 3 possibilità:
+\begin{enumerate}
+    \item Accorpare le \textbf{specializzazioni nella generalizzazione}
+    \item Accorpare le \textbf{generalizzazioni nelle specializzazioni} (se possibile)
+    \item \textbf{Sostituire le generalizzazioni con le associazioni}
+\end{enumerate}
+
 
 
 
