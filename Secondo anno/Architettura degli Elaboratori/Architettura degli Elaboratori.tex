@@ -505,7 +505,447 @@ Non dovendo normalizzare nulla, possiamo riscrivere tutto nel formato a virgola 
 0|10000001|11100000000000000000000 = 0x40F00000
 \]
 
+\chapter{Circuiti logici}
 
+\section{Funzioni logiche}
+
+\begin{Definizione}[Funzione logica]
+\label{def-funzione-logica}
+Una \textbf{funzione logica} (o booleana) è una funzione matematica definita su variabili binarie (ossia che possono valere solo 0 o 1, dove 0 = Falso e 1 = Vero) che restituisce a sua volta un valore di 0 o 1 in uscita.
+\end{Definizione}
+
+Esistono diverse funzioni logiche:
+\begin{itemize}
+    \item Funzioni logiche a un input: \codeb{NOT} \textbf{gate, buffer}
+    \item Funzioni logiche a più input: \codeb{AND, OR, XOR, NAND, NOR, XNOR}
+\end{itemize}
+
+Useremo spesso le \textbf{tabelle di verità} per comprendere come funzionano queste funzioni logiche.
+
+\subsection{Funzioni logiche a un input}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{NOT Logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Il \codeb{NOT} \textbf{gate} si rappresenta tramite un trinagolo con un pallino finale (questo pallino lo vedremo con qualsiasi funzione che utilizza l'operatore \code{NOT} per negare qualcosa). In questo caso abbiamo $\bm{Y = \bar{A}}$ (indichiamo con una barretta l'inverso di una variabile, dunque se $A$ è 0 $\bar{A} = 1$ e viceversa), che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{c|c}
+A & Y \\
+\hline
+0 & 1 \\
+1 & 0
+\end{array}
+\]
+
+Dunque il \code{NOT} gate \textbf{inverte il valore in input}.
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Buffer.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Il \textbf{buffer} si rappresenta tramite un trinagolo. In questo caso abbiamo $\bm{Y = A}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{c|c}
+A & Y \\
+\hline
+1 & 0 \\
+1 & 0
+\end{array}
+\]
+
+Dunque il buffer \textbf{lascia invariato il valore in input}
+\end{minipage}
+
+\subsection{Funzioni logiche a più input}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{AND logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+L'\codeb{AND} si rappresenta tramite un rettangolo unito a un semicerchio. In questo caso abbiamo $\bm{Y = AB}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1
+\end{array}
+\]
+
+Dunque l'\code{AND} ritorna vero se \textbf{entrambi i valori sono veri}.
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{OR Logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+L'\codeb{OR} si rappresenta tramite tre archi uniti a formare una specie di triangolo. In questo caso abbiamo $\bm{Y = A + B}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 1
+\end{array}
+\]
+
+Dunque l'\code{OR} ritorna vero se \textbf{almeno uno dei due valori è vero}.
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{NAND Logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Il \codeb{NAND} si rappresenta con la stessa figura dell'\code{AND} ma termina con un pallino. In questo caso abbiamo $\bm{Y = \overline{AB}}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0
+\end{array}
+\]
+
+Dunque il \code{NAND} ritorna vero se \textbf{almeno uno dei due valori è falso} (il contrario dell'\code{AND}).
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{NOR Logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Il \codeb{NOR} si rappresenta con la stessa figura dell'\code{OR} ma termina con un pallino. In questo caso abbiamo $\bm{Y = \overline{A + B}}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 0
+\end{array}
+\]
+
+Dunque il \code{NOR} ritorna vero se \textbf{entrambi i valori sono falso} (il contrario dell'\code{OR}).
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{XOR Logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Lo \codeb{XOR} si rappresenta con la stessa figura dell'\code{OR} ma ha un doppio arco alla base. In questo caso abbiamo $\bm{Y = A \oplus B}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0
+\end{array}
+\]
+
+Dunque il \code{XOR} ritorna vero se \textbf{i due valori sono diversi}.
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{XNOR Logico.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Lo \codeb{XNOR} si rappresenta con la stessa figura dello \code{XOR} ma termina con un pallino. In questo caso abbiamo $\bm{Y = \overline{A \oplus B}}$, che si rappresenta così tramite la tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 1 \\
+1 & 0 & 1 \\
+1 & 1 & 0
+\end{array}
+\]
+
+Dunque il \code{XNOR} ritorna vero se \textbf{i due valori sono uguali} (il contrario dello \code{XOR}).
+\end{minipage}
+
+\begin{Proprieta}[Proprietà dispari dello \code{XOR}]
+\label{prop-proprietà-dispari-XOR}
+Prese tante variabili booleane $X_1, \ldots, X_n$, 
+\[
+X_1 \oplus \ldots \oplus X_n = \begin{cases}
+    \bm{1} & \textbf{se il numero di 1 è dispari} \\
+    \bm{0} & \textbf{se il numero di 1 è pari} 
+\end{cases}
+\]
+Possiamo quindi dire che ogni 1 aggiunto allo \code{XOR} \textbf{inverte} il risultato.
+\end{Proprieta}
+
+\Dimostrazione \nopagebreak
+
+Dimostreremo questa proprietà solo con 3 variabili, ma vale con una qualsiasi somma di $n$ variabili. \\
+Prese $A,B,C$, essendo lo XOR associativo sappiamo che $A \oplus B \oplus C = (A \oplus B) + C$. Poniamo $Y = A \oplus B$. Dunque
+\[
+Y \oplus C =
+\begin{cases}
+Y & \text{se } C = 0 \\
+\overline{Y} & \text{se } C = 1 
+\end{cases}
+\]
+
+Dunque se $C = 0$, allora avremo che $A \oplus B \oplus C = A \oplus B$ che vale $0$ se il numero di 1 è pari e $1$ se invece è dispari. Se invece $C = 1$, allora avremo che $A \oplus B \oplus C = \overline{A \oplus B}$ che vale $0$ se il numero di 1 è dispari e $1$ se invece è pari. Dunque ogni $1$ che si aggiunge allo \code{XOR} inverte il risultato. $\blacksquare$
+
+\section{Circuiti logici}
+
+\begin{Definizione}[Circuito logico]
+\label{def-circuito-logico}
+Un \textbf{circuito logico} è un circuito elettrico digitale dotato di una serie di input e output che elaborano segnali binari.
+\end{Definizione}
+Il comportamento logico è descritto dalla \textbf{specifica funzionale}, che descrive cosa fa il circuito. Inoltre, è a volte presente una \textbf{specifica temporale}, che ne ritarda le operazioni per poter decidere quando far restituire l'output.
+
+Un circuito logico è formato da due elementi fondamentali:
+\begin{itemize}
+    \item I \textbf{nodi} rappresentano i fili che trasportano il segnale binario, e possono essere ingressi, uscite o nodi interni.
+    \item Gli \textbf{elementi del circuito} sono i blocchi logici che formano un circuito, e possono essere una singola porta logica o altri sotto-circuiti.
+\end{itemize}
+
+Esistono due tipi di circuiti logici:
+\begin{itemize}
+    \item \textbf{Circuiti combinatori}, che non hanno memoria e il cui output è determinato solo dai valori di input correnti
+    \item \textbf{Circuiti sequenziali}, che invece hanno memoria e il cui output dunque è determinato non solo dai valori correnti ma anche quelli passati
+\end{itemize}
+
+Un esempio classico di circuiti sequenziali è la macchinetta delle bevande: se si vuole prendere la bevanda indicata con il numero 34, bisognerà schiacciare prima il 3 e poi il quattro. Ma noi non schiacciamo i tasti in contemporanea, ma in modo sequenziale. Dunque abbiamo bisogno di un circuito che si ricordi che abbiamo premuto prima il 3 e poi il 4, e non che dimentichi tutto ogni volta.
+
+\begin{Proprieta}[Regole dei circuiti combinatori]
+\label{prop-regole-circuiti-combinatori}
+Ci sono diverse regole da rispettare per creare dei circuiti combinatori funzionanti:
+\begin{enumerate}
+    \item ogni elemento è \textbf{combinatorio}
+    \item ogni nodo è o un \textbf{input} o è \textbf{collegato all'output di un solo componente interno}
+    \item il circuito \textbf{non ha cicli}
+\end{enumerate}
+\end{Proprieta}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Circuito combinatorio errato.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Questo ad esempio non è un circuito combinatorio corretto. Infatti, il nodo \codeb{C} si trova in un valore intermedio non determinato: non sappiamo se vale 1 o 0 dato che non vi è nessuna porta logica che prenda in input i due valori $\bar{A}$ e $\bar{B}$ per creare un unico output sensato. Il nodo \code{C} è quindi \textbf{collegato all'output di due componenti interni}, violando così la regola 2).
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Circuito CL esempio.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Questo invece è uno dei circuiti combinatori dell'architettura degli elaboratori: si chiama \textbf{Full Adder} e serve per eseguire delle somme di bit. In questo caso prendiamo i due bit da sommare $A$ e $B$ e il riporto proveniente da un'eventuale somma precedente $C_{in}$. L'output è $S = A \oplus B \oplus C_{in}$, che sarebbe la somma tra bit, e $C_{out}$, l'evenutale riporto generato.\\
+\NB Il blocco CL centrale indica un circuito logico. Si potrebbe pensare che in questo caso avremmo potuto mettere uno \code{XOR} a 3 input, ma questo non funziona: infatti, uno \code{XOR} rilascia solo un output, mentre noi in questo caso abbiamo un circuito che rilascia due output. Dunque creiamo questo blocco CL che rappresenta un circuito logico di cui i dettagli implementativi non ci interessano.
+\end{minipage}
+
+
+\section{Equazioni booleane}
+
+\begin{Definizione}[Equazioni booleane]
+\label{def-equazioni-booleane}
+Un'\textbf{equazione booleana} è un'uguaglianza matematica tra due espressioni composte da variabii booleane e operatori logici.
+\end{Definizione}
+
+\begin{Definizione}[Definizioni dell'algebra di Boole]
+\label{def-algebra-boole}
+L'\textbf{algebra di Boole} è quella branca dell'algebra che si occupa di studiare le equazioni booleane. Vi sono diversi termini necessari da conoscere per poterla studiare:
+\begin{itemize}
+    \item \textbf{Complemento}: una variabile con una barra ($\bar{A}$)
+    \item \textbf{Literal}: una variabile o il suo complemento ($A$ o $\bar{B}$)
+    \item \textbf{Implicante}: un prodotto tra literal ($AC$ o $A \bar{B}$)
+    \item \textbf{Mintermine}: un prodotto che include tutte le variabili in input ($AB\bar{C}$, se come input abbiamo $A,B,C$)
+    \item \textbf{Maxtermine}: una somma che include tutte le variabili in input ($A + \bar{B} + C$, se come input abbiamo $A,B,C$)
+\end{itemize}
+\end{Definizione}
+
+\subsection{Somma di prodotti (SOP)}
+
+Tutte le equazioni booleane possono essere scritte come \textbf{somma di mintermini}. Vediamo come facendo un esempio con due variabili.
+
+Prese $A$ e $B$, sappiamo che abbiamo 4 possibili combinazioni di valori con queste due variabili:
+
+\[
+\begin{array}{cc}
+A & B \\
+\hline
+0 & 0  \\
+0 & 1  \\
+1 & 0  \\
+1 & 1 
+\end{array}
+\]
+
+Ognuna di queste righe ha un proprio \textbf{mintermine}, che è \textbf{vero solo e soltato per quella riga}. Abbiamo quindi
+
+\[
+\begin{array}{cc|c}
+A & B & \textbf{Mintermine} \\
+\hline
+0 & 0 & m_0 = \bar{A} \bar{B} \\
+0 & 1 & m_1 = \bar{A} B \\
+1 & 0 & m_2 = A \bar{B} \\
+1 & 1 & m_3 = A B
+\end{array}
+\]
+
+Adesso, ogni equazione booleana $Y$ ha per ogni riga un risultato prestabilito. Ad esempio, $Y = A + B$ vale 1 per ogni riga tranne che per la prima. Dunque possiamo riscrivere $Y$ come \textbf{somma di tutti i mintermini delle righe dove} $\bm{Y = 1}$. Dunque \mbox{$Y = A + B = \bar{A} B + A \bar{B} + AB = m_1 + m_2 + m_3 = \sum(1,2,3)$}. \\
+\NB Per convenzione usiamo come indice di ogni mintermine il valore delle variabili della riga che rappresenta trasformato in binario. Ad esempio, quando $A = 0$ e $B = 1$ abbiamo il mintermine $01_2 = 1_{10}$. La stessa convenzione la vedremo anche per i maxtermini.
+
+\subsection{Prodotto di somme (POS)}
+
+Oltre alla somma di mintermini, ogni equazione booleana può essere riscritta anche come \textbf{prodotto di maxtermini}. Vediamo anche qui un esempio con due variabili.
+
+Riprendiamo le variabili $A$ e $B$. Ogni riga della tabella che rappresenta le loro possibili combinazioni di valori ha un proprio \textbf{maxtermine}, che è \textbf{falso solo se soltato per quella riga} (dato che i maxtermini danno come output 1 con tre combinazioni su quattro essendo degli \code{OR}, prendiamo per ogni riga il maxtermine falso e non vero). Abbiamo quindi
+
+\[
+\begin{array}{cc|c}
+A & B & \textbf{Maxtermine} \\
+\hline
+0 & 0 & M_0 = A + B \\
+0 & 1 & M_1 = A + \bar{B} \\
+1 & 0 & M_2 = \bar{A} + B \\
+1 & 1 & M_3 = \bar{A} + \bar{B}
+\end{array}
+\]
+
+Dunque ogni equazione booleana $Y$ sappiamo già che ha per ogni riga un risultato prestabilito ($Y$ con $A = 1$ e $B = 0$ vale sempre o $1$ o $0$, qualsiasi funzione sia è già scritto). Ad esempio, $Y = AB$ vale 0 per ogni riga tranne che per l'ultima. Dunque possiamo riscrivere $Y$ come \textbf{prodotto di tutti i maxtermini delle righe dove} $\bm{Y = 0}$- Dunque \mbox{$Y = AB = (A + B) (A + \bar{B}) (\bar{A} + B) = M_0 M_1 M_2 = \prod(0,1,2)$}.
+
+\subsection{Assiomi e teoremi}
+
+Per semplificare l'algebra booleana vi è una serie di assiomi e teoremi che bisogna conoscere. Alcuni sono molto scontati e semplici, altri invece sono meno intuitivi e più complessi.
+
+\begin{Definizione}[Dualità dell'algebra booleana]
+\label{def-dualità-algebra-booleana}
+Nell'algebra booleana vi è una \textbf{dualità} tra le operazioni \code{AND} e \code{OR} e i valori 1 e 0: infatti, è possibile trasformare qualsiasi operazione con questi operatori e questi valori semplicemente scambiando gli \code{AND} con gli \code{OR} e gli 1 con gli 0 e viceversa. \\
+\NB Questa dualità si applica SOLO alle \textbf{identità}, e non a tutte le equazioni booleane. Ci saranno quindi molto utili nei teoremi e negli assiomi che vedremo tra poco
+\end{Definizione}
+
+Ad esempio, presa l'idenità $A + 1 = A$ ($A$ \code{OR} $1 = A$), se applichiamo le regole di dualità otteniamo l'idenità $A \cdot 0 = A$ ($A$ \code{AND} $0 = A$), che è anch'essa vera.  
+
+\begin{Proprieta}[Assiomi]
+\label{prop-assiomi}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Numero} & \textbf{Assioma} & \textbf{Duale} \\
+    \hline
+    1 &$\bm{B \neq 1} \implies \bm{B = 0}$ & $\bm{B \neq 0} \implies \bm{B = 1}$ \\
+    \hline
+    2 & $\bm{\bar{0} = 1}$ & $\bm{\bar{1} = 0}$ \\
+    \hline
+    3 & $\bm{0 \cdot 0 = 0}$ & $\bm{1 + 1 = 1}$ \\
+    \hline
+    4 & $\bm{1 \cdot 1 = 1}$ & $\bm{0 + 0 = 0}$ \\
+    \hline
+    5 &$\bm{0 \cdot 1 = 1 \cdot 0 = 0}$ & $\bm{1 + 0 = 0 + 1 = 1}$ \\
+    \hline
+\end{tabular}
+\end{center}
+\end{Proprieta}
+
+\begin{Proprieta}[Teoremi a una variabile]
+\label{prop-teoremi-una-variabile}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Numero} & \textbf{Teorema} & \textbf{Duale} \\
+    \hline
+    1 & $\bm{B \cdot 1 = B}$ & $\bm{B + 0 = B}$ \\
+    \hline
+    2 & $\bm{B \cdot 0 = 0}$ & $\bm{B + 1 = 1}$ \\
+    \hline
+    3 & $\bm{B \cdot B = B}$ & $\bm{B + B  = B}$ \\
+    \hline
+    4 & \multicolumn{2}{c|}{\rule[-1.2ex]{0pt}{4ex} $\bar{\bar{\bm{B}}} \bm{= B}$} \\
+    \hline
+    5 & $\bm{B \cdot \bar{B} = 0}$ & $\bm{B + \bar{B} = 1}$ \\
+    \hline
+\end{tabular}
+\end{center}
+\end{Proprieta}
+
+Per dimostrare questi teoremi abbiamo due metodi:
+\begin{enumerate}
+    \item \textbf{Induzione perfetta} (o dimostrazione per esaustione), dove in poche parole si provano tutte le combinazioni possibili in input e si dimostra che entrambe le espressioni producono gli stessi output
+    \item \textbf{Usare altri teoremi e assiomi}, così da semplificare l'espressione
+\end{enumerate}
+
+\begin{Proprieta}[Teoremi a più variabili]
+\label{prop-teoremi-piu-variabili}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Nome} & \textbf{Teorema} & \textbf{Duale} \\
+    \hline
+    P. Commutativa & $\bm{B \cdot C = C \cdot B}$ & $\bm{B + C = C + B}$ \\
+    \hline
+    P. Associativa & $\bm{(B \cdot C) \cdot D = B \cdot (C \cdot D)}$ & $\bm{(B + C) + D = B + (C + D)}$ \\
+    \hline
+    P. Distributiva & $\bm{B \cdot (C + D) = (B \cdot C) + (C \cdot B)}$ & $\bm{B + (C \cdot D) = (B + C) (B + D)}$ \\
+    \hline
+    1° T. Assorbimento & $\bm{B \cdot (B + C) = B}$ & $\bm{B + (B \cdot C) = B}$ \\
+    \hline
+    2° T. Assorbimento & $\bm{(B \cdot C) + (B \cdot \bar{C}) = B}$ & $\bm{(B + C) \cdot (B + \bar{C}) = B}$ \\
+    \hline
+\end{tabular}
+\end{center}
+\NB Il duale della proprietà distributiva ci dice che $B + (C \cdot D) = (B + C)(C + D)$, che non coincide con le proprietà dell'algebra che conosciamo, dove l'operatore + non si distribuisce.
+\end{Proprieta}
+
+\Dimostrazione \nopagebreak
+
+Dimostriamo solo i due teoremi assorbimento (ricordiamo che il duale NON va dimostrato, perché dimostrando il teorema stiamo dimostrando anche il suo duale).
+
+\begin{itemize}
+    \item 1° Teorema assorbimento: $B \cdot (B + C) = B$ \\
+    Dimostriamolo per induzione perfetta:
+    \begin{center}
+    \begin{tabular}{cc|cc}
+    $\bm{B}$ & $\bm{C}$ & $\bm{B(B+C)}$ \\
+    \hline
+    0 & 0 & 0 \\
+    0 & 1 & 0 \\
+    1 & 0 & 1 \\
+    1 & 1 & 1 \\
+    \end{tabular}
+    \end{center}
+    Dato che $B$ e $B \cdot (B + C)$ per ogni input restituiscono lo stesso output, possiamo concludere che $B \cdot (B + C) = B$. $\blacksquare$ 
+    \item 2° Teorema assorbimento: $(B \cdot C) + (B \cdot \bar{C}) = B$ \\
+    Dimostriamolo usando altri assiomi e teoremi:
+    \begin{align*}
+    (B \cdot C) + (B \cdot \bar{C}) &=  B \cdot (C + \bar{C}) \quad \text{Duale della P. Distributiva}\\
+     &= B \cdot 1 \quad \text{Teorema 5} \\
+     &= B \quad \text{Teorema 1} 
+    \end{align*}
+    Dunque troviamo che $(B \cdot C) + (B \cdot \bar{C}) = B$. $\blacksquare$
+\end{itemize}
 
 
 
