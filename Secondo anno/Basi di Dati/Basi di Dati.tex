@@ -1049,7 +1049,7 @@ La ristrutturazione si divide in 4 attività:
 \begin{enumerate}
     \item \textbf{Analisi delle ridondanze}: verifichiamo se nel nostro schema ER sono presenti oggetti non necessari
     \item \textbf{Eliminazione delle generalizzazioni}: se possibile dobbiamo eliminare le generalizzazioni
-    \item \textbf{Unione più entità e relazioni insieme}
+    \item \textbf{Partizionamento/Accorpamento di entità e relazioni}
     \item \textbf{Scelta degli identificatori primari}
 \end{enumerate}
 
@@ -1087,12 +1087,38 @@ Il modello relazionale non permette la rappresentazion delle generalizzazioni, d
 \begin{enumerate}
     \item Accorpare le \textbf{specializzazioni nella generalizzazione}
     \item Accorpare le \textbf{generalizzazioni nelle specializzazioni} (se possibile)
-    \item \textbf{Sostituire le generalizzazioni con le associazioni}
+    \item Sostituire le \textbf{generalizzazioni con le associazioni}
 \end{enumerate}
 
+Conviene accorpare le \textbf{specializzazioni nella generalizzazione} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Si creerà in questo caso un attributo \code{tipo} che specifica il tipo di istanza, così da mantenere distinte le istanze di due specializzazioni diverse. Se la generalizzazione è sovrapposta bisognerà prevedere per l'attributo \code{tipo} un valore preciso per quelle instanze che fanno parte di più specializzazioni. Ad esempio, se abbiamo due specializzazioni studente e lavoratore creeremo un tipo chiamato studente-lavoratore. \\ 
+Lo svantaggio è che avremo molti valori nulli per gli attributi delle specializzazioni (la matricola è un valore che va salvato solo per gli studenti e gli studenti-lavoratori, ma per le instanze dei lavoratori il valore rimarrà vuoto). 
 
+Conviene accorpare le \textbf{generalizzazioni nelle specializzazioni} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Questo metodo, però, è applicabile solo se la generalizzazione è \textbf{totale}: infatti, se non lo fosse, avremmo delle istanze della generalizzazione che non potremmo rappresentare in alcun modo.
 
+Conviene sostituire le \textbf{generalizzazioni con le associazioni} quando le operazioni avvengono in modo differenziato tra padre e figli. Ad esempio, se si ha l'entità Persona e le specializzazioni sono studente e lavoratore, si può sosistuire la generalizzazione con delle associazioni quando le operazioni sul padre richiedono solo le informazioni generali dell'entità Persona mentre le operazioni sui figli richiedono le informazioni specifiche di quel figlio. Inoltre, è necessario che la generalizzazione sia \textbf{parziale}. \\
+Lo svantaggio è che un'operazione che ha bisogno delle informazioni sia del padre che del figlio il database non trova tutto in una riga ma deve andare a cercare in tabelle diverse queste infromazioni.
 
+Comunque, è possibile sempre trovare delle soluzioni \textit{ibride}, e anzi nelle gerarchie a più livelli possono essere l'idea migliore.
 
+\subsubsection*{Partizionamento/Accorpamento di entità e relazioni}
+
+Si vuole in questa fase ridurre gli accessi al database lavorando su come gli attributi sono interrogati insieme o separatamente. Esistono 3 modi per farlo:
+\begin{enumerate}
+    \item \textbf{Partizionamento verticale di entità}: Supponiamo che la nostra applicazione acceda in modo separato ai dati anagrafici e a quelli lavorativi di una persona. In questo caso, ci conviene separare nel nostro database questi dati così da risparmiare.
+    \item \textbf{Partizionamento orizzontale di associazioni}: Supponiamo che la nostra applicazione acceda in modo separato alla composizione attuale della squadra rispetto a quella degli anni passati. Ci conviene creare due diverse associazioni per indicare la composizione attuale o passata per rendere lo schema più chiaro e le operazioni più efficienti. 
+    \item \textbf{Eliminazione di attributi multivalore}: Dato che nel modello relazionale gli attributi multivalore non sono rappresentabili direttamente, ci conviene creare una nuova entità per rappresentarli.
+\end{enumerate}
+
+\subsubsection*{Scelta degli identificatori primari}
+
+Vi sono diversi criteri per la scelta degli identificatori:
+\begin{itemize}
+    \item l'attributo o gli attributi \textbf{non devono essere opzionali}
+    \item scegliere tra i possibili identificatori \textbf{quello con meno attributi}
+    \item preferire identificatori \textbf{interni}
+    \item scegliere un attributo che renda le operazioni più ricorrenti \textbf{il più veloce possibile}
+\end{itemize}
+
+\NB Ricordiamo che \textbf{ogni entità ha bisogno di un identificatore}.
 
 \end{document}
