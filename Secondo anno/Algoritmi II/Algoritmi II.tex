@@ -62,13 +62,13 @@ Il \textbf{grado di un vertice} x ($\bm{\deg(x)}$)è il \textbf{numero di archi 
 
 Nei due esempi visti prima, il grado di ogni vertice era 2.
 
-\section{Problema dei ponti di Konisberg}
+\section{Problema dei ponti di Konigsberg}
 
-Il problema dei ponti di Konisberg è uno dei problemi logico-matematici più famosi. 
+Il problema dei ponti di Konigsberg è uno dei problemi logico-matematici più famosi. 
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering
-\includegraphics[width=0.7\textwidth, valign=t]{Ponti di Konisberg.png}
+\includegraphics[width=0.7\textwidth, valign=t]{Ponti di Konigsberg.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
 La domanda è semplice: con la seguente disposizione di ponti, è possibile attraversarli tutti una volta sola e tornare al punto di partenza?
@@ -78,7 +78,7 @@ Questo classico quesito è risolvibile usando i grafi. Infatti, possiamo schemat
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.3\textwidth]{Ponti di Konisberg grafi.png}
+\includegraphics[width=0.3\textwidth]{Ponti di Konigsberg grafi.png}
 \end{figure}
 
 \begin{Definizione}[Passeggiata]
@@ -89,7 +89,7 @@ Una passeggiata è detta \textbf{chiusa} se $\bm{v_0 = v_n}$.
 
 Una passeggiata possibile nel grafo qui sopra ad esempio è "1 a 2 d 5 i 8 l 11 n 10 k 7".
 
-Per risolvere il problema dei ponti di Konisberg bisogna saper rispondere alla domanda "Quand'è che è esiste una passeggiata chiusa in un grafo che contiene tutti gli archi presenti una volta sola?". La risposta è che \textbf{qualsiasi grafo con almeno un nodo x tale che} $\bm{\deg(x) \% 2 = 1}$ (ossia il cui grado è dispari) \textbf{non ammette una passeggiata di questo tipo}. Nel nostro caso, quindi, il problema è irrisolvibile: infatti sia il nodo 1, 5, 7 e 11 hanno un grado dispari. Ma se fossero tutti pari? Non è comunque detto. 
+Per risolvere il problema dei ponti di Konigsberg bisogna saper rispondere alla domanda "Quand'è che è esiste una passeggiata chiusa in un grafo che contiene tutti gli archi presenti una volta sola?". La risposta è che \textbf{qualsiasi grafo con almeno un nodo x tale che} $\bm{\deg(x) \% 2 = 1}$ (ossia il cui grado è dispari) \textbf{non ammette una passeggiata di questo tipo}. Nel nostro caso, quindi, il problema è irrisolvibile: infatti sia il nodo 1, 5, 7 e 11 hanno un grado dispari. Ma se fossero tutti pari? Non è comunque detto. 
 
 \begin{minipage}[c]{0.15\textwidth}
 \centering
@@ -106,7 +106,6 @@ Un grafo si dice \textbf{connesso} se per ogni coppia di vertici x e y esiste un
 
 \begin{Proposizione}[]
 \label{propos-problmea-ponti}
-Esiste una passeggiata chiusa che contiene tutti gli archi del grafo una sola \mbox{volta $\iff$ ogni vertice} ha grado pari e il grafo è chiuso.
 \end{Proposizione}
 
 \section{Rappresentare i grafi}

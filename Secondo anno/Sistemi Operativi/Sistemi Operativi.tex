@@ -554,11 +554,512 @@ Abbiamo visto come le chiamate di sistema siano decisamente più lente delle chi
     \item Bisogna pulire la cache e i registri ogni volta così da averli pronti per le prossime chiamate
 \end{itemize}
 
-Per questo si cerca di limitare la frequenza delle system calls tramite un processo che prende il nome di \textbf{buffering}.
+Per questo si cerca di limitare la frequenza delle system calls tramite un processo che prende il nome di \textbf{buffering}. In poche parole, si alloca una zona di memoria chiamata \textbf{buffer} dove vanno a finire tutti gli argomenti destinati a una syscall. Quando il buffer è pieno, il sistema fa una singola chiamata di sistema che contiene tutti gli argomenti. Ad esempio, se si vuole eseguire l'istruzione \code{printf} 100 volte per mostrare un carattere alla volta, il computer non fa 100 syscall ma una sola con tutti e 100 i caratteri, rendendo così 100 volte più veloce il processo.
+
+\subsection{Interruzioni, eccezioni e trappole}
+
+Durante l'esecuzione di un programma possono sbucare degli eventi improvvisi che richiedano immediata attenzione. Un utente che clicca un tasto sulla tastiera, un programma che prova a dividere per 0, o un'applicazione che richiede di leggere informazioni sul disco sono eventi di questo tipo. Questi eventi si dividono in tre tipi:
+\begin{enumerate}
+    \item \textbf{Traps}, provenienti da un software, intenzionali e sincrone, ossia generate dall'istruzione che la CPU stava effettuando (come la richiesta di una lettura sul disco)
+    \item \textbf{Eccezioni}, errori della CPU, non intenzionali e sincroni (come una divsione per 0)
+    \item \textbf{Interruzioni}, provenienti dall'hardware, non intenzionali e non sincrone (come un utente che clicca un pulsante della tastiera)
+\end{enumerate}
+
+Per gestirli, il sistema operativo usa un meccanismo chiamato \textbf{Processor Interrupts}, che gestisce ogni tipo di evento in modo diverso:
+\begin{enumerate}
+    \item Le \textbf{traps} sarebbero le syscalls che abbiamo già visto: la CPU completa l'istruzione, passa alla modalità kernel, esegue la syscall, torna alla modalità utente e passa alla prossima istruzione.
+    \item Le \textbf{eccezioni} sono generate dalla CPU quando trova un errore, e si dividono in due tipi:
+    \begin{itemize}
+        \item \textbf{faults}, che sono potenzialmente correggibili
+        \item \textbf{aborts}, che sono irrecuperabili e fanno crashare il processo
+    \end{itemize}
+    \item Le \textbf{interruzioni} sono segnali mandati dalla CPU da dispositivi hardware esterni. La CPU finisce l'istruzione corrente, gestisce l'interruzione, e passa alla prossima istruzione. \\ \NB Dato che i dispositivi esterni non possono comunicare direttamente con la CPU, devono far richiesta a un controller chiamato APIC, che fa da intermediario tra la CPU e l'hardware.
+\end{enumerate}
+
+Ogni evento è identificato da un \textbf{vector number} che va da 0 a 255, che fa da indice per l'evento che viene inserito in una tabella, di cui ne esistono due diversi tipi:
+\begin{itemize}
+    \item \textbf{IVT} (Interrupt Vector Table)
+    \item \textbf{IDT} (Interrupt Descriptor Table), dove ogni voce non è un puntatore semplice ma un gate descriptor che include anche dei metadati. Ogni gate descriptor ha un \textit{gate type}, di cui ne esistono di due tipi:
+    \begin{itemize}
+        \item \textit{Interrupt Gate}, che forza \code{IF = 0} bloccando quindi altri interruzioni esterne, dando priorità all'evento corrente
+        \item \textit{Trap Gate}, che invece lascia invariato il flag \code{IF}
+    \end{itemize}
+    In questa tabella, i vettori 0-31 sono riservati alle eccezioni della CPU, mentre i vettori 32-255 sono per le traps o per le interruzioni. 
+\end{itemize}
+
+\subsubsection*{Cosa succede quando arriva un'interruzione?}
+
+Le interruzioni sono più particolari rispetto alle traps e alle eccezioni. Queste arrivano da input esterni e dunque sono imprevedibili, per questo esistono delle azioni automatiche che la CPU esegue qunado arriva un'interruzione per gestirla:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Finisce} l'istruzione corrente
+    \item \textbf{Salva} i registri correnti, il PC e lo Stack Pointer
+    \item \textbf{Passa} alla modalità kernel
+    \item \textbf{Prende} il vettore dell'interruzione tramite l'Interrupt Controller
+    \item \textbf{Esegue} l'ISR, che inzia un'altra serie di passaggi:
+    \begin{enumerate}[label=\arabic*°]
+        \item \textbf{Salva} tutti i registri che la CPU non aveva già salvato
+        \item \textbf{Gestisce} l'interruzione
+        \item \textbf{Invia} il segnale EOI (End of Interrupt) all'APIC per confermare che l'interruzione è stata gestita
+        \item \textbf{Ripristina} i registri
+        \item \textbf{Esegue} l'istruzione assembley \code{iret} per tornare al programma che stava eseguendo.
+    \end{enumerate}
+\end{enumerate}
+
+A volte, però, la CPU si ritrova a eseguire codice che non deve assolutamente essere interrotto. In questo caso può usare delle istruzioni speciali come l'istruzione \codeb{CLI}, che \textbf{blocca} tutte le interruzioni esterne, per poi eseguire l'istruzione \codeb{STI} che invece fa di nuovo \textbf{passare} l einterruzioni. Però non tutte le interruzioni sono ignorabili, e ne esistono per questo di due tipi:
+\begin{itemize}
+    \item \textbf{Interruzioni maschearbili}, che sono interruzioni standard (come il cliccare un tasto di una tastiera), che possono essere ignorate con il comando \code{CLI}
+    \item \textbf{Istruzioni non mascherabili} (\textbf{NMI}, Non Maskable Interrupts), che sono istruzioni con alta priorità (come un avviso di interruzione della corrente), che non possono essere ignorate con il comando \code{CLI}
+\end{itemize}
+
+\begin{Definizione}[Timer]
+\label{def-timer}
+Il \textbf{timer} è uno dei supporti hardware più importanti. Questo permette di interrompere la CPU in modo periodico, così che ogni tot di tempo il sistema operativo controlla se il processo attuale dovrebbe essere fermato o meno, evitando i loop infiniti.
+\end{Definizione}
+
+\subsection{Protezione della memoria}
+
+Per isolare i processi è necessaria una protezione a livello hardware. Il metodo più semplice è lo schema \textbf{base e limiti}. In questo schema vi sono due registri fondamentali:
+\begin{itemize}
+    \item \textbf{Registro base}, che contiene l'indirizzo fisico dove inizia il processo
+    \item \textbf{Registro dei limiti}, che contiene il limite massimo dell'intervallo di memoria allocato
+\end{itemize}
+Dunque la CPU, per controllare che un indirizzo di memoria sia nel range corretto, deve controllare che l'indirizzo virtuale sia $\geq 0$ e che rientri nei limiti. 
+
+I sistemi moderni utilizzano invece la memoria virtuale con la \textbf{paginazione} (Paging) invece del semplice schema base e limiti. Entra qui in gioco un componente hardware chiamato MMU che si trova nella CPU che traduce gli indirizzi virtuali in fisici al volo usando le \textbf{tabelle delle pagine}. Ogni riga della tabella ha poi diversi flag di autorizzazione: esiste il bit Read/Write, che se impostato a 0 indica che tale segmento di memoria può solo essere letto. C'è poi il bit User/Supervisor, che se impostato a 0 indica che solo in modalità kernel si può accedere a queste informazioni, e vi è poi il bit No-Execute che impedisce l'esecuzione di codice da questa pagina. Tutti i problemi riguardanti la gestione della memoria sono delle \textbf{Page Fault Exception}. Quando una PFE si verifica, possono esserci due possibili risposte dal kernel:
+\begin{itemize}
+    \item La richiesta è valida, ma la pagina \textbf{non è presente in RAM}. Dunque la richiesta era leggitima, ma bisognerà prima caricare i dati
+    \item La richiesta non è valida, dunque \textbf{il processo viene terminato}
+\end{itemize}
+
+\subsubsection*{DMA Controller e I/O Controller}
+
+Abbiamo già parlato nelle prime pagine del DMA Controller, un componente hardware in grado di leggere e scrivere dati sulla RAM bypassando la CPU. Questo introduce diversi rischi di sicurezza, e perciò i registri del DMA Controller sono mappati come privilegiati, così che l'utente non possa scriverci sopra. 
+
+Un'altro problema del DMA Controller è che questo comunica con la memoria tramite indirizzi fisici, mentre i programmi usano indirizzi virtuali. È quindi necessario l'intervento del sistema operativo per tradurre ogni volta gli indirizzi virtuali a fisici e passarli ai registri del DMA.
+
+Riguardo invece i controller di input e output, abbiamo già visto che in base al dispositivo dobbiamo comunicare usando o il PMIO o l'MMIO. \\
+Nel caso del PMIO, la CPU usa semplicemente delle istruzioni privilegiate come \code{in} e \code{out}. \\
+Nel caso dell'MMio, i registri fisici del Device Controller sono mappati a speciali indirizzi fisici. Questi si trovano su delle pagine che sono marcate come Supervisor Only così da evitare l'intervento dell'utente se non tramite syscall.
+
+\section{Introduzione a C}
+
+\begin{Definizione}[C]
+\label{def-C}
+\textbf{C} è il linguaggio della programmazione di sistema. Viene usato per i sistemi operativi, i sistemi Embedded, i compilatori, gli interpreti e i database. È così usato perché permette di avere \textbf{controllo diretto} sulla memoria, il che lo rende potentissimo ma anche molto pericoloso.
+\end{Definizione}
+
+\begin{Definizione}[Variabile]
+\label{def-variabile}
+Una \textbf{variabile} è uno \textbf{spazio di memoria con un nome} che contiene un valore di un tipo specifico. Ogni variabile si divide in 4 attributi: nome, tipo, valore e indirizzo.
+\end{Definizione}
+Noi \textbf{dichiariamo} una nuova variabile quando ne annunciamo l'esistenza definendobe il nome e il tipo, ma la variabile è \textbf{definita} quando viene allocato uno spazio di memoria a lei dedicata. Spesso queste operazioni avvengono in contemporanea, ma dato che non è sempre così è importante sapere che sono due eventi differenti.
+\begin{lstlisting}[style=C]
+extern int variable; // Variabile dichiarata (nessuna memoria allocata, tramite extern)
+int variable = 0; // Variabile definita
+int variable_2; // Variabile dichiarata e definita
+\end{lstlisting}
+
+Una variabile è poi detta \textbf{inizializzata} quando definiamo il suo valore. Se non viene inizializzata, avrà dei valori non prevedibili provenienti da allocazioni precedenti. Per questo, è bene dichiarare e inizializzare una variabile nello stesso momento.
+
+\begin{Proprieta}[Scope di una variabile]
+\label{prop-scope-variabile}
+Lo \textbf{scope} di una variabile determina dove nel codice quella variabile è leggibile. Si dividono per questo 3 diversi tipi di variabili:
+\begin{itemize}
+    \item \textbf{Variabili locali}: vivono nello stack e sono distrutte quando il loro scope finisce (ad esempio una variabile definita in una funzione esiste solo lì, è accessibile solo al suo interno e muore quando questa finisce)
+    \item \textbf{Variabili globali}: vivono per l'intera durata del programma e sono definite fuori da qualsiasi funzione. Sono accessibili da qualsiasi funzione
+    \item \textbf{Variabili statiche}: in questo caso dividamo ancora in 
+    \begin{itemize}
+        \item \textbf{Variabili statiche locali}: sono inizializzate all'inizio del programma e vivono per tutta la durata del programma, ma sono chiamabili solo all'interno della funzione dove sono create
+        \item \textbf{Variabili statiche globali}: sono variabili globali accessibili solo all'interno del file .c dove sono create. Questo di norma non succede con le variabili globali, che sono accessibili da qualsiasi altro file .c del progetto
+    \end{itemize}
+\end{itemize}
+\end{Proprieta}
+
+Una dichiarazione interna può comunque coprirne una esterna.
+\begin{lstlisting}[style=C]
+int x = 100;
+int main(void){
+    int x = 200
+}
+\end{lstlisting}
+
+In questo esempio, nella funzione \code{main} la variabile \code{x} diventa una nuova variabile che copre quella globale in quella determinata funzione.
+
+Esistono poi due importanti keyword riguardanti le variabili che non sono molto utilizzate ma che sono importanti da conoscere:
+\begin{itemize}
+    \item \codeb{register}: consiglia al compilatore di salvare questa variabile nei registri della CPU
+    \item \codeb{volatile}: dice al compilatore che questa variabile potrebbe cambiare anche al di fuori del controllo del programma corrente
+\end{itemize}
+
+\subsection{I tipi in C}
+
+C è un linguaggio \textbf{staticamente tipato}, dove quindi ogni variabile ha un tipo preciso conosciuto già a compiletime che non può cambiare. Questi tipi servono al compilatore per determinare quanti byte allocare ad ogni variabile, come leggere/scrivere quei byte e quali operazioni sono consentite.
+
+\begin{Definizione}[\codeb{char}]
+\label{def-char}
+\codeb{char} è il tipo con meno spazio di memoria disponibile in C: solo 1 byte. Questo rappresenta un qualsiasi carattere della tabella ASCII, che è una tabella dove ad ogni indice da 0 a 127 corrisponde un simbolo. Si può inizializzare usando direttamente il carattere che si vuole, scrivendo \code{char c = 'A'}, oppure scrivendo l'indice della tabella ASCII che indica il carattere che si vuole, scrivendo ad esempio \code{char c = 65} (65 in ASCII indica prorpio il simbolo 'A').
+\end{Definizione}
+
+\begin{Definizione}[Tipi interi]
+\label{def-int}
+Il \code{char} è solo uno dei tanti tipi che fanno parte della \textbf{famiglia dei tipi interi}. Oltre a lui troviamo:
+\begin{itemize}
+    \item \codeb{short}, con almeno 2 byte di memoria
+    \item \codeb{int}, con almeno 2 byte di memoria (tipicamente 4 byte)
+    \item \codeb{long}, con almeno 4 byte di memoria (su Linux/macOS sono 8 byte)
+    \item \codeb{long long}, con almeno 8 byte di memoria 
+\end{itemize}
+\end{Definizione}
+
+Per controllare la dimensione in byte di un tipo esiste comunque un operatore chiamato \codeb{sizeof} che a compiletime ritorna il numero di byte destinato ad una variabile qualsiasi di quel tipo su quel sistema operativo. Ad esempio, \code{sizeof(long)} su Windows restituirà 4, mentre su Linux o macOS 8.
+
+\begin{Proprieta}[Signed vs Unsigned]
+\label{prop-signed-unsigned}
+Tutti i tipi interi possono poi essere \textbf{signed} (default) o \textbf{unsigned}. Utilizzando un tipo unsigned si perdono tutti i numeri negativi ma il range dei numeri positivi raddoppia. Ad esempio, un \code{char} signed ha un range da -128 a 127, ma un \code{char} unsigned ha un range da 0 a 255. \\
+\NB In una \code{printf} (funzione per mandare a schermo un valore), bisogna usare \code{\%d} per i tipi signed e \code{\%u} per gli unsigned.
+\end{Proprieta}
+
+Riguardo l'overflow, i tipi signed e unsigned si comportano in modo diverso:
+\begin{itemize}
+    \item gli unsigned \textbf{ricominciano da 0}, seguendo le regole dell'aritmetica modulare
+    \item i signed \textbf{non hanno un comportamento stabilito}, il che lo rende molto pericoloso
+\end{itemize}
+
+\begin{Definizione}[Tipi floating-point]
+\label{def-tipi-floating-point}
+I tipi \textbf{floating point} (a virgola mobile) sono quei tipi usati per rappresentare i numeri decimali. Seguono tutti lo standard IEEE 754 e sono tre:
+\begin{itemize}
+    \item \codeb{float}, con 4 byte di memoria e una precisione di 7 cifre decimali
+    \item \codeb{double}, con 8 byte di memoria e una precisione di 15 cifre decimali
+    \item \codeb{long double}, con almeno 10 byte e fino a 16 byte e una precisione di almeno 18 cifre decimali
+\end{itemize} 
+\end{Definizione}
+
+\begin{Definizione}[\codeb{bool}]
+\label{def-bool}
+Il \codeb{bool} è l'unico tipo booleano presente in C. Questo può assumere solo due valori: \textbf{true}(1) o \textbf{false}(0). Occupa perciò un solo byte di memoria (non un singolo bit, dato che l'unità minima di memoria indirizzabile per le architetture moderne è un byte). \\
+\NB È possibile assegnare a una variabile booleana un qualsiasi valore, che sarà sempre trasformato in 1 se diverso da 0.
+\end{Definizione}
+
+\begin{Proprieta}[Type casting]
+\label{prop-type-casting}
+In C è supportato sia il casting \textbf{implicito} che quello \textbf{esplicito}. Il casting implicito è automatico e trasforma un valore di un tipo in un altro più preciso (ad esempio da \code{short} a \code{int} o da \code{int} a \code{double}). Il casting esplicito invece va scritto dal programmatore e può essere effettuato tra tutti i tipi. Se si passa da un tipo più preciso a uno meno, il risultato verrà troncato.
+\end{Proprieta}
+
+Ad esempio, se poniamo \code{int i = 300} e poi \code{double j = i}, stiamo effettuando un casting implicito da \code{int} a \code{double}. Invece se scriviamo \code{double pi = 3.14} e poi \code{int ipi = pi}, stiamo effettuando un casting esplicito da \code{double} a \code{int}, che troncherà il valore di \code{pi} a 3.
+
+Il casting esplicito a volte è fondamentale per avere risutlati corretti. Ad esempio, prese due variabili \code{int a = 3} e \code{int b = 2}, se scriviamo \code{dobule c = a / b} non otteremo 1.5 ma bensì 1. Infatti, in C \textbf{una divisione tra interi restituisce un intero}. Dunque è necessario un casting esplicito su \code{a} o su \code{b} per trasformarli in \code{double} e rendere così la divisone una divisione tra \code{double} e \code{int}, che restituisce un \code{double}. Scriveremo quindi \codeb{c = (double) a / b}.
+
+Riguardo i tipi esiste anche una funzione per rinominarle: il \codeb{typedef}. Scrivendo all'inizio del programma \code{typedef unsigned int uint\_t} sarà possibile scrivere in tutto il programma \code{uint\_t} al posto di \code{unsigned int}.
+
+\subsection{Array}
+
+\begin{Definizione}[Array]
+\label{def-array}
+Un \textbf{array} è una \textbf{sequenza di elementi dello stesso tipo}.
+\end{Definizione}
+
+\begin{Proprieta}[Proprietà degli array]
+\label{prop-proprieta-array}
+Tutti gli array hanno le seguenti proprietà:
+\begin{enumerate}
+    \item \textbf{Dimensione fissa}
+    \item Il primo elemento \textbf{indicizzato a 0}
+    \item Elementi \textbf{salvati vicini in memoria} (in un array di \code{int}, se il primo elemento si trova all'indirizzo di memoria x il secondo si troverà all'indirizzo x + 4 byte sempre)
+\end{enumerate}
+\end{Proprieta}
+
+Un array si indica scrivendo "tipo + nome + [lunghezza]". Ad esempio, \code{int array\_interi[5]} è un array di \code{int} lungo 5. Per prendere un elemento dell'array bisogna scrivere \code{array\_interi[x]}, dove \code{x} indica l'indice dell'elemento. È importante che $0 \leq x < \text{lunghezza dell'array}$, altrimenti avremo non un errore ma un comportamento anomalo da parte del computer, che prenderà semplicemente un valore sulla memoria che noi non conosciamo.
+
+Preso un array, vi sono poi diversi modi per inizializzarlo. Il modo più semplice è scrivere ad esempio \code{int array\_interi[5] = \{232,23,2,1,1\}}. In questo caso, la lunghezza dell'array è anche omissibile, dato che è calcolabile dal compilatore. Se non la si omette, si può anche inizializzare una sola parte dell'array, scrivendo ad esempio \code{int array\_interi[5] = \{232,23\}}. Si può poi anche inizializzare un array scegliendo i valori in corrispondenza di alcuni indici, scrivendo ad esempio \code{int array\_interi[5] = \{[0] = 232, [3] = 1\}}. Se si vuole si può anche inizializzare un array con tutti gli elementi a 0, scrivendo \code{int array\_interi[5] = \{0\}} o \code{int array\_interi[5] = \{\}}. Infine, un array di \code{char} si può inizializzare velocemente scrivendo ad esempio \code{char array\_char[] = "Ciao"}, che equivale a scrivere \code{char array\_char[] = \{'C', 'i', 'a', 'o', $\backslash0$\}} (aggiunge un elemento in più pari a $\backslash0$, rendendo l'array di 1 più lungo di quanto ci aspetteremmo). 
+
+Ovviamente poi è possibile anche modificare il valore in corrispondenza di un indice x dell'array, scrivendo ad esempio \code{int array\_interi[2] = 7}.
+
+\begin{Proprieta}[Iterare un array]
+\label{prop-iterare-array}
+\textbf{Iterare un array} significa scorrere l'array dal primo all'ultimo valore. Per farlo si usano i \codeb{for}, dei loop che creano una variabile (solitamente \code{i}) dove viene salvato un valore, che aumenta ad ogni giro di un quantitativo scelto fino a quando una condizione non è più rispettata.  
+\end{Proprieta}
+
+\begin{lstlisting}[style=C]
+int array_interi[10] = \{9,8,7,6,5,4,3,2,1,0\};
+int sum = 0;
+for (int i = 0; i < 10; i++){ // For che compie 10 iterazioni
+    sum += array_interi[i];
+}
+printf("Sum = %d\n", sum) // %d è usato per mandare in output un numero int signed, mentre \n è il carattere per andare a capo
+\end{lstlisting}
+
+\begin{Definizione}[Variable-Lenghts Array]
+\label{def-VLA}
+I \textbf{Variable-Lenghts Arrays} (VLAs) sono degli array di cui non conosciamo la dimensione a compiletime ma solo a runtime. Sono array di dimensione \code{n} dove \code{n} rappresenta un valore in input che non possiamo conoscere a priori. 
+\end{Definizione}
+
+\begin{lstlisting}[style=C]
+void print_squares(int n){
+    int squares[n]; 
+    for (int i = 0; i < n; i++){
+        squares[i] = i*i;
+    }
+}
+int main(void){
+    print_squares(6);
+    return 0;
+}
+\end{lstlisting}
+In questo caso l'array \code{squares} è un VLA, dato che la dimensione dipende dal parametro della funzione \code{print\_squares(int n)}.
+
+\begin{Definizione}[Array 2D]
+\label{def-array-2D}
+Fino ad ora abbiamo parlato di array a una dimensione, ma esistono anche \textbf{array a due dimensioni} (array 2D), ossia array di array. 
+\end{Definizione}
+
+Un array 2D si indica scrivendo "tipo + nome + [righe][colonne]". Ad esempio, \code{int matrix[5][3]} indica un array 2D con 5 righe e 3 colonne, ossia una matrice con 5 righe e 3 colonne. Per prendere l'elemento alla riga i e alla colonna j bisogna scrivere \code{matrix[i-1][j-1]} (il -1 è fondamentale perché ricordiamo che gli indici partono da 0).
+
+Questi array sono salvati in memoria in modo lineare: sono come dei lunghi array 1D, dove tutte le righe sono una di fianco l'altra. Dunque in un array di 2 righe e 3 colonne di \code{int}, per accedere al quinto elemento partendo con un indirizzo x in corrispondenza del primo elemento dovremo andare all'indirizzo x + 16.
+
+Per iterare su questi array 2D si utilizzano due for annidati, in questo modo:
+\begin{lstlisting}[style=C]
+int matrix[2][3] = {
+    {1, 7, 9},
+    {8, 6, 5}
+}
+int sum = 0
+for (int i = 0; i < 2; i++){
+    for (int j = 0; j < 3; j++){
+        sum += matrix[i][j]
+    }
+}
+printf("Sum = %d\n", sum)
+\end{lstlisting}
+
+\begin{Proprieta}[Array decay]
+\label{prop-passare-array-funzioni}
+Il passaggio di un array a una funzione (\textbf{array decay}) in C non avviene copiando interamente l'array ma \textbf{passando un puntatore al primo elemento}. 
+\end{Proprieta}
+
+Infatti, dato che gli array sono salvati in memoria in modo lineare, basta conoscere il puntatore al primo elemento per conoscere tutti gli elementi. È importante, però, passare alla funzione anche la dimensione dell'array. Si potrebbe pensare di usare l'operatore \code{sizeof} per trovare la lunghezza dell'array, ma questo non è possibile. Infatti, se passiamo ad una funzione il parametro \code{int arr[]}, abbiamo detto che stiamo passando solo il puntatore al primo elemento, dunque \code{sizeof(arr)} restituisce la lunghezza del puntatore, che è sempre 8 byte.
+
+Ci sono tre dichiarazioni equivalenti per scrivere come parametro di una funzione un'array:
+\begin{lstlisting}[style=C]
+void funzione(int arr[], int n);
+void funzione(int *arr, int n);
+void funzione(int arr[20], int n); // Il 20 viene ignorato 
+\end{lstlisting}
+
+\subsection{Stringhe in C}
+
+\begin{Definizione}[Stringa]
+\label{def-stringa}
+Una \textbf{stringa} è una \textbf{sequenza ordinata di caratteri}. In C non esiste il tipo \code{string}, ma una stringa è piuttosto un \textbf{array di} \codeb{char} con un \textbf{null terminator} ('$\backslash 0$', che abbiamo già visto in precedenza). Questo null terminator è fondamentale perché fa capire al computer quando la stringa è terminata.
+\end{Definizione}
+
+Un literal di una stringa (ossia il valore puro) è salvato nella memoria read-only (.rodata). Dunque se scriviamo ad esempio \code{char *s = "Ciao"}, avremo una stringa non modificabile. Se invece vogliamo una \textbf{stringa modificabile}, dobbiamo instanziare un vero array e non solo un puntatore, scrivendo \codeb{char s[] = "Ciao"}, che dunque restituirà un array lungo 5 (ricordiamo sempre il null terminator $\backslash 0$).
+
+\begin{Proprieta}[Copiare una stringa]
+\label{prop-copiare-stringa}
+Se si vuole copiare una stringa in C, esistono due funzioni della libreria \codeb{<string.h>} (libreria che contiene tutte le funzioni riguardanti le stringhe) per farlo:
+\begin{itemize}
+    \item \codeb{strcpy}, che non controlla la lunghezza delle stringhe
+    \item \codeb{strncpy}, che invece controlla la lunghezza delle stringhe
+\end{itemize}
+\end{Proprieta}
+
+Se abbiamo una stringa \code{str1} lunga 10 inizializzato, e una stringa \code{str2} lunga 3 vuota, fare \code{strcpy(str2, str)} crea un buffer overflow. Invece scrivendo \mbox{\code{strncpy(str2, str1, sizeof(str2) - 1)}} non abbiamo problemi, dato che copiamo al massimo n elementi. 
+
+\begin{Proprieta}[Misurare la lunghezza di una stringa]
+\label{prop-misurare-lunghezza-stringa}
+Per misurare la lunghezza di una stringa ci sono due possibilità:
+\begin{itemize}
+    \item con l'operatore \codeb{sizeof}, che include nella lunghezza anche il null terminator
+    \item con la funzione \codeb{strlen}, che invece lo esclude
+\end{itemize}
+È importante capire che su una stringa non inizializzata \code{strlen} non funziona, dato che ha bisogno del null terminator per capire la lunghezza della stringa. Invece \code{sizeof} restituisce sempre la dimensione della stringa, anche se questa non è inizializzata.
+\end{Proprieta}
+
+Esiste un pattern per copiare una stringa in un altro stando attenti però alla lunghezza delle due stringhe:
+\begin{lstlisting}[style=C]
+char str[] = "Hello";
+char buf[5];
+// Pattern
+strncpy(buf, str, sizeof(buf) - 1); // Lasciamo l'ultimo elemento libero
+buf[sizeof(buf) - 1] = '\0'; // Aggiungiamo il null terminator 
+\end{lstlisting}
+
+\begin{Proprieta}[Comparare due stringhe]
+\label{prop-comparare-stringhe}
+Per comparare due stringhe \code{a} e \code{b} non bisogna scrivere \code{a == b}. Infatti, in questo modo staremmo comparando i puntatori ai loro rispettivi primi elementi e non le stringhe stesse. Per farlo correttamente si deve usare la funzione \codeb{strcmp}, scrivendo quindi \code{strcmp(a,b)}, che restituisce un valore \textbf{negativo} se \code{a} viene prima di \code{b} alfabeticamente, \textbf{0} se sono uguali e un valore \textbf{positivo} se \code{a} viene dopo di \code{b}.
+\end{Proprieta}
+
+\begin{Proprieta}[Comporre una stringa]
+\label{prop-comporre-stringa}
+Per comporre una stringa possiamo usare due funzioni:
+\begin{itemize}
+    \item \codeb{sprintf}, che non controlla la lunghezza della stringa
+    \item \codeb{snprintf}, che invece controlla la lunghezza della stringa
+\end{itemize}
+Ricordano molto le funzioni viste in Proprietà \ref{prop-copiare-stringa}.
+\end{Proprieta}
+
+Se ad esempio abbiamo 3 variabili \code{giorno,mese} e \code{anno}, e vogliamo unirle in una stringa formando la scritta giorno-mese-anno, possiamo usare queste due funzioni. Se però la nostra stringa dovesse essere troppo corta, il programma continuerebbe a scrivere anche fuori dalla stringa, creando un buffer overflow. Per evitare questo problema si preferisce usare \code{snprintf}, scrivendo \code{snprintf(str1, sizeof(str1), "\%04d-\%02d-\%02d")}.
+
+\subsection{Puntatori}
+
+\begin{Definizione}[Puntatore]
+\label{def-puntatore}
+Un \textbf{puntatore} è una variabile che ha come valore un \textbf{indirizzo di memoria}. Se vogliamo indicare che una variabile è un puntatore dobbiamo precedere il nome di questa con un \codeb{*}. Esistono inoltre anche i \textit{puntatori dei puntatori}, che si indicano con due \code{*}. 
+\end{Definizione}
+
+Ad esempio, \code{int *a} è un puntatore a un intero, \code{double *b} è puntatore a un double e \code{int **c} è un puntatore a un puntatore a un intero. È importante capire quindi che \textbf{il tipo di un puntatore conta}: per salvare l'indirizzo di un \code{int} bisogna creare un puntatore \code{int}. Unica eccezione è il \codeb{void *}, che è un puntatore generico che può puntare a tutto. Il problema di questo puntatore è che non si può accedere al valore a cui punta direttamente: è necessario fare un casting esplicito.
+\begin{lstlisting}[style=C]
+int x = 42;
+void *p = &x
+int y = *(int *)p // Dobbiamo prima fare il casting e dire che p è un puntatore a un int
+\end{lstlisting}
+
+Per liberare un puntatore, esiste un comando chiamato \codeb{free}. Ad esempio, se abbiamo un puntatore \code{int *p = \&x} e vogliamo liberarlo, basterà scrivere \code{free(p)}:
+
+I puntatori permettono di:
+\begin{itemize}
+    \item simulare il passaggio di variabili \textbf{by reference}, permettendo di modificare queste variabili all'interno di funzioni esterne
+    \item lavorare con la \textbf{memoria dinamica}
+    \item usare diverse \textbf{strutture dati}, come le linked list
+    \item lavorare \textbf{efficientemente con gli array}, non dovendoli copiare ogni volta che li passiamo come parametri in una funzione (come già visto nel capitolo degli array)
+\end{itemize}
+
+Per prendere l'indirizzo di una variabile si usa l'operatore \codeb{\&}. 
+\begin{lstlisting}[style=C]
+int x = 42;
+int *p;
+p = &x; // p è un puntatore che contiene l'indirizzo di x
+\end{lstlisting}
+
+In questo codice, per accedere al valore che si trova all'indirizzo salvato in \code{p} basta scrivere \code{*p}. Si può, in questo modo, anche modificare il valore di x, scrivendo ad esempio \code{*p = 3}.
+
+\begin{Proposizione}[Strict aliasing]
+\label{propos-strict-aliasing}
+Se si hanno due puntatori che puntano alla stessa area di memoria, bisogna seguire il principio dello \textbf{strict aliasing}, che dice che non è consentito accedere al valore di un oggetto tramite due puntatori di tipo diverso. L'unica eccezione a questa regola è il \code{char*}: è sempre lecito convertire l'indirizzo di un qualsiasi puntatore in \code{char*}. Dunque, presa \code{int a = 10}, non possiamo scrivere \code{float *b = (float *) \& a} e poi accedere al valore a cui punta \code{b} scrivendo ad esempio \code{*b}, ma possiamo scrivere \code{char *c = (char *) \&a} e accedere poi al valore a cui punta \code{c} senza alcun problema.
+\end{Proposizione}
 
 
+\begin{Definizione}[Puntatore \codeb{NULL}]
+\label{def-puntatore-null}
+In C esiste anche il puntatore \codeb{NULL}, che è un puntatore che \textbf{non punta a nulla} (punta all'indirizzo 0). Questo serve per inizializzare i puntatori che ancora non puntano a nulla.
+\end{Definizione}
 
+La keyword \codeb{const} con i puntatori si comporta in modo particolare: infatti si può riferire al puntatore, al valore puntato, o a entrambi.
+\begin{lstlisting}[style=C]
+int x = 10;
+int y = 20;
+const int *p1 = &x // p1 può cambiare, *p1 no
+p1 = &y // Valido (cambio indirizzo a cui punto)
+int * const p2 = &x // p2 non può cambiare, *p2 si
+*p2 = 99 // Valido (cambio valore a cui si riferisce il mio indirizzo)
+const int * const p3 = &x // Non può cambiare nulla
+\end{lstlisting}
 
+Quando si eseguono delle somme/sottrazioni su un puntatore, questo si muove in memoria di un \textbf{multiplo della dimensione del tipo di dato a cui punta}. Ad esempio, se \code{p} punta a un \code{int} con indirizzo x, \code{p-1} punterà all'indirizzio x - 4, mentre \code{p+10} all'indirizzo x + 40. 
+
+Sottrarre invece due puntatori che puntano a elementi dello stesso tipo nello stesso array darà un risultato non in byte ma in \textbf{numero di elementi}. Se ad esempio \code{p1} punta al primo elemento e \code{p2} punta al quinto, il risultato sarà 4, dato che ci sono 4 elementi di differenza tra il primo e il quarto. Per memorizzare queste informazioni esiste un tipo chiamato \codeb{ptrdiff\_t} definito nella libreria \codeb{<stddef.h>}. Oltre a sottrarre, puntatori nello stesso array possono essere anche comparati. Ad esempio, \code{p1 < p2} ritorna vero in questo caso perché \code{p1} punta al primo elemento mentre \code{p2} al quinto, mentre \code{p1 == p2} e \code{p1 > p2} ritornano entrambe falso. 
+
+Grazie a queste nuove informazioni, possiamo scrivere un nuovo modo per iterare su tutti gli elementi di un array:
+\begin{lstlisting}[style=C]
+int arr[5] = {1,2,3,4,5}
+int *end = arr + 5;
+for (int *cur = arr; cur < end; cur++){ // Partiamo dall'indice dell'elemento 0 e aumentiamo fino al quinto elemento
+    printf("%d ", *cur)
+}
+\end{lstlisting}
+
+Notiamo alla seconda linea di questo codice che al posto di scrivere \code{\&arr} abbiamo scritto solo \code{arr}. Questo non è un errore: seguendo il principio visto nella Proprietà \ref{prop-passare-array-funzioni}, che dice che quando gli array sono passati a una funzione decadono, e passano solo il puntatore al primo elemento, anche qui gli array passano in automatico l'indirizzo al loro primo elemento. \\
+Un'altra cosa interessante da notare è che \codeb{arr[i] = *(arr + i)} sempre.
+
+\begin{Definizione}[Puntatore a un array]
+\label{def-puntatore-array}
+Abbiamo visto che per puntare a un array si punta al suo primo elemento. Esistono però anche dei \textbf{puntatori} che puntano direttamente a tutto l'array. In questo caso si usa la \& per riferirsi all'intero array.
+\end{Definizione}
+Ad esempio, preso l'array \code{int arr[5] = \{1,2,3,4,5\}}, possiamo instanziare il puntatore \code{int (*p)[5] = \&arr} che punta all'intero array. In questo caso, \code{p+1} non avanzerà quindi di 4 byte nella memoria ma di ben 20. Questi puntatori ad array interi sono particolarmente utili negli array 2D, che ricoridamo sono array di array. 
+
+I puntatori posson opoi puntare anche a delle \textbf{funzioni}. Ad esempio, il puntatore \code{int (*p) (int, int)} è un puntatore che può puntare a una funzione che prende in input due \code{int} e restituisce un \code{int}. Capiremo l'importanza di questi puntatori solo quando introdurremo più avanti concetti pù avanzati.
+
+\subsection{Errori nella gestione della memoria}
+
+Gli errori di gestione della memoria sono tra i bug più critici nello sviluppo software. Questi, oltre a essere particolarmente insidiosi e difficili da trovare, sono anche molto pericolosi per la sicurezza. Vediamo alcuni dei più importanti errori di gestione della memoria da evitare assolutamente
+
+\begin{Definizione}[Dangling pointers]
+\label{def-dangling-pointer}
+I cosidetti \textbf{dangling pointers} (o puntatori penzolanti in italiano) sono dei puntatori che puntano a una \textbf{porzione della memoria non più valida}.
+\end{Definizione}
+
+Vediamo un esempio di dangling pointer:
+\begin{lstlisting}[style=C]
+int *get_local(void){ // Questa funzione ritorna un puntatore a un intero
+    int x = 42;
+    return &x; // Ritorniamo un puntatore a una variabile locale!
+}
+int main(void){
+    int *p = get_local(); // Dangling pointer, dato che x viene subito distrutta
+}
+\end{lstlisting}
+
+\begin{Definizione}[Wild pointer]
+\label{def-wild-pointer}
+Un \textbf{wild pointer} è un puntatore che \textbf{non è mai stato inizializzato}.
+\end{Definizione}
+
+Se ad esempio dichiarassimo \code{*p} senza inizializzarlo e provassimo ad accedere al valore al suo interno commetteremmo un errore, dato che in quel momento \code{p} sarebbe proprio un wild pointer.
+
+\begin{Definizione}[Buffer Overflow]
+\label{det-buffer-overflow}
+Un \textbf{buffer overflow} è un errore che accade quando si \textbf{scrive oltre un array}. Lo abbiamo incontrato spesso nel capitolo degli array, ed è proprio uno dei più classici errori riguardanti la gestione della memoria.
+\end{Definizione}
+
+\begin{Definizione}[Off-by-One]
+\label{def-off-by-one}
+Un \textbf{off-by-one} error è anche questo uno degli errori più classici riguardo gli array. Accade quando si prova ad \textbf{accedere a un elemento fuori dal range di un array}.
+\end{Definizione}
+
+\begin{Definizione}[Variabili non inizializzate]
+\label{def-variabili-non-inizializate}
+\textbf{Accedere a variabili non inizializzate} è anch'esso uno degli errori più comuni della gestione della memoria. Per evitarlo, è sempre consigliato inizializare le variabili appena create a 0.
+\end{Definizione}
+
+\begin{Definizione}[Aliasing]
+\label{def-aliasing}
+L'\textbf{aliasing} si verifica quando due puntatori fanno \textbf{riferimento alla stessa area di memoria}. In questo caso il compilatore deve assumere che questi due puntatori possano puntare alla stessa variabile, rendendo il codice molto più lento. Per questo, se si è sicuri che due puntatori che fanno riferimento alla stessa area di memoria non faranno riferimento alla stessa variabile, bisogna usare la keyword \codeb{restrict}. 
+\end{Definizione}
+
+Per trovare errori di questo tipo si utilizzano due strumenti fondamentali:
+\begin{itemize}
+    \item \textbf{Valgrid}, che rileva memory leaks, tentativi invalidi di lettura/scrittura e utilizzo di variabili prima di esser state inizializzate
+    \item \textbf{AddressSanitizer} (\textbf{ASan}), che rileva buffer overflow, wild pointer, tentativi di liberare la memoria da un puntatore usando due volte il comando \code{free} e diversi comportamenti indefiniti.
+\end{itemize}
+
+Oltre a questi strumenti, ci sono poi diversi pattern da seguire per evitare tutti questi errori in partenza.
+
+\section{Stack}
+
+\begin{Definizione}[Stack]
+\label{def-stack}
+Lo \textbf{stack} è una regione di memoria dedicata a immagazzinare:
+\begin{itemize}
+    \item \textbf{variabili locali}
+    \item \textbf{parametri delle funzioni}
+    \item \textbf{indirizzi dove tornare appena una funzione finisce} (così che il programma sa dove riprendere appena finsice una chiamata di una funzione)
+    \item \textbf{registri salvati}
+    \item \textbf{valori ritornati}
+\end{itemize}
+\end{Definizione}
+
+\begin{Proprieta}[Proprietà dello stack]
+\label{prop-stack}
+Tra le proprietà dello stack troviamo:
+\begin{itemize}
+    \item filosofia \textbf{LIFO} (Last In First Out)
+    \item \textbf{gestione automatica}
+    \item \textbf{limite fissato} (tipicamente a 1-8 MB per thread)
+    \item \textbf{veloce}
+\end{itemize}
+\end{Proprieta}
 
 
 \end{document}
