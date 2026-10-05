@@ -260,6 +260,9 @@ Ad esempio, $-7_{10} = 1001 \bm{>>} 2 = 0010 = 2_{10}$ è uno \textbf{shift logi
 Preso un numero $A_{10}$, effettuando uno shift a \textbf{sinistra} di $N$ posizioni, troviamo che $\bm{A_{10} << N = A_{10} \cdot 2^n}$. Se invece si effettua uno shift a \textbf{destra}, troviamo che $\bm{A >> N = A / 2^N}$.  
 \end{Proposizione}
 
+Se uno shift a destra restituisce in decimale un numero con la virgola, questo verrà approssimato sempre verso il basso. Ad esempio, Preso $-13_{10} = 11110011_2$, se effettuiamo uno shift di 2 verso destra troviamo che $11110011 >> 2 = 11111100 = -4$, quando invece $-13/4 = -3.25$.
+
+
 \section{Numeri con la virgola}
 
 Siamo riusciti a rappresentare numeri interi senza segno e con il segno, ma dobbiamo ora rappresentare i \textbf{numeri con la virgola}. Abbiamo due possibili rappresentazioni: 
@@ -306,11 +309,11 @@ Per studiare la rappresentazione a virgola mobile è necessario consocere la \te
 
 \begin{Definizione}[Notazione scientifica]
 \label{def-notazione-scientifica}
-La \textbf{notazione scientifica} è una tecnica usata per rappresentare i numeri nella forma $\bm{\pm M \times B^E}$, dove $M$ è la \textbf{mantissa}, $B$ è la base e $E$ è l'esponente. \\
+La \textbf{notazione scientifica} è una tecnica usata per rappresentare i numeri nella forma $\bm{\pm M \cdot B^E}$, dove $M$ è la \textbf{mantissa}, $B$ è la base e $E$ è l'esponente. \\
 \NB In un sistema a base n, $\bm{1 \leq M < n}$. Dunque ad esempio nel sistema decimale la mantissa è compresa tra 1 e 10.
 \end{Definizione}
 
-Ad esempio, nel nostro sistema decimale scriveremmo $2437 = 2.437 \times 10^3$. 
+Ad esempio, nel nostro sistema decimale scriveremmo $2437 = 2.437 \cdot 10^3$. 
 
 \begin{Proprieta}[Rappresentazione a virgola mobile]
 \label{prop-rappresentazione-virgola-mobile}
@@ -334,7 +337,7 @@ Vi sono però altre due importanti considerazioni da fare:
 
 Rappresentare il numero $\bm{-228}_{10}$ usando la \textbf{rappresentazione a virgola mobile con 32 bit}. \nopagebreak
 
-Per prima cosa, quindi, convertiamo $228$ in binario (il segno non ci interessa, vi è un bit apposta in questa rappresentazione che se ne occupa): $228_{10} = 11100100_2$. A questo punto dobbiamo scriverlo nella notazione scientifica binaria, in un processo che prende il nome di \textbf{normalizzazione}: $11100100_2 = 1.11001_2 \times 2^7$. Aggiungiamo il bias all'esponente che diventa $127 + 7 = 134$, e riscriviamo tale numero nella sua rappresentazione a 32 bit finale:
+Per prima cosa, quindi, convertiamo $228$ in binario (il segno non ci interessa, vi è un bit apposta in questa rappresentazione che se ne occupa): $228_{10} = 11100100_2$. A questo punto dobbiamo scriverlo nella notazione scientifica binaria, in un processo che prende il nome di \textbf{normalizzazione}: $11100100_2 = 1.11001_2 \cdot 2^7$. Aggiungiamo il bias all'esponente che diventa $127 + 7 = 134$, e riscriviamo tale numero nella sua rappresentazione a 32 bit finale:
 \[
 1 | 10000110 | 11001000000000000000000_2
 \]
@@ -364,14 +367,14 @@ $\bm{-\infty}$ & 1 & 11111111 & 00000000000000000000000 \\
 \textbf{NaN} & Indifferente & 11111111 & non-zero \\
 \hline
 \textbf{Denormalizzati} & Indifferente & 00000000 & $M \neq 0$ \\
- & & & $(-1)^s \times 2^{-126} \times 0.m$ \\
+ & & & $(-1)^s \cdot 2^{-126} \cdot 0.m$ \\
 \hline
 \end{tabular}
 \end{center}
 
 Dunque lo 0 si rappresenta con il codice esadecimale 0x00000000 o il codice 0x80000000 (vi sono anche qui, come nel Segno e Ampiezza, due rappresentazioni per esso). \\
 Quando invece vogliamo rappresentare un operazione indefinita, come $\infty - \infty$ o $0/0$. \\
-Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché voglio rappresentare numeri ancora più piccoli di $10^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \times 10^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
+Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché voglio rappresentare numeri ancora più piccoli di $10^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \cdot 10^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
 
 \begin{Proprieta}[Livello di precisione]
 \label{prop-livello-di-precisione}
@@ -427,7 +430,7 @@ Per prima cosa dobbiamo quindi estrarre l'esponente e i bit frazionari di entram
 40500000_{16} &= 0|10000000|10100000000000000000000
 \end{align*}
 
-La mantissa del primo numero è quindi $1.1$, mentre per il secondo è $1.101$. Gli esponenti sono rispettivamente $127$ e $128$, ossia $0$ e $1$ tolto il bias, e dato che $0 - 1= - 1$, dobbiamo fare uno shift verso destra della mantissa del primo numero di 1. Dunque $1.1 >> 1 = 0.11 \ (\times 2^1)$. Possiamo ora sommare le due mantisse:
+La mantissa del primo numero è quindi $1.1$, mentre per il secondo è $1.101$. Gli esponenti sono rispettivamente $127$ e $128$, ossia $0$ e $1$ tolto il bias, e dato che $0 - 1= - 1$, dobbiamo fare uno shift verso destra della mantissa del primo numero di 1. Dunque $1.1 >> 1 = 0.11 (\cdot 2^1)$. Possiamo ora sommare le due mantisse:
 
 \[
 \begin{array}{rccccc}
@@ -438,12 +441,12 @@ La mantissa del primo numero è quindi $1.1$, mentre per il secondo è $1.101$. 
 \end{array}
 \]
 
-Dobbiamo ora normalizzare la mantissa: $10.011 \times 2^1 = 1.0011 \times 2^2$. Non serve arrotondare nulla, dato che i bit frazionari sono ben meno di 23, dunque possiamo riscrivere tutto nel formato a virgola mobile:
+Dobbiamo ora normalizzare la mantissa: $10.011 \cdot 2^1 = 1.0011 \cdot 2^2$. Non serve arrotondare nulla, dato che i bit frazionari sono ben meno di 23, dunque possiamo riscrivere tutto nel formato a virgola mobile:
 \[
 0|10000001|00110000000000000000000 = 0x4098000_{16}
 \]
 
-Se invece prendiamo due numeri con segno opposto, come ad esempio $0x40C00000$ e $0xC0200000$. 
+Vediamo ora cosa succede se invece prendiamo due numeri con segno opposto, come ad esempio $0x40C00000$ e $0xC0200000$. 
 
 Per prima cosa estraiamo l'esponente e i bit frazionari:
 \begin{align*}
@@ -451,21 +454,23 @@ Per prima cosa estraiamo l'esponente e i bit frazionari:
 C0200000_{16} &= 1|10000000|01000000000000000000000
 \end{align*}
 
-La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\times 2^2)$. Possiamo ora sottarre (dato che la seconda è negativa) le due mantisse :
+La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\cdot 2^2)$. Possiamo ora sottarre (dato che la seconda è negativa) le due mantisse :
 
 \[
 \begin{array}{rcccc}
-1. & 0 & 0 & 0 & - \\
+1. & 1 & 0 & 0 & - \\
 0. & 1 & 0 & 1 & = \\
 \hline
 0. & 1 & 1 & 1 &
 \end{array}
 \]
 
-Dobbiamo ora normalizzare la mantissa: $0.111 \times 2^2 = 1.11 \times 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
+Dobbiamo ora normalizzare la mantissa: $0.111 \cdot 2^2 = 1.11 \cdot 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
 \[
 0|10000000|11000000000000000000000 = 0x40600000
 \]
+
+\NB L'addizione tra numeri a virgola mobile \textbf{non è associativa}. Dunque $A + B$ non è sempre uguale a $B + A$.
 
 \subsection{Moltiplicazione con numeri in virgola mobile}
 
@@ -908,7 +913,7 @@ Per dimostrare questi teoremi abbiamo due metodi:
     \hline
     P. Associativa & $\bm{(B \cdot C) \cdot D = B \cdot (C \cdot D)}$ & $\bm{(B + C) + D = B + (C + D)}$ \\
     \hline
-    P. Distributiva & $\bm{B \cdot (C + D) = (B \cdot C) + (C \cdot B)}$ & $\bm{B + (C \cdot D) = (B + C) (B + D)}$ \\
+    P. Distributiva & $\bm{B \cdot (C + D) = (B \cdot C) + (B \cdot D)}$ & $\bm{B + (C \cdot D) = (B + C) (B + D)}$ \\
     \hline
     1° T. Assorbimento & $\bm{B \cdot (B + C) = B}$ & $\bm{B + (B \cdot C) = B}$ \\
     \hline
@@ -940,12 +945,118 @@ Dimostriamo solo i due teoremi assorbimento (ricordiamo che il duale NON va dimo
     \item 2° Teorema assorbimento: $(B \cdot C) + (B \cdot \bar{C}) = B$ \\
     Dimostriamolo usando altri assiomi e teoremi:
     \begin{align*}
-    (B \cdot C) + (B \cdot \bar{C}) &=  B \cdot (C + \bar{C}) &\text{Duale della P. Distributiva}\\
+    (B \cdot C) + (B \cdot \bar{C}) &=  B \cdot (C + \bar{C}) &\text{P. Distributiva al contrario}\\
      &= B \cdot 1 &\text{Teorema 5} \\
      &= B &\text{Teorema 1} 
     \end{align*}
     Dunque troviamo che $(B \cdot C) + (B \cdot \bar{C}) = B$. $\blacksquare$
 \end{itemize}
+
+\subsection{Semplificare un'equazione}
+
+\begin{Definizione}[Semplificare un'equazione]
+\label{def-semplificare-equazione}
+\textbf{Semplificare} un'equazione (o minimizzare un'equazione) significa \textbf{ridurre} un'equazione al minor numero di implicanti, dove ogni implicante deve avere il minor numero di literal.
+\end{Definizione}
+
+Per semplificare un'equazione sono molto utili in particolare la Proprietà distributiva e i due teoremi assorbimento. Sarà molto utile anche vedere queste proprietà/teoremi al contrario: ad esempio, a volte ci capiterà di  semplificare passando da $(B + C) (B + D)$ a $B + CD$ piuttosto che il contrario. \\
+Altre tecniche di semplificazioni utili sono l'\textbf{espansione} e la \textbf{duplicazione}. L'espansione è praticamente il fenomeno inverso dei due teoremi assorbimento. Ad esempio, a volte sarà utile passare da $P$ a $P \cdot (P + A)$, oppure da $P$ a $PA + P \bar{A}$. La duplicazione è invece banalmente il riscrivere un literal $A$ come $A + A$. Sembrano dei procedimenti inutili, ma possono esserci equazioni molto grandi semplificabili tramite queste tecniche. 
+
+È importante capire che esistono diversi modi per semplificare un'equazione: alcuni più veloci, altri più lenti. Il nostro obiettivo è quello di cercare la strada più veloce, così da ridurre il numero di passaggi e quindi di errori.
+
+\Esempi \nopagebreak
+
+Semplificare l'equazione $\bm{A(AB + ABC)}$. \nopagebreak
+
+Banalmente
+\begin{align*}
+A(AB + ABC) &=  A(AB(1+C)) &\text{P. Distributiva al contrario}\\
+ &= A(AB(1))\cdot 1 &\text{Duale del teorema 2} \\
+ &= A \cdot AB &\text{Teorema 1} \\
+ &= AA \cdot B &\text{P. Associativa} \\
+ &= \bm{AB} & \text{Teorema 3} 
+\end{align*}
+
+\Separatore
+
+Semplificare l'equazione $\bm{(A + BC)(A + DE)}$. \nopagebreak
+
+Questa equazione utilizzando il duale della Proprietà Distributiva al contrario si semplfiica subito: infatti, se poniamo $X = BC$ e $Y = DE$, troviamo proprio $(A + X)(A + Y) = A + XY = \bm{A + BCDE}$.
+
+\begin{Proposizione}[Obiettivo della semplificazione]
+\label{propos-obiettivo-semplificazione}
+L'obiettivo della semplificazione di un'equazione è quasi sempre quello di ridurci a una \textbf{SOP} (somma di prodotti, come abbiamo fatto negli esempi precedenti) o una \textbf{POS} (prodotto di somme).
+\end{Proposizione}
+
+\Esempi \nopagebreak
+
+Trasformare nella forma \textbf{POS} l'equazione $\bm{AB + C'DE + F}$. \nopagebreak
+
+\NB $C'$ equivale a scrivere $\bar{C}$.
+
+Notiamo come anche in questo esempio non ci basti che eseguire tante volte il duale della Proprietà Distributiva al contrario. Infatti, 
+\begin{align*}
+AB + C'DE + F &= (AB + C')(AB + DE) + F \\
+ &= (A + C')(B + C')(A + DE)(B + E) + F \\
+ &= F + (A + C')(B + C')(A + D)(A + E)(B + D)(B + E) \\
+ &= (F + (A + C')(B + C')(A + D))(F + (A + E)(B + D)(B + E)) \\
+ &= (F + A + C')(F + (B + C')(A + D))(F + A + E)(F + (B + D)(B + E)) \\
+ &= \bm{(F + A + C')(F + B + C')(F + A + D)(F + A + E)(F + B + D)(F + B + E)}
+\end{align*}
+
+\NB Qui ci aspettavamo 6 termini moltiplicativi nell'ultima espressione dato che avevamo 3 implicanti inizialmente, uno con 3 literal, uno con 2 e uno con 1, dunque $3 \cdot 2 \cdot 1 = 6$.
+
+\Separatore
+
+Trasformare nella forma \textbf{POS} l'equazione $\bm{A + B'CDE}$. \nopagebreak
+
+Seguendo lo stesso ragionamento visto nell'esempio precedente, troviamo subito che $A + B'CDE = \bm{(A + B')(A + C)(A + D)(A + E)}$. Abbiamo anche qui 4 termini moltiplicativi come previsto.
+
+\subsection{Teorema di DeMorgan}
+
+\begin{Proprieta}[Teorema di DeMorgan]
+\label{prop-teorema-DeMorgan}
+Il \textbf{teorema di DeMorgan} è uno dei teoremi più importanti dell'algebra di Boole:
+\begin{center}
+\begin{tabular}{|c|c|}
+    \hline
+    \textbf{DeMorgan} & \textbf{Duale} \\
+    \hline
+    $\bm{\overline{B_0 \cdot B_1 \cdot B_2 \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ & $\bm{\overline{B_0 + B_1 + B_2 + \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ \\
+    \hline
+\end{tabular}
+\end{center}
+In sostanza, il \textbf{complemento del prodotto è la somma dei complementi} e il \textbf{complemento della somma è il prodotto dei complementi}.
+\end{Proprieta}
+
+Questo teorema è fondamentale nei circuiti logici, ed è alla base proprio del processo chiamato \textbf{Bubble pushing}.
+
+\begin{Definizione}[Bubble pushing]
+\label{def-bubble-pushing}
+Il \textbf{bubble pushing} è una tecnica utilizzata nei circuiti per passare da circuiti \code{NOR} a \code{AND} e viceversa o da \code{NAND} a \code{OR} e viceversa.
+\end{Definizione}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Bubble pushing.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Grazie al teorema di DeMorgan, riusciamo dimostrare che i due circuiti qui a sinistra sono identici. I pallini in corrispondenza dell'input del \code{OR} indicano un valore \code{NOT}. Se ad esempio avevamo un \code{NAND} che collegava $A$ e $B$, lo avremmo ora trasformato in un \code{OR} che collega $\bar{A}$ e $\bar{B}$. Lo stesso ragionamento varrebbe anche con un \code{NOR} che diventerebbe un \code{AND}. 
+\end{minipage}
+
+Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando questa tecnica.
+
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Circuito logico A bubble pushing.png}
+\end{minipage}\hfill
+\begin{minipage}[l]{0.45\textwidth}
+\includegraphics[width=1\textwidth, valign=t]{Circuito logico B bubble pushing.png}
+\end{minipage}
+
+Ad esempio, questi due circuiti rappresentano la stessa identica equazione booleana: \mbox{$\bm{Y = \overline{AB} \cdot \overline{CD} = AB + CD}$} (sappiamo che è la stessa equazione grazie proprio al teorema di DeMorgan).
+
+Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{logiche divergenti}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte.
 
 
 
