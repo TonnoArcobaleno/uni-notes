@@ -1036,7 +1036,7 @@ Per trovare errori di questo tipo si utilizzano due strumenti fondamentali:
 
 Oltre a questi strumenti, ci sono poi diversi pattern da seguire per evitare tutti questi errori in partenza.
 
-\section{Stack}
+\subsection{Stack}
 
 \begin{Definizione}[Stack]
 \label{def-stack}
@@ -1048,7 +1048,12 @@ Lo \textbf{stack} è una regione di memoria dedicata a immagazzinare:
     \item \textbf{registri salvati}
     \item \textbf{valori ritornati}
 \end{itemize}
+Ogni chiamata di funzione crea un proprio \textbf{stack frame}, che muore quando viene eseguito il suo \code{return}. In ogni stack esistono poi i puntatori \textbf{RBP} e \textbf{RSP}: il primo mantiene una reference utile ai debugger per leggere lo stack frame, mentre il secondo segna la fine dello stack (ossia nel punto più basso, dato che lo stack cresce \textbf{verso il basso}). 
 \end{Definizione}
+
+Anche le chiamate ricorsive creano ogni volta un nuovo stack frame: per questo motivo è da evitare una ricorsione molto profonda, dato che potrebbe portare a un problema di \textit{stack overflow}. In questi casi è infatti sempre consigliata una soluzione iterativa rispetto a quella ricorsiva.
+
+\NB Dato che le variabili locali muoiono quando muore lo stack dove sono salvate, non bisogna mai ritornare un puntatore a una variabile locale. Se si vuole salvare dei dati al di fuori di una funzione bisogna usare l'\textbf{heap}, che analizzeremo più nel dettaglio tra poco.
 
 \begin{Proprieta}[Proprietà dello stack]
 \label{prop-stack}
@@ -1061,5 +1066,119 @@ Tra le proprietà dello stack troviamo:
 \end{itemize}
 \end{Proprieta}
 
+\begin{lstlisting}[style=C]
+int add(int a, int b){
+    int result = a + b;
+    return result:
+}
+
+int main(void){
+    int x = add(3,7);
+    return 0;
+}
+\end{lstlisting}
+
+In questo caso, nello stack del main è presente solo la variabile \code{x}, mentre nello stack dell'add è presente il return address e la variabile \code{result}. I parametri \code{3} e \code{7} non si trovano sullo stack ma sui registri: infatti, ogni funzione ha \textbf{6 registri disponibili per salvare parametri interi} (RDI, RSI, RDX, RCX, R8, R9): solo se supera questo numero di parametri interi è costretta a salvarli nello stack.
+
+\subsection{Heap}
+
+\begin{Definizione}[Heap]
+\label{def-heap}
+L'\textbf{heap} è una regione di memoria destinata all'\textbf{allocazione dinamica della memoria}. Serve per mantenere dati di cui la dimenisone e la durata vitale non sono conosciuti a compiletime.
+\end{Definizione}
+
+Abbiamo già detto che l'heap è fondamentale per far sopravvivere quelle variabili locali anche fuori dalle proprie funzioni di appartenenza, ma ha anche molti altri scopi.
+
+\begin{Proprieta}[Proprietà dell'heap]
+\label{prop-proprieta-heap}
+Tra le proprietà dell'heap troviamo:
+\begin{itemize}
+    \item \textbf{gestione manuale} (bisogna allocare memoria usando \codeb{malloc} e liberarla usando \codeb{free})
+    \item \textbf{sopravvivenza oltre le chiamate di funzione}
+    \item \textbf{dimensione variabile}
+    \item \textbf{più lento dello stack}
+    \item \textbf{condiviso tra le funzioni di uno stesso processo}
+\end{itemize}
+\end{Proprieta}
+
+È consigliato scegliere l'heap per grandi quantità di dati di dimensione dinamica che vogliamo far vivere a lungo, mentre è consigliato l'utilizzo dello stack per dati piccoli e di vita breve.
+
+\NB I valori salvati nell'heap possono essere il \code{return} di una funzione, ma è importante che chi chiami questa funzione liberi la memoria dell'heap occupata da questo valore tramite \code{free}.
+
+\begin{lstlisting}[style=C]
+int main(void){
+    int n = 10;
+    // Allochiamo un array di n interi nell'heap
+    int *arr = malloc(n * sizeof(int));
+    if (arr == NULL){ // Bisogna sempre controllare se l'allocazione ha fallito
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++){
+        arr[i] = i*i;
+        prinf("%d", arr[i]);
+    }
+    free(arr); // Liberiamo la memoria
+    arr = NULL;
+    return 0;
+}
+\end{lstlisting}
+
+Oltre alla funzione \code{malloc} esiste anche la funzione \codeb{calloc(n, size)} che alloca \code{n} elementi ognuno di grandezza \code{size}. Nel codice qui sopra avremmo ad esempio potuto scrivere \code{calloc(n, sizeof(int))} e avrebbe funzionato ugualmente. Per ridimensionare un blocco già allocato si utilizza la funzione \codeb{realloc(ptr, new\_size)}, dove \code{ptr} è il puntatore che punta al blocco in memoria nell'heap vogliamo ridimensionare con la nuova dimensione \code{new\_size}. Ad esempio, nell'esempio precedente avremmo potuto allungare l'array di 1 scrivendo \code{int* temp = realloc(arr, n + 1 * sizeof(int))} e \code{arr = tmp}, dopo aver controllato che l'allocazione sia andata a buon fine. Notiamo quindi come queste funzioni siano fondamentali per creare dei \textbf{array dinamici}. Infatti, continuando a ridimensionare i blocchi salvati nell'heap possiamo modificare uno stesso array e renderlo sempre più grande. Se però si esegue questo processo troppe volte, si crea un problema chiamato \textbf{frammentazione dell'heap}.
+
+\begin{Proprieta}[Frammentazione dell'heap]
+\label{prop-frammentazione-heap}
+Dopo diverse chiamate di \code{malloc} e \code{free}, l'heap inizialmente contiguo si inizia a frammentare, lasciando magari tanti piccoli blocchi da pochi MB che se sommati arrivano anche ad avere una dimensione molto importante. Tuttavia, \code{malloc} alloca memoria contigua, dunque non può usare più blocchi in un colpo solo. Può quindi capitare di \textbf{non poter allocare qualcosa in memoria perché non vi è un blocco contiguo abbastanza grande}, anche se in memoria lo spazio totale è superiore allo spazio richiesto.
+\end{Proprieta}
+
+\begin{Osservazione}[Assenza del garbage collector]
+\label{oss-no-garbage-collector}
+In C \textbf{non è presente alcun garbage collector}. Per questo motivo, è fondamentale seguire diverse regole per mantenere ordine nel proprio programma:
+\begin{itemize}
+    \item La funzione che chiama \code{malloc} per allocare memoria sull'heap è \textbf{proprietaria} di quella memoria, a meno che non ne trasferisca la proprietà ritornando il puntatore a quella memoria
+    \item Se una funzione ritorna un valore allocato in memoria heap, bisogna \textbf{documentare chiaramente} che la funzione chiamante dovrà chiamare \code{free} su quel puntatore
+    \item Per evitare confusione è preferibile che \textbf{chi alloca memoria la liberi anche}
+    \item Se una funzione passa un puntatore che punta a un blocco in memoria heap a un'altra, deve essere chiaro se ne sta \textbf{passando anche la proprietà o meno}, così da decidere chiaramente chi debba chiamare \code{free}
+    \item Dopo aver chiamato \code{free} su un puntatore, questo va \textbf{subito impostato su} \codeb{NULL}, così da evitare il bug del double-free
+\end{itemize}
+\end{Osservazione}
+
+\subsection{Altri errori nella gestione della memoria}
+
+Ora che abbiamo introdotto lo stack e l'heap, vediamo altri errori comuni nella gestione della memoria.
+
+\begin{Definizione}[Memory leaks]
+\label{def-memory-leaks}
+Un \textbf{memory leak} è un classico errore nella gestione della memoria che accade quando \textbf{non si libera mai la memoria allocata nell'heap}, ossia quando non si chiama la funzione \code{free}. Valgrid è in grado di trovare questo errore, puntando alla linea dove l'allocazione avviene.
+\end{Definizione}
+
+\begin{Definizione}[Bug riguardanti la funzione \codeb{free}]
+\label{def-bug-free}
+Abbiamo già nominato il bug del \textbf{double-free}, che consiste nel chiamare due volte la funzione \code{free} sullo stesso puntatore. Un'altro bug comune riguardo la funzione \code{freee} è quello di usare un puntatore dopo la chiamata di \code{free}.
+\end{Definizione}
+
+\begin{Definizione}[Heap Buffer Overflow]
+\label{def-heap-buffer-overflow}
+Oltre allo stack overflow esiste anche l'\textbf{heap buffer overflow}, che consiste nello scrivere oltre il limite massimo di memoria heap allocata. Questo provoca un \textbf{comportamento indefinito} (UB, Undefined Behavior) da parte della macchina: lo standard C smette di imporre qualsiasi regola su cosa debba accedere e il compilatore, assumendo che tale situazione non si verifichi, non si fa problemi e corrompe silenziosamenete i dati o provoca crash casuali, anche molto lontani da dove si è verificato l'errore.
+\end{Definizione}
+
+A volte si prova col codice a evitare questi UB, ma questo non sempre è sufficiente.
+
+\begin{lstlisting}[style=C]
+int check_overflow(int x){
+    if (x+1 < x){ // Non funziona !!
+        return 1;
+    }
+    return 0;
+}
+int check_overflow2(int x){
+    if (x == INT_MAX){ // Funziona !!
+        return 1;
+    }
+    return 0;
+}
+\end{lstlisting}
+
+Ad esempio, qui abbiamo due funzioni che provano a controllare l'overflow di un \code{signed int}. Solo la seconda funzione, però, è corretta. Questo perché la prima fa un controllo che per il compilatore è inutile: infatti, il compilatore \textbf{da per scontato che gli UB non accadano mai}, e quindi da per scontato che \code{x+1 < x} sia sempre falso, non controllandolo nemmeno. Dunque il ramo if viene cancellato direttamente, e così la prima funzione restituisce sempre 0.
 
 \end{document}

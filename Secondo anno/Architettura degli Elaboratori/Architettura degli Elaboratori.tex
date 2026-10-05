@@ -1056,8 +1056,15 @@ Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando 
 
 Ad esempio, questi due circuiti rappresentano la stessa identica equazione booleana: \mbox{$\bm{Y = \overline{AB} \cdot \overline{CD} = AB + CD}$} (sappiamo che è la stessa equazione grazie proprio al teorema di DeMorgan).
 
-Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{logiche divergenti}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte.
+Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{porte logiche universali}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte.
 
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{NAND e NOR fanno tutto.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} ($\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$). L'\code{OR} infine è rappresnetato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} ($\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
+\end{minipage}
 
 
 
