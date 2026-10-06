@@ -249,9 +249,11 @@ Uno \textbf{shift} è un'operazione sui bit che \textbf{sposta tutte le posizion
 
 Esistono due tipi di shift:
 \begin{itemize}
-    \item \textbf{shift aritmetico}, dove si ripete il bit più significativo sequendo la logica della sign-extension;
+    \item \textbf{shift aritmetico}, dove nello shift a destra si ripete il bit più significativo sequendo la logica della sign-extension;
     \item \textbf{shift logico}, dove si inseriscono degli 0 a sinistra della sequenza sequendo la logica della zero-extension.
 \end{itemize}
+
+Lo shift a sinsitra invece è sempre uguale: sia nell'aritmetico che nel logico vengono inseriti degli 0 a sinistra della sequenza.
 
 Ad esempio, $-7_{10} = 1001 \bm{>>} 2 = 0010 = 2_{10}$ è uno \textbf{shift logico} (si è infatti perso il segno, cosa che capita quando si usa la zero-extension), mentre $-8_{10} = 111000 \bm{>>>} 3 = 111111 = -1_{10}$ è uno \textbf{shift aritmetico}. Notiamo che, in entrambi i casi, il nuovo numero si può ottenere prendendo l'originale e dividendolo per $2^N$, dove $N$ è il valore dello shift. Questa è una proprietà degli shift di destra. Allo stesso modo, per gli shift di sinistra, basta moltiplicare il valore per $2^N$. Ad esempio, $-8_{10} = 111000 << 2 = 100000 = -32 = -8 \cdot 2^2$.  
 

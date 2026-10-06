@@ -520,7 +520,7 @@ L'algoritmo DFS può essere riscritto anche come algoritmo ricorsivo:
 DFS_Ricorsivo(G,x,Vis):
     while esiste un vicino y adiacente a x tale che Vis[y] == 0:
         Vis[y] = 1
-        DFS_Ricorsivo(G,x,P)
+        DFS_Ricorsivo(G,y,Vis)
 \end{lstlisting}
 
 La complessità di questo algoritmo rimane $\textbf{O}\bm{(n+m)}$ per lo stesso ragionamento già visto per il \code{DFS\_Alternativo}.
