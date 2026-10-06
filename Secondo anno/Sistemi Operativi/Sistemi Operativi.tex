@@ -1375,19 +1375,116 @@ Quando facciamo partire un programma, il sistema operativo esegue tre passi:
 
 \begin{Proprieta}[Caricare file in RAM]
 \label{prop-caricare-file-RAM}
-Ci sono poi due modalità in cui l'OS può caricare un file in memoria RAM:
+Ci sono poi due modalità in cui l'OS può caricare un programma in memoria RAM:
 \begin{itemize}
     \item \textbf{Eager Loading} (OS più vecchi), dove l'OS carica l'intero file binario nella RAM prima di eseguire il programma
     \item \textbf{Lazy Loading} (OS più nuovi), dove l'OS carica solo il codice necessario. Quando la CPU prova ad accedere a una pagina non ancora caricata, parte un \textit{page fault} che fa partire il caricamento di tale pagina in RAM (riparleremo di page fault e paging più avanti quando parleremo della gestione della memoria)
 \end{itemize}
 \end{Proprieta}
 
-Con la tecnica del lazy loading è molto probabile che gran parte del codice binario non venga mai caricato in RAM perché non necessario. 
+Con la tecnica del lazy loading è molto probabile che gran parte del codice binario non venga mai caricato in RAM perché non necessario. Inoltre, ogni processo crede di avere l'intero spazio di memoria tutto per sé, nonostante questo ovviamente non sia vera. Questo fenomeno è chiamato l'\textbf{illusione della virtualizzazione della memoria}. 
 
+\begin{Proprieta}[Stati di un processo]
+\label{prop-stati-processo}
+Un processo si trova sempre in uno di questi 3 stati:
+\begin{itemize}
+    \item \textbf{READY}, in attessa che la CPU lo esegua: i suoi contenuti sono salvati nel \textbf{PCB} (che vedremo tra poco nel dettaglio cos'è) e il processo è inserito nella \textbf{run queue} in attesa di essere schedulato
+    \item \textbf{RUNNING}, durante il quale il processo monopolizza la CPU usandone le risorse e i registri
+    \item \textbf{BLOCKED}, in attesa di un I/O o di un evento
+\end{itemize}
+\NB In una CPU con 4 core, al massimo 4 processi possono veramente essere in modalità RUNNING in contemporanea.
+\end{Proprieta}
 
+A causa del fenomeno del time-sharing, un processo non sta mai a lungo in modalità RUNNING, ma piuttosto si muove molto tra questa modalità e la modalità READY. Inolte, un processo BLOCKED non passa mai subito a RUNNING, ma ritorna ad essere READY: sarà poi lo scheduler a decidere quando mandarlo in RUNNING. 
 
+\begin{Definizione}[PCB]
+\label{def-PCB}
+Il \textbf{PCB} (Process Control Block) è la struttura dati che il sistema operativo instanzia per ogni processo per identificarne, salvarne e tracciarne lo stato di esecuzione, la memoria e le risorse.
+\end{Definizione}
 
+Ogni PCB salva diverse informazioni quindi, tra cui un identificativo (\code{pid}), lo stato del processo, un puntatore alla pagina di memoria riservata al processo e una struttura dati chaimata \code{trapframe} dove vengono salvati tutti i registri della CPU quando il processo viene interrotto. Il PCB è quindi fondamentale per poter effettuare il time-sharing senza perdere informazioni riguardo i singoli processi. Il sistema operativo ha poi una struttura dati chiamata \textbf{process table} dove mantiene tutti i PCB. È qui che lo scheduler cerca il primo processo READY per mandarlo in esecuzione. 
 
+\begin{Definizione}[Gerarchia dei processi]
+\label{def-gerarchia-processi}
+Su UNIX i processi formano un \textbf{albero gerarchico} che parte dalla radice PID 1. In questo albero ogni processo ha un genitore, e se questo genitore muore prima dei figli, questi sono addotati direttamente dalla radice PID 1. L'unico modo per creare un nuovo processo è usare la funzione \code{fork()}, che vedremo meglio più avanti.
+\end{Definizione}
 
+\begin{Definizione}[PID 1]
+\label{def-PID-1}
+\textbf{PID 1} è il primo processo dello spazio utente eseguito dal kernel dopo l'accensione del computer. Sui linux più moderni questo processo prende il nome di \code{systemd}, ed è considerabile l'antenato di tutti i processi. Questo esegue un loop che chiamata la funzione \code{wait()} per trovare tutti gli eventuali processi orfani. \\
+\NB Non è possibile uccidere questo proesso tramite comandi normali. 
+\end{Definizione}
+
+\subsection{Gestione dei processi in UNIX}
+
+La gestione dei processi in UNIX si basa su 5 syscall fondamentali:
+\begin{itemize}
+    \item \codeb{fork()}, che crea un processo figlio clonado il chiamante
+    \item la famiglia \codeb{exec()}, che rimpiazza l'immagine (ossia l'insieme di dati e codice che costituiscono il programma caricato in memoria) del processo corrente con un nuovo programma (serve per avviare un nuovo programma partendo dal duplicato di un processo di un altro programma)
+    \item \codeb{wait()}/\codeb{waitpid()}, che aspetta che un processo figlio termini
+    \item \codeb{exit()}, che termina un processo
+    \item \codeb{getpid()}/\codeb{getppid()}, che restituiscono rispettivamente l'identificativo univoco del processo chiamante e del processo padre che ha creato il processo chiamante
+\end{itemize}
+Per poter utilizzare queste funzioni sono necessario gli header \codeb{<unistd.h>}, \codeb{sys/wait.h} e \codeb{<sys/types.h>}. 
+
+Uno si potrebbe domandare a cosa serve fare tutto questo casino per creare un nuovo processo. Perché non fare come in Windows dove si creano nuovi processi senza doverne di duplicare di vecchi come si fa in UNIX tramite \code{fork()}? Semplicemente perché, duplicando un processo già esistente, si evita di dover settare molti dei parametri che già sono stati gestiti dal processo padre. Infatti, in questo modo noi dobbiamo semplicemente cambiare alcune cose per rendere il processo adatto alle nostre esigenze per poi eseguire il programma tramite il comando \code{exec()}. 
+
+\subsection{\codeb{fork()}}
+
+\begin{Definizione}[\codeb{fork()}]
+\label{def-fork}
+La syscall \codeb{fork()} crea un nuovo processo figlio \textbf{duplicando un processo} chiamante detto padre. Una volta terminata la chiamata a questa funzione avremo quindi due processi in esecuzione sullo stesso punto del codice (infatti, copiando il PCB stiamo copiando anche il Program Counter), che condividono lo stesso codice ma con copie differenti di stack e heap. L'unica vera differenza tra le due copie è il valore ritornato dalla funzione \code{fork()}: infatti, questa nonostante viene chiamata una volta, ritorna sempre due valori, uno per il padre e uno per il figlio. Ritorna un valore positivo per il padre, 0 per il figlio, e ritorna -1 se c'è stato un errore.
+\end{Definizione}
+
+\begin{lstlisting}[style=C]
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int main(void) {
+    printf("Before fork: PID=%d\n", getpid()); // pid del processo corrente (padre)
+    pid_t pid = fork();
+    if (pid < 0) { // Errore
+        perror("fork"); exit(1);
+    } else if (pid == 0) { // Figlio
+        printf("Figlio:  PID=%d, PPID=%d\n", getpid(), getppid());
+    } else { // Padre
+        printf("Padre: PID=%d, child PID=%d\n", getpid(), pid);
+    }
+    printf("Sia il padre che il figlio printano questa linea.");
+    return 0;
+}
+\end{lstlisting}
+
+L'ordine dell'else if e dell'else è casuale: non sappiamo infatti se verrà ritornato prima il valore del padre o prima quello del figlio, ma se non ci sono errori sicuramente entrambi saranno mostrati a schermo. Infatti, quando viene chiamata la funzione \code{fork()}, il processo si letteralmente divide in un due processi paralleli: uno con il valore di ritorno per il padre e uno per il figlio.
+
+Il figlio riceve sempre una copia dello spazio di indirizzamento virtuale del padre, ma come già detto avrà copie indipendenti di stack e heap, che se modificate nle codice non influenzeranno le copie del padre (e viceversa). Stesso discorso vale ad esempio anche per le variabili globali: il processo figlio ottiene una copia indipendente dalle altre.
+
+\begin{Proposizione}[Chi va prima?]
+\label{propos-chi-va-prima}
+Come già accennato, non è possibile capire quale processo debba essere eseguito per primo. Infatti, è lo scheduler che fa questa scelta basandosi su molti fattori, che la rendono una scelta \textbf{non-deterministica}. Per questo motivo è importante scrivere codice che non dipenda dall'ordine di esecuzione dei processi padre/figlio.
+\end{Proposizione}
+
+\begin{Osservazione}[]
+\label{oss-piu-fork}
+Ogni \code{fork()} \textbf{raddoppia il numero di processi}. Infatti, da un processo A viene prima creato un processo B con una chiamata, ma se poi avviene un'altra chiamata sia il processo A che il processo B creano un processo a testa, arrivando a 4, e così via.
+\end{Osservazione}
+
+\begin{Definizione}[Fork Bomb]
+\label{def-fork-bomb}
+Una \textbf{fork bomb} è un attacco \textit{denial-of-service} che clona processi all'infinito per riempire la tabella dei processi e bloccare il computer.
+\end{Definizione}
+
+In bash una fork bomb si presenta con questa linea di comando semplicissima: \code{:(){ :|: \&};:}. Mentre in C è un loop infinito che continua a chiamare la funzione \code{fork()}. In questo modo il numero di processi cresce in modo esponenziale fino a saturare la CPU. 
+
+\begin{Proprieta}[Copy-on-Write]
+\label{prop-copy-on-write}
+Per come è stata descritta una chiamata \code{fork()} dovrebbe copiare l'intero spazio di indirizzamento ogni volta che un nuovo processo viene creato. Dato che questo spazio può occupare anche diversi giga, molti sistemi operativi evitano queste operazioni costose usando una tecnica chiamata \textbf{Copy-on-Write} (COW). In sostanza, i due processi padre e figlio inizialmente condividono le stesse pagine di memoria fisica, e se uno dei due processi prova a modificare quest'area si crea una nuova pagina dove viene copiato il contenuto della pagina condivisa, che sarà puntata dal processo che ha provato a modificare l'area condivisa. 
+\end{Proprieta}
+
+Non tutte le risorse sono copiate con una \code{fork()}. Tra quelle non copiate troviamo:
+\begin{itemize}
+    \item 
+\end{itemize}
 
 \end{document}
