@@ -666,6 +666,8 @@ Trova_Ciclo_Diretto(G): # In G ogni nodo ha un arco uscente
 
 Poiché tutti i nodi hanno un arco uscente, \code{x.neighbors[0]} è sempre un'operazione sensata. La lista che ci verrà restituita dall'algoritmo è un cammino con il primo e l'ultimo nodo uguali, dunque è un ciclo diretto. Dunque, preso un grafo diretto G con tutti i vertici aventi almeno un arco uscente, questo ha sicuramente un ciclo diretto. $\blacksquare$
 
+\subsection{Trovare un ordine topologico in un grafo diretto aciclico}
+
 Vogliamo ora invece trovare un'algoritmo che trovi un'ordine topologico di un grafo diretto aciclico. Per la Proposizione \ref{propos-grafo-cicli-diretti} sappiamo che esiste sicuramente un vertice senza archi uscenti. Prendiamo questo vertice, lo segniamo, e lo eliminiamo dal grafo. A questo punto, dato che l'algoritmo non ha cicli diretti, sicuramente vi è un altro nodo che non ha più archi uscenti. Lo prendiamo, lo segniamo e lo cancelliamo, e continuiamo così fino ad aver ricavato un ordine topologico. Se vi sono più nodi senza archi uscenti nello stesso momento basta prendere uno dei nodi in modo casuale: infatti, in uno stesso grafo possono esserci anche più ordini topologici diversi. \\
 Vediamo il codice:
 \begin{lstlisting}[style=Python]
@@ -682,5 +684,76 @@ Ordine_Topologico(G): # G è un grafo diretto aciclico
 \NB Questo algoritmo è un algoritmo distruttivo per il grafo: alla fine G sarà vuoto, dunque il grafo va prima salvato per poter eseguire questo algoritmo.
 
 Il costo computazionale di questo algoritmo è $\textbf{O}\bm{(n (n+m))}$. Infatti, il ciclo while esegue $\O(n)$ iterazioni, e trovare un nodo senza archi uscenti costa $\O(n)$, mentre eliminarlo costa $\O(m)$ (dato che devo eliminare quel nodo da tutte le liste di adiacenza degli altri vertici). Dunque il costo diventa $\O(n(n+m))$.
+
+Il problema è che questo costo è veramente elevato (almeno $\O(n^2)$), dunque cerchiamo di studiare un algoritmo che trovi un ordine topologico di un grafo diretto aciclico in tempo $\O(n + m)$.
+
+Partiamo sempre dalla DFS, ma aggiungiamo questa volta un contatore che incrementa ogni volta che visitiamo un vertice non ancora visto. Assegniamo poi ad ogni nodo v due valori: $\bm{t(v)}$ è il valore del \textbf{contatore quando visitiamo il nodo v}, mentre $\bm{T(v)}$ è il valore del \textbf{contatore quando eliminiamo quel nodo dallo stack}. 
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Ordine topologico grafo diretto esempio.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Proviamo ad esempio a calcolare i valori di $t(v)$ e $T(v)$ di alcuni nodi in questo grafico. Ipotizziamo una DFS che segue questo ordine: A,B,C,D,E,F,G,H,I,J. Dunque $t(A) = 1, t(B) = 2, \ldots, t(J) = 10$, ossia ogni nodo $v$ ha come valore $t(v)$ la sua posizione nell'ordine dei nodi visitati. Per quanto riguarda i valori $T(v)$, troviamo ad esempio che $T(D) = 4$: infatti, questo nodo viene inserito e subito eliminato dallo stack dato che non punta a nodi adiacenti non visitati. Abbiamo anche che $T(E) = T(C) = T(B) = 5$: infatti, una volta visitato $E$ questo viene subito rimosso dato che non ha nodi adiacenti non visitati, e vengono poi rimossi anche $C$ e $B$. Infine, troviamo che $T(J) = T(G) = T(F) = T(A) = 10$: questi sono i nodi che rimangono nello stack una volta che sono stati visitiati tutti i nodi, e che vengono quindi rimossi per ultimi.   
+\end{minipage}
+
+\begin{Osservazione}[]
+\label{oss-ordine-topologico-grafo-diretto}
+In una \textbf{foglia f} abbiamo che $\bm{t(f) = T(f)}$, mentre nella \textbf{radice r} troviamo che $\bm{t(r) = T(r)}$. 
+\end{Osservazione}
+
+Ad ogni nodo $v$ associamo l'intervallo $\bm{[t(v), T(v)]}$. 
+
+\begin{Proposizione}[]
+\label{propos-ordine-topologico-grafo-diretto}
+In un grafo diretto aciclico, presi due nodi $u$ e $v$ vi sono tre possibilità:
+\begin{enumerate}
+    \item $\bm{[t(u), T(u)] \subseteq [t(v), T(v)]}$ (\textbf{Arco all'indietro}, che va da un discendente a un antenato)
+    \item $\bm{[t(v), T(v)] \subseteq [t(u), T(u)]}$ (\textbf{Arco in avanti}, che va da un antenato a un discendente)
+    \item $\bm{[t(u), T(u)] \cap [t(v), T(v)] = \varnothing}$ (\textbf{Arco di attraversamento}, che collega due nodi allo stesso livello, ossia due nodi dove nessuno è antenato dell'altro)
+\end{enumerate}
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Vogliamo quindi dimostrare che è impossibile che gli intervalli di due nodi si sovrappongano, ossia che $t(u) < t(v) \leq T(u) < T(v)$. 
+
+Sappiamo che dire $t(u) < t(v)$ equivale a dire che $u$ è stato inserito nello stack prima di $v$, e dire che $T(u) < T(v)$ significa che $u$ è stato rimosso prima di $v$ dallo stack. Ma queste due proposizioni non possono coesistere: per la natura stessa di uno stack, che è una struttura dati LIFO (Last In First Out), se un elemento entra prima di un altro sicuramente uscirà dopo di questo. Ciò significa che non esisteranno mai due nodi $u$ e $v$ tali che $t(u) < t(v) \leq T(u) < T(v)$. $\blacksquare$
+
+Seguendo la stessa logica di questa dimostrazione, possiamo dire che preso un \textbf{arco} $(u,v)$ ci troviamo sicuramente nella \textbf{situazione 2)}. Infatti, sicuramente visitiamo prima il nodo $u$ del nodo $v$, dunque $t(u) < t(v)$, e dato che ci troviamo in uno stack sicuramente rimuvoeremo prima $v$, dunque $T(u) \leq T(v)$.
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Ordine topologico grafo non diretto esempio.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+È possibile usare questo stesso algoritmo anche nei grafi \textbf{non diretti}. In questo grafo ad esempio, seguendo come ordine del DFS $A,C,D,B,E$, il nodo $A$ ha come intervallo $[1,5]$, mentre $D$ ha ad esempio $[3,5]$. 
+\end{minipage}
+
+Essendo gli archi non orientati, dei 3 casi visti nella Proposizione \ref{propos-ordine-topologico-grafo-diretto} ne abbiamo ora solo due:
+\begin{enumerate}
+    \item $\bm{[t(u), T(u)] \subseteq [t(v), T(v)]}$ (\textbf{Arco all'indietro})
+    \item $\bm{[t(u), T(u)] \cap [t(v), T(v)] = \varnothing}$ (\textbf{Arco di attraversamento})
+\end{enumerate}
+
+\begin{Proposizione}[]
+\label{propos-grafi-non-diretti-ordine-topologico}
+In un grafo non diretto connesso \textbf{non esistono archi di attraversamento}.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Poniamo per assurdo che esista un arco $(u,v)$ tale che $[t(u), T(u)]\cap[t(v), T(v)] = \varnothing$. Assumiamo che $u$ venga nell'albero di ricerca prima di $v$, ossia che $t(u) < t(v)$. Dato che esiste un arco $(u,v)$, non è possibile che il nodo $u$ venga eliminato dallo stack prima della visita del nodo $v$. Infatti, per eliminare un nodo è necessario aver visitato tutti i suoi vicini, quindi prima di eliminare $u$ dobbiamo per forza di cose visitare $v$. Dunque sicuramente $t(v) \leq T(u)$, ossia $I_u \cap I_v \neq \varnothing$. $\blacksquare$
+
+\begin{Proposizione}[]
+\label{propos-grafo-connesso-non-diretto-ciclo-arco-all-indietro}
+In un grafo connesso non diretto, $G$ ha un ciclo $\iff$ ogni DFS ha un arco all'indietro.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+
+
+
 
 \end{document}

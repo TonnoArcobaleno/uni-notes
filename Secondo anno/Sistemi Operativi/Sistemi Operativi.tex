@@ -104,7 +104,7 @@ Durante la fase di decodifica, la Control Unit legge i bit che si trovano nell'I
 
 Durante la fase di esecuzione, in base al tipo di istruzione vi sono tre possibili scenari:
 \begin{enumerate}
-    \item Se l'istruzione è aritmetica, come ad esempio l'istruzione \code{add \%eax, \%ebx} (vedremo ogni tanto del codice assembley, non è essenziale ma può aiutare a capire di cosa si sta parlando. In questo caso, stiamo facendo una somma tra i valori contenuti all'interno di due registri, \code{eax} e \code{ebx}), parliamo di \textbf{ALU operations}, dato che è la ALU che se ne occupa, facendo l'operazione e scrivendo il risultato finale.
+    \item Se l'istruzione è aritmetica, come ad esempio l'istruzione \code{add \%eax, \%ebx} (vedremo ogni tanto del codice assembly, non è essenziale ma può aiutare a capire di cosa si sta parlando. In questo caso, stiamo facendo una somma tra i valori contenuti all'interno di due registri, \code{eax} e \code{ebx}), parliamo di \textbf{ALU operations}, dato che è la ALU che se ne occupa, facendo l'operazione e scrivendo il risultato finale.
     \item Se l'istruzione è una \code{load/store}, come ad esempio l'istruzione \code{mov (\%rax), \%rcx} (stiamo muovendo il valore del registro \code{\%rax} nel registro \code{\%rcx} performando dunque un'operazione di \code{load}), parliamo di \textbf{Memory operations}, dove la CPU legge/scrive dati nella RAM usando MAR o MDR.
     \item Se l'istruzione è un \code{jump/branch}, come ad esempio l'istruzione \code{jmp 0x4010a0} (stiamo saltando all'indirizzo \code{0x4010a0}), parliamo di \textbf{Control flow}, dove il Program Counter viene aggiornato direttamente all'indirizzo indicato, modificando il flow di esecuzione.
 \end{enumerate}
@@ -525,7 +525,7 @@ Un programma per funzionare ha però bisogno di eseguire delle istruzioni privil
 Le \textbf{chiamate di sistema} (\textbf{system calls}, syscalls o traps) sono delle richieste che le applicazioni fanno al kernel per eseguire istruzioni privilegiate. 
 \end{Definizione}
 
-A differenza delle chiamate di libreria, che si possono eseguire interamente in modalità utente e sono molto veloci, le chiamate di sistema sono significativamente più lente perché coinvolgono anche il kernel. Esistono, però, delle chiamate di libreria dette \textbf{wrappers}, le quali al loro interno eseguono una chiamata di sistema. Spesso nel codice non si utilizzano le system calls in modo diretto ma dei wrappers, così da non dover scivere in assembley (linguaggio delle chiamate di sistema).
+A differenza delle chiamate di libreria, che si possono eseguire interamente in modalità utente e sono molto veloci, le chiamate di sistema sono significativamente più lente perché coinvolgono anche il kernel. Esistono, però, delle chiamate di libreria dette \textbf{wrappers}, le quali al loro interno eseguono una chiamata di sistema. Spesso nel codice non si utilizzano le system calls in modo diretto ma dei wrappers, così da non dover scivere in assembly (linguaggio delle chiamate di sistema).
 
 Quando ad esempio un'applicazione chiamata una funzione \code{read()}, succedono diverse cose:
 \begin{enumerate}[label=\arabic*°]
@@ -601,7 +601,7 @@ Le interruzioni sono più particolari rispetto alle traps e alle eccezioni. Ques
         \item \textbf{Gestisce} l'interruzione
         \item \textbf{Invia} il segnale EOI (End of Interrupt) all'APIC per confermare che l'interruzione è stata gestita
         \item \textbf{Ripristina} i registri
-        \item \textbf{Esegue} l'istruzione assembley \code{iret} per tornare al programma che stava eseguendo.
+        \item \textbf{Esegue} l'istruzione assembly \code{iret} per tornare al programma che stava eseguendo.
     \end{enumerate}
 \end{enumerate}
 
@@ -654,7 +654,7 @@ Una \textbf{variabile} è uno \textbf{spazio di memoria con un nome} che contien
 \end{Definizione}
 Noi \textbf{dichiariamo} una nuova variabile quando ne annunciamo l'esistenza definendobe il nome e il tipo, ma la variabile è \textbf{definita} quando viene allocato uno spazio di memoria a lei dedicata. Spesso queste operazioni avvengono in contemporanea, ma dato che non è sempre così è importante sapere che sono due eventi differenti.
 \begin{lstlisting}[style=C]
-extern int variable; // Variabile dichiarata (nessuna memoria allocata, tramite extern)
+extern int variable; // Variabile dichiarata, ma nessuna memoria allocata, tramite extern
 int variable = 0; // Variabile definita
 int variable_2; // Variabile dichiarata e definita
 \end{lstlisting}
@@ -1180,5 +1180,214 @@ int check_overflow2(int x){
 \end{lstlisting}
 
 Ad esempio, qui abbiamo due funzioni che provano a controllare l'overflow di un \code{signed int}. Solo la seconda funzione, però, è corretta. Questo perché la prima fa un controllo che per il compilatore è inutile: infatti, il compilatore \textbf{da per scontato che gli UB non accadano mai}, e quindi da per scontato che \code{x+1 < x} sia sempre falso, non controllandolo nemmeno. Dunque il ramo if viene cancellato direttamente, e così la prima funzione restituisce sempre 0.
+
+\subsection{Fasi della compilazione}
+
+La compilazione di un file \code{.c} si divide in 4 fasi precise:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Pre-processore}
+    \item \textbf{Compilatore}
+    \item \textbf{Assemblatore}
+    \item \textbf{Linker}
+\end{enumerate}
+
+Ogni file \code{.c} in uno stesso progetto è compialto come una \textbf{translation unit} indipendente. Ognuno di questi è pre-processat e compilato in modo indipendente dagli altri, e non possono quindi leggere il codice interno degli altri \code{.c}. In questo modo, se dobbiamo modificare solo un file \code{.c}, non è necessario pre-processare e compilare di nuovo tutti i file ma solo quel singolo \code{.c}.
+
+\subsubsection*{Pre-processore}
+
+\begin{Definizione}[Pre-processore]
+\label{def-pre-processore}
+La \textbf{pre-processore} è la fase antecedente alla vera compilazione. Si occupa di gestire tutte le righe che iniziano con \#, prendendo in input il file con estensione \code{.c} o \code{.h} e restituendo un file con lo stesso nome e estensione \code{.i}.
+\end{Definizione}
+
+\NB I file \code{.h} sono dei file con delle \textbf{dichiarazioni} condivise tra tutti i file del progetto. È importante non mettere mai delle definzioni in questi file, che causanod diversi errori a linktime (durante la 4° fase, ossia la fase del Linker). 
+
+Tra le diverse righe che iniziano con \# ci sono:
+\begin{itemize}
+    \item \codeb{\#include}, che serve per includere contenuti (come funzioni o variabili globali) da altri file. Il pre-processore prende questi contenuti e li copia nel nostro file. 
+    \item \codeb{\#define}, che definisce una macro che sostituisce un vlaore (ad esempio, se c'è la linea \code{\#define PI 3.14}, ogni volta che il pre-processore legge \code{PI} lo sostitusice con il valore \code{3.14}). Può definire anche una macro per sostituire una variabile (ad esempio, se c'è la linea \code{\#define MAX(a,b) ((a) > (b) ? (a) : (b))}, il pre-processore ogni volta che legge \code{MAX(a,b)} esegue un controllo e restituisce \code{(a)} o \code{(b)}). È importante usare le () in questo caso perché queste \textit{macro} definite con \code{\#define} non rispettano l'ordine degli operatori. Ad esempio, \code{\#define SQUARE(x) x * x} non è scritto correttamente, dato che passando come argomento 2 + 3 il risultato non sarebbe 25 ma 11 (2 + 3 * 2 + 3).
+    \item \codeb{\#ifdef, \#ifndef, \#endif}, che servono per includere del codice solo se alcune condizioni sono rispettate. 
+    \begin{lstlisting}[style=C]
+#define DEBUG_MODE // Se si vuole disattivare bisogna commentare questa riga
+#ifdef DEBUG_MODE
+    #define DBG(x) printf("%d", x)
+#else
+    #define DBG(x) // Non espande nulla
+#endif
+    \end{lstlisting}
+        In questo caso quando chiameremo nel codice \code{DBG(x)}, funzionerà solo se la \code{DEBUG\_MODE} è attiva. \code{ifndef} funziona come \code{ifdef} ma al contrario: se il nome nella condizione non esiste allora passa, altrimenti no. Queste condizioni sono fondamentali per creare gli \textbf{include guards}, che sono utili per evitare di includere due volte gli stessi contenuti. 
+        \begin{lstlisting}[style=C]
+#ifndef MODULO
+    #define MODULO
+    void funzione(int x);
+#endif        
+        \end{lstlisting}
+        Creiamo quindi un blocco \code{\#ifndef} che viene eseguito una volta e crea la macro \code{MODULO}. Avendola creata, il blocco \code{\#ifndef} non sarà più eseguito, evitando così l'errore del double-include.
+\end{itemize}
+
+Oltre a tutte queste macro che abbiamo visto, esistono altre macro che il compilatore ha di default: 
+\begin{itemize}
+    \item \codeb{\_\_FILE\_\_}: nome del file sorgente
+    \item \codeb{\_\_LINE\_\_}: linea di codice corrente
+    \item \codeb{\_\_DATE\_\_}: data segnata a compiletime
+    \item \codeb{\_\_TIME\_\_}: ora segnata a compiletime
+    \item \codeb{\_\_func\_\_}: nome della funzione corrente
+\end{itemize}
+
+A volte può essere utile leggere l'output del pre-processore per effettuare debugging. Per avviare un file \code{hello.c} solo nel pre-processore bisogna eseguire il comando \code{gcc -E hello.c -o hello.i}. Esistono poi tanti comandi per conoscere informazioni differenti: se vogliamo ad esempio contare il numero di righe dopo l'esecuzione del pre-processore basta eseguire il comando \code{gcc -E hello.c | wc -l}.
+
+\subsubsection*{Compilatore}
+
+\begin{Definizione}[Compilatore]
+\label{def-compilatore}
+Il \textbf{compilatore} (\codeb{cc1}) si occupa di tradurre il codice C in assembly, prendendo in input il file \code{.i} e restituendo un file con lo stesso nome e con estensione \code{.s}, con assembly puro specifico per l'architettura del computer (x86-64, ARM64...).
+\end{Definizione}
+
+Per generare codice assemly dal file \code{hello.c} usiamo il comando \code{gcc -S hello.c -02 hello.s}. Per leggere questi file, è ovviamente necessaria una conoscenza minima delle istruzioni assembly. Tra le più importanti troviamo:
+\begin{itemize}
+    \item \codeb{mov dst, src}, che copia un valore da \code{dst} a \code{src}
+    \item \codeb{push reg}, che decrementa il valore del puntatore alla fine dello stack \code{RSP} e aggiunge in cima il valore salvato nel registro \code{reg}
+    \item \codeb{pop reg}, che estrae il valore in cima allo stack e lo salva nel registro \code{reg} e incrementa il valore del puntatore alla fine dello stack \code{RSP}
+    \item \codeb{add dst, src}, che somma il valore di \code{dst} con \code{src} e lo sovrascrive in \code{dst}
+    \item \codeb{sub dst, src}, che sottrae il valore di \code{src} a \code{dst} e lo sovrascrive in \code{dst}
+    \item \codeb{cmp a,b}, che calcola la differenza aritmetica tra \code{a} e \code{b} senza però modificare \code{a} o \code{b}
+    \item \codeb{je / jne / jl}, che esegue un salto se due valori sono uguali / diversi / minore
+    \item \codeb{call label}, che salva l'indirizzo di ritorno sullo stack e salta all'esecuzione di un altra funzione specificata in \code{label}
+    \item \codeb{ret}, che prende l'indirizzo di ritorno dallo stack e riprende il flusso di esecuzione dopo la fine di una funzione
+    \item \codeb{lea dst}, che calcola un indirizzo di memoria e memorizza l'indirizzo in \code{dst}
+\end{itemize}
+
+Ad esempio, una semplice funzione come questa
+\begin{lstlisting}[style=C]
+int max(int a, int b){
+    if (a > b){
+        return a;
+    }
+    return b;
+}
+\end{lstlisting}
+
+in assembly diventa
+\begin{lstlisting}[style=C]
+max:
+    cmp edi, esi # Compara a (edi) e b (esi)
+    jle .L2 # Se a <= b ritorna b (chiama la funzione .L2 definita dopo)
+    mov eax, edi # eax = a
+    ret
+.L2:
+    mov eax, esi # eax = b
+    ret
+\end{lstlisting}
+
+\begin{Definizione}[Rappresentazione intermedia]
+\label{def-rappresentazione-intermedia}
+I compilatori moderni utilizzano una \textbf{rappresentazione intermedia} (IR, Intermediate Representation).
+\end{Definizione}
+Ad esempio, per i computer che utilizzano GCC (GNU Compiler Collection), si passa prima in GIMPLE, ossia una rappresentazione ad albero semplificata, poi in RTL, un linguaggio più vicino all'hardware, e solo dopo l'RTL si arriva all'assembly.
+
+Questa rappresentazione interna effettua diverse operazioni di ottimizzazione. Ad esempio elimina codice morto mai eseguito, oppure rimpiazza una chiamata di una funzione con il suo codice, oppure può anche rimpiazzare delle operazioni costose con altre più semplici (ad esempio, dato che $x * 2 = x <<1$, rimpiazza tutte le moltiplicazioni con uno shift a sinsitra). Esistono poi diversi livelli di ottimizzazione. In GCC abbiamo livelli da 0 a 3 e poi il livello s, che ottimizza la dimensione del file.
+
+\subsubsection*{Assemblatore}
+
+\begin{Definizione}[Assemblatore]
+\label{def-assemblatore}
+L'\textbf{assemblatore} (\codeb{as}) converte il codice assembley in codice macchina binario. Prende in input un file \code{.s} e restituisce un file con lo stesso nome e l'estensione \code{.o}.
+\end{Definizione}
+
+Un file \code{.o} (Object File) è tipicamente in formato ELF (Executable and Linkable Format) ed è diviso in diverse sezioni:
+\begin{itemize}
+    \item \textbf{ELF Header}, ossia il frontespizio del file che contiene i metadati fondamentali, l'architettura della CPU e la posizione delle altre sezioni
+    \item \codeb{.text} \textbf{section}, che contiene il codice macchina vero e prorpio
+    \item \codeb{.data} \textbf{section}, che memorizza le variabili globali e statiche inizializzate a un valore diverso da 0
+    \item \codeb{.bss} \textbf{section}, che memorizza le variabili globali e statiche non inizializzate
+    \item \codeb{.rodata} \textbf{section}, che contiene i dati in sola lettura, come le costanti o le stringhe letterali
+    \item \textbf{Symbol table}, ossia la tabella dei simboli che elenca tutti gli identificatori (nomi delle variabili, delle funzioni...) definiti nel file oppure utilizzati qui ma definiti altrove
+    \item \textbf{Relocation table}, ossia la tabella che contiene tutte le istruzioni per il linker su dove e come aggiustare gli indirizzi di memoria
+\end{itemize}
+
+\subsubsection*{Linking}
+
+\begin{Definizione}[Linker]
+\label{def-linker}
+Il \textbf{linker} (\codeb{ld}) combina tutti i file \code{.o} in un unico eseguibile. 
+\end{Definizione}
+Il linker crea una symbol table globale e associa ogni chiamata o utilizzo di un simbolo al punto esatto in cui quel simbolo è implementato. Dunque, se creiamo una funzione \code{add\_numbers} nel file \code{utils.o} e chiamiamo questa funzione nel file \code{main.o} sarà il linker a collegare i due file, risolvendo tutti i riferimenti lasciati in sospeso nelle fasi precedenti. Se poi esiste un simbolo referenziato ma mai definito, avviene un \textit{linker error}. Ricordiamo che una variabile può essere dichiarata ma non definita tramite la keyword \code{extern}.
+
+Il linker inoltre risolve il problema lasciato in sospeso dall'assemblatore, ossia la \textbf{rilocazione}. Abbiamo visto come nei file \code{.o} esista una relocation table che contiene delle istruzioni su come aggiustare gli indirizzi di memoria. Questa esiste perché nella fase gestita dall'assemblatore non si sa ancora come e dove verranno collocate in memoria le diverse funzioni o variabli. Il linker quindi prende questi segnaposti temporanei lasciati dall'assemblatore che dovranno essere sostituiti dal linker dai veri indirizzi di memoria ora conosciuti.
+
+Nei file eseguibili ELF creati dal linker esistono le \textbf{sezioni} e i \textbf{segmenti}. È importante capire la differenza tra questi due concetti:
+\begin{itemize}
+    \item Le \textbf{sezioni} servono al compilatore, al linker e al debugger e suddividono il codice in blocchi logici specifici, e sono descritte nella Section Header Table presente nell'ELF Header
+    \item  I \textbf{segmenti} servono invece al sistema operativo per mandare in esecuzione il programma e suddividono il codice in base ai permessi di memoria necessaria, e sono descrcitti nella Program Header Table presente sempre nell'ELF Header
+\end{itemize}
+
+\subsection{Linking statico e dinamico}
+
+\begin{Definizione}[Libreria statica]
+\label{def-libreria-statica}
+Una \textbf{libreria statica} è un file \codeb{.a} che contiene un archivio di file oggetto \code{.o}. 
+\end{Definizione}
+
+Per creare una libreria si utilizza lo strumento \codeb{ar} (archiver) che raggruppa i file oggetto in un unico archivio. Ad esempio, se abbiamo due file oggetto \code{math.o} e \code{stats.o}, per raggrupparli in una libreria statica usiamo il comando \code{ar rcs librarymath.a math.o stats.o}, che li inserisce nell'archivio \code{librarymath.a}. La dicitura \code{rcs} indica che i file devono essere rimpiazzati (\code{r}) se sono già presenti nell'archivio, che bisogna creare l'archivio se ancora no nesiste (\code{c}), e che bisogna generare un indice dei simboli all'interno dell'archivio per permettere al linker di trovare velocemente funzioni e variabili (\code{s}, symbol index). Se si vuole poi aprire la libreria, si può usare il comando \code{ar -t libmymath.a} per stampare la lista dei file oggetto o usare il comando \code{nm} per stampare la tabella dei simboli dell'archivio, dove sono presenti tutti i nomi delle funzioni e delle variabili referenziate al suo interno. Per collegare poi una libreria a un file \code{.c} si usa il comando \code{gcc main.c -L. -lmymath -o program}. \code{-L.} aggiunge la directory corrente ai percorsi di ricerca del linker dove cercare i file di libreria, mentre \code{-lmymath} dice al linker di creare una libreria chiamata \code{libmymath.a} ( o \code{libmymath.so} che indica una liberia dinamica, che vedremo ora cos'è). 
+
+\begin{Definizione}[Libreria dinamica]
+\label{def-libreria-dinamica}
+Una \textbf{libreria dinamica} (o \textbf{condivisa}) è un file \codeb{.so} contenente un archivio di file oggetti \code{.o} caricato a runtime e condiviso tra i diversi processi. Queste sono condivise tramite il \textbf{dynamic linker}.
+\end{Definizione}
+Quindi se sia il programma A che B hanno bisogno di accedere a questa libreria, questa verrà mappata una sola volta in memoria RAM e sarà condivisa tra il processo A e il processo B. Il processo di creazione din  una libreria dinamica è molto simile a quello di una libreria statica.
+
+È possibile anche caricare in memoria una liberira condivisa mentre è già in esecuzione, senza doverla collegare in fase di compilazione. Per farlo, è necessario includere l'header \code{<stdio.h>} ed è necessario aprire la libreria tramite il comando \code{dlopen(percorso, RTLD\_LAZY)}.
+
+Bisogna usare librerie statiche per il deployment e per i sistemi embedded, mentre bisogna usare le librerie dinamiche per liberire condivise di grandi dimensioni.
+
+\chapter{Virtualizzazione}
+
+\NB Per questo e per i prossimi due capitoli seguiremo la struttura \textbf{OSTEP}, che organizza il sistema operativo in 3 blocchi principali:
+
+\begin{itemize}
+    \item \textbf{Virtualizzazione}
+    \item \textbf{Concorrenza}
+    \item \textbf{Persistenza}
+\end{itemize}
+
+\section{Processi e API}
+
+\subsection{Cos'è un processo?}
+
+Abbiamo già visto nella Definizione \ref{def-processo} cos'è un processo, ossia un'\textbf{istanza di un programma}. Se vogliamo però essere più precisi, un processo è l'\textbf{astrazione} che il sistema operativo crea di un programma in esecuzione, che include:
+\begin{itemize}
+    \item Il codice che sta venendo eseguito
+    \item Il valore corrente del Program Counter
+    \item Il contenuto dei registri della CPU
+    \item Una spazio di indirizzi virtuale privato
+    \item Un insieme di descrittori di file aperti
+    \item Un univoco Process ID (PID)
+\end{itemize}
+
+Dunque i programmi sono file scritti in modo permanente nel disco, mentre i processi sono entità temporanee che vivono nella RAM. 
+
+Quando facciamo partire un programma, il sistema operativo esegue tre passi:
+\begin{enumerate}[label=\arabic*°]
+    \item Legge il file binario ELF sul disco
+    \item Carica il codice e i dati statici nella RAM
+    \item Alloca lo stack e l'heap, prepara i descrittori dei file e salta al punto di start del programma, ossia alla funzione \code{main()}
+\end{enumerate}
+
+\begin{Proprieta}[Caricare file in RAM]
+\label{prop-caricare-file-RAM}
+Ci sono poi due modalità in cui l'OS può caricare un file in memoria RAM:
+\begin{itemize}
+    \item \textbf{Eager Loading} (OS più vecchi), dove l'OS carica l'intero file binario nella RAM prima di eseguire il programma
+    \item \textbf{Lazy Loading} (OS più nuovi), dove l'OS carica solo il codice necessario. Quando la CPU prova ad accedere a una pagina non ancora caricata, parte un \textit{page fault} che fa partire il caricamento di tale pagina in RAM (riparleremo di page fault e paging più avanti quando parleremo della gestione della memoria)
+\end{itemize}
+\end{Proprieta}
+
+Con la tecnica del lazy loading è molto probabile che gran parte del codice binario non venga mai caricato in RAM perché non necessario. 
+
+
+
+
+
+
 
 \end{document}
