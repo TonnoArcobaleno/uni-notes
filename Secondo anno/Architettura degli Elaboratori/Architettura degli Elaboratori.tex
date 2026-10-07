@@ -1056,7 +1056,7 @@ Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando 
 \includegraphics[width=1\textwidth, valign=t]{Circuito logico B bubble pushing.png}
 \end{minipage}
 
-Ad esempio, questi due circuiti rappresentano la stessa identica equazione booleana: \mbox{$\bm{Y = \overline{AB} \cdot \overline{CD} = AB + CD}$} (sappiamo che è la stessa equazione grazie proprio al teorema di DeMorgan).
+Ad esempio, questi due circuiti rappresentano la stessa identica equazione booleana: \mbox{$\bm{Y = \overline{\overline{AB} \cdot \overline{CD}} = AB + CD}$} (sappiamo che è la stessa equazione grazie proprio al teorema di DeMorgan).
 
 Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{porte logiche universali}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte.
 

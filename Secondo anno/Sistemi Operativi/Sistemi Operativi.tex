@@ -543,7 +543,7 @@ Il wrapper ha tre metodi per poter passare i parametri al kernel:
     \item \textbf{Stack utente}: gli argomenti sono passati allo stack utente
 \end{itemize}
 
-La regola numero uno riguardo le chiamate di sistema è quella di \textbf{non fidarsi mai dell'input dell'utente}. Infatti, prima di far partire una syscall la CPU deve sempre validare i parametri della chaimata. Deve controllare se i puntatori puntano a spazi di memoria validi o se il processo ha i permessi necessari per fare quella determinata azione ad esempio.
+La regola numero uno riguardo le chiamate di sistema è quella di \textbf{non fidarsi mai dell'input dell'utente}. Infatti, prima di far partire una syscall la CPU deve sempre validare i parametri della chiamata. Deve controllare se i puntatori puntano a spazi di memoria validi o se il processo ha i permessi necessari per fare quella determinata azione ad esempio.
 
 \subsubsection*{Perché le chiamate di sistema sono così costose per il computer?}
 
@@ -1360,7 +1360,7 @@ Abbiamo già visto nella Definizione \ref{def-processo} cos'è un processo, ossi
     \item Il valore corrente del Program Counter
     \item Il contenuto dei registri della CPU
     \item Una spazio di indirizzi virtuale privato
-    \item Un insieme di descrittori di file aperti
+    \item Un insieme di descrittori di file aperti (ossia una tabella di numeri dove ognuno è collegato a un file)
     \item Un univoco Process ID (PID)
 \end{itemize}
 
@@ -1402,7 +1402,7 @@ A causa del fenomeno del time-sharing, un processo non sta mai a lungo in modali
 Il \textbf{PCB} (Process Control Block) è la struttura dati che il sistema operativo instanzia per ogni processo per identificarne, salvarne e tracciarne lo stato di esecuzione, la memoria e le risorse.
 \end{Definizione}
 
-Ogni PCB salva diverse informazioni quindi, tra cui un identificativo (\code{pid}), lo stato del processo, un puntatore alla pagina di memoria riservata al processo e una struttura dati chaimata \code{trapframe} dove vengono salvati tutti i registri della CPU quando il processo viene interrotto. Il PCB è quindi fondamentale per poter effettuare il time-sharing senza perdere informazioni riguardo i singoli processi. Il sistema operativo ha poi una struttura dati chiamata \textbf{process table} dove mantiene tutti i PCB. È qui che lo scheduler cerca il primo processo READY per mandarlo in esecuzione. 
+Ogni PCB salva diverse informazioni quindi, tra cui un identificativo (\code{pid}), lo stato del processo, un puntatore alla pagina di memoria riservata al processo e una struttura dati chiamata \code{trapframe} dove vengono salvati tutti i registri della CPU quando il processo viene interrotto. Il PCB è quindi fondamentale per poter effettuare il time-sharing senza perdere informazioni riguardo i singoli processi. Il sistema operativo ha poi una struttura dati chiamata \textbf{process table} dove mantiene tutti i PCB. È qui che lo scheduler cerca il primo processo READY per mandarlo in esecuzione. 
 
 \begin{Definizione}[Gerarchia dei processi]
 \label{def-gerarchia-processi}
@@ -1414,6 +1414,8 @@ Su UNIX i processi formano un \textbf{albero gerarchico} che parte dalla radice 
 \textbf{PID 1} è il primo processo dello spazio utente eseguito dal kernel dopo l'accensione del computer. Sui linux più moderni questo processo prende il nome di \code{systemd}, ed è considerabile l'antenato di tutti i processi. Questo esegue un loop che chiamata la funzione \code{wait()} per trovare tutti gli eventuali processi orfani. \\
 \NB Non è possibile uccidere questo proesso tramite comandi normali. 
 \end{Definizione}
+
+È grazie al PID 1 se nessun processo rimane veramente orfano.
 
 \subsection{Gestione dei processi in UNIX}
 
@@ -1429,7 +1431,7 @@ Per poter utilizzare queste funzioni sono necessario gli header \codeb{<unistd.h
 
 Uno si potrebbe domandare a cosa serve fare tutto questo casino per creare un nuovo processo. Perché non fare come in Windows dove si creano nuovi processi senza doverne di duplicare di vecchi come si fa in UNIX tramite \code{fork()}? Semplicemente perché, duplicando un processo già esistente, si evita di dover settare molti dei parametri che già sono stati gestiti dal processo padre. Infatti, in questo modo noi dobbiamo semplicemente cambiare alcune cose per rendere il processo adatto alle nostre esigenze per poi eseguire il programma tramite il comando \code{exec()}. 
 
-\subsection{\codeb{fork()}}
+\subsubsection*{\codeb{fork()}}
 
 \begin{Definizione}[\codeb{fork()}]
 \label{def-fork}
@@ -1484,7 +1486,89 @@ Per come è stata descritta una chiamata \code{fork()} dovrebbe copiare l'intero
 
 Non tutte le risorse sono copiate con una \code{fork()}. Tra quelle non copiate troviamo:
 \begin{itemize}
-    \item 
+    \item I timer
+    \item I segnali pendenti (ossia in attesa di consegna)
+    \item Ovviamente i valori PID e PPID
 \end{itemize}
+
+\subsubsection*{\codeb{wait()} e \codeb{waitpid()}}
+
+\begin{Definizione}[Zombie]
+\label{def-zombie}
+Un processo figlio, quando termina, non scompare immediatamente, ma è neessario che il genitore chiami la funzione \codeb{wait()} per eliminarlo. Se questa chiamata non arriva mai, il processo diventa uno \textbf{zombie}, che spreca le risorse del sistema operativo. 
+\end{Definizione}
+
+Quando viene chiamata la funzione \codeb{wait()}, questa rimane in attesa fino a quando un processo figlio non termina, e ritorna il PID del processo terminato. Se il chiamante di \code{wait()} non ha figli, questa funzione ritorna -1. Ovviamente, un padre con N figli dovrebbe aspettarli tutti: non ha senso fare \code{wait()} solo su un figlio se poi tutti gli altri diventano zombie. \\
+Questa funzione risolve il problema dell'ordine non-deterministico visto prima tra padre e figlio. Infatti, con questa funzione possiamo dire al padre di aspettare finché il processo figlio non muoia. La \textbf{shell} è l'esempio perfetto in questo caso: possiamo infatti considerare la shell come il programma padre, e tutti i suoi figli come i comandi che scriviamo. La shell (padre) riprende a funzionare solo dopo che il comando corrente (figlio) è terminato.
+
+Oltre alla funzione \code{wait()} esiste anche la funzione \codeb{waitpid()}, che permette di specificare quale dei diversi figli di un processo si voglia aspettare. In base al valore del PID specificato, questa funzione si comporta in modo diverso:
+\begin{itemize}
+    \item PID > 0: aspetta quel figlio esatto
+    \item PID = -1: aspetta un qualsiasi figlio (come \code{wait()})
+    \item PID = 0: aspetta un qualsiasi figlio nello stesso process group
+    \item PID < -1: aspetta  un qualsiasi figlio nel process group
+\end{itemize}
+
+Se tra gli argomenti di \code{waitpid()} aggiungiamo anche l'opzione \codeb{WNOHANG}, questa ritornerà 0 se non è presente alcun figlio del processo chiamante (utile per il polling). \\
+È possibile aggiungere tra gli argomenti una variabile \codeb{status} che fa da contenitore: alla fine del \code{waitpid()}, questa avrà al suo intero un valore con delle informazioni riguardo la chiamata di \code{wait()}. Esitono poi delle macro da usare per studiare queste informazioni:
+\begin{itemize}
+    \item \code{WIFEXITED(status)}, che ritorna True se il figlio è terminato normalmente con una chiamata \code{exit()}
+    \item \code{WEXITSTATUS(status)}, che ritorna l'exit code (da 0 a 255) se il figlio è terminato con \code{exit()}
+    \item \code{WIFSIGNALED(status)}, che ritorna True se il figlio è terminato a causa di un segnale
+    \item \code{WTERMSIG(status)}, che ritorna il numero del segnale che ha terminato il figlio se questo è terminato a causa di un segnale
+    \item \code{WIFSTOPPED(status)}, che ritorna True se il figlio è stato stoppato
+\end{itemize}
+
+\subsubsection*{\codeb{exec()}}
+
+\begin{Definizione}[\codeb{exec()}]
+\label{def-exec}
+Il processo \codeb{exec()} rimpiazza l'immagine in memoria del processo corrente con quella di un nuovo programma. È fondamentale per creare un processo di nuovo programma partendo dal duplicato di un processo di un altro programma. Rimpiazza totalmente il codice, i data, lo stack e l'heap. La tabella dei descrittori dei file invece rimane identica, e questo permette ridirigere i programmi I/O nella shell usando sempre lo stesso codice.
+\end{Definizione}
+
+È necessario separare le funzioni \code{fork()} e \code{exec()} perché tra le due chiamate un processo figlio può fare diverse cose, tra cui ad esempio cambiare alcune variabili d'ambiente (ossia coppie chiave-valore globali gestite dal sistema operativo che definiscono il contesto di configurazione e il comportamento dei programmi in esecuzione), ridirezionare l'output da un file a un altro o cambiare la cartella di lavoro.
+
+Esistono 6 varianti del comando \code{exec()}, che insieme formano la famiglia \code{exec()}:
+\begin{itemize}
+    \item \code{execl(path,arg0, ... , NULL)}, che richiede il percorso esatto del file, riceve gli argomenti come una lista separata da virgole, e che eredita le variabili d'ambiente
+    \item \code{execv(path, argv[])}, che richiede il percorso esatto del file, riceve gli argomenti come un array, e che eredita le variabili d'ambiente
+    \item \code{execle(path, arg0, ..., NULL, envp[])}, che richiede il percorso esatto del file, riceve gli argomenti come una lista separata da virgole, e che riceve le variabili d'ambiente tramite un array
+    \item \code{execve(path, argv[], envp[])}, che richiede il percorso esatto del file, riceve gli argomenti come un array, e che riceve le variabili d'ambiente tramite un array
+    \item \code{execlp(file, arg0, ..., NULL)}, che riceve gli argomenti come una lista separata da virgole, che cerca l'eseguibile automaticamente nelle cartelle cercando il nome \code{file}, e che eredita le variabili d'ambiente
+    \item \codeb{execvp(file, argv[])}, che riceve gli argomenti come un array, che cerca l'eseguibile automaticamente nelle cartelle cercando il nome \code{file}, e che eredita le variabili d'ambiente
+\end{itemize}
+
+L'ultima funzione è quella più utilizzata. In questa, il primo degli argomenti nell'array \code{argv[]} in realtà non è un argomento ma è il nome del programma. Dal secondo fino al penultimo sono i veri argomenti, mentre l'ultimo è sempre \code{NULL}, necessario per far capire quando smettere di cercare gli argomenti.
+
+\begin{lstlisting}[style=C]
+execvp("ls", {"ls", "-l", "/tmp", NULL});
+perror("execvp failed"); // Se arrivo qui allora non è riuscito a saltare al nuovo codice
+exit(EXIT_FAILURE);
+\end{lstlisting}
+
+Se \code{exec()} fallisce, come vediamo qui sopra il codice del programma semplicemente continua a essere eseguito. Se invece è eseguito correttamente, questa funzione non ritorna nulla. Questo ha molto senso: stiamo andando a eseguire del nuovo codice modificando interamente i dati, l'heap e lo stack, quindi l'indirizzo al quale l'\code{exec()} dovrebbe ritornare un valore semplciemente non esiste più, perché è stato sovrascritto.
+
+\begin{lstlisting}[style=C]
+pid_t pid = fork();
+if (pid < 0){ // Errore nella fork
+    perror("fork");
+    exit(1);
+}
+else if (pid == 0){ // Figlio
+    char *args[] = {"wc", "-l", "file.txt", NULL};
+    execvp("wc", args);
+    perror("exec"); // Se arriviamo qui l'exec è fallito
+    exit(1);
+}
+else{ // Padre
+    int status;
+    waitpid(pid, &status, 0);
+    printf("wc finito con codice d'uscita %d\n", WEXITSTATUS(status))
+}
+\end{lstlisting}
+Questo codice mostra come usare nel modo corretto le funzioni \code{fork(), wait(), waitpid()} e \code{exec()}. 
+
+
+
 
 \end{document}
