@@ -1350,11 +1350,14 @@ Bisogna usare librerie statiche per il deployment e per i sistemi embedded, ment
     \item \textbf{Persistenza}
 \end{itemize}
 
+\begin{Definizione}[Virtualizzazione]
+\label{def-virtualizzazione}
+La \textbf{virtualizzazione} è una tecnica che crea una versione virtuale di una risorsa fisica astraendola dall'hardware e permettendo così di far girare più ambienti isolati sulla stessa macchina.
+\end{Definizione}
+
 \section{Processi e API}
 
-\subsection{Cos'è un processo?}
-
-Abbiamo già visto nella Definizione \ref{def-processo} cos'è un processo, ossia un'\textbf{istanza di un programma}. Se vogliamo però essere più precisi, un processo è l'\textbf{astrazione} che il sistema operativo crea di un programma in esecuzione, che include:
+Abbiamo già visto nella Definizione \ref{def-processo} cos'è un processo (o job), ossia un'\textbf{istanza di un programma}. Se vogliamo però essere più precisi, un processo è l'\textbf{astrazione} che il sistema operativo crea di un programma in esecuzione, che include:
 \begin{itemize}
     \item Il codice che sta venendo eseguito
     \item Il valore corrente del Program Counter
@@ -1544,7 +1547,7 @@ Esistono 6 varianti del comando \code{exec()}, che insieme formano la famiglia \
     \item \codeb{execvp(file, argv[])}, che riceve gli argomenti come un array, che cerca l'eseguibile automaticamente nelle cartelle cercando il nome \code{file}, e che eredita le variabili d'ambiente
 \end{itemize}
 
-L'ultima funzione è quella più utilizzata. In questa, il primo degli argomenti nell'array \code{argv[]} in realtà non è un argomento ma è il nome del programma. Dal secondo fino al penultimo sono i veri argomenti, mentre l'ultimo è sempre \code{NULL}, necessario per far capire quando smettere di cercare gli argomenti.
+L'ultima funzione è quella più utilizzata. In questa, il primo degli argomenti nell'array \code{argv[]} in realtà non è un argomento ma è il nome del processo. Dal secondo fino al penultimo sono i veri argomenti, mentre l'ultimo è sempre \code{NULL}, necessario per far capire quando smettere di cercare gli argomenti.
 
 \begin{lstlisting}[style=C]
 execvp("ls", {"ls", "-l", "/tmp", NULL});
@@ -1591,8 +1594,156 @@ Per gestire la priorità di un processo la CPU usa un valore di "\textbf{nicenes
 
 \begin{Definizione}[\codeb{pipe()}]
 \label{def-pipe}
-La funzione \codeb{pipe()} crea un \textbf{canale di comunicazione unidirezionale} tra due processi.
+La funzione \codeb{pipe()} crea un \textbf{canale di comunicazione unidirezionale} tra due processi, fondamentale per scambiare dati tra un processo padre e un processo figlio. Si compone di un array di dimensione 2, dove al valore 0 corrisponde l'estremità da cui si leggono i dati usando la funzione \code{read()}, mentre al valore 1 corrisponde l'estremità da cui si scirvono i dati usando la funzione \code{write()}.
 \end{Definizione}
+
+\begin{Definizione}[\codeb{dup2()}]
+\label{def-dup2}
+La funzione \codeb{dup2()} prende in ingresso due file descriptor e fa in modo che il secondo punti dove punta il primo. 
+\end{Definizione}
+
+\subsection{Shell}
+
+Un'esempio classico per capire tutti queste funzioni è la \textbf{shell}. 
+
+\begin{Definizione}[Shell]
+\label{def-shell}
+Una \textbf{shell} è una \textbf{REPL} (Read-Eval-Print-Loop), ossia un ciclo infinito che stampa il prompt (ad esempio \$), legge un comando e lo esegue, all'infinito.
+\end{Definizione}
+
+Ogni comando in una shell crea un nuovo processo, fatta eccezione per i comandi built-in, che sono ad esempio i comandi \codeb{cd} (che modifica la cartella di lavoro della shell), \codeb{exit} (che termina il processo della shell) o \codeb{export} (che modifica l'ambiente della shell). \\ Solitamente, quando la shell riceve un comando crea un processo e chiama la funzione \code{wait()}, aspettando che quel processo termini per passare al prossimo comando. È possibile però far partire dei processi in \textbf{background} aggiungendo alla fine il carattere \textbf{\&}. Infatti, se la shell rileva questo carattere alla fine del comando semplicemente non chiamerà la funzione \code{wait()}, lasciando il comando in esecuzione in background. Una volta terminato, il kernel manderà il segnale \code{SIGCHLD} al padre e questo eseguirà un \code{waitpid} per terminarlo, così da non lasciare nessun processo zombie.
+
+\section{Scheduling}
+
+Abbiamo visto con quali funzioni il sistema operativo gestisce i vari processi e come questi sono catalogati, ma è arrivato il momento di farci un'ulteriore domanda: come fa il sistema operativo a decidere in che ordine eseguire più processi? Questa scelta spetta a un componente software che prende il nome di \textbf{scheduler}- 
+
+\begin{Definizione}[Scheduler]
+\label{def-scheduler}
+Lo \textbf{scheduler} è il componente software del computer che decide l'ordine di esecuzione dei diversi processi.
+\end{Definizione}
+
+Esistono diverse \textbf{politiche di scheduling}, ossia diversi modi per decidere con quale ordine mandare i processi in esecuzione sulla CPU. Per iniziare a studiare queste diverse politiche faremo delle assunzioni sul nostro carico di lavoro (ossia sui nostri processi che dobbiamo eseguire) che pian piano toglieremo. Diremo quindi che i nostri processi
+\begin{enumerate}[label=\arabic*°]
+    \item Hanno tutti \textbf{tempo di esecuzione uguale}
+    \item Arrivano tutti \textbf{allo stesso momento}
+    \item Una volta iniziati \textbf{non possono essere interrotti}, ossia non vi è \textbf{preemption} (intesa come la capacità del SO di togliere la CPU a un processo prima che questo termini, per assegnarla a un altro)
+    \item Lavorano \textbf{solo con la CPU} (no I/O)
+    \item Hanno un \textbf{tempo di esecuzione conosciuto}
+\end{enumerate}
+Sono assunzioni molto forti e molto distanti dalla realtà, ma sono per il momento necessarie per studiare le prime politiche più basilari. In particolare la 5° assunzione è quella più distante dalla realtà: infatti, l'\textbf{Halting Problem} dimostra che non esiste algoritmo in grado di determinare se un processo terminerà mai o no, quindi è proprio assurdo pensare che ne possa esistere uno che riesca a determinare non solo se finirà o meno ma anche in quanto tempo. 
+
+Per valutare una policy di scheduling useremo tre metriche: il \textbf{tempo di turnaround}, ossia il tempo che passa dall'arrivo di un processo nella coda pronti fino al suo completamento, il \textbf{tempo di risposta}, ossia il tempo che passa dall'arrivo di un processo alla sua prima esecuzione, e l'\textbf{equità}, che rappresenta quanto una policy gestisce la CPU in modo equo tra tutti i processi. Purtroppo, performance e equità sono spesso in conflitto: si può avere una policy perfettamente equa ma poco efficac0e, che rende il computer lentissimo, o una super efficace ma poco equa, che lascia quindi alcuni processi sempre in attesa. Per questo, è necessario trovare un \textit{compromesso} tra questi due fattori.
+
+\NB Per calcolare matematicamente l'equità di una policy, si usa il \textbf{Jain's Fairness Index}, ossia la formula
+\[
+J(x_1, \ldots, x_n) = \frac{(\sum_{i = 1}^m x_i)^2}{n \cdot \sum_{i = 1}^n x_i^2}
+\]
+
+dove $x_i$ rappresenta il tempo di CPU allocato a un processo i. Se tutti i processi hanno la stessa quatità $x$, avremo che $J(x, \ldots, x) = \frac{n^2 x^2}{n \cdot n x^2} = 1$, che rappresenta l'equità perfetta. Se invece abbiamo un processo che monopolizza la CPU, avremo un valore vicino a $\frac{1}{n}$.
+
+\subsection{Policy di scheduling}
+
+\subsubsection*{FIFO}
+
+La policy più semplice di tutti è quella \textbf{FIFO} (First-In First-Out), la stessa usata nelle code, anche chaimata \textbf{FCFS} (First-Come First-Serviced). In questo caso la coda pronti è una vera e propria coda informatica, dove i processi \textbf{vengono eseguiti nell'ordine di arrivo}. 
+
+Se abbiamo tre processi A,B e C arrivati tutti a tempo $t = 0$ (ipotizziamo che A è arrivato leggermente prima di B e che questo è arrivato leggermente prima di C), tutti con un tempo di esecuzione di 10 secondi. In questo caso, avremo come tempo medio di turnaround $\bm{20}$ \textbf{secondi} (10 secondi di A + 20 di B + 30 di C tutto diviso 3). È un ottimo tempo, ma vediamo cosa succede appena togliamo la prima assunzione, ossia quando prendiamo 3 processi con tempi di esecuzioni diversi. \\
+Ipotizziamo gli stessi tre processi di prima ma modifichiamo il tempo di esecuzione di A da 10 secondi a 100 secondi. In questo caso il tempo medio di turnaround arriva a $\bm{110}$ \textbf{secondi} (100 secondi di A + 110 di B + 120 di C tutto diviso 3). Questo succede per l'\textbf{effetto convoglio}: il processo A, più lento degli altri, essendo eseguito per primo rallenta anche gli altri che senza di lui sarebbero molto più veloci.
+
+\subsubsection*{SJF}
+
+Per risolvere l'effetto convoglio si è pensato di eseguire prima i processi più veloci e dopo quelli più lenti, dando così vita a una nuova policy che prende il nome di \textbf{SJF} (Shortest-Job-First). Se proviamo a eseguire i tre processi visti prima con la nuova policy vediamo un netto miglioramento nel tempo di turnaround, che arriva a una media di $\bm{50}$ \textbf{secondi} (10 secondi del processo B + 10 del C + 100 di A tutto diviso 3).
+
+\begin{Proposizione}[]
+\label{propos-SJF}
+La policy SJF è la policy \textbf{migliore per ottimizzare il tempo di turnaround} se tutti i processi arrivano allo stesso istante.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Partendo dall'ipotesi che tutti i processi arrivino a tempo 0, il loro tempo di turnaround coincide con il loro instante di completamento. Se chiamiamo $R_i$ il tempo di esecuzione (attenzione, non di turnaround) di un processo i-esimo, troviamo che 
+\[
+T_{\text{turnaround del processo i}} = \sum_{j = 1}^i R_j
+\]
+
+Il nostro tempo totale di turnaround sarà la somma di tutti questi tempi dei singoli processi, ossia
+\[
+T_{\text{turnaround}} = \sum_{i = 1}^n T_{\text{turnaround del processo i}} = R_1 + (R_1 + R_2) + \ldots = \sum_{i = 1}^n R_i (n - i + 1)
+\]
+
+\NB Troviamo come coefficiente proprio $n - i + 1$ perché, guardando bene la sommatoria dei tempi di turnaround dei singoli processi, notiamo che $R_1$ compare $n$ volte, $R_2$ compare $n-1$ volte e così via, fino a $R_n$ che compare solo una volta. 
+
+A questo punto è facile notare come ordinando i diversi processi possiamo ordinare i diversi $R_i$. Ci conviene dunque mettere sempre come primo processo quello con il tempo di esecuzione minore, dato che il suo valore $R$ è quello che appare più spesso nella sommatoria (abbiamo visto come compaia ben $n$ volte), mentre come ultimo processo ci conviene mettere il più lento. Abbiamo quindi dimostrato come ordinare i processi dal più veloce al più lento sia il modo migliore per ottimizzare il tempo di turnaround. $\blacksquare$
+
+Proviamo ora a togliere anche la seconda assunzione, ossia prendiamo 3 processi con tempi di arrivo diversi. \\
+Ipotizziamo gli stessi tre processi di prima $A,B$ e $C$, ma ipotizziamo che i processi $B$ e $C$ arrivino dopo 10 secondi rispetto ad $A$. In questo caso, la SJF a tempo 0 farà partire il processo più veloce, e dato che è presente solo $A$ sarà questo a partire. Dunque troviamo che il tempo medio di turnaround sarà in questo caso $\bm{103.3}$ \textbf{secondi} (100 secondi di A + 100 di B + 110 di C tutto diviso 3). Questo succede perché, per la terza assunzione, i nostri processi una volta iniziati non possono essere interrotti.
+
+\subsubsection*{PSJF}
+
+Per risolvere il problema della SJF viene introdotto un nuovo concetto chiamato \textbf{preemption}. Il SO non è più vincolato a dover eseguire un processo per intero prima di passare a un altro, ma può effettuare ora un context-switch per passare da un processo all'altro. Stiamo dunque eliminando la terza assunzione per risolvere i problemi relativi al SJF. È nata così un'altra policy, chiamata \textbf{PSJF} (Preemptive Shortest Job First), anche detta \textbf{STCF} (Shortest Time-to-Complete First). In questa policy, ogni volta che arriva un nuovo processo lo scheduler si sveglia per controllare quale tra i processi presenti è il più veloce da eseguire, e sceglie di mandare in esecuzione sempre quello, anche se la CPU è occupata con un altro. Ovviamente, se un processo appena arrivato ha lo stesso tempo di esecuzione di quello che si trova già sulla CPU, non avviene nessuno scambio per non sprecare tempo con il context-switch. 
+
+Riprendendo l'esempio di prima, in questo caso troviamo che il tempo medio di turnaround è tornato ad essere $\bm{50}$ \textbf{secondi} (120 secondi di A + 10 di B + 20 di C tutto diviso 3). Infatti, seguendo questa policy troviamo che il processo A parte per primo e viene eseguito per 10 secondi, ma poi questo viene fermato per far eseguire i processi B e C, appena arrivati e più veloci. 
+
+\begin{Proposizione}[Corollario]
+\label{propos-corollario-PSJF}
+La policy PSJF è la policy \textbf{migliore per ottimizzare il tempo di turnaround}.
+\end{Proposizione}
+
+La dimostrazione è praticamente identica a quella della Proposizione \ref{propos-SJF}, ma ora abbiamo tolto l'ipotesi che tutti i processi arrivino insieme. 
+
+\begin{Definizione}[Starvation]
+\label{def-starvation}
+Lo \textbf{starvation} è un fenomeno che si verifica quando un processo non viene \textbf{mai completato}. È un classico problema di equità.
+\end{Definizione}
+
+Nella policy PSJF il problema dello Starvation è evidente: preso infatti un processo molto lento, è possibile che questo non venga mai eseguito se arrivano in continuazione nuovi processi sempre più rapidi di lui. 
+
+Notiamo quindi come la PSJF non sia perfetta. Infatti, oltre al problema dello starvation, c'è anche la quinta assunzione su cui si basa che è molto irrealistica (vedremo più avanti che è possibile stimare la durata di un processo, ma non avremo mai una certezza al 100\%). Inoltre, vi è anche un altro problema: durante l'analisi di queste policy abbiamo totalmente trascurato il tempo medio di reazione dei processi. Questo dato, però, non è da sottovalutare affatto. Infatti, nell'utilizzo quotidiano del computer l'utente richiede feedback immediato (o quasi, diciamo in tempo <100ms), e queste nostre policy non rispettano sempre questa condizione. È infatti possibile che un processo richiesto dall'utente vada indietro nella coda pronti perché più lento, aumentandone così il tempo di attesa. Questa cosa è assolutamente da evitare, dunque dobbiamo cercare una nuova policy di scheduling che provi a risolvere alcuni tra questi problemi.
+
+\subsubsection*{Round Robin}
+
+Si è arrivati dunque a una nuvoa policy di scheduling che prende il nome di \textbf{Round Robin} (RR), anche detta \textbf{Time-slicing}. Questa gestisce i processi con un loop circolare: ogni processo che si trova nel loop ha solo poco tempo a disposizione sulla CPU prima di lasciare il posto al processo successivo e tornare nella coda pronti fino a quando il processo non termina. Inoltre, quando un processo arriva nella coda pronti, diventa il primo candidato per essere eseguito, così da migliorare in modo importante il tempo di reazione.
+
+\begin{Definizione}[Time Slice]
+\label{def-time-slice}
+Il periodo di tempo che ogni processo ha a disposizione sulla CPU è detto \textbf{Time Slice} (o Scheduling Quantum).
+\end{Definizione}
+
+Scegliere la durata del Time Slice è una delle scelte più importanti nella policy RR. Infatti, bisogna scegliere un periodo nè troppo lungo (altrimenti l'utente non avrebbe più l'illusione delle esecuzioni simultanee) ma nemmeno troppo corto (altrimenti la CPU spenderebbe tutto il tempo a cambiare tra un processo e l'altro senza veramente lavorare sui processi). Per calcolare un tempo corretto, basta usare la formula
+\[
+\text{Overhead} = \frac{\text{Tempo di switch tra un processo e l'altro}}{\text{Time Slice + Tempo di switch tra un processo e l'altro}}
+\] 
+e trovare un valore tale che l'overhead è minore dell'1\%. Ad esempio, se abbiamo come tempo di switch 1 ms, ha senso porre come Time Slice \textbf{100 ms}, dato che $\frac{1}{101} = 0.99 \% < 1\%$.
+
+Vediamo con un esempio come funziona il RR. Presi tre processi $A,B$ e $C$ che arrivano tutti insieme e che durano tutti 10 secondi, con la policy SJF avremmo come tempo di reazione medio 10 secondi (0 secondi di A + 10 di B + 20 di C tutto diviso 3), mentre con il RR avremmo come tempo medio solo $\bm{2}$\textbf{secondi} (0 secondi di A + 2 di B + 4 di C tutto diviso 3). Dunque notiamo un grande miglioramento per quanto riguarda i tempi di risposta. Purtroppo, però, lo stesso non lo si può dire con i tempi di turnaround. Infatti, avremo come tempo medio di turnaround $\bm{28}$ \textbf{secondi} (26 secondi di A + 28 di B + 30 di C tutto diviso 3), contro i 20 secondi della SJF o della FIFO. Questo accade perché nella policy RR tutti questi processi che durano lo stesso quantitativo di tempo finiscono praticamente insieme verso la fine, dunque hanno un tempo di turnaround tutti più o meno uguale e molto alto, cosa che invece non succedeva ad esempio con la SJF, dove i processi erano eseguiti in modo \textit{sequenziale}. Notiamo, però, come la policy RR sia anche più \textbf{equa} di tutte le altre policy sequenziali. Infatti, qui ogni processo ha sempre lo stesso tempo a disposizione sulla CPU di tutti gli altri, rendendola quindi una policy più equa. Per quanto riguarda invece la quinta assunzione, nemmeno con il RR siamo riusciti a eliminarla.
+
+\begin{Proposizione}[]
+\label{propos-trade-off}
+\begin{itemize}
+    \item Una policy equa e che ottimmiza il tempo di risposta avrà sempre un tempo di turnaround alto
+    \item Una policy che ottimmizza il tempo di turnaround sarà sempre poco equa e poco reattiva
+\end{itemize}
+\end{Proposizione}
+
+Questa proposizione ci costringe quindi a fare una scelta tra equità + velocità di risposta e velocità di esecuzione. Il sistema operativo dovrà  quindi scegliere la policy corretta in base al proprio carico di lavoro e alle proprie necessità.
+
+\subsection{Incorporare operazioni I/O}
+
+Abbiamo quindi visto diverse policy di scheduling, ma non siamo mai riusciti a eliminare con nessuna di queste la quarta assunzione, ossia quella che prevede che \textbf{non ci siano operazioni I/O}. Anche questa è un'assunzione del tutto irrealistica: i programmi veri non fanno solo calcoli sulla CPU, ma leggono anche dati sul disco, si connettono a internet, o aspettano che l'utente scriva qualcosa. Quando qualcosa di questo succede, il processo passa immediatamente allo stato BLOCKED, e non può usare la CPU fino a quando l'operazione I/O è stata completata. Di solito, un programma alterna tra operazioni CPU e operazioni I/O, dunque l'obiettivo dello scheduler deve essere quello di massimizzare l'utilizzo delle risorse dando a ogni processo la CPU solo quando questo ne ha realmente bisogno. Per farlo, dividiamo gli utilizzi della CPU di un processo in dei \textbf{piccoli sottoprocessi}. Se ad esempio abbiamo un processo che ha bisogno di 50 ms totali di CPU, il nostro scheduler può dividere questo processo in 5 sottoprocessi da 10ms l'uno e trattarli come processi a sé. 
+
+Per capire come funziona tutto ciò, vedimao un esempio. Ipotizziamo di avere due processi: $A$ è un processo da 100 ms totali, 50 dei quali sono di operazioni CPU mentre 50 di operazioni I/O, mentre $B$ è un processo da 50 ms solo di operazioni CPU. Il nostro scheduler divide quei 50 ms di operazioni CPU di $A$ in 5 sottoprocessi. Ora, se ad esempio usiamo una policy di PSJF, avremo all'inizio 6 processi a competere: 5 sono i sottoprocessi di $A$ da 10 ms mentre 1 è $B$ da 50ms. Dato che i sottoprocessi di $A$ sono più veloci, lo scheduler prenderà il primo sottoprocesso di $A$ e lo manderà in esecuzione. Una volta terminato, il processo $A$ si troverà in attesa di un operazione I/O, e nel frattempo che attende sulla CPU ci sarà il processo $B$. In questo modo non stiamo sprecando alcun tempo vuoto sulla CPU, e una volta che $A$ sarà tornato disponibile dopo l'operazione I/O, verrà subito rimesso a lavoro dato che sarà nuovamente il processo più corto, a meno che $B$ nel frattempo non abbia quasi finito (ossia gli siano rimasti <10ms di tempo).
+
+\subsection{Implementazioni delle diverse policy in C}
+
+Ogni policy in C viene implementata in modo differente:
+\begin{itemize}
+    \item La policy \textbf{FIFO}, come già accenato, è una semplice coda, ossia una \textbf{lista puntata semplice}
+    \item Le policy \textbf{SJF/PSJF} è una coda con priorità, ossia una \textbf{lista puntata semplice ordinata} o un \textbf{heap binario}
+    \item La policy \textbf{RR} è una \textbf{lista puntata circolare}
+\end{itemize}
+
+Dagli anni 50 agli anni 60 era la FIFO e la SJF la policy più usata nei computer, mentre nei sistemi moderni time-sharing il Round Robin e il PSJF sono le policy più importanti e usate. In questi sistemi multicore moderni il problema si è spostato più sul coordinamento: bisogna saper distribuire i processi sui core in modo equilibrato e saper riassegnare uno stesso processo allo stesso core quando possibile.
+
 
 
 
