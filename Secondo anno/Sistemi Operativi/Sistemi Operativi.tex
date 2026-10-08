@@ -1419,7 +1419,7 @@ Su UNIX i processi formano un \textbf{albero gerarchico} che parte dalla radice 
 
 \subsection{Gestione dei processi in UNIX}
 
-La gestione dei processi in UNIX si basa su 5 syscall fondamentali:
+La gestione dei processi in UNIX si basa su 5 syscall fondamentali facenti parte della stessa API:
 \begin{itemize}
     \item \codeb{fork()}, che crea un processo figlio clonado il chiamante
     \item la famiglia \codeb{exec()}, che rimpiazza l'immagine (ossia l'insieme di dati e codice che costituiscono il programma caricato in memoria) del processo corrente con un nuovo programma (serve per avviare un nuovo programma partendo dal duplicato di un processo di un altro programma)
@@ -1490,6 +1490,12 @@ Non tutte le risorse sono copiate con una \code{fork()}. Tra quelle non copiate 
     \item I segnali pendenti (ossia in attesa di consegna)
     \item Ovviamente i valori PID e PPID
 \end{itemize}
+
+\begin{Definizione}[Segnale]
+\label{def-segnale}
+Un \textbf{segnale} è un'interruzione software mandate a un processo. Un processo può catturare tutti i segnali che gli vengono inviati e eseguire codice apposito per gestire questi segnali.
+<\end{Definizione}
+
 
 \subsubsection*{\codeb{wait()} e \codeb{waitpid()}}
 
@@ -1568,6 +1574,25 @@ else{ // Padre
 \end{lstlisting}
 Questo codice mostra come usare nel modo corretto le funzioni \code{fork(), wait(), waitpid()} e \code{exec()}. 
 
+\subsection{Altre funzioni per gestire i processi in UNIX}
+
+Oltre a tutte le funzioni che abbiamo già visto, ve ne sono altre fondamentali.
+
+\begin{Definizione}[\codeb{exit()} e \codeb{\_exit()}]
+\label{def-exit}
+Abbiamo già visto la funzione \codeb{exit()}, che \textbf{termina un processo}, ma non abbiamo parlato della sua alternativa \codeb{\_exit()}. Questa chiamata permette di fare un uscita "grezza", ossia termina un processo senza flush dei buffer, senza handler e cose del genere. \\
+\NB Dopo un \code{fork()}, per chiudere un processo bisogna usare \code{\_exit()}. Questo perché il figlio con \code{fork()} eredita lo spazio di indirizzamento di memoria del padre, e per evitare di flushare il buffer del padre tramite una chiamata \code{exit()} normale è consigliato usare un \code{\_exit()}.
+\end{Definizione}
+
+\begin{Definizione}[\codeb{nice()}]
+\label{def-nice()}
+Per gestire la priorità di un processo la CPU usa un valore di "\textbf{niceness}" che va da -20 a 19. Per gestire questo valore esiste la funzione \codeb{nice()}, che prende un intero in input che viene aggiunto al valore di niceness del processo corrente. Più questo valore è alto, meno è importante per la CPU, e per questo un processo può solo aumentare il suo valore di niceness ma non diminuirlo.
+\end{Definizione}
+
+\begin{Definizione}[\codeb{pipe()}]
+\label{def-pipe}
+La funzione \codeb{pipe()} crea un \textbf{canale di comunicazione unidirezionale} tra due processi.
+\end{Definizione}
 
 
 
