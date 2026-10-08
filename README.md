@@ -10,7 +10,7 @@ Questo repository costituisce un archivio personale di tutti i miei appunti univ
 
 #### Anno Accademico 2026/2027
 *   [Algoritmi II (in corso)](<Secondo anno/Algoritmi II/Algoritmi II.pdf>)
-*   [Architettura degli Elaboratori (in corso)](<Secondo anno/Architettura degli Elaboratori/Architettura degli Elaboratori.pdf>)
+*   [Architettura degli Elaboratori I (in corso)](<Secondo anno/Architettura degli Elaboratori I/Architettura degli Elaboratori I.pdf>)
 *   [Basi di Dati (in corso)](<Secondo anno/Basi di Dati/Basi di Dati.pdf>)
 *   [Sistemi Operativi (in corso)](<Secondo anno/Sistemi Operativi/Sistemi Operativi.pdf>)
 
