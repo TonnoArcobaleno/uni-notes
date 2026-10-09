@@ -1121,4 +1121,38 @@ Vi sono diversi criteri per la scelta degli identificatori:
 
 \NB Ricordiamo che \textbf{ogni entità ha bisogno di un identificatore}.
 
+\subsection{Tradurre le associazioni}
+
+\begin{Definizione}[Vincolo di integrità referenziale]
+\label{def-vincolo-integrità-referenziale}
+Per indicare che due tabelle/relazioni $R_1$ e $R_2$ (le vecchie entità del modello ER) nel modello relazionale sono in relazione si utilizzano delle chiavi. Un \textbf{vincolo di integrità referenziale}, noto come \textbf{foreign key}, serve a vietare i riferimenti a chiavi che nella tabella di riferimento non esistono.
+\end{Definizione}
+
+Il tipo di traduzione cambia in base al tipo di associazione:
+\begin{itemize}
+    \item \textbf{Molti a molti}
+    \item \textbf{Uno a molti}
+    \item \textbf{Uno a uno}
+\end{itemize}
+
+\subsubsection*{Molti a molti}
+
+L'associazione diventa una \textbf{relazione} che ha come \textbf{chiave} le \textbf{chiavi primarie delle entità collegate}, e che include anche gli attributi dell'associazione. 
+
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Associazione molti a molti modello relazionale.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.55\textwidth}
+Ad esempio, quest'associazione si traduce nel modello relazionale in 3 tabelle:
+\begin{itemize}
+    \item \textbf{Impiegato(\underline{Matricola}, Cognome, Stipendio)}
+    \item \textbf{Progetto(\underline{Codice}, Nome, Budget)}
+    \item \textbf{Partecipazione(\underline{Matricola}, \underline{Codice}, DataInizio)}
+\end{itemize}
+Vi sono poi dei vincoli di integrià referenziale tra Matricola in Partecipazione e la chiave di Impiegato e fra Codice in Partecipazione e la chiave di Progetto.
+\end{minipage}
+
+
+
 \end{document}
