@@ -48,7 +48,7 @@ Gli archi possono avere anche un orientamento, e se tutti gli archi lo hanno dic
 
 \begin{Proprieta}[Archi]
 \label{prop-archi}
-Preso un arco \textbf{f} da x a x, diciamo che
+Preso un arco \textbf{f} da x a y, diciamo che
 \begin{itemize}
     \item f è \textbf{incidente} a x e y
     \item x è \textbf{adiacente} a y ($\bm{x \sim y}$)
@@ -719,7 +719,7 @@ Vogliamo quindi dimostrare che è impossibile che gli intervalli di due nodi si 
 
 Sappiamo che dire $t(u) < t(v)$ equivale a dire che $u$ è stato inserito nello stack prima di $v$, e dire che $T(u) < T(v)$ significa che $u$ è stato rimosso prima di $v$ dallo stack. Ma queste due proposizioni non possono coesistere: per la natura stessa di uno stack, che è una struttura dati LIFO (Last In First Out), se un elemento entra prima di un altro sicuramente uscirà dopo di questo. Ciò significa che non esisteranno mai due nodi $u$ e $v$ tali che $t(u) < t(v) \leq T(u) < T(v)$. $\blacksquare$
 
-Seguendo la stessa logica di questa dimostrazione, possiamo dire che preso un \textbf{arco} $(u,v)$ ci troviamo sicuramente nella \textbf{situazione 2)}. Infatti, sicuramente visitiamo prima il nodo $u$ del nodo $v$, dunque $t(u) < t(v)$, e dato che ci troviamo in uno stack sicuramente rimuvoeremo prima $v$, dunque $T(u) \leq T(v)$.
+Seguendo la stessa logica di questa dimostrazione, possiamo dire che preso un \textbf{arco} $(u,v)$ ci troviamo sicuramente nella \textbf{situazione 2)}. Infatti, sicuramente visitiamo prima il nodo $u$ del nodo $v$, dunque $t(u) < t(v)$, e dato che ci troviamo in uno stack sicuramente rimuoveremo prima $v$, dunque $T(v) \leq T(u)$.
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering

@@ -89,7 +89,7 @@ Il problema più grande di questa tecnica è l'addizione: semplicemente, questa 
 & 1 & 0 & 1 & 0 & 0& = & 19_{10} \neq 0
 \end{array}
 \]
-Inoltre, un'altro problema è che vi sono due rappresentazioni dello 0: infatti, 0 = 1000 = 0000. 
+Inoltre, un altro problema è che vi sono due rappresentazioni dello 0: infatti, 0 = 1000 = 0000. 
 
 Per questi motivi nasce un'altra tecnica, quella del \textbf{complemento a 2}.
 
@@ -760,7 +760,7 @@ Ci sono diverse regole da rispettare per creare dei circuiti combinatori funzion
 \includegraphics[width=1\textwidth, valign=t]{Circuito combinatorio errato.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Questo ad esempio non è un circuito combinatorio corretto. Infatti, il nodo \codeb{C} si trova in un valore intermedio non determinato: non sappiamo se vale 1 o 0 dato che non vi è nessuna porta logica che prenda in input i due valori $\bar{A}$ e $\bar{B}$ per creare un unico output sensato. Il nodo \code{C} è quindi \textbf{collegato all'output di due componenti interni}, violando così la regola 2).
+Questo ad esempio non è un circuito combinatorio corretto. Infatti, il nodo $\bm{C}$ si trova in un valore intermedio non determinato: non sappiamo se vale 1 o 0 dato che non vi è nessuna porta logica che prenda in input i due valori $\bar{A}$ e $\bar{B}$ per creare un unico output sensato. Il nodo $C$ è quindi \textbf{collegato all'output di due componenti interni}, violando così la regola 2). Parliamo in questo caso di \textbf{contention}, e scriviamo $\bm{C = X}$, che rappresenta un valore ignoto.
 \end{minipage}
 
 \begin{minipage}[c]{0.35\textwidth}
@@ -772,6 +772,23 @@ Questo invece è uno dei circuiti combinatori dell'architettura degli elaborator
 \NB Il blocco CL centrale indica un circuito logico. Si potrebbe pensare che in questo caso avremmo potuto mettere uno \code{XOR} a 3 input, ma questo non funziona: infatti, uno \code{XOR} rilascia solo un output, mentre noi in questo caso abbiamo un circuito che rilascia due output. Dunque creiamo questo blocco CL che rappresenta un circuito logico di cui i dettagli implementativi non ci interessano.
 \end{minipage}
 
+
+\begin{Definizione}[Alte impedenza]
+\label{def-alta-impedenza}
+Un nodo si trova nello stato di \textbf{alta impedenza} quando si stacca elettricamente dal circuito e non influisce più in alcun circuito logico. Per indicare questo stato di alta impedenza usiamo la lettera \textbf{Z}.
+\end{Definizione}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Tristate Buffer.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Nei circuiti logici per far passare un nodo a uno stato di alta impedenza si usa il \textbf{Tristate Buffer} (letteralmente un buffer a tre stati, 0, 1 e Z). Oltre al nodo in input $A$ e all'output $Y$, vi è un terzo nodo $E$ che serve per attivare e disattivare il buffer. Se infatti $E = 0$, allora il buffer è attivo e $Y = Z$ sempre, se invece $E = 1$ allora il buffer è disattivo e quindi $Y = A$.
+\end{minipage}
+
+Questi tristate buffer sono fondamentali per creare dei circuiti dove non ci sono tante linee di dati, ma ce n'è una sola che collega tutti i diversi componenti. Facciamo un esempio per capire quanto sono importanti.
+
+Abbiamo un circuito diviso in 4 componenti: processore, video, ethernet e memoria. Vogliamo collegare queste quattro componenti in modo che tutte possano comunicare con tutte le altre, ma solo una alla volta. Senza un bus condiviso dovremmo creare dei collegamenti tra tutte le possibili coppie di componenti, arrivando a 6 linee totali. Con il bus condiviso invece ne possiamo usare una sola, risparmiando moltissime risorse, ed è possibile anche gestire in modo più efficiente la linea. Infatti, dato che vogliamo che solo una componente alla volta possa parlare, possiamo mettere sulla linea di scrittura di ogni componente un tristate buffer. In questo modo, se un componente vuole parlare con un altro, tutti gli altri componenti verranno mandati in alta impedenza, così da non poter più mandare dati sul bus, rimanendo solo in ascolto. 
 
 \section{Equazioni booleane}
 
@@ -1024,7 +1041,7 @@ Il \textbf{teorema di DeMorgan} è uno dei teoremi più importanti dell'algebra 
     \hline
     \textbf{DeMorgan} & \textbf{Duale} \\
     \hline
-    $\bm{\overline{B_0 \cdot B_1 \cdot B_2 \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ & $\bm{\overline{B_0 + B_1 + B_2 + \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ \\
+    $\bm{\overline{B_0 \cdot B_1 \cdot B_2 \ldots} = \overline{B_0} + \overline{B_1} + \overline{B_2} \cdot \ldots}$ & $\bm{\overline{B_0 + B_1 + B_2 + \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ \\
     \hline
 \end{tabular}
 \end{center}
@@ -1058,17 +1075,159 @@ Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando 
 
 Ad esempio, questi due circuiti rappresentano la stessa identica equazione booleana: \mbox{$\bm{Y = \overline{\overline{AB} \cdot \overline{CD}} = AB + CD}$} (sappiamo che è la stessa equazione grazie proprio al teorema di DeMorgan).
 
-Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{porte logiche universali}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte.
+Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{porte logiche universali}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte. \\
+\NB Al contrario delle porte \code{AND} e \code{OR}, le porte \code{NAND} e \code{NOR} NON sono associative.
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering
 \includegraphics[width=1\textwidth, valign=t]{NAND e NOR fanno tutto.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} ($\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$). L'\code{OR} infine è rappresnetato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} ($\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
+Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} (\mbox{$\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$}). L'\code{OR} infine è rappresnetato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} (\mbox{$\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$}). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
 \end{minipage}
 
+Nascono quindi le \textbf{funzioni a due livelli}, dove il primo livello è rappresentato da tanti \code{ANDs} e il secondo da un \code{OR}. In questo modo, è possibile rappresentare qualsiasi SOP come circuiti logici nel modo più chiaro possibile. Tramite il bubble pushing è poi possibile trasformare queste funzioni in funzioni composte solo da tanti \code{NAND} e da un altro \code{NAND} finale. 
 
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Funzione a due livelli esempio.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Questa a sinistra è ad esempio una funzione a due livelli che rappresenta l'equazione \mbox{$Y = \bar{A}\bar{B}\bar{C} + A \bar{B} \bar{C} + A \bar{B}C$}. Notiamo come in questi schemi è importante mettere gli input in alto (o a sinistra), e gli output in basso (o a destra), con le porte logiche che vanno da sinistra a destra con linee dritte possibilimente, perché più facili da leggere. 
+\end{minipage}
+
+\subsection{Circuiti a più uscite}
+
+Abbiamo per ora visto, fatta eccezione per il Full Adder, solo circuiti con un output. Esistono, però, anche i \textbf{circuiti a più uscite}. Tra questi il primo che vediamo è il \textbf{Priority Circuit}.
+
+\begin{Definizione}[Priority Circuit]
+\label{def-priority-circuit}
+Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra).
+\end{Definizione}
+
+Preso quindi un priority circuit con 4 input $A_3, A_2, A_1$ e $A_0$, questo avrà 4 output $Y_3, Y_2, Y_1$ e $Y_0$, e come già accennato per ogni combinazione di input si accenderà sempre l'output corrispondente all'input TRUE più a sinistra. Quindi, se ad esempio è acceso l'input $A_3$ (ossia vale 1), sicuramente sarà acceso l'output $Y_3$. Se invece è acceso $A_2$, se $A_3$ non è acceso allora si accenderà $Y_2$. Se è acceso $A_1$, se $A_3$ e $A_2$ non sono accesi allora si accenderà $Y_1$, e infine se $A_0$ è l'unico acceso allora si accenderà $Y_0$. Abbiamo quindi un circuito con le uscite \textbf{mutualmente esclusive}: con una determinata combinazione di input \textbf{al più un output sarà acceso}.
+
+\begin{Definizione}[Don't Care]
+\label{def-dont-care}
+Quando l'output di un'equazione \textbf{non è influenzato da uno dei valori in input}, si può segnare quel valore come \textbf{X} per indicare che non è importante. Questa rappresentazione prende il nome di rappresentazione \textbf{Don't Care}.
+\end{Definizione}
+\begin{minipage}[c]{0.50\textwidth}
+\centering
+\begin{center}
+\begin{tabular}{cccc|cccc}
+$A_3$ & $A_2$ & $A_1$ & $A_0$ & $Y_3$ & $Y_2$ & $Y_1$ & $Y_0$ \\
+\hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 0 & 0 & 0 & \textbf{1} \\
+0 & 0 & 1 & X & 0 & 0 & \textbf{1} & 0 \\
+0 & 1 & X & X & 0 & \textbf{1} & 0 & 0 \\
+1 & X & X & X & \textbf{1} & 0 & 0 & 0 \\
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+Dunque la tabella di verità priority circuit a 4 ingressi può essere rappresentata in modo compatto tramite la Don't Care in questo modo.
+\end{minipage}
+
+\section{Mappe di Karnaugh}
+
+\begin{Definizione}[Mappe di Karnaugh]
+\label{def-mappe-karnaguh}
+Le \textbf{Mappe di Karnaugh} (K-Maps) sono rappresentazioni grafiche delle tabelle di verità per minimizzare le espressioni booleane graficamente.
+\end{Definizione}
+
+Per capire al meglio le mappe di Karnaugh è meglio vederle con un esempio. Ipotizziamo di voler rappresentare l'equazione booleana della funzione $Y$ che ha la seguente tabella di verità:
+
+\[
+\begin{array}{ccc|c}
+A & B & C & Y \\
+\hline
+0 & 0 & 0 & 1 \\
+0 & 0 & 1 & 1 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 0
+\end{array}
+\]
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\diagbox{$C$}{$AB$} & 00 & 01 & 11 & 10 \\ \hline
+0 & 1 & 0 & 0 & 0 \\ \hline
+1 & 1 & 0 & 0 & 0 \\ \hline
+\end{tabular}
+\end{minipage}
+\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Questa è la mappa di Karnaugh corrispondente alla funzione $Y$ che vogliamo rappresentare. Abbiamo quindi diviso i literal in due gruppi: $AB$ e $C$. Sulle colonne ci sono tutti i possibili valori di $A$ e $B$, mentre sulle righe i possibili valori di $C$. Notiamo una cosa molto interessante: le colonne non sono scritte nel classico ordine 00, 01, 10, 11 che ci aspetteremmo, ma nell'ordine 00, 01, 11 e 10. Questo è fatto perché ad ogni colonna viene modificato sempre e solo un bit, mai due insieme. Troviamo quindi che tra la 1° e la 2° cambia $B$, tra la 2° e la 3° $A$, tra la 3° e la 4° di nuovo $B$ e tra la 4° e la 1° di nuovo $A$. 
+\end{minipage}
+
+\vspace{0.5cm}
+
+Una volta che abbiamo creato la mappa di Karnaugh per la nostra funzione $Y$, dobbiamo cerchiare tutti gli 1 presenti nella mappa. Possiamo cerchiare più 1 insieme se questi sono vicini e se ne cerchiamo un numero uguale a una potenza di 2 ($1, 2, 4, \ldots$), e dobbiamo fare i cerchi più grandi possibili. Inoltre, se sono presenti dei valori don't care (X), è possibile cerchiarli, ma solo se questi aiutano a creare cerchi più grandi. In questo caso cerchieremo quindi semplicemente i due 1 sulla prima colonna. Notiamo che nell'implicante creato da queste due celle cerchiate, l'unico valore che cambia è $C$ (abbiamo infatti i mintermini $\bar{A} \bar{B} \bar{C}$ e $\bar{A} \bar{B} C$). Per questo motivo, è possibile eliminare la $C$ da questi due implicanti (infatti $\bar{A} \bar{B} \bar{C} + \bar{A} \bar{B} C = \bar{A} \bar{B})$. Dunque otteniamo che $\bm{Y = \bar{A} \bar{B}}$.
+
+\begin{Definizione}[Implicante primo]
+\label{def-implicante-primo}
+Un \textbf{implicante primo} è un raggruppamento di 1 o di X di dimensione massima in una mappa di Karnaugh. Rappresenta un termine prodotto che \textbf{non può più essere minimizzato}.
+\end{Definizione}
+
+Vediamo un altro esempio un po' più complesso. Proviamo a minimizzare la funzione $Y$ con la seguente tabella di verità tramite la sua mappa di Karnaugh:
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\[
+\begin{array}{cccc|c}
+A & B & C & D & Y \\
+\hline
+0 & 0 & 0 & 0 & \colorbox{yellow}{1} \\
+0 & 0 & 0 & 1 & \colorbox{yellow}{0} \\
+0 & 0 & 1 & 0 & \colorbox{yellow}{1} \\
+0 & 0 & 1 & 1 & \colorbox{yellow}{1} \\
+0 & 1 & 0 & 0 & \colorbox{pink}{0} \\
+0 & 1 & 0 & 1 & \colorbox{pink}{X} \\
+0 & 1 & 1 & 0 & \colorbox{pink}{1} \\
+0 & 1 & 1 & 1 & \colorbox{pink}{1} \\
+1 & 0 & 0 & 0 & \colorbox{cyan}{1} \\
+1 & 0 & 0 & 1 & \colorbox{cyan}{1} \\
+1 & 0 & 1 & 0 & \colorbox{cyan}{X} \\
+1 & 0 & 1 & 1 & \colorbox{cyan}{X} \\
+1 & 1 & 0 & 0 & \colorbox{lime}{X} \\
+1 & 1 & 0 & 1 & \colorbox{lime}{X} \\
+1 & 1 & 1 & 0 & \colorbox{lime}{X} \\
+1 & 1 & 1 & 1 & \colorbox{lime}{X}
+\end{array}
+\]
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\diagbox{$CD$}{$AB$} & 00 & 01 & 11 & 10 \\ \hline
+00 & \colorbox{yellow}{1} & \colorbox{pink}{0} & \colorbox{lime}{X} & \colorbox{cyan}{1} \\ \hline
+01 & \colorbox{yellow}{0} & \colorbox{pink}{X} & \colorbox{lime}{X} & \colorbox{cyan}{1} \\ \hline
+11 & \colorbox{yellow}{1} & \colorbox{pink}{1} & \colorbox{lime}{X} & \colorbox{cyan}{X} \\ \hline
+10 & \colorbox{yellow}{1} & \colorbox{pink}{1} & \colorbox{lime}{X} & \colorbox{cyan}{X} \\ \hline
+\end{tabular}
+
+\vspace{0.5cm}
+
+\NB I colori qui ci aiutano a capire come tradurre la tabella di verità nella sua mappa di Karnaugh velocemente: in questo caso, con 4 variabili, le prime due colonne sono i primi 8 valori, ma dato che la terza colonna è invertita con la quarta, invertiamo anche qui gli 8 valori, mettendo gli ultimi 4 alla terza colonna e i penultimi quattro alla quarta colonna.
+\end{minipage}
+
+\begin{minipage}[c]{0.60\textwidth}
+Proviamo ora a raggruppare gli 1 e le X. Possiamo prendere i quattro 1 e le quattro X in basso per formare un cerchio da 8, poi possiamo prendere anche i due 1 e le sei X tutte a destra per formare un altro cercio da 8, e possiamo anche prendere i quattro 1 su tutti gli angoli (ricoridamo che l'angolo in alto a sinistra è come se toccasse l'angolo in alto a destra e in basso a sinistra, e ciò vale per tutti gli angoli). Arriviamo quindi a una mappa del genere.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh.png}
+\end{minipage}
+
+Per il cerchio tutto in basso notiamo che l'unico termine che non cambia è $C$, per il cerchio più a destra è $A$, e per il cerchio formato dai quattro angoli sono $\bar{B}$ e $\bar{D}$. Dunque troviamo che $\bm{Y = C + A + \bar{B} \bar{D}}$.
 
 
 
