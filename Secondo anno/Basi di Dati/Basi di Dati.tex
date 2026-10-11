@@ -646,7 +646,7 @@ Avevamo già accenato a questo modello nelle pagine precedenti, ma ora lo studie
 \begin{Proprieta}[Convenzioni per i nomi di entità e associazioni]
 \label{prop-convenzioni-nomi-entita-associazioni}
 Il nome di un'\textbf{entità} deve essere \textit{espressivo} e \textit{al singolare}. \\
-Il nome di un'associazione deve essere \textit{espressivo}, \textit{al singolare} e deve essere \textit{un sostantivo} se possibile, cercando di evitare i ver
+Il nome di un'associazione deve essere \textit{espressivo}, \textit{al singolare} e deve essere \textit{un sostantivo} se possibile, altrimenti un \textit{verbo} (all'infinito, e evitando i veribi avere, essere e tutti quelli modali)
 \end{Proprieta}
 
 Vediamo alcuni esempi di schemi ER molto basilari: \nopagebreak
@@ -751,6 +751,8 @@ Vediamo alcuni esempi: \nopagebreak
 \caption{Associazione molti a molti}
 \end{figure}
 
+\NB La cardinalità riferità a un'entità la scriviamo sul ramo che collega questa entità all'associazione. Ad esempio, la cardinalità (0,1) nella prima figura indica che un Impiegato può dirigere uno o nessun progetto, mentre la cardinalità (1,1) vicino a Progetto indica che un progetto è diretto sempre da un impiegato.
+
 \begin{minipage}[c]{0.35\textwidth}
 \centering
 \includegraphics[width=1\textwidth, valign=t]{Cardinalità attributi.png}
@@ -758,6 +760,17 @@ Vediamo alcuni esempi: \nopagebreak
 \begin{minipage}[c]{0.60\textwidth}
 È possibile associare la cardinalità anche agli attributi. In questo caso, abbiamo un impiegato che ha 0 o più automobili, e che ha uno e un solo nome e una e una sola età (la cardinalità uno a uno è omessa).
 \end{minipage}
+
+Inoltre, è bene sapere che è possibile incontrare anche la cardinalità non scritta in modo esplicito tramite parentesi ma tramite frecce. Questa rappresentazione la si vede nei diagrammi UML, che noi non usiamo, ma è importante conoscerla così da poterla comprendere quando la si incontra.
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{UML Cardinalità.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Ad esempio, con questa \textbf{doppia freccia e barretta} indichiamo una \textbf{caridnalità (0,N)} (la doppia freccia indica la cardinalità \textbf{N}, mentre la barretta indica la cardinalità \textbf{0}). Per una cardinalità \textbf{(1,1)}, invece avremmo usato una normale \textbf{freccia}. Troviamo quindi che la cardinalità (1,N) si fa con una doppia freccia normale, mentre la cardinalità (0,1) si fa con una freccia e barretta.
+\end{minipage}
+
 
 \subsection{Identificatori}
 
@@ -833,7 +846,23 @@ Una generalizzazione è:
 Queste proprietà ricordano molto le Proprietà \ref{prop-vincoli-sottoclassi} viste per le sottoclassi.
 \end{Proprieta}
 
-\section{Analisi dei requisiti e progettazione concettuale}
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Generalizzazione totale esclusiva.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+In base al tipo di generalizzazione cambia anche la rappresentazione. Presa infatti una generalizzazione totale e esclusiva, questa deve essere rappresentata da una \textbf{freccia vuota} (che indica che la generalizzazione è \textbf{totale}), e da un \textbf{pallino pieno} sotto la freccia (che indica che la generalizzazione è \textbf{esclusiva}.
+\end{minipage}
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Generalizzazione totale esclusiva 2.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Oltre alla rappresentazione vista prima con freccia vuota e pallino pieno, è possibile anche semplicemente scrivere, affianco la freccia che indica la generalizzazione, il tipo di generalizzazione tra parentesi graffe. In questo caso abbiamo scritto \textbf{\{TOT,ESCL\}} per indicare quindi una generalizzazione totale e esclusiva.
+\end{minipage}
+
+\section{Esempio: Società di formazione - Progettazione Logica}
 
 Vediamo ora un esempio concreto.
 
@@ -1037,6 +1066,25 @@ Consideriamo ad esempio tre schemi di relazione:
 \end{itemize}
 Nella tabella \code{Esame} non è presente alcun puntatore diretto alle righe di \code{Studente} o \code{Corso}: il legame è garantito unicamente dalla presenza dei campi \code{Matricola} e \code{CodiceCorso}, i cui valori puntano concettualmente ai corrispondenti valori presenti nelle altre due relazioni.
 
+\subsection{NULL}
+
+\begin{Definizione}[NULL]
+\label{def-NULL}
+\textbf{NULL} è un valore speciale usato nelle basi di dati per indicare una mancanza di informazione o il fatto che l'informazione non è applicabile.
+\end{Definizione}
+
+Ad esempio, se abbiamo una tabella PERSONA(\underline{CF}, Nome, Lavoro), l'attributo Lavoro può assumere valore NULL in una tupla se la persona associata a tale tupla non ha un lavoro.
+
+\begin{Osservazione}[Osservazioni sul valore NULL]
+\label{oss-NULL}
+\begin{itemize}
+    \item NULL non appartiene a nessun dominio ma può \textbf{sostituire valori in tutti i domini}
+    \item Due valori NULL, anche se nello stesso dominio, sono considerati \textbf{diversi}
+    \item \textbf{NULL} $\bm{\neq 0}$
+    \item Gli attributi chiave non devono \textbf{mai assumere valore NULL}
+\end{itemize}
+\end{Osservazione}
+
 \section{Passare dal modello concettuale a quello logico}
 
 Vogliamo ora tradurre lo schema concettuale in quello logico, rappresentandone i dati in mono corretto (e efficiente, ma ci concentreremo maggiormente sulla correttezza). Non è una traduzione semplice, perché non vi è una vera e propria procedura da seguire alla lettera. Questo perché vi sono diversi aspetti che non sono direttamente rappresentabili, e anche perché è necessario prestare attenzione alle prestazioni.
@@ -1102,9 +1150,9 @@ Comunque, è possibile sempre trovare delle soluzioni \textit{ibride}, e anzi ne
 
 \subsubsection*{Partizionamento/Accorpamento di entità e relazioni}
 
-Si vuole in questa fase ridurre gli accessi al database lavorando su come gli attributi sono interrogati insieme o separatamente. Esistono 3 modi per farlo:
+Si vuole in questa fase ridurre gli accessi al database lavorando su come gli attributi sono interrogati, se insieme o separatamente. Esistono 3 modi per farlo:
 \begin{enumerate}
-    \item \textbf{Partizionamento verticale di entità}: Supponiamo che la nostra applicazione acceda in modo separato ai dati anagrafici e a quelli lavorativi di una persona. In questo caso, ci conviene separare nel nostro database questi dati così da risparmiare.
+    \item \textbf{Partizionamento verticale di entità}: Supponiamo che la nostra applicazione acceda in modo separato ai dati anagrafici e a quelli lavorativi di una persona. In questo caso, ci conviene separare nel nostro database questi dati così da renderlo più efficiente.
     \item \textbf{Partizionamento orizzontale di associazioni}: Supponiamo che la nostra applicazione acceda in modo separato alla composizione attuale della squadra rispetto a quella degli anni passati. Ci conviene creare due diverse associazioni per indicare la composizione attuale o passata per rendere lo schema più chiaro e le operazioni più efficienti. 
     \item \textbf{Eliminazione di attributi multivalore}: Dato che nel modello relazionale gli attributi multivalore non sono rappresentabili direttamente, ci conviene creare una nuova entità per rappresentarli.
 \end{enumerate}
@@ -1125,7 +1173,7 @@ Vi sono diversi criteri per la scelta degli identificatori:
 
 \begin{Definizione}[Vincolo di integrità referenziale]
 \label{def-vincolo-integrità-referenziale}
-Per indicare che due tabelle/relazioni $R_1$ e $R_2$ (le vecchie entità del modello ER) nel modello relazionale sono in relazione si utilizzano delle chiavi. Un \textbf{vincolo di integrità referenziale}, noto come \textbf{foreign key}, serve a vietare i riferimenti a chiavi che nella tabella di riferimento non esistono.
+Per indicare che due tabelle/relazioni $R_1$ e $R_2$ (le vecchie entità o associazioni del modello ER) nel modello relazionale sono in relazione si utilizzano delle chiavi. Un \textbf{vincolo di integrità referenziale}, noto come \textbf{foreign key}, serve a vietare i riferimenti a chiavi che nella tabella di riferimento non esistono.
 \end{Definizione}
 
 Il tipo di traduzione cambia in base al tipo di associazione:
@@ -1153,6 +1201,256 @@ Ad esempio, quest'associazione si traduce nel modello relazionale in 3 tabelle:
 Vi sono poi dei vincoli di integrià referenziale tra Matricola in Partecipazione e la chiave di Impiegato e fra Codice in Partecipazione e la chiave di Progetto.
 \end{minipage}
 
+Spesso è consigliato rinominare gli attributi della chiave della relazione che rappresta l'associazione. Ad esempio, qui piuttosto che scrivere Matricola e Codice in Partecipazione, era più chiaro scrivere Impiegato e Progetto, trasfomarndo quindi Partecipazione in \textbf{Partecipazione(\underline{Impiegato}, \underline{Progetto}, DataInizio)}. 
 
+\begin{minipage}[c]{0.35\textwidth}
+\centering          
+\includegraphics[width=1\textwidth, valign=t]{Associazione molti a molti ricorsiva.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Quello che era un consiglio nelle relazioni molti a molti normali, diventa un obbligo in quelle ricorsive. In questo caso infatti la ridenominazione è fondamentale per definire il ruolo di ogni partecipante. Nel modello relazionale avremo quindi 2 tabelle:
+\begin{itemize}
+    \item \textbf{Prodotto(\underline{Codice}, Nome, Costo)}
+    \item \textbf{Composizione(\underline{Composto}, \underline{Componente}, Quantità)}
+\end{itemize}
+\end{minipage}
+
+\subsubsection*{Uno a molti}
+
+In questo caso è possibile trasformare l'associazione in una \textbf{relazione} con un procedimento identico a quello visto nelle associazioni molti a molti, ma la chiave non sarà costituita dalle chiavi primarie delle entità collegate, ma solo la \textbf{chiave primaria dell'entità con cardinalità massima 1}. \\
+È però possibile anche un'altra soluzione. Al posto di trasformare l'associazione in una relazione, si possono \textbf{trasferire tutti gli attributi dell'associazione} all'entità con cardinalità massima 1 e aggiungere a questa entità come attributo anche la chiave primaria dell'altra entità (che diventa quindi la \textbf{foreign key}). Questo ha senso perché l'entità con cardinalità massima 1 può essere associata a un solo elemento dell'altra entità, dunque da sola è in grado di identificare l'occorrenza di associazione.
+
+\subsubsection*{Uno a uno}
+
+In questo caso è preferibile \textbf{creare un'unica relazione} che unisca le due entità e l'associazione quando la partecipazione è obbligatoria per entrambe le entità o quando le due entità accedono quasi insieme alle informazioni. In questo caso la tabella risultante ha tutti gli attributi delle due entità e dell'associazione e ha come chiave primaria l'identificatore di una delle due entità. Altrimenti, si possono creare due relazioni, una per entità, e procedere allo stesso modo visto con le associazioni uno a molti, scegliendo una delle due relazioni a cui aggiungere la foreign key (se però nell'associazione vi è un'entità con cardinalità minima 0 e una con cardinalità minima 1, bisogna mettere la foreign key SEMPRE nell'entità con cardinalità minima 1). Si può, infine, anche scegliere di creare una terza relazione apposta per l'associazione, anche se è una soluzione raramente adottata.
+
+\section{Esempio: Società di formazione - Progettazione Logica}
+\subsection{Ristrutturare lo schema ER}
+
+Riprendiamo ora l'esempio della società di formazione di cui abbiamo creato lo schema ER nel secondo capitolo. Eravamo arrivati a questo schema ER:
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Schema ER completo.png}
+\end{figure}
+
+Per passare dal modello concettuale a quello logico dobbiamo quindi ora ristrutturare questo schema ER.
+
+\subsubsection*{Analisi delle ridondanze}
+
+L'unica ridondanza evidente in questo schema è l'attributo N. Part. presente nell'entità Edizione Corso. Infatti, questo potrebbe essere ricavato contando le occorrenze dell'associazione Partecipazione Corrente. Tuttavia, possiamo assumere che questa informazione sia utilizzata spesso nella base di dati, il che renderebbe il conteggio molto inefficiente. Dunque lasciamo tutto com'è senza effettuare modifiche per ora, facendo attenizone in futuro a aggiornare questa informazione tramite \textit{vincoli dinamici} (ossia dovremo fare in modo che questa infromazione si aggiorni da sola ogni volta che un partecipante si iscrive a un'edizione di un corso).
+
+\subsubsection*{Eliminazione delle generalizzazioni}
+
+Per quanto riguarda la generalizzazione Partecipante --- Professionista - Dipendente, dato che queste non hanno associazioni specifiche e dato che dividere la superclasse nelle due sottoclassi richiederebbe di duplicare l'associazione Impiego Passato (infatti, anche un libero professionista può in passato aver lavorato come dipendente), decidiamo di accorpare le sottoclassi nella superclasse. Modifichiamo quindi quest'entità aggiungendole 4 attributi opzionali provenienti dalle sue sottoclassi, e aggiungendo anche un nuovo atrtibuto TipoP che indica il tipo di partecipante (professionista o dipendente).
+
+Per quanto riguarda invece la generalizzazione Docente --- Collaboratore - Interno, dato che queste non hanno attributi propri e non hanno associazioni specifiche ha anche qui molto senso accorpare le sottoclassi nella superclasse. Modifichiamo quindi quest'entità, aggiungendole un attributo TipoD che indica il tipo di docente (collaboratore o interno).
+
+\subsubsection*{Partizionamento/accorpamento di entità e relazioni}
+
+Non è necessario nessun partizionamento/accorpamento di entità e relazioni in questo caso, ma abbiamo un attributo multivalore da analizzare. Si tratta dell'attributo Telefono dell'entità Docente. Creiamo quindi una nuova entità Telefono che è collegata all'entità Docente tramite una relazione uno a molti (un telefono ha solo un docente, ma un docente ha più telefoni).
+
+\subsubsection*{Scelta degli identificatori primari}
+
+L'unico dubbio riguarda l'entità Partecipante. Questa ha infatti due valori univoci: CF e Codice. Nello schema ER avevamo scelto Codice come identificatore primario, ma scegliamo di passare a CF.
+
+\subsubsection*{Schema ER finale} \nopagebreak
+
+Lo schema ER finale si presenta quindi in questo modo: \nopagebreak
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Schema ER completo ristrutturato.png}
+\end{figure}
+
+\subsection{Passaggio allo schema logico}
+
+Una votla ristrutturato lo schema ER non ci resta che tradurlo in uno schema logico. 
+
+Per questa traduzione, adottiamo fin da subito delle convenzioni che saranno utili per la successiva implementazione in SQL:
+\begin{itemize}
+    \item Nomi delle tabelle in maiuscolo
+    \item Niente spazi o punteggiatura (nei nomi delle tabelle al posto degli spazi useremo gli \_ mentre nei nomi degli attributi uniremo i termini)
+    \item Le chiavi usate per tradurre le associazioni possono essere rinominate come già visto per rendere la loro funzione più chiara
+\end{itemize}
+
+\subsubsection*{Traduzione delle entità}
+
+La traduzione delle entità non crea problemi: ogni entità diventa una tabella (che potrebbe \textit{non essere ancor anella sua forma finale}) e gli identificatori primari vengono sottolineati per rappresentare la chiave primaria scelta. Creiamo quindi una serie di nuove tabelle:
+\begin{itemize}
+    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP)} \\
+    Vincoli: 
+    \begin{itemize}
+        \item TipoP NOT NULL
+        \item TipoP = 'Professionista' OR TipoP = 'Dipendente'
+        \item (TipoP = 'Professionista' AND Area NOT NULL AND Titolo NOT NULL AND Posizione IS NULL AND Livello IS NULL) OR (TipoP = 'Dipendente' AND Posizione NOT NULL AND Livello NOT NULL AND Area IS NULL AND Titolo IS NULL)
+    \end{itemize}
+    \item \textbf{DATORE(\underline{Nome}, \underline{Indirizzo}, \underline{Numero})}
+    \item \textbf{DOCENTE(\underline{CF}, Età, CittàNascita, Cognome, TipoD)} \\
+    Vincoli:
+    \begin{itemize}
+        \item TipoD NOT NULL
+        \item TipoD = 'Collaboratore' OR TipoD = 'Interno'
+    \end{itemize}
+    \item \textbf{TELEFONO(\underline{Numero})}
+    \item \textbf{CORSO(\underline{Codice}, Titolo)} \\
+    Vincoli:
+    \begin{itemize}
+        \item Titolo NOT NULL
+    \end{itemize}
+    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine,NPart)} (CodiceCorso è la chiave che collega EDIZIONE\_CORSO a CORSO, ed è necessaria perché nello schema ER l'entità Edizione Corso è un entità debole, con un identificatore esterno) \\
+    Vincoli:
+    \begin{itemize}
+        \item DataInizio <= DataFine
+        \item NPart > 0
+    \end{itemize}
+    \item \textbf{LEZIONE (\underline{Giorno}, \underline{Aula}, \underline{Orario})}
+\end{itemize}
+
+\subsubsection*{Traduzione delle associazioni}
+
+Le traduzioni delle associazioni sono un po' più complesse. Vediamole una alla volta.
+
+L'associazione IMPIEGO\_PASSATO tra PARTECIPANTE e DATORE è un'associazione molti a molti, dunque è necessario creare una relazione apposta per lei, ossia \mbox{\textbf{IMPIEGO\_PASSATO(\underline{CFPart},\underline{NomeDatore}, DataInizio, DataFine)}}, con i seguenti vincoli:
+\begin{itemize}
+    \item CFPart deve essere già presente in una tupla in PARTECIPANTE (questo vincolo lo vedremo spesso perché è il vincolo che indica una foreign key)
+    \item NomeDatore deve essere già presente in una tupla in DATORE
+    \item DataInizio < DataFine
+\end{itemize}
+
+L'associazione IMPIEGO\_CORRENTE è invece un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Dunque possiamo modificare questa relazione aggiungendo la chiave di DATORE e l'attributo DataInizio. Dunque PARTECIPANTE diventa \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}, con i seguenti vincoli aggiunti:
+\begin{itemize}
+    \item Se NomeDatore NOT NULL allora questo deve essere già presente in una tupla in DATORE
+    \item TipoP = 'Dipendente' OR (TipoP = 'Professionista' AND NomeDatore IS NULL AND DataInizio IS NULL) 
+    \item (NomeDatore IS NULL AND DataInizio IS NULL) OR (NomeDatore NOT NULL AND DataInizio NOT NULL)
+    \item Se DataInizio NOT NULL AND CF è presente in IMPIEGO\_PASSATO allora DataInizio > MAX(DataFine presenti nelle tuple con lo stesso CFPart in \mbox{IMPIEGO\_PASSATO})
+\end{itemize}
+
+Quest'ultimo vincolo sembra molto complesso ma serve solo per evitare di inserire nel database dei dati errati. Infatti, non ha senso inserire un impiego corrente il cui inizio è avvenuto prima della fine di uno degli impieghi passati della stessa persona (siamo nell'ipotesi di poter avere solo un impiego alla volta, dunque non avrebbe senso inserire un impiego il cui inizio è avvenuto prima della fine di un altro impiego, altrimenti staremmo ammettendo che questa persona ha avuto due impieghi nello stesso momento).
+
+L'associazione PARTECIPAZIONE\_PASSATA è un'altra associazione molti a molti, dunque creiamo anche per lei una relazione apposta, ossia \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})}, con i seguenti vincoli:
+\begin{itemize}
+    \item CFPart deve essere già presente in una tupla in PARTECIPANTE
+    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+\end{itemize}
+
+L'associazione PARTECIPAZIONE\_CORRENTE è un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Questa volta scegliamo di creare una relazione a parte per questa associazione, così da non appesantire la tabella PARTECIPANTE che ha già incorportato l'associazione IMPIEGO\_CORRENTE. 
+Dunque creiamo la nova tabella \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} che ha come chiave solo la chiave dell'entità con cardinalità massima 1, ossia la chiave di PARTECIPANTE. I vincoli sono i seguenti:
+\begin{itemize}
+    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+\end{itemize}
+
+L'associazione COMPOSIZIONE è anche questa un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione LEZIONE. Possiamo quindi incorporare l'assocazione COMPOSIZIONE in essa aggiungendo la chiave di EDIZIONE\_CORSO, ossia CodiceCorso e DataInizio. Dunque LEZIONE diventa \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{ORARIO}, CodiceCorso, DataInizio)}, con i seguenti vincoli:
+\begin{itemize}
+    \item CodiceCorso NOT NULL AND DataInizio NOT NULL
+    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+\end{itemize}
+Il primo vincolo è fondamentale in questo caso dato che la partecipazione di LEZIONE all'assocazione è obbligatoria, quindi ogni lezione è sempre associata a un'EDIZIONE\_CORSO.
+
+L'associazione TIPOLOGIA è stata già tradotta quando abbiamo tradotto l'entità debole EDIZIONE\_CORSO, dunque non dobbiamo fare nulla.
+
+L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un'attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Duqnue TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}, con i seguenti vincoli:
+\begin{itemize}
+    \item CFDocente deve essere già presente in una tupla di DOCENTE
+\end{itemize}
+
+L'associazione ABILITAZIONE è un'associazione molti a molti, dunque creiamo in questo caso una nuova relazione con chiave le due chiavi delle due entità collegate (DOCENTE e CORSO). Dunque creiamo la tabella \textbf{ABILITAZIONE(\underline{CFDocente} ,\underline{CodiceCorso})}, con i seguenti vincoli:
+\begin{itemize}
+    \item CFDocente deve essere già presente in una tupla di DOCENTE
+    \item CodiceCorso deve essere già presente in una tupla di CORSO
+\end{itemize}
+
+L'associazione DOCENZA\_PASSATA è anche questa un'associazione molti a molti. Dunque creiamo anche qui una nuova relazione \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})} con i seguenti vincoli:
+\begin{itemize}
+    \item CFDocente deve essere già presente in una tupla di DOCENTE
+    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+    \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+\end{itemize}
+
+L'associazione DOCENZA\_CORRENTE è invece un'associazione uno a uno. Tra le tante possibilità che abbiamo scegliamo in questo caso di incorporare questa associazione nella relazione EDIZIONE\_CORSO aggiungendo come foreign key la chiave di DOCENTE. Dunque la relazione diventa \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)}, con i seguenti vincoli aggiunti:
+\begin{itemize}
+    \item Se CFDocente NOT NULL allora CFDocente deve essere già presente in una tupla di DOCENTE
+    \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in ABILITAZIONE
+\end{itemize}
+
+\NB CFDocente potrebbe essere NULL perché nello schema ER la partecipazione di EDIZIONE\_CORSO all'associazione DOCENZA\_CORRENTE non è obbligatoria. In questo modo possiamo quindi creare un'edizione corso prima ancora di aver trovato il docente che insegnerà quel corso.
+
+\subsubsection*{Riepilogo}
+
+Riepiloghiamo quindi tutte le relazioni che costituiscono il nostro nuovo schema logico con tutti i loro vincoli:
+\begin{itemize}
+    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)} \\
+    Vincoli:
+    \begin{itemize}
+        \item TipoP NOT NULL
+        \item TipoP = 'Professionista' OR TipoP = 'Dipendente'
+        \item (TipoP = 'Professionista' AND Area NOT NULL AND Titolo NOT NULL AND Posizione IS NULL AND Livello IS NULL) OR (TipoP = 'Dipendente' AND Posizione NOT NULL AND Livello NOT NULL AND Area IS NULL AND Titolo IS NULL)
+        \item Se NomeDatore NOT NULL allora questo deve essere già presente in una tupla in DATORE
+        \item TipoP = 'Dipendente' OR (TipoP = 'Professionista' AND NomeDatore IS NULL AND DataInizio IS NULL) 
+        \item (NomeDatore IS NULL AND DataInizio IS NULL) OR (NomeDatore NOT NULL AND DataInizio NOT NULL)
+        \item Se DataInizio NOT NULL AND CF è presente in IMPIEGO\_PASSATO allora DataInizio > MAX(DataFine presenti nelle tuple con lo stesso CFPart in \mbox{IMPIEGO\_PASSATO})
+    \end{itemize}
+    \item \textbf{DATORE(\underline{Nome}, \underline{Indirizzo}, \underline{Numero})}
+    \item \textbf{DOCENTE(\underline{CF}, CognomeEtà, CittàNascita, Cognome, TIpoD)} \\
+    Vincoli:
+    \begin{itemize}
+        \item TipoD NOT NULL
+        \item TipoD = 'Collaboratore' OR TipoD = 'Interno'
+    \end{itemize}
+    \item \textbf{TELEFONO(\underline{Numero}, CFDocente)} \\
+    Vincoli:
+    \begin{itemize}
+        \item CFDocente deve essere già presente in una tupla di DOCENTE
+    \end{itemize}
+    \item \textbf{CORSO(\underline{Codice}, Titolo)} \\
+    Vincoli:
+    \begin{itemize}
+        \item Titolo NOT NULL
+    \end{itemize}
+    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)} \\
+    Vincoli:
+    \begin{itemize}
+        \item DataInizio <= DataFine 
+        \item NPart > 0
+        \item Se CFDocente NOT NULL allora CFDocente deve essere già presente in una tupla in DOCENTE
+        \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in ABILITAZIONE
+    \end{itemize}
+    \item \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{Orario}, CodiceCorso, DataInizio)} \\
+    Vincoli:
+    \begin{itemize}
+        \item CodiceCorso NOT NULL AND DataInizio NOT NULL
+        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+    \end{itemize}
+    \item \textbf{IMPIEGO\_PASSATO(\underline{CFPart}, \underline{NomeDatore}, DataInizio, DataFine)} \\
+    Vincoli:
+    \begin{itemize}
+        \item CFPart deve essere già presente in una tupla in PARTECIPANTE
+        \item NomeDatore deve essere giò presente in una tupla in DATORE
+        \item DataInizio < DataFine
+    \end{itemize}
+    \item \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})} \\
+    Vincoli:
+    \begin{itemize}
+        \item CFPart deve essere già presente in una tupla in PARTECIPANTE
+        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+    \end{itemize}
+    \item \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} \\
+    Vincoli:
+    \begin{itemize}
+        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+    \end{itemize}
+    \item \textbf{ABILITAZIONE(\underline{CFDocente}, \underline{CodiceCorso})} \\
+    Vincoli:
+    \begin{itemize}
+        \item CFDocente deve essere già presente in una tupla di DOCENTE
+        \item CodiceCorso deve essere già presente in una tupla di CORSO
+    \end{itemize}
+    \item \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})} \\
+    Vincoli:
+    \begin{itemize}
+        \item CFDocente deve essere già presente in una tupla di DOCENTE
+        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+        \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
+    \end{itemize}
+\end{itemize}
 
 \end{document}

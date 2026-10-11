@@ -404,6 +404,8 @@ DFS(G, x):
     return Vis
 \end{lstlisting}
 
+\NB Negli pseudocodici che vedremo da qui in avanti utilizziamo la convenzione con indici da 0 a $n-1$. Negli esempi pratici, tuttavia, i nodi dei grafi sono spesso numerati da 1 a $n$. Per applicare correttamente lo pseudocodice agli esempi sarebbe quindi necessario sottrarre $1$ da ciascun nodo, ma per evitare di appesantire i codici noi qui omettiamo questa conversione, lasciando i nodi al loro valore standard.
+
 \begin{Proposizione}[]
 \label{propos-DFS}
 Presi due nodi x e y in un grafo, y è raggiungibile da x $\implies$ $\codeb{Vis[y] = 1}$
@@ -554,9 +556,9 @@ Distanza_Radice(P,x):
             r = i
             break
     con = 0
-    while r != x:
+    while x != r:
         con += 1
-        r = P[r]
+        x = P[x]
     return con
 \end{lstlisting}
 
