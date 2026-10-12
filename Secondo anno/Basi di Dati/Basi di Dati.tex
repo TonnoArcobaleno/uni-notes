@@ -1085,6 +1085,19 @@ Ad esempio, se abbiamo una tabella PERSONA(\underline{CF}, Nome, Lavoro), l'attr
 \end{itemize}
 \end{Osservazione}
 
+\subsection{Vincoli}
+
+\begin{Definizione}[Vincoli di integrità]
+\label{def-vincoli}
+In una relazione possono essere definiti dei \textbf{vincoli di integrità} sui domini degli attributi. Questi vincoli possono essere:
+\begin{itemize}
+    \item \textbf{vincoli di dominio}, ossia vincoli sul valore di un attributo (ad esempio VOTO <= 30 AND VOTO >= 0)
+    \item \textbf{vincoli di tupla}, ossia vincoli sul valore di due o più attributi nella stessa tupla (ad esempio (VOTO = 30) OR (NOT LODE = "Si"))
+    \item \textbf{vincoli tra tuple della stessa relazione}, ossia vincoli sul valore di uno o più attributi nelle diverse tuple della stessa relazione (ad esempio MATRICOLA UNIQUE)
+    \item \textbf{vincoli tra tuple di relazioni diverse}, ossia i vincoli delle foreign key (ad esempio Esame.Studente REFERENCES Studente.Matricola)
+\end{itemize} 
+\end{Definizione}
+
 \section{Passare dal modello concettuale a quello logico}
 
 Vogliamo ora tradurre lo schema concettuale in quello logico, rappresentandone i dati in mono corretto (e efficiente, ma ci concentreremo maggiormente sulla correttezza). Non è una traduzione semplice, perché non vi è una vera e propria procedura da seguire alla lettera. Questo perché vi sono diversi aspetti che non sono direttamente rappresentabili, e anche perché è necessario prestare attenzione alle prestazioni.
@@ -1175,6 +1188,10 @@ Vi sono diversi criteri per la scelta degli identificatori:
 \label{def-vincolo-integrità-referenziale}
 Per indicare che due tabelle/relazioni $R_1$ e $R_2$ (le vecchie entità o associazioni del modello ER) nel modello relazionale sono in relazione si utilizzano delle chiavi. Un \textbf{vincolo di integrità referenziale}, noto come \textbf{foreign key}, serve a vietare i riferimenti a chiavi che nella tabella di riferimento non esistono.
 \end{Definizione}
+
+
+
+
 
 Il tipo di traduzione cambia in base al tipo di associazione:
 \begin{itemize}
@@ -1452,5 +1469,95 @@ Riepiloghiamo quindi tutte le relazioni che costituiscono il nostro nuovo schema
         \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
     \end{itemize}
 \end{itemize}
+
+\chapter{SQL}
+
+\section{Cos'è SQL?}
+
+\begin{Definizione}[SQL]
+\label{def-SQL}
+Il linguaggio \textbf{SQL} (Structured Query Language, ossia Linguaggio di Interrogazione Strutturato) è il linguaggio standard dei database relazionali usato per \textbf{definire} le basi di dati, \textbf{manipolarle} e \textbf{interrogarle} tramite \textbf{query} (interrogazioni).\\
+Questo linguggio nasce nel 1974 con SEQUEL, diventando uno standard di fatto dal 1983, ma formalmente solo dal 1986. 
+\end{Definizione}
+
+Il linguaggio SQL si può dividere in diversi sottolinguaggi con pacchetti di comandi specifici per alcune operazioni:
+\begin{itemize}
+    \item \textbf{DDL} (Data Definition Language), che serve per \textbf{creare e strutturare} le tabelle e gli oggetti del database
+    \item \textbf{DML} (Data Manipulation Language), che serve per \textbf{manipolare} i dati nelle tabelle
+    \item \textbf{DQL} (Data Query Language), che serve per \textbf{interrogare} i dati
+    \item \textbf{DCL} (Data Control Language), che serve per gestire i \textbf{permessi} di accesso ai dati
+\end{itemize}
+
+\section{DDL}
+
+Una volta tradotta la nostra base di dati in schema logico, vediamo come creare la nostra base di dati in SQL, tramite le istruzioni del sottolinguaggio \textbf{DDL}.
+
+\subsection*{Domini}
+
+\begin{Definizione}[Domini]
+\label{def-domini}
+Dentro SQL esistono due tipi di domini:\textbf{domini elementari}, che sono predefiniti, o \textbf{domini definiti dall'utente}.
+\end{Definizione}
+
+I domini elementari sono:
+\begin{itemize}
+    \item \textbf{Carattere} (singoli caratteri o stringhe)
+    \item \textbf{Bit} (singoli bit o stringhe)
+    \item \textbf{Numerici}
+    \item \textbf{Data, ora, intervalli di tempi}
+    \item \textbf{Boolean} (introdotto dal 1999)
+    \item \textbf{BLOB, CLOB} (introdotto dal 1999, utilizzati per grandi immagini e testi; non possono esserre oggetto di query)
+\end{itemize}
+
+Ogni tipo di dati elementare è supportato da funzioni specifiche, come \code{year()}.
+
+Per creare un dominio esiste la funzione \codeb{CREATE DOMAIN}. Se ad esempio vogliamo creare il dominio dei voti, dobbiamo scrivere
+\begin{lstlisting}
+CREATE DOMAIN Voti
+    AS SMALLINT DEFAULT NULL
+    CHECK(Value >= 18 AND Value <= 30)
+\end{lstlisting}
+In questo modo stiamo creando un dominio che parte come uno SMALLINT (dominio elementare di interi), con default NULL e che può avere solo valori compresi tra 18 e 30. Sono molto utili se abbiamo più volte definito lo stesso vincolo di integrità: possiamo infatti creare un singolo dominio con questo vincolo così definirlo una volta sola. 
+
+\subsection*{Tabelle}
+
+Per creare una nuova tabella si utilizza il comando \codeb{CREATE TABLE}, che definisce lo schema della tabella e ne crea un'istanza vuota. Ci permette di specificarne attributi, domini e vincoli di integritò. Se ad esempio vogliamo creare una relazione Impiegato con i suoi vari attributi, dobbiamo scrivere
+\begin{lstlisting}
+CREATE TABLE Impiegato(
+    Matricola VARCHAR(6) PRIMARY KEY,
+    CF VARCHAR(16) UNIQUE,
+    Nome VARCHAR(20) NOT NULL,
+    Cognome VARCHAR (20) NOT NULL,
+    FOREIGN KEY Dipart VARCHAR(15) REFERENCES Dipartimento(Codice),
+    Stipendio NUMERIC(9) DEFAULT 0,
+    UNIQUE(Cognome, Nome)
+)
+\end{lstlisting}
+
+Vediamo cosa significano queste diverse parole chiavi:
+\begin{itemize}
+    \item \codeb{PRIMARY KEY} indica che l'attributo Matricola è la nostra chiave primaria
+    \item \codeb{NOT NULL} indica che quell'attributo non può mai essere NULL (\NB In SQL di default un campo può essere nulla)
+    \item \codeb{VARCHAR(n)} indica una stringa che può avere al massimo n caratteri.
+    \item \codeb{UNIQUE} indiica che il CF deve essere unico tra tutte le tuple della relazione Impiegato
+    \item \codeb{FOREIGN KEY} + \codeb{REFERENCES} indica che Dipart è una foreign key di un'altra tabella chiamata Dipartimento, la cui chiave è Codice
+    \item \codeb{DEFAULT} indica che lo stipendio di ogni nuovo impiegato si trova come default a 0
+\end{itemize}
+
+Sia \code{UNIQUE} che \code{PRIMARY KEY} che \code{FOREIGN KEY} possono racchiudere più campi insieme (come già visto nell'istruzione \code{UNIQUE(Cognome, Nome)}, che rende unica la coppia di attribuit (Cognome, Nome), e non i singoli campi ). Questo è fondamentale quando abbiamo una chiave primaria / foreign key composta da più attributi (infatti non si può scrivere più volte \code{PRIMARY KEY} affianco ai diversi attributi, ma bisogna scrivere a parte \code{PRIMARY KEY(att1, att2, ...)}).
+
+\subsection*{Vincoli}
+
+Abbiamo già visto come inserire dei vincoli a un campo, ad esempio scrivendo \code{NOT NULL} o \code{UNIQUE}. È possibile specificare delle \textbf{reazioni alla violazione di vincoli d'integrità} che eseguono delle istruzioni specifiche quando si prova a violare un vincolo (se queste non sono presenti le azioni che violerebbero i vincoli semplicemente non vengono eseguite). Nell'esempio di prima avevamo una foreign key \code{Dipart} in riferimento a una tupla in \code{Dipartimento} (chiamiamo la tabella Impiegato \textbf{slave} mentre la tabella Dipartimento \textbf{master}). Normalmente, non potremmo eliminare una riga in Dipartimento prima di aver eliminato tutte le references a quella riga in Impiegato. È possibile però definire una reazione alla violazione di questo vincolo di integrità che in automatico elimina tutte le references in Impiegato e elimina anche la riga in Dipartimento. Per fare ciò scriviamo \codeb{ON DELETE CASCADE}(\NB Questo funziona perfettamente, ma è MOLTO rischioso, dato che con un'operazione eliminiamo più righe in tabelle diverse). Se invece non vogliamo eliminare tutte le righe ma semplicemente impostarle a un valore NULL (se ammesso), possiamo scrivere \codeb{ON DELETE CASCADE SET NULL}. \\
+E se invece un dipartimento non viene eliminato ma modificato? Esiste l'operazione \codeb{ON UPDATE <CASCADE>}, che aggiorna a cascata tutte le reference a quel dipartimento in Impiegato. \\
+Dunque, se vogliamo che una volta eliminato un dipartimento mettiamo a NULL le references in Impiegato, e una volta modificato invece a cascata modifichiamo tutto in Impiegato, dobbiamo scrivere \code{FOREIGN KEY Dipart VARCHAR(15) REFERENCES Dipartimento(Codice) ON DELETE SET NULL ON UPDATE CASCADE}.
+
+Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore di 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere codeb{CHECK(DataInizio <= DataFine)} in una riga a parte.
+
+
+
+
+
+
 
 \end{document}
