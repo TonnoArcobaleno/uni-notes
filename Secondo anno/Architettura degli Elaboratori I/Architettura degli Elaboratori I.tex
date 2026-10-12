@@ -1102,7 +1102,7 @@ Abbiamo per ora visto, fatta eccezione per il Full Adder, solo circuiti con un o
 
 \begin{Definizione}[Priority Circuit]
 \label{def-priority-circuit}
-Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra).
+Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra). Questi tipi di circuiti che restituiscono al più un output TRUE per ogni combinazione di input sono detti circuiti \textbf{one-hot}.
 \end{Definizione}
 
 Preso quindi un priority circuit con 4 input $A_3, A_2, A_1$ e $A_0$, questo avrà 4 output $Y_3, Y_2, Y_1$ e $Y_0$, e come già accennato per ogni combinazione di input si accenderà sempre l'output corrispondente all'input TRUE più a sinistra. Quindi, se ad esempio è acceso l'input $A_3$ (ossia vale 1), sicuramente sarà acceso l'output $Y_3$. Se invece è acceso $A_2$, se $A_3$ non è acceso allora si accenderà $Y_2$. Se è acceso $A_1$, se $A_3$ e $A_2$ non sono accesi allora si accenderà $Y_1$, e infine se $A_0$ è l'unico acceso allora si accenderà $Y_0$. Abbiamo quindi un circuito con le uscite \textbf{mutualmente esclusive}: con una determinata combinazione di input \textbf{al più un output sarà acceso}.
@@ -1242,7 +1242,7 @@ Dalla tabellla della verità troviamo la seguente mappa di Karnaugh. Dobbiamo qu
 \includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh duale.png}
 \end{minipage}
 
-Per il cerchio da 4 notiamo che i termini che non cambiano sono $\bar{B}$ e $C$, mentre per il cerchio da 2 sono $A,C$ e $\bar{D}$ (ricordiamo che per la dualità quando abbiamo $A = 1$ dobbiamo prendere $\bar{A}$ e quando abbiamo $A = 0$ dobbiamo prendere $A$). Dunque troviamo che $\bm{Y = (\bar{B} + C)(A + C + \bar{D})}$. Questa è la \textbf{POS minima} della nostra funzione $Y$
+Per il cerchio da 4 notiamo che i termini che non cambiano sono $\bar{B}$ e $C$, mentre per il cerchio da 2 sono $A,C$ e $\bar{D}$ (ricordiamo che per la dualità quando abbiamo $A = 1$ dobbiamo prendere $\bar{A}$ e quando abbiamo $A = 0$ dobbiamo prendere $A$). Dunque troviamo che $\bm{Y = (\bar{B} + C)(A + C + \bar{D})}$. Questa è la \textbf{POS minima} della nostra funzione $Y$ (nota che questa funzione algebrica non è equivalente a quella trovata prima come SOP minima: questo è casuato dai valori Don't Care, che possono creare funzioni algebriche differenti a partire dalla stessa mappa di Karnaugh).
 
 \subsection{Usare le mappe di Karnaugh per visualizzare i teoremi}
 
@@ -1310,6 +1310,125 @@ A & B & C & Y \\
 \end{tabular}
 \end{minipage}
 
-Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, duqnue non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini distano di un solo bit cambiato, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{ANDs} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{ORs} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equviale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}.
+Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, dunque non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ciò ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini cambiano di un solo bit, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{ANDs} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{ORs} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equviale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}. Se invece volessimo rappresentarlo tramite un circuito a più livelli, potremmo trasformare questo \code{XOR} a 3 in due \code{XOR} a 2, e potremmo poi trasformare ogni \code{XOR} a 2 in un circuito a due livelli. Infatti, uno \code{XOR} a 2 può essere rappresentato da 2 \code{AND} e un \code{OR} (o viceversa), dunque avremmo un totale di \textbf{6} porte distribuite su 4 livelli, un netto miglioramento rispetto alle 11 viste prima. Si guadagna quindi a livelli hardware ma si perde a livello di velocità, dato che appunto dobbiamo passare su più livelli. Questa differenza, che non sembra nemmeno così importante con uno \code{XOR} a 3 ingressi, diventa evidente in uno \code{XOR} a 8 ingressi, dove servono $2^8/2 = 2^7 = 128$ \code{AND} e un \code{OR} a 128 ingressi per poterla tradurre in una rete a due livelli (che significa 127 \code{OR} a 2 ingressi), mentre in una rete a più livelli bastano 7 \code{XOR} a due ingressi, che si traducono in 14 porte \code{AND} e 7 \code{OR}. Dunque passiamo da 128+127 = 255 porte a sole 21.
+
+\subsection{Multiplexer}
+
+\begin{Definizione}[Multiplexer]
+\label{def-multiplexer}
+Un \textbf{multiplexer} (MUX) è un circuito combinatorio che \textbf{seleziona uno tra i segnali} in ingresso e lo collega in output. Per farlo utilizza dei \textbf{selettori}, il cui numero dipende dal numero di input: in un circuito con $n$ input servono $\bm{\log_2 n}$ bit-selettori.
+\end{Definizione}
+
+\begin{minipage}[c]{0.60\textwidth}
+Un multiplexer si raffigura usando un trapezio in verticale, con gli input a sinistra, i selettori in alto e gli output a destra. In questo caso abbiamo un MUX a due input (e con quindi un selettore dato che $\log_2 2 = 1$). La tabella di verità è molto semplice:
+\[
+\begin{array}{c|c}
+S & Y \\
+\hline
+0 & D_0 \\
+1 & D_1
+\end{array}
+\]
+Notiamo quindi come quando $S = 0$ allora si attiva $D_0$, mentre quando $S = 1$ si attiva $D_1$. Dunque $\bm{Y = \bar{S} D_0 +
+S D_1}$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{MUX.png}
+\end{minipage}
+
+\begin{minipage}[c]{0.60\textwidth}
+Un MUX a 4 ingressi, oltre alla sua forma canonica con 4 variabili e 2 selettori nello stesso MUX, può essere riprodotto anche usando 3 MUX a 2 ingressi. Dato che dobbiamo usare solo 2 selettori ($\log_2 4 = 2$), utilizziamo il selettore $S_0$ per i primi due MUX e $S_1$ solo per il terzo. Infatti, dato che stiamo cercando di mandare in output uno solo dei 4 valori in input, ci bastano questi due selettori per poterli scegliere tutti senza problemi. Se ad esempio vogliamo $Y = D_2$, basta posse $S_0 = 0$ e $S_1 = 1$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{MUX 4 ingressi.png}
+\end{minipage}
+
+Troviamo quindi che $\bm{Y = \bar{S_0} \bar{S_1} D_0 + S_0 \bar{S_1} D_1 + \bar{S_0} S_1 D_2 + S_0 S_1 D_3}$. Se volessimo quindi trasformare questo MUX in un circuito a due livelli, avremmo bisogno di 4 \code{AND} a 3 ingressi e di un \code{OR} a 4 ingressi, ossia di 8 \code{AND} a 2 ingressi e di 3 \code{OR} a 2 ingressi, per un totale di 11 porte logiche. Se invece anche qui, piuttosto che fare un circuito a due livelli ne creiamo uno a 4, trasformando ogni multiplexer in un circuito a due livelli, avremmo bisogno di sole 6 porte \code{AND} e di 3 porte \code{OR}, per un totale di 9 porte logiche.
+
+\subsubsection*{Tristate Buffer al posto del multiplexer}
+
+Grazie allo stato di alta impedenza, è possibile riprodurre lo stesso identico comportamento dei multiplexer utilizzando semplicemente dei tristate buffers. Ad esempio, un MUX a 4 input può essere riprodotto in questi due modi usando tristate buffers:
+
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{MUX tristate.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\includegraphics[width=1\textwidth, valign=t]{MUX tristate 2.png}
+\end{minipage}
+
+Nella prima immagine usiamo 6 tristate buffer, praticamente 2 per multiplexer. Nella seconda invece ne usiamo solo 4, ma usiamo 4 porte \code{AND} per gestire gli ingressi di questi tristate per far partire il segnale solo da un singolo tristate alla volta, così da non creare mai contention.
+
+\subsubsection*{Usare i multiplexer per rappresentare funzioni booleane}
+
+Possiamo usare i multiplexer anche per rappresentare delle funzioni booleane. Ad esempio, presa la funzione $Y$ con la seguente tabella di verità:
+
+\[
+\begin{array}{cc|c}
+A & B & Y \\
+\hline
+0 & 0 & 0 \\
+0 & 1 & 0 \\
+1 & 0 & 0 \\
+1 & 1 & 1
+\end{array}
+\]
+
+se poniamo i diversi input del nostro multiplexer tutti a 0 tranne che per l'ultimo che vale 1, possiamo rappresentare questa funzione con il seguente MUX:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{MUX a 4 AND.png}
+\end{figure}
+
+dove la freccia verso il basso indica un input fisso di $0$, mentre la barretta indica un input fisso di $1$. Abbiamo quindi rappresentato la funzione $Y = AB$, ossia la porta logica \code{AND}, tramite un MUX a 4 ingressi. Notiamo però che possiamo migliorare questa rappresentazione utilizzando un MUX a soli due ingressi. Infatti, modificando la tabella della verità in questo modo
+\[
+\begin{array}{c|c}
+A & Y \\
+\hline
+0 & 0 \\
+1 & B
+\end{array}
+\]
+
+che è totalmente equivalente a quella vista sopra, possiamo rappresentare la funzione $Y$ con questo MUX:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{MUX a 2 AND.png}
+\end{figure}
+
+Vediamo anche un esempio più complesso. Prendiamo la seguente funzione $D$ a 3 ingressi:
+\[
+\begin{array}{ccc|c}
+A_2 & A_1 & A_0 & D \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 0
+\end{array}
+\]
+
+Possiamo rappresentarla usando un MUX 8 ingressi, ma è più comodo rappresentarla con 7 MUX a 2 ingressi, in questo modo:
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{7 MUX.png}
+\end{figure}
+
+Notiamo però anche qui una cosa: i primi 4 MUX sono praticamente superflui. Infatti, il primo e il terzo valgono sempre 0, indipendentemente da $A_0$, mentre il secondo vale $0$ se $A_0 = 0$, e $1$ se $A_0 = 1$, ossia vale $A_0$, e il quarto allo stesso modo vale invece $\bar{A_0}$. Dunque possiamo rappresentare il circuito di questa funzione usando solamente tre MUX:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Da 7 a 3 MUX.png}
+\end{figure}
+
+
 
 \end{document}
