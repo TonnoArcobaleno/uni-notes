@@ -1086,7 +1086,7 @@ Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette
 Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} (\mbox{$\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$}). L'\code{OR} infine è rappresnetato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} (\mbox{$\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$}). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
 \end{minipage}
 
-Nascono quindi le \textbf{funzioni a due livelli}, dove il primo livello è rappresentato da tanti \code{ANDs} e il secondo da un \code{OR}. In questo modo, è possibile rappresentare qualsiasi SOP come circuiti logici nel modo più chiaro possibile. Tramite il bubble pushing è poi possibile trasformare queste funzioni in funzioni composte solo da tanti \code{NAND} e da un altro \code{NAND} finale. 
+Nascono quindi le \textbf{reti a due livelli}, dove il primo livello è rappresentato da tanti \code{ANDs} e il secondo da un \code{OR} (o viceversa). In questo modo, è possibile rappresentare qualsiasi SOP come circuiti logici nel modo più chiaro possibile. Tramite il bubble pushing è poi possibile trasformare queste funzioni in funzioni composte solo da tanti \code{NAND} e da un altro \code{NAND} finale (o da due \code{NOR}, se si parte con tanti \code{ORs} e si finisce con un \code{AND}). 
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -1129,10 +1129,11 @@ $A_3$ & $A_2$ & $A_1$ & $A_0$ & $Y_3$ & $Y_2$ & $Y_1$ & $Y_0$ \\
 Dunque la tabella di verità priority circuit a 4 ingressi può essere rappresentata in modo compatto tramite la Don't Care in questo modo.
 \end{minipage}
 
+
 \section{Mappe di Karnaugh}
 
 \begin{Definizione}[Mappe di Karnaugh]
-\label{def-mappe-karnaguh}
+\label{def-mappe-karnaugh}
 Le \textbf{Mappe di Karnaugh} (K-Maps) sono rappresentazioni grafiche delle tabelle di verità per minimizzare le espressioni booleane graficamente.
 \end{Definizione}
 
@@ -1227,8 +1228,88 @@ Proviamo ora a raggruppare gli 1 e le X. Possiamo prendere i quattro 1 e le quat
 \includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh.png}
 \end{minipage}
 
-Per il cerchio tutto in basso notiamo che l'unico termine che non cambia è $C$, per il cerchio più a destra è $A$, e per il cerchio formato dai quattro angoli sono $\bar{B}$ e $\bar{D}$. Dunque troviamo che $\bm{Y = C + A + \bar{B} \bar{D}}$.
+Per il cerchio tutto in basso notiamo che l'unico termine che non cambia è $C$, per il cerchio più a destra è $A$, e per il cerchio formato dai quattro angoli sono $\bar{B}$ e $\bar{D}$. Dunque troviamo che $\bm{Y = C + A + \bar{B} \bar{D}}$. Questa è la \textbf{SOP minima} della nostra funzione $Y$.
 
+\subsection{Duale delle mappe di Karnaugh}
 
+Le mappe di Karnaugh possono essere usate anche per trovare la \textbf{POS minima} di una funzione booleana, sfruttando le regole della dualità. Dobbiamo in questo caso prendere gli 0 al posto degli 1, e quando dobbiamo prendere una variabile che non cambia, se questa vale 0 prendiamo la stessa variabile, altrimenti se vale 1 ne prendiamo il complemento. Riprendiamo l'esempio di prima per capire come fare.
+
+\begin{minipage}[c]{0.60\textwidth}
+Dalla tabellla della verità troviamo la seguente mappa di Karnaugh. Dobbiamo quindi raggruppare non gli 1 ma gli 0. Possiamo quindi prendere lo 0 e le tre X per formare un cerchio da 4, e possiamo poi prendere lo 0 a sinistra e la X affianco per formare un cerchio da due.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh duale.png}
+\end{minipage}
+
+Per il cerchio da 4 notiamo che i termini che non cambiano sono $\bar{B}$ e $C$, mentre per il cerchio da 2 sono $A,C$ e $\bar{D}$ (ricordiamo che per la dualità quando abbiamo $A = 1$ dobbiamo prendere $\bar{A}$ e quando abbiamo $A = 0$ dobbiamo prendere $A$). Dunque troviamo che $\bm{Y = (\bar{B} + C)(A + C + \bar{D})}$. Questa è la \textbf{POS minima} della nostra funzione $Y$
+
+\subsection{Usare le mappe di Karnaugh per visualizzare i teoremi}
+
+Le mappe di Karnaugh sono molto importanti per capire visiamente i teoremi dell'algebra di Boole. Vedremo in questo caso un teorema che noi non abbiamo visto tra i teoremi da studiare, ossia il \textit{teorema del consenso}, che dice che $BC + \bar{B}D + CD = BC + \bar{B}D$. Non è importante conoscerlo, ma lo useremo come base per vedere come le mappe di Karnaugh ci aiutano a dimostrare queste identità.
+
+\begin{minipage}[c]{0.6\textwidth}
+Notiamo come, presa la mappa di Karnaugh per le variabili $B,C$ e $D$, per scrivere l'espressione $BC + \bar{B}D + CD$ dobbiamo prendere due 1 al centro due volte. Quei cerchio in più serve proprio per rappresentare $CD$, ma noi sappiamo che è superfluo: infatti, i due 1 che prende erano già presi da altri cerchi, dunque possiamo toglierlo, trovando proprio l'espressione $BC + \bar{B}D$. Ecco dimostrato intuitivamente come $BC + \bar{B}D + CD = BC + \bar{B}D$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh Teorema.png}
+\end{minipage}
+
+Oltre che aiutarci a capire il teorema visiamente, le mappe di Karnaugh ci aiutano anche a intuirne la dimostrazione algebrica. Infatti, abbiamo visto come $CD$ nella mappa di Karnaugh sia rappresentato da quei due 1, che rappresentano rispettivamente il mintermine $\bar{B}CD$ e il mintermine $BCD$. Capiamo quindi che se scriviamo $CD$ come $\bar{B}CD + BCD$ ci verrà più veloce la dimostrazione. Infatti, 
+\begin{align*}
+BC + \bar{B}D + CD &= BC + \bar{B}D + \bar{B}CD + BCD \\
+ &= BC (D + 1) + \bar{B}D(1 + C) \\
+ &= BC +  \bar{B}D \quad \blacksquare
+\end{align*}
+
+\subsection{Algoritmo Quine-McCluskey}
+
+Le mappe di Karnaugh abbiamo visto come sono molto utili per trovare SOP/POS minima nelle funzioni a poche variabili (solitamente 3 o 4). Per le funzioni con tante variabili, però, iniziano ad essere molto lente. Per questo motivo si introduce un nuovo algoritmo: l'\textbf{algoritmo Quine-McCluskey}.
+
+\begin{Definizione}[Algoritmo Quine-McCluskey]
+\label{def-algoritmo-quine}
+L'\textbf{algoritmo Quine-McCluskey} (QMC, anche detto metodo degli implicanti primi), è un metodo utilizzato per \textbf{minimizzare} le funzioni booleane a $n$ variabili con un solo output che rappresentano reti a due livelli.
+\end{Definizione}
+
+\section{Circuiti a più livelli}
+
+Abbiamo parlato brevemente in precedenza delle \textbf{reti a due livelli}, ossia circuiti formati da tanti \code{ANDs} e da un \code{OR} finale o viceversa. Questi circuiti rappresentano le funzioni booleana in forma rispettivamente \textbf{POS} e in forma \textbf{SOP}, e sono molto veloci, ma spesso richiedono una quantità esagerata di hardware. Per questo motivo nascono i \textbf{circuiti a più livelli}.
+
+\begin{Definizione}[Circuiti a più livelli]
+\label{def-circuiti-più-livelli}
+I \textbf{circuiti a più livelli} (o reti a più livelli) sono dei circuiti combinatori rappresentati non più da soli due livelli di \code{ANDs} e \code{OR} o di \code{ORs} e di \code{AND}, ma da più livelli con diverse porte logiche.
+\end{Definizione}
+
+Prima di vedere alcuni circuiti a più livelli, capiamo perché sono così fondamentali con un esempio. \\
+Ipotizziamo di voler rappresentare tramite un circuito uno \code{XOR} a 3 ingressi. Avremo quindi la seguente tabella della verità con la corrispondente mappa di Karnaugh:
+
+\begin{minipage}[c]{0.55\textwidth}
+\centering
+\[
+\begin{array}{ccc|c}
+A & B & C & Y \\
+\hline
+0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 1 \\
+0 & 1 & 0 & 1 \\
+0 & 1 & 1 & 0 \\
+1 & 0 & 0 & 1 \\
+1 & 0 & 1 & 0 \\
+1 & 1 & 0 & 0 \\
+1 & 1 & 1 & 1
+\end{array}
+\]
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\diagbox{$C$}{$AB$} & 00 & 01 & 11 & 10 \\ \hline
+0 & 0 & 1 & 0 & 1 \\ \hline
+1 & 1 & 0 & 1 & 0 \\ \hline
+\end{tabular}
+\end{minipage}
+
+Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, duqnue non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini distano di un solo bit cambiato, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{ANDs} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{ORs} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equviale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}.
 
 \end{document}
