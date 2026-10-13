@@ -208,7 +208,7 @@ Nel nostro caso abbiamo quindi uno schema del tipo
 
 In realtà, per la memorizzazione e la visita avremmo un costo pari a $\Theta(n + \sum_{v \in V} \deg(v))$, ma dato che $\Theta(n + \sum_{v \in V} \deg(v)) = \Theta(n + 2m) = \Theta(n+m)$, i conti tornano perfettamente.
 
-Per i grafi diretti, invece, ci sono 3 possibilità:
+Per i grafi diretti, invece, con le matrici di adiacenze scriviamo sulle colonne gli archi entranti in un nodo e sulle righe quelli uscenti, mentre con le liste di adiacenze ci sono 3 possibilità:
 \begin{enumerate}
     \item Le liste di adiacenze hanno solo i nodi in entrata
     \item Le liste di adiacenze hanno solo i nodi in uscita
@@ -778,7 +778,7 @@ In un grafo connnesso diretto, G ha un ciclo $\iff$ ogni DFS ha un arco all'indi
 \end{enumerate}
 
 Vediamo ora l'algoritmo per riempire l'array $T$ e $t$ in un grafo diretto connesso G:
-\begin{lstlisting}
+\begin{lstlisting}[style=Python]
 Algoritmo(G,x):
     n = numero di nodi in G
     t = [-1] * n
@@ -788,7 +788,7 @@ Algoritmo(G,x):
     Algoritmo_Ricorsivo(G,x,t,T,con)
 \end{lstlisting}
 dove \code{Algoritmo\_Ricorsivo} è questa funzione ricorsiva:
-\begin{lstlisting}
+\begin{lstlisting}[style=Python]
 Algoritmo_Ricorsivo(G,x,t,T,con):
     while esiste un nodo y con arco (x,y) e t[y] == -1:
         con ++
@@ -799,7 +799,7 @@ Algoritmo_Ricorsivo(G,x,t,T,con):
 
 \begin{Proposizione}[]
 \label{propos-tu<tv}
-In un ordine topologico $T$ di un grafo G connesso e diretto, preso un arco $(u,v) \in T$, $\bm{T[u] \leq T[v]}$.  
+In un ordine topologico $T$ di un grafo G connesso e diretto, preso un arco $(u,v) \in T$, $\bm{T(v) \leq T(u)}$.  
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -807,8 +807,127 @@ In un ordine topologico $T$ di un grafo G connesso e diretto, preso un arco $(u,
 Abbiamo solo due casi da analizzare: se $(u,v)$ è un arco in avanti o di attraversamento. Infatti, se abbiamo trovato un ordine topologico sicuramente in G non è possibile trovare cicli, e per la Proposizione \ref{propos-grafo-diretto-connesso-ciclo-diretto-arco-all-indietro} sappiamo che se G non ha un cicli allora nessuna DFS sul grafo produce archi all'indietro, che altrimenti formerebbero un ciclo. Analizziamo quindi i seguenti casi:
 \begin{itemize}
     \item $(u,v)$ è un arco in avanti \\
+    In questo caso allora abbiamo che $[t(v), T(v)] \subseteq [t(u), T(u)]$, dunque troviamo proprio che $T(v) \leq T(u)$.
     \item $(u,v)$ è un arco di attraversamento \\
+    In questo caso allora possiamo sicuramente dire che la DFS abbia visitato prima $v$ e poi $u$, altrimenti avesse visto prima $u$ sarebbe passata per questo arco collegando subito anche $v$. Dunque, dato che $v$ è stato visitato prima e da lui non è possibile arrivare a $u$ (questo perchè $(u,v)$ è un arco di attraversamento che quindi collega due "cugini", ma se da $v$ potessimo arrivare a $u$ allora questo sarebbe un antenato di $u$, cosa dunque impossibile), troviamo che $v$ esce prima dallo stack prima che entri $u$, ossia $T(v) < t(u) < T(u)$. 
 \end{itemize}
 
+Concludiamo quindi che in ogni caso $T(v) \leq T(u)$. $\blacksquare$
+
+Grazie a questa proposizione, è possibile ora trovare facilmente un ordine topologico in un grafo diretto acicliclo. Infatti, basta calcolare il valore $T$ per ogni nodo, e ordinarli dal più piccolo al più grande per avere un ordine topologico dove gli archi vanno sempre da destra a sinistra. Infatti, questo ha ora senso dato che preso un arco $(x,y)$, è vero sempre che $T(x) \leq T(y)$. Vediamo come si traduce questo in codice:
+
+\begin{lstlisting}[style=Python]
+OrdTop(G): // G grafo diretto aciclico
+    n = numero di nodi in G
+    L = [] // Lista dove inseriremo il nostro ordine topologico
+    Vis = [0] * n
+    for nodo v in G:
+        if Vis[v] == 0:
+            OrdTop_ric(G,v,Vis,L)
+    return L
+\end{lstlisting}
+
+dove \code{OrdTop} è questa funzione ricorsiva:
+\begin{lstlisting}[style=Python]
+OrdTop_ric(G,v,Vis,L):
+    Vis[v] = 1
+    for nodo adiacente u a v:
+        if Vis[u] == 0:
+            OrdTop_ric(G,u,Vis,L)
+    L.append(v)
+\end{lstlisting} 
+
+Sembra strano però: non stiamo mai calcolando il valore $t$ o $T$ di nessun nodo. Questo però non è necessario: infatti, ogni volta che abbiamo un nodo $(u,v)$ abbiamo detto che $T(v) \leq T(u)$, e infatti noi nel nostro algoritmo mettiamo sempre $v$ prima di $u$ nella lista (aggiungendolo dopo usando \code{append}), in modo da rispettare questa condizione sempre e senza dover calcolare il valore $T$ dei nodi.
+
+\subsection{DFS impossibili}
+
+Vediamo il seguente DFS:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{DFS impossibile.png}
+\end{figure}
+
+Se proviamo a capire da quale nodo questo DFS parta, ci accorgiamo di una verità inevitabile: questo DFS \textbf{non può partire da NESSUN nodo}. Infatti, una volta che si arriva al nodo 8, da qualsiasi nodo si parta, ci si blocca: infatti dall'8 se andassimo al 7 allora dovremmo andare anche al 6 o al 2, cosa che nel nostro DFS non succede. Se invece andassimo al 9 dovremmo andare all'1 e viceversa, e se andassimo al 2 dovremmo andare al 7 e poi al 6 o viceversa. Notiamo quindi come i due archi problematici siano gli archi $67$ e $91$. Questi due archi collegano infatti in entrambi casi due nodi di grado 1 (nell'albero di ricerca), e dato che questi sono per forza archi all'indietro (abbiamo visto come nei grafi non diretti tutti gli archi fuori dall'albero di ricerca siano archi all'indietro), troviamo che per forza un nodo è antenato dell'altro, ed essendo entrambi di grado 1, troviamo che uno dei due deve essere per forza la radice. Quindi troviamo che un nodo tra 6 e 7 è la radice, e anche uno tra 9 e 1 lo è: questo è ovviamente impossibile, e quindi capiamo subito che il DFS è impossibile. \\
+Possiamo quindi ricapitolare che, se in un DFS ci sono due nodi $A$ e $B$ di grado 1 collegati da un arco fuori dal DFS e altri due nodi $C$ e $D$ con la stessa proprietà, il DFS è \textbf{impossibile}.
+
+\subsection{Pozzi universali}
+
+\begin{Definizione}[Pozzo universale]
+\label{def-pozzo-universale}
+In un grafo diretto un \textbf{pozzo universale} è un nodo $x$ a cui tutti gli altri nodi \textbf{puntano} ma che \textbf{non punta} a nessun nodo.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Esempio pozzo universale.png}
+\caption{Esempio di pozzo universale}
+\end{figure}
+
+Vogliamo ora stabilire, preso un grafo diretto G salvato tramite matrice di adiacenze, se \textbf{esiste un pozzo universale} (uno solo, dato che in ogni grafo può esistere al più un pozzo universale per la definizione stessa di pozzo) in G in tempo $\textbf{O}\bm{(n)}$. Ricordiamo che in una matrice di adiacenze $(i,j) \in E(G)$ si traduce in $m[i,j] = 1$ (scriviamo quindi sulle colonne gli archi entranti di un nodo e sulle righe gli archi uscenti). Stiamo quindi cercando un nodo che abbia \textbf{una colonna di soli 1} (tranne che per la cella che si incrocia con sé stesso), e \textbf{una riga di soli 0}. Sembra facile: basta controllare ogni colonna di ogni nodo e ogni sua riga. Questo però ha costo totale $\O(n^2)$ e non l'$\O(n)$ richiesto. Per questo motivo cerchiamo un approccio diverso. \\
+Notiamo che, presa una cella $(i,j)$, se $m[i,j] = 1$ allora possiamo subito eliminare $i$ dai possibili candidati al pozzo universale, dato che manda un arco in uscita, mentre se $m[i,j] = 0$ allora possiamo subito eliminare $j$ dai possibili candidati, dato che esiste un nodo $j$ che non ha un nodo che punta a $i$. Dunque, con un controllo su una singola cella, in ogni caso riusciamo a eliminare un nodo dai possibili candidati ad essere pozzo universale. Ci bastano quindi solo $n$ check per trovare un possibile pozzo universale, e ci servono poi solo $2n$ controlli su quel candidato per controllare che funzioni davvero da pozzo universale. Vediamo come si traduce questo in codice:
+\begin{lstlisting}[style=Python]
+PozzoUniverale(m):
+    candidato = 0
+    for i in range(2,n):
+        if m[candidato,i] == 1: // Il candidato ha un arco di uscita, non va bene
+            candidato = i
+    for i in range(2,n): // Check per controllare che candidato funzioni
+        if m[i, candidato] == 0 and i != candidato: // Il candidato non ha un arco in entrata da i, non va bene
+            return False
+        if m[candidato,i] == 1: // Il candidato ha un arco in uscita, non va bene
+            return False
+    return candidato // Se supera i test è un vero pozzo universale
+\end{lstlisting}
+
+\subsection{Ponti}
+
+\begin{Definizione}[Ponte]
+\label{def-ponte}
+In un grafo connesso e non diretto, un arco è \textbf{ponte} se non appartiene a nessun ciclo.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Esempio di ponte.png}
+\caption{Esempio di ponte}
+\label{fig-esem-ponte}
+\end{figure}
+
+\begin{Osservazione}[]
+\label{oss-ponti}
+Preso un grafo G, G è un albero $\implies$ tutti gli archi di G sono ponti.
+\end{Osservazione}
+
+Questo è ovvio, dato che gli alberi sono aciclici.
+
+Per verificare se un arco $xy$ sia un ponte, è necessario eliminarlo dal grafo e eseguire una DFS da $x$ o da $y$ per verificare se esiste un cammino da $x$ a $y$. Se \textbf{questo cammino esiste} nonostante $xy$ sia stato eliminato, allora $xy$ \textbf{non è un ponte}: infatti questo sarebbe un secondo cammino da $xy$, che formerebbe quindi insieme al cammino trovato nel DFS un ciclo. Se invece \textbf{non troviamo un cammino} da $x$ a $y$, allora $xy$ \textbf{è un ponte}. Il costo di questa operazione è quindi il costo di una DFS, ossia $\O(n+m)$, più il costo dell'eliminazione di un arco, ossia $\O(n)$. Dunque il costo totale è $\textbf{O}\bm{(n+m)}$.
+
+Se ora volessimo invece trovare tutti i ponti in un grafo G, potremmo pensare di eseguire questo algoritmo con tutti gli archi in G. Ciò però avrebbe un costo di $\O(m(n+m))$, abbastanza elevato. Proviamo quindi a ragionare in modo diverso.\\
+Sappiamo che se eseguiamo un DFS su G, troveremo un albero di ricerca T. Trovandoci in un grafo connesso non diretto, per la Proposizione \ref{propos-grafi-non-diretti-ordine-topologico} sappiamo che tutti gli archi fuori da T sono all'indietro, e per la Proposizione \ref{propos-grafo-connesso-non-diretto-ciclo-arco-all-indietro} sappiamo che questi archi formano sempre dei cicli, dunque possiamo già concludere che \textbf{tutti gli archi fuori da T non sono ponti}. Non ci resta ora che analizzare gli archi di T, che sappiamo essere $n-1$, e per farlo possiamo usare l'algoritmo visto prima. Arriviamo quindi a un costo totale di $\textbf{O}(n(n+m))$, migliore rispetto al costo visto prima, dato che in un grafo connesso abbiamo $m \geq n - 1$, ossia almeno $m \in \O(n)$.  \\
+Vediamo un esempio per capire meglio questo procedimento.
+
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{DFS Ponti.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.60\textwidth}
+Sappiamo già quindi che $13$ e $46$ non sono ponti, essendo fuori l'albero di ricerca. $12$ nemmeno lo è, perché eliminandolo riusciamo comunque a trovare un cammino tra $1$ e $2$ ($1-2-3$). Stesso dicorso per gli archi $23, 45$ e $56$. L'unico che veramente è un ponte è proprio l'arco $34$, che avevamo già visto nell'esempio in Figura \ref{fig-esem-ponte}.
+\end{minipage}
+
+Notiamo da questo esempio, però, una cosa molto interessante, ossia che da un nodo $x$ collegato a un nodo $y$ tramite un arco che non è un ponte esiste un altro arco all'indietro che parte da $y$ discendente e arriva a un antenato di $x$. Ipotizziamo ad esempio che il nostro DFS parta dal nodo 1: se prendiamo l'arco $56$, notimao che l'arco all'indietro collega $6$ a un antenato di $5$: il nodo $4$. Questo ci assicura già che anche $56$ non può essere un ponte: infatti, se $6$ è collegato a un antenato di $5$, vuol dire che esiste un cammino che da $6$ porta a $5$ senza passare per l'arco $56$, il che rende $56$ non un ponte. Racchiudiamo questa idea ora in una proposizione e dimostriamola.
+
+\begin{Proposizione}[]
+\label{propos-arco-indietro-collega-antenato}
+Preso un grafo G connesso e non diretto, e T un albero di ricerca derivante da un DFS su G, e $xy$ un arco di T, dove $y$ è un discendente di $x$, allora esiste un arco $uv \neq xy$, con $u \in T_y$ (dove $T_y$ è il sottoalbero formato dai discendenti di $y$ e da $y$ stesso) e $v$ antenato di $x \iff xy$ non è un ponte.  
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}[label=\arabic*°]
+    \item Esiste un arco $uv \neq xy$, con $u \in T_y$ e $v$ antenato di $x \implies xy$ non è un ponte.  \\
+    Per dimostrare che $xy$ non è un ponte, dobbiamo dimostrare che tolto questo esista comunque un cammino che porti da $x$ a $y$ nel grafo. Poiché $u \in T_y$, sappiamo che $u$ è discendente di $y$ e che quindi esiste un cammino da $y$ a $u$. Per lo stesso motivo, poiché $v$ è antenato di $x$, sicuramente esiste un cammino da $v$ a $x$. Dunque, passando per il cammino da $y$ a $u$, per l'arco da $u$ a $v$, e per il cammino da $v$ a $x$, troviamo un cammino che collega $x$ a $y$, senza passare per l'arco $xy$. Possiamo quindi concludere che $xy$ non è un ponte. $\blacksquare$
+    \item Esiste un arco $uv \neq xy$, con $u \in T_y$ e $v$ antenato di $x \impliedby xy$ non è un ponte.  \\
+\end{enumerate}
 
 \end{document}
