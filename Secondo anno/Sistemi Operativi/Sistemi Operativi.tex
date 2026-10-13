@@ -1678,7 +1678,7 @@ A questo punto è facile notare come ordinando i diversi processi possiamo ordin
 Proviamo ora a togliere anche la seconda assunzione, ossia prendiamo 3 processi con tempi di arrivo diversi. \\
 Ipotizziamo gli stessi tre processi di prima $A,B$ e $C$, ma ipotizziamo che i processi $B$ e $C$ arrivino dopo 10 secondi rispetto ad $A$. In questo caso, la SJF a tempo 0 farà partire il processo più veloce, e dato che è presente solo $A$ sarà questo a partire. Dunque troviamo che il tempo medio di turnaround sarà in questo caso $\bm{103.3}$ \textbf{secondi} (100 secondi di A + 100 di B + 110 di C tutto diviso 3). Questo succede perché, per la terza assunzione, i nostri processi una volta iniziati non possono essere interrotti.
 
-\subsubsection*{PSJF}
+\subsubsection*{PSJF/STCF}
 
 Per risolvere il problema della SJF viene introdotto un nuovo concetto chiamato \textbf{preemption}. Il SO non è più vincolato a dover eseguire un processo per intero prima di passare a un altro, ma può effettuare ora un context-switch per passare da un processo all'altro. Stiamo dunque eliminando la terza assunzione per risolvere i problemi relativi al SJF. È nata così un'altra policy, chiamata \textbf{PSJF} (Preemptive Shortest Job First), anche detta \textbf{STCF} (Shortest Time-to-Complete First). In questa policy, ogni volta che arriva un nuovo processo lo scheduler si sveglia per controllare quale tra i processi presenti è il più veloce da eseguire, e sceglie di mandare in esecuzione sempre quello, anche se la CPU è occupata con un altro. Ovviamente, se un processo appena arrivato ha lo stesso tempo di esecuzione di quello che si trova già sulla CPU, non avviene nessuno scambio per non sprecare tempo con il context-switch. 
 
@@ -1731,7 +1731,7 @@ Questa proposizione ci costringe quindi a fare una scelta tra equità + velocit�
 
 Abbiamo quindi visto diverse policy di scheduling, ma non siamo mai riusciti a eliminare con nessuna di queste la quarta assunzione, ossia quella che prevede che \textbf{non ci siano operazioni I/O}. Anche questa è un'assunzione del tutto irrealistica: i programmi veri non fanno solo calcoli sulla CPU, ma leggono anche dati sul disco, si connettono a internet, o aspettano che l'utente scriva qualcosa. Quando qualcosa di questo succede, il processo passa immediatamente allo stato BLOCKED, e non può usare la CPU fino a quando l'operazione I/O è stata completata. Di solito, un programma alterna tra operazioni CPU e operazioni I/O, dunque l'obiettivo dello scheduler deve essere quello di massimizzare l'utilizzo delle risorse dando a ogni processo la CPU solo quando questo ne ha realmente bisogno. Per farlo, dividiamo gli utilizzi della CPU di un processo in dei \textbf{piccoli sottoprocessi}. Se ad esempio abbiamo un processo che ha bisogno di 50 ms totali di CPU, il nostro scheduler può dividere questo processo in 5 sottoprocessi da 10ms l'uno e trattarli come processi a sé. 
 
-Per capire come funziona tutto ciò, vedimao un esempio. Ipotizziamo di avere due processi: $A$ è un processo da 100 ms totali, 50 dei quali sono di operazioni CPU mentre 50 di operazioni I/O, mentre $B$ è un processo da 50 ms solo di operazioni CPU. Il nostro scheduler divide quei 50 ms di operazioni CPU di $A$ in 5 sottoprocessi. Ora, se ad esempio usiamo una policy di PSJF, avremo all'inizio 6 processi a competere: 5 sono i sottoprocessi di $A$ da 10 ms mentre 1 è $B$ da 50ms. Dato che i sottoprocessi di $A$ sono più veloci, lo scheduler prenderà il primo sottoprocesso di $A$ e lo manderà in esecuzione. Una volta terminato, il processo $A$ si troverà in attesa di un operazione I/O, e nel frattempo che attende sulla CPU ci sarà il processo $B$. In questo modo non stiamo sprecando alcun tempo vuoto sulla CPU, e una volta che $A$ sarà tornato disponibile dopo l'operazione I/O, verrà subito rimesso a lavoro dato che sarà nuovamente il processo più corto, a meno che $B$ nel frattempo non abbia quasi finito (ossia gli siano rimasti <10ms di tempo).
+Per capire come funziona tutto ciò, vediamo un esempio. Ipotizziamo di avere due processi: $A$ è un processo da 100 ms totali, 50 dei quali sono di operazioni CPU mentre 50 di operazioni I/O, mentre $B$ è un processo da 50 ms solo di operazioni CPU. Il nostro scheduler divide quei 50 ms di operazioni CPU di $A$ in 5 sottoprocessi. Ora, se ad esempio usiamo una policy di PSJF, avremo all'inizio 6 processi a competere: 5 sono i sottoprocessi di $A$ da 10 ms mentre 1 è $B$ da 50ms. Dato che i sottoprocessi di $A$ sono più veloci, lo scheduler prenderà il primo sottoprocesso di $A$ e lo manderà in esecuzione. Una volta terminato, il processo $A$ si troverà in attesa di un operazione I/O, e nel frattempo che attende sulla CPU ci sarà il processo $B$. In questo modo non stiamo sprecando alcun tempo vuoto sulla CPU, e una volta che $A$ sarà tornato disponibile dopo l'operazione I/O, verrà subito rimesso a lavoro dato che sarà nuovamente il processo più corto, a meno che $B$ nel frattempo non abbia quasi finito (ossia gli siano rimasti <10ms di tempo).
 
 \subsection{Implementazioni delle diverse policy in C}
 
@@ -1743,6 +1743,135 @@ Ogni policy in C viene implementata in modo differente:
 \end{itemize}
 
 Dagli anni 50 agli anni 60 era la FIFO e la SJF la policy più usata nei computer, mentre nei sistemi moderni time-sharing il Round Robin e il PSJF sono le policy più importanti e usate. In questi sistemi multicore moderni il problema si è spostato più sul coordinamento: bisogna saper distribuire i processi sui core in modo equilibrato e saper riassegnare uno stesso processo allo stesso core quando possibile.
+
+\section{Policy di scheduling più complesse}
+
+\subsection{MLFQ}
+
+Abbiamo visto come l'assunzione più irrealistica tra tutte quelle fatte sia il conoscere a priori il runtime di un processo. Dato che ciò è impossibile nei sistiemi reali, abbiamo bisogno di uno scheduler che riesca a \textbf{prevedere} il runtime di un processo in qualche modo. Per cercare di creare uno scheduler del genere, dobbiamo prima dividere i processi in due macrogruppi:
+\begin{itemize}
+    \item \textbf{Processi interattivi}, ossia processi composti da brevi calcoli sulla CPU seguiti da periodi di WAITING, che hanno bisogno di poco tempo di reazione
+    \item \textbf{Batch/Processi CPU}, ossia processi composti da lunghi periodi sulla CPU e da poco I/O, che hanno bisogno di un tempo di turnaround ottimale
+\end{itemize}
+
+Il nostro scheduler deve essere in grado di capire ogni processo di che classe fa parte e di trattarlo nel modo corretto. Ad esempio, un processo interattivo deve avere un livello di priorità più alto di un batch. Questa idea è alla base del \textbf{MLFQ} (\textbf{Multi-Level Feedback Queue}).
+
+\begin{Definizione}[MLFQ]
+\label{def-MLFQ}
+Il \textbf{MLFQ} (Multi-Level Feedback Queue) è una gerarchia dei processi a più livelli. Questo si divide in più code con livelli di priorità differenti. 
+\end{Definizione}
+
+Vediamo un MLFQ a 4 livelli:
+\begin{enumerate}[label=\arabic*°]
+    \item $\bm{Q_0}$, livello con la priorità più alta dove vanno i nuovi processi, che utilizza come policy un RR
+    \item $\bm{Q_1}$, livello con priorità alta che utilizza come policy sempre un RR 
+    \item $\bm{Q_2}$, livello con priorità media che utilizza come policy sempre un RR 
+    \item $\bm{Q_3}$, livello più basso dove vanno a finire i processi batch che utilizzano molto la CPU, che utilizza come policy una FIFO
+\end{enumerate}
+
+\NB Non è detto che un MLFQ abbia sempre 4 livelli, ma anzi spesso troviamo implementazioni tra gli 8 e i 32 liveli.
+
+Un processo parte sempre dal livello $Q_0$ ma appena finisce il suo \textbf{time allotment} sulla CPU scende di un livello, e riceve ogni tanto dei boost in alto così da non finire mai in starvation. Questo time allotment è quindi il quantitativo di tempo permesso a un livello di priorità a ogni processo prima che venga declassato. Inoltre, i primi tre livelli che utilizzano tutti il RR come policy differiscono per il Time Slice, che aumenta abbassandoci di livello, fino ad arrivare all'ultima coda che è sempre una FIFO e che quindi ha un time slice infinito.
+
+\begin{Proprieta}[Regole del MLFQ]
+\label{prop-regole}
+Presi due processi $A$ e $B$,
+\begin{enumerate}
+    \item \textbf{Priorità($\bm{A}$) > Priorità($\bm{B}$)} allora $\bm{A}$ \textbf{viene eseguito} e $\bm{B}$ \textbf{no} (se $A$ è in $Q_0$ e $B$ in $Q_2$ allora viene eseguito $A$)
+    \item \textbf{Priorità($\bm{A}$) = Priorità($\bm{B}$)} allora $\bm{A}$ e $\bm{B}$ \textbf{sono eseguiti in RR} (se $A$ e $B$ sono in $Q_1$ sono eseguiti entrambi in RR)
+    \item Quando un processo arriva \textbf{è sempre il processo con più priorità}
+    \item Quando un processo usa tutto il suo time allotment sulla CPU che gli è permesso al suo livello, \textbf{scende di livello} sempre (il tempo è \textit{cumulativo}: anche se lascio la CPU prima che finisca il mio tempo, quando torno sulla CPU il tempo non si resetta ma continua. Dunque ogni processo non può stare più tempo di quanto gli spetti sulla CPU senza essere declassato)
+    \item Dopo un tot di tempo (\textit{boost period}) \textbf{tutti i processi salgono di livello} (così da non far finire in starvation nessun processo e evitare che un processo che, finito un grosso lavoro sulla CPU, rimanga in basso nelle gerarchie)
+\end{enumerate}
+\end{Proprieta}
+
+Scegliere un \textbf{boost period} $S$ adeguato non è facile. Non può essere troppo piccolo perché altrimenti i processi interrativi sono sempre interrotti da batch più lenti, ma se $S$ è invece troppo grande rischio di far attendere troppo i batch che si trovano nella coda a bassa priorità.
+
+Nella regola 4 è fondamentale che il tempo sia cumulativo: infatti in passato questo non era cumulativo, e questo lo rendeva vulnerabile a degli attacchi mirati che usavano il 99\% del time allotment prima di richiedere un I/O per resettare il timer. In questo modo un processo poteva rimanre tutto il tempo che voleva nella coda di priorità più alta senza conseguenze. \\
+Un'altro tentativo di rompere questo sistema di scheduling è quello di usare la funzione \code{fork()} per duplicare il processo e resettare così il timer. Per questo motivo, bisogna associare un unico timer uguale tra i figli e il padre, così da far ereditare a un processo figlio il timer del padre.
+
+Abbiamo quindi risolto il problema del runtime noto a priori creando uno scheduler che divide i nostri processi tra più livelli. In questo modo, mentre eseguiamo un processo iniziamo a capire quanto questo sia lento o veloce e lo spostiamo tra le diverse priorità, così da non eseguire mai per troppo tempo un processo lento e non far aspettare mai troppo tempo un processo veloce. 
+
+\subsection*{MLFQ nei sistemi reali}
+
+I sistemi reali implementano l'MLFQ in modi differenti. Ad esempio, BSD utilizza assegna un valore di priorità ad ogni processo, che può andare da 0 a 255. Solitamente i processi con valore da 0 a 63 sono processi kernel, quelli da 64 a 127 sono processi di sistema e i restanti processi da 128 a 255 sono processi utente. Linux O(1) invece utilizza un sistema a 140 livelli dove ogni livello ha una coda di esecuzione separata. È presente anche un processo di rilevazione dei processi: quelli che vanno spesso in SLEEP (ossia si staccano spesso dalla CPU) sono i processi più interattivi e ricevono un bonus, mentre quelli che utilizzano di più la CPU ricevono un malus. 
+
+\subsection*{Problemi dell'MLFQ}
+
+L'MLFQ è perfetto per ottimizzare performance e tempo di risposta, ma non è in grado di garantire \textbf{equità}. Infatti, l'MLFQ non riesce a garantire che un processo che merita il doppio del tempo del processo B riceva effettivamente il tempo che meriti. Abbiamo bisogno di un paradigma differente, che prende il nome di \textbf{Propotional Share Scheduling}.
+
+\subsection{Propotional Share Scheduling}
+
+Esistono due algoritmi propotional-share:
+\begin{itemize}
+    \item \textbf{Lottery scheduling}
+    \item \textbf{Stride Scheduling}
+\end{itemize}
+
+\subsubsection{Lottery Scheduling}
+
+Immaginiamo di avere due processi da dover eseguire $A$ e $B$, e di voler distribuire 100 biglietti della lotteria ai nostri due processi. Decidiamo che il processo $A$ è più importante del $B$ e debba ricevere 75 biglietti, mentre $B$ ne riceverà solo 25. Una volta fatto, lo scheduler prende a caso uno dei 100 biglietti: \textbf{il processo che ha quel biglietto verrà eseguito}. A lungo andare troveremo che il tempo di accesso alla CPU del processo $A$ è il triplo del tempo che ha il processo $B$, dato che $P(A) = \frac{75}{100} = 75\%$ mentre $P(B) = \frac{25}{100} = 25\%$. Ovviamente più estrazioni vengono fatte più i tempi di esecuzione di $A$ e $B$ si avvicinano a queste percentuali.
+
+Se poi a questi due processi si aggiunge $C$, qualsiasi numero di biglietti che verranno dati a $C$ modificherà la priorità degli altri processi. Ad esempio, se $C$ diamo a $C$ 50 biglietti, troviamo che $P(C) = \frac{50}{150} = 33\%$, mentre le percentuali $P(A) = \frac{75}{150} = 50\%$ e $P(B) = \frac{25}{150} = 17\%$ sono scese. Se volessimo modificare queste percentuali dovremmo poi aumentare o diminuire il numero di biglietti di $A$ o di $B$.
+
+Il problema di usare estrazioni casuali è che, sul breve termine, queste possano sbilanciarsi molto su scenari improbabili. Ad esempio, presi due processi $A$ e $B$ con il 50\% di biglietti per entrambi, è possibile che dopo 10 estrazioni il processo $A$ vinca 8 estrazioni, mentre $B$ solo 2. Calcoliamo in questo caso l'\textbf{indice di equità}:
+\[
+U = \frac{\min(C_A, C_B)}{\max(C_A,C_B)}
+\]
+
+dove $C_A$ e $C_B$ sono rispettivamente il numero di estrazioni vinte dal processo $A$ e $B$. In questo caso avremmo quindi $U = \frac{2}{8} = 0.25$, che è molto basso. L'ideale sarebbe ovviamente di avere $\bm{U = 1}$, che indica \textbf{equità perfetta}.
+
+Dato che l'equità perfetta nel breve periodo non sempre è raggiungibile, per i processi molto brevi il lottery scheduling potrebbe non essere la soluzione corretta. Per questo motivo introduciamo una nuova policy chiamata \textbf{stride scheduling}.
+
+\subsubsection{Stride scheduling}
+
+Nello \textbf{stride scheduling} a ogni processo vengono assegnati due valori: 
+\begin{itemize}
+    \item $\textbf{stride}_{\bm{i}} \bm{= \frac{W}{\textbf{tickets}_i}}$, dove $W$ è una costante molto grande
+    \item $\textbf{pass}_{\bm{i}} \bm{= 0}$ inizialmente
+\end{itemize}
+
+In questa policy noi eseguiamo sempre il processo con il pass più basso, e per ogni esecuzione di ogni processo modifichiamo il suo valore di pass aggiungendogli il suo valore di stride. 
+
+Notiamo quindi come un processo con molti tickets avrà uno stride più basso e quindi verrà eseguito più volte, perché il suo pass aumenterà più lentamente rispetto ad altri. Se prendiamo ad esempio tre processi $A,B$ e $C$ dove $\text{stride}_A = \frac{10000}{100} = 100, \text{stride}_B = \frac{10000}{50} = 200$ e $\text{stride}_C = \frac{10000}{250} = 40$. Ci aspettiamo che il processo $A$ venga eseguito il 25\% del tempo, il $B$ il 12.5\% e il $C$ il 62.5\%. Vediamo dopo 10 tick cosa succede:
+\begin{enumerate}[label=\arabic*°]
+    \item tick: $A$ eseguito $\implies \text{pass}_A = 100$
+    \item tick: $B$ eseguito $\implies \text{pass}_B = 200$
+    \item tick: $C$ eseguito $\implies \text{pass}_C = 40$
+    \item tick: $C$ eseguito $\implies \text{pass}_C = 80$
+    \item tick: $C$ eseguito $\implies \text{pass}_C = 120$
+    \item tick: $A$ eseguito $\implies \text{pass}_A = 200$
+    \item tick: $C$ eseguito $\implies \text{pass}_C = 160$
+    \item tick: $C$ eseguito $\implies \text{pass}_C = 200$
+    \item tick: $A$ eseguito $\implies \text{pass}_A = 300$
+    \item tick: $B$ eseguito $\implies \text{pass}_B = 400$
+\end{enumerate} 
+
+Dunque il processo $C$ viene eseguito 6 volte, $A$ 3 e $B$ 1 sola, dunque $P(C) = 6/10 = 60\%$,$P(A) = 3/10 = 30\%$ e $P(B) = 1/10 = 10\%$, molto simili alle percentuali che ci aspettavamo dopo solo 10 tick. Dunque lo stride scheduling \textbf{converge molto più velocemente alle percentuali previste} rispetto al lottery scheduling.
+
+Un problema importante di questo scheduling è che un processo nuovo monopolizza la CPU fino a quando il suo valore pass non raggiunge i pass degli altri processi. Per questo, è improtante impostare come base per i pass dei nuovi processi il valore \textbf{minimo tra i pass dei processi attuali}.
+
+\subsection{CFS}
+
+\subsection{Linux passa a CFS}
+
+Abbiamo già accennato allo scheduler Linux O(1) che utilizzava una policy MLFQ. Linux, però, nell'ottobre del 2007 ha deciso di cambiare scheduler e passare al \textbf{CFS} (Completely Fair Scheduler). Questo per due motivi:
+\begin{itemize}
+    \item La strategia bonus/malus era troppo complessa e a volte anche imprecisa
+    \item Con molti processi gli errori di arrotondamento nel calcolo della priorità di un processo si accumulavano, portando alcuni processi ad avere più o meno tempo sulla CPU di quanto gli dovesse spettare
+\end{itemize}
+
+Il \textbf{CFS} non utilizza delle code di priorità, ma cerca piuttosto di modellare una CPU perfettamente equa, ossia una CPU che esegue tutti i processi in contemporanea dando a ogni processo un quantitativo di CPU uguale per tutti. Ovviamente ciò non è realizzabile realmente, dato che la CPU può eseguire al più un processo per core. Il CFS cerca quindi di emulare questo comportamento calcolando sempre quanto tempo ogni processo ha ricevuto e mandando in esecuzione sempre il \textbf{processo che ha ricevuto fino a quel momento meno CPU rispetto a tutti gli altri}. Per fare ciò, lo scheduler assegna a ogni processo un \textbf{virtual runtime} (\code{vruntime}), calcolato in nanosecondi e aggiornato ad ogni esecuzione seguendo questa formula: $\code{vruntime} += \Delta t \cdot \frac{W_0}{w_i} $ (con \code{vruntime} che parte sempre a un valore minimo prestabilito), dove $\Delta t$ è il tempo di esecuzione del processo, $W_0$ è il peso del processo a \code{nice = 0} (di solito 1024), e $w_i$ è il peso del processo i determinato basandosi sul suo valore \code{nice}. Quindi, un processo con alta priorità avrà il proprio valore \code{nice} più basso, quindi il valore $w_i$ più alto e quindi un \code{vruntime} più basso. Questo scheduler altro non usa che una policy \textbf{stride scheduling}, implementata però non con una sorted list ma un red-black tree (una specie di AVL), che seleziona velocemente il prossimo processo da eseguire, ossia quello con il \code{vruntime} più basso che è sempre nel nodo più a sinistra dell'albero, il cui puntatore è salvato nella cache per poterlo raggiungere velocemente. 
+
+Ci sono due importanti parametri nel CFS:
+\begin{itemize}
+    \item \textbf{Target Scheduling Latency}, ossia il tempo massimo che può passare entro il quale TUTTI i processi vanno eseguiti
+    \item \textbf{Minimum Granularity}, ossia il tempo minimo assegnato a ogni processo sulla CPU
+\end{itemize}
+
+Ovviamente questi due valori vanno bilanciati: non posso avere come TSL 1 s e poi come MG 0.5 s, perché già con soli 3 processi questi due valori vanno in conflitto. Con un numero elevato di processi si arriverà sempre a una scelta tra TSL e MG: in questo caso, il minimum granularity avrà la priorità sul TSL, dunque ogni processo avrà sempre quel tot minimo di tempo sulla CPU \textbf{indipendentemente} dal numero di processi.
+
+
 
 
 

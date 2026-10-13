@@ -707,7 +707,7 @@ Ad ogni nodo $v$ associamo l'intervallo $\bm{[t(v), T(v)]}$.
 
 \begin{Proposizione}[]
 \label{propos-ordine-topologico-grafo-diretto}
-In un grafo diretto aciclico, presi due nodi $u$ e $v$ vi sono tre possibilità:
+In un grafo diretto aciclico, preso un arco $uv$ al di fuori dell'albero di ricerca vi sono tre possibilità:
 \begin{enumerate}
     \item $\bm{[t(u), T(u)] \subseteq [t(v), T(v)]}$ (\textbf{Arco all'indietro}, che va da un discendente a un antenato)
     \item $\bm{[t(v), T(v)] \subseteq [t(u), T(u)]}$ (\textbf{Arco in avanti}, che va da un antenato a un discendente)
@@ -751,10 +751,64 @@ Poniamo per assurdo che esista un arco $(u,v)$ tale che $[t(u), T(u)]\cap[t(v), 
 In un grafo connesso non diretto, $G$ ha un ciclo $\iff$ ogni DFS ha un arco all'indietro.
 \end{Proposizione}
 
+\vspace{2cm}
+
 \Dimostrazione \nopagebreak
 
+\begin{enumerate}[label=\arabic*°]
+    \item G ha un ciclo $\implies$ ogni DFS ha un arco all'indietro \\
+    Sappiamo per la proposizione appena vista che ogni arco fuori dall'albero di ricerca in un grafo non diretto è all'indietro. Preos un ciclo, per definizione stessa dell'albero sicuro non esiste un ciclo in questo (gli alberi sono infatti grafi aciclici). Dunque esiste sicuramente un arco del ciclo che non fa parte dell'albero, e dato che tutti gli archi fuori dall'albero sono all'indietro, questo è un arco all'indietro. $\blacksquare$
+    \item G ha un ciclo $\impliedby$ ogni DFS ha un arco all'indietro \\
+    Sia $uv$ un arco all'indietro fuori dall'albero di ricerca con $u$ discendente di $v$. Sappiamo sicuramente che nell'albero esiste un cammino P da $u$ a $v$, e dato che $uv$ non fa parte dell'albero questo chiude un ciclo. $\blacksquare$
+\end{enumerate}
 
+\begin{Proposizione}[]
+\label{propos-grafo-diretto-connesso-ciclo-diretto-arco-all-indietro}
+In un grafo connnesso diretto, G ha un ciclo $\iff$ ogni DFS ha un arco all'indietro.
+\end{Proposizione}
 
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}[label=\arabic*°]
+    \item G ha un ciclo $\implies$ ogni DFS ha un arco all'indietro \\
+    La dimostrazione purtroppo non è identica, perché qui non abbiamo più la certezza che tutti gli archi fuori dall'albero di ricerca siano all'indietro. Dunque dobbiamo fare una dimostrazione differente. \\
+    Supponiamo che se C è un ciclo nel grafo, e $v$ è il primo vertice del ciclo visitato dal DFS, allora tutti i vertici del ciclo sono discendenti di $v$. Infatti sappiamo che tutti i vertici oltre $v$ sono visitati prima che $v$ venga rimosso dallo stack, dunque possiamo dedurre che tutti i nodi sono discendenti di $v$. Se questo infatti per assurdo non fosse vero, vuol dire che avremmo un nodo $v_i$ sul ciclo non discendente di $v$, ossia che esiste un passo tra un vertice $v_j$ a un suo non discendente $v_{j+1}$ nel quale la discendenza quindi si perde. Sappiamo che $t(v_{j+1}) \leq T(v_j) \leq T(v)$. Questo significa che $v_{j+1}$ è stato inserito prima di aver rimosso $v$, dunque $v_{j+1}$ viene rimosso prima di $v$, dunque è un discendente di $v$. Duqnue sicuramente non esistono nodi non discendenti di $v$ nel cerchio. Ma allora possiamo concludere l'ultimo arco che collega l'ultimo nodo a $v$ e che chiude è un cerchio è proprio un arco all'indietro, dato che collega un discendente con un antenato. $\blacksquare$
+    \item G ha un ciclo $\impliedby$ ogni DFS ha un arco all'indietro \\
+    La dimostrazione è identica a quella vista per la Proposizione \ref{propos-grafo-connesso-non-diretto-ciclo-arco-all-indietro}. $\blacksquare$
+\end{enumerate}
+
+Vediamo ora l'algoritmo per riempire l'array $T$ e $t$ in un grafo diretto connesso G:
+\begin{lstlisting}
+Algoritmo(G,x):
+    n = numero di nodi in G
+    t = [-1] * n
+    T = [-1] * n
+    con = 1
+    T[x] = 1
+    Algoritmo_Ricorsivo(G,x,t,T,con)
+\end{lstlisting}
+dove \code{Algoritmo\_Ricorsivo} è questa funzione ricorsiva:
+\begin{lstlisting}
+Algoritmo_Ricorsivo(G,x,t,T,con):
+    while esiste un nodo y con arco (x,y) e t[y] == -1:
+        con ++
+        t[y] = con
+        Algoritmo_Ricorsivo(G,y,t,T,con)
+    T[x] = con
+\end{lstlisting}
+
+\begin{Proposizione}[]
+\label{propos-tu<tv}
+In un ordine topologico $T$ di un grafo G connesso e diretto, preso un arco $(u,v) \in T$, $\bm{T[u] \leq T[v]}$.  
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Abbiamo solo due casi da analizzare: se $(u,v)$ è un arco in avanti o di attraversamento. Infatti, se abbiamo trovato un ordine topologico sicuramente in G non è possibile trovare cicli, e per la Proposizione \ref{propos-grafo-diretto-connesso-ciclo-diretto-arco-all-indietro} sappiamo che se G non ha un cicli allora nessuna DFS sul grafo produce archi all'indietro, che altrimenti formerebbero un ciclo. Analizziamo quindi i seguenti casi:
+\begin{itemize}
+    \item $(u,v)$ è un arco in avanti \\
+    \item $(u,v)$ è un arco di attraversamento \\
+\end{itemize}
 
 
 \end{document}
