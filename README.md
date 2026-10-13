@@ -20,4 +20,4 @@ Gli appunti possono contenere refusi, imprecisioni o errori di trascrizione (com
 1. Aprendo una **Issue** direttamente su questo repository GitHub.
 2. Contattandomi via email all'indirizzo: `ferraro.notes.issues@proton.me` (canale preferito perché è più facile che io risponda in fretta).
 
-Ringrazio qui anche il mio caro amico [Catalin Ceban](https://github.com/catalin-ceban) con il quale mi confronto giornalmente per cercare di capirci qualcosa durante le lezioni, che ha anche lui una sua [repository di appunti](https://github.com/catalin-ceban/appunti-universitari).
+Ringrazio inoltre i miei cari amici [Catalin Ceban](https://github.com/catalin-ceban), con il quale mi confronto ogni giorno per capirci qualcosa durante le lezioni (e di cui vi segnalo la [repository di appunti personale](https://github.com/catalin-ceban/appunti-universitari)), e [Diego Cruciani](https://github.com/kruxiani), che mi ha dato l'idea di iniziare a prendere appunti in LaTeX.
