@@ -1402,7 +1402,7 @@ A causa del fenomeno del time-sharing, un processo non sta mai a lungo in modali
 
 \begin{Definizione}[PCB]
 \label{def-PCB}
-Il \textbf{PCB} (Process Control Block) è la struttura dati che il sistema operativo instanzia per ogni processo per identificarne, salvarne e tracciarne lo stato di esecuzione, la memoria e le risorse.
+Il \textbf{PCB} (Process Control Block) è la struttura dati che il sistema operativo instanzia per ogni processo per identificarne, salvarne e tracciarne lo stato di esecuzione, la memoria e le risorse. Questo si trova nella \textit{memoria kernel}, una speciale zona di memoria RAM destinata a tutti i componenti più importanti del kernel.
 \end{Definizione}
 
 Ogni PCB salva diverse informazioni quindi, tra cui un identificativo (\code{pid}), lo stato del processo, un puntatore alla pagina di memoria riservata al processo e una struttura dati chiamata \code{trapframe} dove vengono salvati tutti i registri della CPU quando il processo viene interrotto. Il PCB è quindi fondamentale per poter effettuare il time-sharing senza perdere informazioni riguardo i singoli processi. Il sistema operativo ha poi una struttura dati chiamata \textbf{process table} dove mantiene tutti i PCB. È qui che lo scheduler cerca il primo processo READY per mandarlo in esecuzione. 
@@ -1871,6 +1871,116 @@ Ci sono due importanti parametri nel CFS:
 
 Ovviamente questi due valori vanno bilanciati: non posso avere come TSL 1 s e poi come MG 0.5 s, perché già con soli 3 processi questi due valori vanno in conflitto. Con un numero elevato di processi si arriverà sempre a una scelta tra TSL e MG: in questo caso, il minimum granularity avrà la priorità sul TSL, dunque ogni processo avrà sempre quel tot minimo di tempo sulla CPU \textbf{indipendentemente} dal numero di processi.
 
+\section{Virtualizzazione della memoria}
+
+\subsection{Perché virtualizzare la memoria?}
+
+Il nostro computer ha una sola RAM fisica che deve dividere tra tutti i processi. È proprio il sistema operativo a dover dividere questa memoria in modo adeguato tra i diversi processi, e assicurarsi che ogni processo non vada a toccare una zona di memoria non propria. Astrarre la memoria ci facilita questa operazione. 
+
+È importante virtualizzare la memoria perché facilita di molto questo lavoro del sistema operativo. Basti pensare che i primi computer non avevano alcuna astrazione della memoria: ogni processo doveva usare direttamente gli indirizzi fisici. Questo non solo era molto pericoloso, perché ogni programma poteva scrivere su un blocco di memoria non proprio e corrompere il SO, ma anche perché questo rendeva impossibile il \textbf{multiprogramming}, dunque la CPU spesso si trovava ferma ad aspettare un'operazione I/O perdendo tempo, e ogni computer poteva quindi eseguire solo un processo alla volta. Oggi col multiprogramming invece possiamo eseguire più processi insieme, che si alternano sulla CPU così da eliminare i momenti morti nei quali la CPU non esegue alcun processo in attesa di un'operazione di I/O.  
+
+Dunque si è passati da un solo processo a più processi eseguiti in contemporanea sulla CPU. Rimangono però diversi problemi, sia di protezione ma anche di facilità di utilizzo. Per rispondere a questi problemi nascela \textbf{memoria virtuale}. 
+
+\begin{Proprieta}[Proprietà della memoria virtuale]
+\label{prop-memoria-virtuale}
+La memoria virtuale deve avere tre proprietà fondamentali:
+\begin{itemize}
+    \item \textbf{Trasparenza}: i processi devono credere che la memoria virtuale che l'OS gli consegna sia la vera memoria fisica del computer
+    \item \textbf{Efficienza}: la virtualizzazione deve essere veloce e non deve sprecare RAM (ciò avviene grazie a un supporto hardware, che rende queste operazioni più veloci)
+    \item \textbf{Protezione}: nessun processo deve poter toccare lo spazio di memoria dedicato a un altro processo
+\end{itemize}
+\end{Proprieta}
+
+\begin{Definizione}[Spazio d'indirizzamento]
+\label{def-spazio-indirizzo}
+Lo \textbf{spazio d'indirizzamento} è l'astrazione che fa il sistema operativo sulla memoria fisica, che altro non è che un \textbf{range} di indirizzi virtuali. Ogni processo ha il proprio spazio d'indirizzamento privato con i propri indirizzi virtuali, che però non corrispondono direttamente a un indirizzo fisico. Infatti, due processi possono avere lo stesso indirizzo virtuale \code{0x0ABCDEFG} ad esempio, che però corrisponde per i due processi a due indirizzi fisici diversi.
+\end{Definizione} 
+
+\NB QUALSIASI indirizzo visibile sul computer è sempre un indirizzo virtuale. L'OS infatti lo traduce in modo trasparente senza che nemmeno il programma ne sia a consocenza.
+
+\begin{Osservazione}[Range degli spazi d'indirizzamento]
+\label{oss-range}
+Gli spazi d'indirizzamento più vecchi avevano 16 o 32 bit di spazio allocato. Nei sistemi moderni troviamo indirizzi detti a \textbf{64 bit}, che però in realtà sono indirizzi a 48 bit, che creano spazi d'indirizzamento di addirittura 256 Tbit, più che sufficienti, o al massimo 52 bit che creano spazi da 4 PiB.
+\end{Osservazione}
+
+
+Un indirizzo virtuale contiene tre regioni logiche distinte:
+\begin{itemize}
+    \item \textbf{Stack + Heap}, dove si trovano le variabili locali e le allocazioni dinamiche richieste con \code{malloc}
+    \item \textbf{Static Data}, dove si trovano le variabili statiche e globali
+    \item \textbf{Code}, dove si trovano le istruzioni del programma
+\end{itemize}
+
+Questi sono posizionati in ordine dall'indirizzo di memoria più alto (per Stack e Heap), al più basso (per il codice). Questo segmento, in particolare, è read-only, con una dimensione fissa, e condiviso tra i diversi thread di uno stesso processo.
+
+Per quanto riguarda la regione Heap, questa è quella che come già detto contiene la memoria allocata dinamicamente tramite \code{malloc}. Cresce verso l'alto, ossia verso indirizzi di memoria più alti. La regione Stack invece contiene le variabili locali. Si trova in cima allo spazio d'indirizzamento e cresce verso il basso, ossia verso indirizzi di memoria più bassi. Dunque queste due strutture crescono una verso l'altra: se si toccano l'OS uccide il programma, trovando un errore di \textit{stack overflow} o di \textit{heap exhaustion}. 
+
+Abbiamo già parlato di Heap e di \code{malloc} e di tutti i problemi che ne conseguono nel primo capitolo quando abbiamo studiato un po' di C. Tutti quei problemi che abbiamo studiato riguardano proprio questi indirizzi di memoria virtuali, dunque è importante avere quei concetti ben assimilati per poter capire ciò che vedremo da qui in avanti.
+
+\subsection{Passare da memoria virtuale a fisica}
+
+\subsubsection*{Riallocazione statica}
+
+Prima dell'introduzione dei dispositivi hardware per la traduzione dalla memoria logica (non ancora virtuale, la virtualizzazione vera e propria verrà dopo) a quella fisica si utilizzava una tecnica puramente software chiamata \textbf{riallocazione statica}. 
+
+\begin{Definizione}[Riallocazione statica]
+\label{def-riallocazione-statica}
+La \textbf{riallocazione statica} è una tecnica software per tradurre indirizzi logici in fisici. In poche parole l'OS riscrive tutti gli indirizzi logici richiesti dal programma in indirizzi fisici in base a dove è posizionato il programma. Questa riallocazione è sempre \textit{contigua}.
+\end{Definizione}
+
+Se ad esempio il nostro programma utilizzi indirizzi logici tra \code{0} e \code{100}, e questo viene posizionato all'indirizzo fisico di RAM \code{5000}, la riallocazione statica traduce tutti gli indirizzi logici a \code{5000} fino a \code{5100}.
+
+I vantaggi di questa tecnica sono:
+\begin{itemize}
+    \item \textbf{zero supporto hardware}
+    \item \textbf{zero tempo sprecato a runtime}, dato che tutte le allocazioni avvengono a loadtime
+    \item \textbf{implementazione semplice}
+\end{itemize}
+
+Gli svantaggi però sono molti e importanti:
+\begin{itemize}
+    \item \textbf{nessuna protezione}: infatti, non c'è alcun controllo hardware che verifichi che nessun processo tocchi memoria destinata a altri processi
+    \item una volta che il processo viene allocato a una zona di memoria, \textbf{non può essere spostato}, dato che gli indirizzi vengono modificati a loadtime prima che il processo parta 
+\end{itemize}
+
+È evidente quindi che è necessario anche un supporto hardware per poter gestire correttamente la memoria virtuale. Questo ci porta al primo meccanismo hardware che prende il nome di \textbf{base and bounds}. 
+
+\subsubsection*{Base and bounds}
+
+Con un supporto hardware possiamo infatti rimpiazzare le vecchie traduzioni statiche con nuove allocazioni dinamiche. Queste rimangono comunque trasparenti ai programmi, ma diventano ora più \textbf{efficienti}, \textbf{veloci} e \textbf{sicure}. 
+
+Il primo meccanismo hardware mai creato è il \textbf{base and bounds}, introdtto alla fine degli anni 50. Nell'MMU, che è il supporto hardware per gestire l'allocazione di memoria, vengono inseriti due registri: 
+\begin{itemize}
+    \item \textbf{base register}, che contiene l'inizio dell'indirizzo di memroia fisicio di un processo
+    \item \textbf{bound register}, che contiene la dimensione dello spazio d'indirizzamento del processo o l'indirizzo fisico finale disponibile per il nostro processo (le due interpretazioni sono equivalenti, ma ragioneremo con la prima)
+\end{itemize}
+
+Ogni CPU ha una sola coppia di questi registri, dunque quando il sistema operativo deve fare un contex-switch, deve salvare la coppia di valori del processo che stavamo eseguendo e caricare quella del processo che vogliamo eseguire. Questa coppia di valori viene salvata nel PCB del programma.
+
+Preso quindi un indirizzo virtuale, dopo aver fatto il check \mbox{indirizzo virtuale $<$ bound}, possiamo calcolarci l'indirizzo fisico con questa semplice formula:
+\[
+\text{indirizzo fisico} = \text{indirizzo virtuale} + \text{base}
+\]
+
+Nel caso il check fallisca, l'OS passa in modalità kernel e termina il processo che ha richiesto una zona di memoria non sua. 
+
+Il base and bounds ci permette anche di \textbf{muovere un processo} mentre questo già è in esecuzione, al contrario della riallocazione statica. Banalmente, l'OS lo toglie dalla CPU con un context switch, trova una nuova porzione di memoria dove spostare il processo e aggiorna il suo base register. Per cercare un indirizzo vuoto, l'OS cerca in una linked list dove salva tutti i range di memoria liberi sulla RAM. \\
+Ricordiamo che il processo è allo scuro di tutto ciò: non saprà mai dove si trova al livello fisico e nemmeno gli interessa, dato che usa gli indirizzi virtuali.
+
+Alla conclusione di un processo, il sistema operativo deve verificare se la memoria appena liberata sia adiacente ad altri spazi vuoti e, in tal caso, unire questi blocchi per formarne uno più grande da allocare in futuro a un altro programma. Per decidere quale regione di memoria assegnare a un nuovo processo, il sistema operativo può seguire diverse politiche:
+\begin{itemize}
+    \item \textbf{First-Fit}: scansiona la lista dall'inizio e seleziona la prima regione di dimensione sufficiente. È una tecnica veloce, ma tende ad accumulare molti piccoli frammenti nella parte iniziale della lista.
+    \item \textbf{Best-Fit}: cerca la regione più piccola in grado di contenere il processo. Minimizza lo spazio sprecato nella singola allocazione, ma tende a lasciare un gran numero di frammenti di piccolissime dimensioni.
+    \item \textbf{Worst-Fit}: seleziona la regione libera più grande disponibile. Consuma il blocco di dimensione maggiore (che potrebbe servire a processi più grandi), ma garantisce che i frammenti residui siano abbastanza ampi da poter essere riutilizzati.
+\end{itemize}
+
+Nessuna politica è perfetta in assoluto: la scelta va effettuata valutando lo specifico contesto d'uso.
+
+Il problema principale del base and bounds è il requisito di memoria \textbf{contigua}, del tutto analogo a quello della riallocazione statica. Ciò comporta un limite enorme: anche in presenza di una grande quantità di memoria libera complessiva, se questa è fortemente frammentata potrebbe non esistere un singolo blocco contiguo sufficientemente ampio per contenere l'intero processo.
+
+Questo fenomeno di inefficienza si presenta anche all'interno dello spazio d'indirizzamento del processo. Se ad esempio vengono allocati 16 KB di RAM a un processo, 12 KB potrebbero essere riservati preventivamente allo Stack e all'Heap (ovvero lo spazio intermedio previsto per la loro espansione), rimanendo inizialmente inutilizzati. Di conseguenza, in ogni processo è presente una porzione di RAM fisica non sfruttata, un problema che si amplifica all'aumentare dei processi attivi. Ciò accade perché il base and bounds alloca fin da subito tutto lo spazio necessario al processo in modo preventivo, anche se al momento non serve: un processo che richiede inizialmente solo 3 KB di RAM si vedrà assegnato un blocco molto più grande, trasformando la parte residua in memoria sprecata. \\
+Un altro problema del base and bounds è l'impossibilità di eseguire qualsiasi processo il cui spazio d'indirizzamento virtuale sia più grande della memoria RAM fisica disponibile. \\
+Infine, con il base and bounds non è possibile condividere alcuna porzione di memoria tra processi distinti, anche quando questi condividono dati o codice.
 
 
 
