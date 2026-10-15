@@ -613,7 +613,7 @@ Ad esempio, l'associazione Frequenta(Studenti, Corsi) è totale su Corsi, dato c
 In una base di dati sono quindi individuabili due componenti:
 \begin{itemize}
     \item \textbf{lo schema}, ossia la struttura di rappresentazione dei dati (\textit{aspetto intensionale}), che rimane invariante nel tempo
-    \item \textbf{l'instanza}, ossia i valori attuali che sono salvati nel DB (\textit{aspetto estensionale}), che possono cambiare anche molto rapidamente
+    \item \textbf{l'istanza}, ossia i valori attuali che sono salvati nel DB (\textit{aspetto estensionale}), che possono cambiare anche molto rapidamente
 \end{itemize}
 
 Per creare una base di dati è necessario costruire in totale 3 schemi:
@@ -717,8 +717,8 @@ Ad esempio, l'associazione Studente --- Esame --- Corso, per lo studente la card
 \label{prop-valori-cardinalità}
 In realtà, per la cardinalità si usano per convenzione solo \textbf{3 simboli}:
 \begin{itemize}
-    \item Per la cardinalità \textbf{minima} si usano solo lo \textbf{0}, che indica che un'instanza potrebbe anche non partecipare a nessuna associazione, come uno studente che non ha ancora effettuato esami, o l'\textbf{1}, che invece indica che ogni instanza deve partecipare per forza ad almeno un'associazione, come l'entità Corso che deve per forza avere almeno un esame. 
-    \item Per la caridnalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'instanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'instanza può partecipare ad un numero indeterminato di instanze.
+    \item Per la cardinalità \textbf{minima} si usano solo lo \textbf{0}, che indica che un'istanza potrebbe anche non partecipare a nessuna associazione, come uno studente che non ha ancora effettuato esami, o l'\textbf{1}, che invece indica che ogni istanza deve partecipare per forza ad almeno un'associazione, come l'entità Corso che deve per forza avere almeno un esame. 
+    \item Per la caridnalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'istanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'istanza può partecipare ad un numero indeterminato di instanze.
 \end{itemize}\end{Proprieta}
 
 \begin{Proprieta}[Classficazione di associazioni]
@@ -1044,7 +1044,7 @@ Una relazione può avere anche più chiavi alternative. Di solito si sceglie que
 
 Un insieme di attributi $X$ di una relazione R è una chiave di R se:
 \begin{enumerate}
-    \item Per ogni instanza di R non esistono due tuple distinte $t_1$ e $t_2$ tali che $t_1[X] = t_2[X]$.
+    \item Per ogni istanza di R non esistono due tuple distinte $t_1$ e $t_2$ tali che $t_1[X] = t_2[X]$.
     \item Nessun sottoinsieme proprio (ossia un sottinsieme diverso da $X$ stesso) di $X$ soddisfa la prima condizione. La chiave è quindi un insieme minimale: funziona solo con tutti i suoi elementi, non se ne possono levare.
 \end{enumerate}
 
@@ -1552,9 +1552,130 @@ Abbiamo già visto come inserire dei vincoli a un campo, ad esempio scrivendo \c
 E se invece un dipartimento non viene eliminato ma modificato? Esiste l'operazione \codeb{ON UPDATE <CASCADE>}, che aggiorna a cascata tutte le reference a quel dipartimento in Impiegato. \\
 Dunque, se vogliamo che una volta eliminato un dipartimento mettiamo a NULL le references in Impiegato, e una volta modificato invece a cascata modifichiamo tutto in Impiegato, dobbiamo scrivere \code{FOREIGN KEY Dipart VARCHAR(15) REFERENCES Dipartimento(Codice) ON DELETE SET NULL ON UPDATE CASCADE}.
 
-Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore di 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere codeb{CHECK(DataInizio <= DataFine)} in una riga a parte.
+Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore di 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere codeb{CHECK(DataInizio <= DataFine)} in una riga a parte. Inoltre, essendo \code{CHECK} un tipo particolare di CONSTRAINT, possiamo usare proprio la parola chiave \codeb{CONSTRAINT} che non solo deifnisce ma \textbf{nomina} il vincolo così che in futuro possa essere modificato o eliminato. Ad esempio, possiamo scrivere \mbox{\code{CONSTRAINT CHK\_StipedioNonNegativo (Stipendio >= 0)}} per creare un nuovo CONSTRAINT su Stipendio chiamato \code{CHK\_StipendioNonNegativo} che controlli che ogni Stipendio sia $\geq 0$. Per modificare/eliminare poi un vincolo si usano le parole chiavi \codeb{ALTER TABLE}. Per eliminare un vincolo usiamo poi la parola chiave \codeb{DROP}. Ad esempio, se vogliamo eliminiare il vincolo \code{CHK\_StipedioNonNegativo} dovremo scrivere \mbox{\code{ALTER TABLE Stipendio DROP CONSTRAINT CHK\_StipendioNonNegativo}}. Se volessimo invece modificare il vincolo dovremmo usare la parola chiave \codeb{ADD}. Ad esempio, se volessimo imporre che lo stipendio non è più solo non negativo ma sempre positivo, scriveremmo \code{ALTER TABLE Stipendio ADD CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio > 0)}.
 
+\subsection*{Indici}
 
+Ogni volta che definiamo la chiave primaria, il DBMS automaticamente genera un indice sulla chiave primaria. Questo indice, che si trova a livello fisico, consente di accedere più velocemente al campo a cui si riferisce. Per capire perché sono importanti vediamo un esempio. Ipotizziamo di voler recuperare i dati di uno studente con matricola 2238123, con gli indici fisici possiamo fare una ricerca sul file che contiene solo gli indici. Questo rende la ricerca più veloce rispetto a una ricerca direttamente sulle matricole perché il file contenente le matricole è decisamente più grande del file con gli indici (dato che contiene anche tutte le informazioni riguardanti gli studenti). Dunque la ricerca sul file degli indici è una ricerca su un numero di blocchi in memoria decisamente minore rispetto a una ricerca sul file con tutti gli studenti, il che la rende una ricerca più veloce. \\
+Oltre agli indici sulle chiavi primarie è possibile creare anche un nuovo indice con il comando \codeb{CREATE INDEX}, scrivendo semplicemente \mbox{CREATE INDEX nome\_indice ON nome\_tabella (colonna1, colonna2, ...)} per creare un indice sulle colonne di quella tabella. \\ 
+\NB È possibile anche creare degli indici unici tramite la parola chiave \code{UNIQUE} posta tra \code{CREATE} e \code{INDEX}, che impedisce l'inserimento di valori duplicati nella colonna indicizzata. Nonostante ciò, è molto più chiaro rendere unici i campi e non gli indici (comunque il risultato è lo stesso).
+
+Tra i vantaggi degli indici troviamo:
+\begin{itemize}
+    \item \textbf{Velocizzano le ricerche filtrate} (operazioni che vedremo in seguito)
+    \item \textbf{Ottimizzano le relazioni e i collegamenti}: è fondamentale quindi avere indicizzate le colonne che collegano una tabella a un'altra
+    \item \textbf{Rendono più rapido l'ordinamento e il raggruppamento} (operazioni che vedremo in seguito)
+\end{itemize}
+
+Tra gli svantaggi invece troviamo:
+\begin{itemize}
+    \item \textbf{Rallentano le operazioni di scrittura} (operazioni che vedremo in seguito), dato che ogni volta che si modifica, inserisce o cancella un record il database non solo deve aggiornare la tabella base ma anche il file degli indici
+    \item \textbf{Consumano più spazio sul disco}, essendo questi indici fisici
+\end{itemize}
+
+È consigliato quindi usare indici solo sulle colonne usate frequentemente nelle operazioni di ricerca filtra e sulle colonne che collegano più tabelle.
+
+\subsection*{Modifiche agli schemi}
+
+Abbiamo già visto che per modificare un vincolo \code{CONSTRAINT CHECK} si può usare il comando \codeb{ALTER TABLE}. Questo è uno dei diversi comandi che permettono di \textbf{modificare gli schemi}. Andrebbero evitate queste modifiche una volta già creata la base di dati, ma possono capitare situazioni particolari dove queste operazioni possono rilevarsi utili. Oltre a \code{ALTER TABLE} esistono:
+\begin{itemize}
+    \item \codeb{ALTER DOMAIN}
+    \item \codeb{DROP DOMAIN}
+    \item \codeb{DROP TABLE}
+\end{itemize}
+
+Con il comando \codeb{ALTER DOMAIN} possiamo impostare (\code{SET DEFAULT}) o rimuovere (\code{DROP DEFAULT}) un valore di default di un dominio. È possibile modificare i vincoli di nullabilità, scrivendo \code{SET NOT NULL} per impostare un campo NOT NULL, o scrivendo \code{DROP NOT NULL} per eliminare un vincolo NOT NULL a un campo. Si possono poi anche aggiungere (\code{ADD domain\_constraint}) o eliminare (\code{DROP CONSTRAINT domain\_constraint}) un vincolo di dominio. Infine, si può anche rinominare un dominio con il comando \code{RENAME TO}. \\
+Se ad esempio abbiamo un dominio Voti, e vogliamo mettere come default il valore 0, possiamo scrivere \code{ALTER DOMAIN Voti SET DEFAULT 0}. Se invece vogliamo aggiungere il vincolo che ogni voto sia $\leq 30$, possiamo scrivere \mbox{\code{ALTER DOMAIN Voti ADD CONSTRAINT CHK\_VotiMassimo30 CHECK(Voto <= 30)}}.
+
+Con il comando \codeb{ALTER TABLE}, oltre che modificare/eliminare vincoli già esistenti sui campi, possiamo creare dei campi totalmente nuovi a una tabella, scrivendo \code{ADD nome\_colonna tipo\_dato}. Si può poi anche modificare il tipo di un campo di una tabella scrivendo \code{MODIFY nome\_colonna nome\_tipo}. Si può anche eliminare (\code{DROP}) o rinominare \code{RENAME TO} un campo di una tabella. Se rinominiamo un campo dobbiamo però stare attenti a eventuali foreign key su tale campo. Inoltre si possono anche aggiungere dei nuovi CONSTRAINT, oltre che modificarli/eliminarli, scrivendo \code{ADD CONSTRAINT}. Si può infine rinominare una tabella sempre con il comando \code{RENAME TO} (anche qui dovremo stare attenti per eventuali riferimenti esterni).  \\
+Se ad esempio, se vogliamo aggiungere a una tabella Matricola il campo Nome di tipo \code{VARCHAR(16)}, scriveremo \mbox{\code{ALTER TABLE Matricola ADD Nome VARCHAR(16)}}. Se invece vogliamo rinominare una tabella Voti in VotiStudenti scriveremo \code{ALTER TABLE Voti RENAME TO VotiStudenti}. Se infine vogliamo aggiungere un vincolo di foreign key su un campo Matricola di una tabella Voti che fa riferimento a un campo Matricola di una tabella Studenti, possiamo scrivere \code{ALTER TABLE Voti ADD CONSTRAINT FK\_MatricolaForeignKey FOREIGN KEY (Matricola) REFERENCES Studenti(Matricola)}.
+
+Con il comando \codeb{DROP} è poi possibile eliminare:
+\begin{itemize}
+    \item un \textbf{dominio}
+    \item una \textbf{tabella} (cancellandone sia i dati che lo schema, se si vuole cancellare solo le righe bisogna usare o il comando \codeb{TRUNCATE}, che cancella tutte le righe, o il comando \codeb{DELETE} che elimina tutte le righe che seguono determinate condizioni da noi imposte)
+    \item un \textbf{indice}
+    \item una \textbf{vista} 
+\end{itemize}
+
+\subsection*{View}
+
+Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturare del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
+
+\section{Interrogare un database}
+
+\subsection{Algebra relazionale}
+
+Prima di studiare il DQL (la componente di SQL dedicata all'interrogazione dei dati), è fondamentale comprendere un linguaggio formale più astratto: l'\textbf{algebra relazionale}. Si tratta di un insieme di operatori che si applicano a una o due relazioni per produrre come risultato una \textit{nuova relazione}. \\
+L'algebra relazionale è poi un linguaggio \textit{procedurale}: ogni espressione specifica in modo esplicito la sequenza di operazioni da eseguire per calcolare il risultato.
+
+Tra le operazioni fondamentali dell'algebra relazionale ci sono:
+\begin{itemize}
+    \item \textbf{Selezione}
+    \item \textbf{Proiezione}
+    \item \textbf{Ridenominazione}
+    \item \textbf{Unione}
+    \item \textbf{Differenza}
+    \item \textbf{Prodotto cartesiano}
+\end{itemize}
+
+Tra le operazioni derivate (ossia sostituitibili con una combinazione di operazioni fondamentali) dell'algebra relazionale ci sono:
+\begin{itemize}
+    \item \textbf{Join naturale}
+    \item \textbf{Theta join}
+    \item \textbf{Intersezione}
+\end{itemize}
+
+Tratteremo qui diversi operatori dell'algebra di relazione, partendo prima da quelli riguardanti un'unica relazione, per poi passare a quelli che combinano le informazion di più relazioni.
+
+\begin{Definizione}[Proiezione]
+\label{def-proiezione}
+La \textbf{proiezione} è un operatore che permette di tagliare alcune colonne di una relazione, selezionando così delle \textbf{specifiche colonne di una relazione}. Per indicare una proiezione scriviamo $\bm{\pi_{A_1, \ldots, A_k}(r)}$, che indica una proiezione che prende della relazione $r$ le colonne riferite agli attributi $A_1, \ldots, A_k$.
+\end{Definizione}
+Seguendo le regole dell'insiemistica, in una proiezione \textbf{NON prendiamo duplicati}. Se ad esempio prendiamo solo un attributo di una relazione in una proiezione, avremo l'insieme dei valori distinti di quell'atrtibuto. Se invece prendiamo più attributi, elimineremo solo i duplicati che hanno valori uguali in TUTTI i campi presi dalla proiezione.
+
+\begin{Definizione}[Selezione]
+\label{def-selezione}
+La \textbf{selezione} è un operatore che permette di tagliare alcune righe di una relazione, selezionando così delle \textbf{specifiche righe di una relazione}. Per indicare una selezione scriviamo $\bm{\sigma_C(r)}$, che indica una selezione che prende della relazione $r$ tutte le righe che soddisfano la condizione $C$, scritta tramite operatori booleani.
+\end{Definizione}
+
+Ad esempio, $C$ può essere $A < B \land \neq A$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti.
+
+Se prendiamo quindi la relazione $r$
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{C\#} & \textbf{Città} \\ \hline
+Rossi   & 1 & Roma   \\
+Rossi   & 2 & Milano \\
+Rossi   & 3 & Roma   \\
+Bianchi & 4 & Roma   \\
+Verdi   & 5 & Roma   \\ \hline
+\end{tabular}
+\end{center}
+
+La proiezione $\pi_{\text{Nome, Città}}(r)$ sarà una tabella del genere:
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Nome} & \textbf{Città} \\ \hline
+Rossi   & Roma   \\
+Rossi   & Milano \\
+Bianchi & Roma   \\
+Verdi   & Roma   \\ \hline
+\end{tabular}
+\end{center}
+
+mentre la selezione $\sigma_{C < 3}$ sarà una tabella del genere:
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{C\#} & \textbf{Città} \\ \hline
+Rossi   & 1 & Roma   \\
+Rossi   & 2 & Milano \\ \hline
+\end{tabular}
+\end{center}
 
 
 
