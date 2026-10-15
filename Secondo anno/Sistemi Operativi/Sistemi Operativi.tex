@@ -1706,7 +1706,7 @@ Si è arrivati dunque a una nuvoa policy di scheduling che prende il nome di \te
 
 \begin{Definizione}[Time Slice]
 \label{def-time-slice}
-Il periodo di tempo che ogni processo ha a disposizione sulla CPU è detto \textbf{Time Slice} (o Scheduling Quantum).
+Il periodo di tempo che ogni processo ha a disposizione sulla CPU è detto \textbf{Time Slice} (o \textbf{quantum}).
 \end{Definizione}
 
 Scegliere la durata del Time Slice è una delle scelte più importanti nella policy RR. Infatti, bisogna scegliere un periodo nè troppo lungo (altrimenti l'utente non avrebbe più l'illusione delle esecuzioni simultanee) ma nemmeno troppo corto (altrimenti la CPU spenderebbe tutto il tempo a cambiare tra un processo e l'altro senza veramente lavorare sui processi). Per calcolare un tempo corretto, basta usare la formula
