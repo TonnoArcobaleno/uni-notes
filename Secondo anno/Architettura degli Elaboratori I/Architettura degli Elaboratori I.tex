@@ -368,8 +368,8 @@ $\bm{-\infty}$ & 1 & 11111111 & 00000000000000000000000 \\
 \hline
 \textbf{NaN} & Indifferente & 11111111 & non-zero \\
 \hline
-\textbf{Denormalizzati} & Indifferente & 00000000 & $M \neq 0$ \\
- & & & $(-1)^s \cdot 2^{-126} \cdot 0.m$ \\
+\textbf{Denormalizzati} & Indifferente & 00000000& $M \neq 0$ \\
+ & &  (indica $-126$ e non $-127$) & $(-1)^s \cdot 2^{-126} \cdot 0.m$ \\
 \hline
 \end{tabular}
 \end{center}
@@ -383,7 +383,7 @@ Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \text
 In base al numero di bit, si può raggiungere un livello di precisione più o meno alto. Vi sono 3 standard conosciuti:
 \begin{itemize}
     \item \textbf{Half-Precision} (16 bit)
-    \item \textbf{Single-Precision} (32 bit, ciò che utilizzeremo noi)
+    \item \textbf{Single-Precision} (32 bit, che utilizzeremo quasi sempre)
     \item \textbf{Double-Precision} (64 bit)
 \end{itemize}
 \end{Proprieta}
