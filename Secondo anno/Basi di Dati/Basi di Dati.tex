@@ -1294,32 +1294,12 @@ Per questa traduzione, adottiamo fin da subito delle convenzioni che saranno uti
 
 La traduzione delle entità non crea problemi: ogni entità diventa una tabella (che potrebbe \textit{non essere ancor anella sua forma finale}) e gli identificatori primari vengono sottolineati per rappresentare la chiave primaria scelta. Creiamo quindi una serie di nuove tabelle:
 \begin{itemize}
-    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP)} \\
-    Vincoli: 
-    \begin{itemize}
-        \item TipoP NOT NULL
-        \item TipoP = 'Professionista' OR TipoP = 'Dipendente'
-        \item (TipoP = 'Professionista' AND Area NOT NULL AND Titolo NOT NULL AND Posizione IS NULL AND Livello IS NULL) OR (TipoP = 'Dipendente' AND Posizione NOT NULL AND Livello NOT NULL AND Area IS NULL AND Titolo IS NULL)
-    \end{itemize}
+    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP)}
     \item \textbf{DATORE(\underline{Nome}, \underline{Indirizzo}, \underline{Numero})}
-    \item \textbf{DOCENTE(\underline{CF}, Età, CittàNascita, Cognome, TipoD)} \\
-    Vincoli:
-    \begin{itemize}
-        \item TipoD NOT NULL
-        \item TipoD = 'Collaboratore' OR TipoD = 'Interno'
-    \end{itemize}
+    \item \textbf{DOCENTE(\underline{CF}, Età, CittàNascita, Cognome, TipoD)}
     \item \textbf{TELEFONO(\underline{Numero})}
-    \item \textbf{CORSO(\underline{Codice}, Titolo)} \\
-    Vincoli:
-    \begin{itemize}
-        \item Titolo NOT NULL
-    \end{itemize}
-    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine,NPart)} (CodiceCorso è la chiave che collega EDIZIONE\_CORSO a CORSO, ed è necessaria perché nello schema ER l'entità Edizione Corso è un entità debole, con un identificatore esterno) \\
-    Vincoli:
-    \begin{itemize}
-        \item DataInizio <= DataFine
-        \item NPart > 0
-    \end{itemize}
+    \item \textbf{CORSO(\underline{Codice}, Titolo)}
+    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine,NPart)} (CodiceCorso è la chiave che collega EDIZIONE\_CORSO a CORSO, ed è necessaria perché nello schema ER l'entità Edizione Corso è un entità debole, con un identificatore esterno) 
     \item \textbf{LEZIONE (\underline{Giorno}, \underline{Aula}, \underline{Orario})}
 \end{itemize}
 
@@ -1327,147 +1307,45 @@ La traduzione delle entità non crea problemi: ogni entità diventa una tabella 
 
 Le traduzioni delle associazioni sono un po' più complesse. Vediamole una alla volta.
 
-L'associazione IMPIEGO\_PASSATO tra PARTECIPANTE e DATORE è un'associazione molti a molti, dunque è necessario creare una relazione apposta per lei, ossia \mbox{\textbf{IMPIEGO\_PASSATO(\underline{CFPart},\underline{NomeDatore}, DataInizio, DataFine)}}, con i seguenti vincoli:
-\begin{itemize}
-    \item CFPart deve essere già presente in una tupla in PARTECIPANTE (questo vincolo lo vedremo spesso perché è il vincolo che indica una foreign key)
-    \item NomeDatore deve essere già presente in una tupla in DATORE
-    \item DataInizio < DataFine
-\end{itemize}
+L'associazione IMPIEGO\_PASSATO tra PARTECIPANTE e DATORE è un'associazione molti a molti, dunque è necessario creare una relazione apposta per lei, ossia \mbox{\textbf{IMPIEGO\_PASSATO(\underline{CFPart},\underline{NomeDatore}, DataInizio, DataFine)}}.
 
-L'associazione IMPIEGO\_CORRENTE è invece un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Dunque possiamo modificare questa relazione aggiungendo la chiave di DATORE e l'attributo DataInizio. Dunque PARTECIPANTE diventa \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}, con i seguenti vincoli aggiunti:
-\begin{itemize}
-    \item Se NomeDatore NOT NULL allora questo deve essere già presente in una tupla in DATORE
-    \item TipoP = 'Dipendente' OR (TipoP = 'Professionista' AND NomeDatore IS NULL AND DataInizio IS NULL) 
-    \item (NomeDatore IS NULL AND DataInizio IS NULL) OR (NomeDatore NOT NULL AND DataInizio NOT NULL)
-    \item Se DataInizio NOT NULL AND CF è presente in IMPIEGO\_PASSATO allora DataInizio > MAX(DataFine presenti nelle tuple con lo stesso CFPart in \mbox{IMPIEGO\_PASSATO})
-\end{itemize}
+L'associazione IMPIEGO\_CORRENTE è invece un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Dunque possiamo modificare questa relazione aggiungendo la chiave di DATORE e l'attributo DataInizio. Dunque PARTECIPANTE diventa \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}.
 
 Quest'ultimo vincolo sembra molto complesso ma serve solo per evitare di inserire nel database dei dati errati. Infatti, non ha senso inserire un impiego corrente il cui inizio è avvenuto prima della fine di uno degli impieghi passati della stessa persona (siamo nell'ipotesi di poter avere solo un impiego alla volta, dunque non avrebbe senso inserire un impiego il cui inizio è avvenuto prima della fine di un altro impiego, altrimenti staremmo ammettendo che questa persona ha avuto due impieghi nello stesso momento).
 
-L'associazione PARTECIPAZIONE\_PASSATA è un'altra associazione molti a molti, dunque creiamo anche per lei una relazione apposta, ossia \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})}, con i seguenti vincoli:
-\begin{itemize}
-    \item CFPart deve essere già presente in una tupla in PARTECIPANTE
-    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-\end{itemize}
+L'associazione PARTECIPAZIONE\_PASSATA è un'altra associazione molti a molti, dunque creiamo anche per lei una relazione apposta, ossia \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})}.
 
 L'associazione PARTECIPAZIONE\_CORRENTE è un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Questa volta scegliamo di creare una relazione a parte per questa associazione, così da non appesantire la tabella PARTECIPANTE che ha già incorportato l'associazione IMPIEGO\_CORRENTE. 
-Dunque creiamo la nova tabella \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} che ha come chiave solo la chiave dell'entità con cardinalità massima 1, ossia la chiave di PARTECIPANTE. I vincoli sono i seguenti:
-\begin{itemize}
-    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-\end{itemize}
+Dunque creiamo la nova tabella \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} che ha come chiave solo la chiave dell'entità con cardinalità massima 1, ossia la chiave di PARTECIPANTE.
 
-L'associazione COMPOSIZIONE è anche questa un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione LEZIONE. Possiamo quindi incorporare l'assocazione COMPOSIZIONE in essa aggiungendo la chiave di EDIZIONE\_CORSO, ossia CodiceCorso e DataInizio. Dunque LEZIONE diventa \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{ORARIO}, CodiceCorso, DataInizio)}, con i seguenti vincoli:
-\begin{itemize}
-    \item CodiceCorso NOT NULL AND DataInizio NOT NULL
-    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-\end{itemize}
-Il primo vincolo è fondamentale in questo caso dato che la partecipazione di LEZIONE all'assocazione è obbligatoria, quindi ogni lezione è sempre associata a un'EDIZIONE\_CORSO.
+L'associazione COMPOSIZIONE è anche questa un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione LEZIONE. Possiamo quindi incorporare l'assocazione COMPOSIZIONE in essa aggiungendo la chiave di EDIZIONE\_CORSO, ossia CodiceCorso e DataInizio. Dunque LEZIONE diventa \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{ORARIO}, CodiceCorso, DataInizio)}.
 
 L'associazione TIPOLOGIA è stata già tradotta quando abbiamo tradotto l'entità debole EDIZIONE\_CORSO, dunque non dobbiamo fare nulla.
 
-L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un'attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Duqnue TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}, con i seguenti vincoli:
-\begin{itemize}
-    \item CFDocente deve essere già presente in una tupla di DOCENTE
-\end{itemize}
+L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un'attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Duqnue TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}.
 
-L'associazione ABILITAZIONE è un'associazione molti a molti, dunque creiamo in questo caso una nuova relazione con chiave le due chiavi delle due entità collegate (DOCENTE e CORSO). Dunque creiamo la tabella \textbf{ABILITAZIONE(\underline{CFDocente} ,\underline{CodiceCorso})}, con i seguenti vincoli:
-\begin{itemize}
-    \item CFDocente deve essere già presente in una tupla di DOCENTE
-    \item CodiceCorso deve essere già presente in una tupla di CORSO
-\end{itemize}
+L'associazione ABILITAZIONE è un'associazione molti a molti, dunque creiamo in questo caso una nuova relazione con chiave le due chiavi delle due entità collegate (DOCENTE e CORSO). Dunque creiamo la tabella \textbf{ABILITAZIONE(\underline{CFDocente} ,\underline{CodiceCorso})}
 
-L'associazione DOCENZA\_PASSATA è anche questa un'associazione molti a molti. Dunque creiamo anche qui una nuova relazione \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})} con i seguenti vincoli:
-\begin{itemize}
-    \item CFDocente deve essere già presente in una tupla di DOCENTE
-    \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-    \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-\end{itemize}
+L'associazione DOCENZA\_PASSATA è anche questa un'associazione molti a molti. Dunque creiamo anche qui una nuova relazione \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})}.
 
-L'associazione DOCENZA\_CORRENTE è invece un'associazione uno a uno. Tra le tante possibilità che abbiamo scegliamo in questo caso di incorporare questa associazione nella relazione EDIZIONE\_CORSO aggiungendo come foreign key la chiave di DOCENTE. Dunque la relazione diventa \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)}, con i seguenti vincoli aggiunti:
-\begin{itemize}
-    \item Se CFDocente NOT NULL allora CFDocente deve essere già presente in una tupla di DOCENTE
-    \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in ABILITAZIONE
-\end{itemize}
-
-\NB CFDocente potrebbe essere NULL perché nello schema ER la partecipazione di EDIZIONE\_CORSO all'associazione DOCENZA\_CORRENTE non è obbligatoria. In questo modo possiamo quindi creare un'edizione corso prima ancora di aver trovato il docente che insegnerà quel corso.
+L'associazione DOCENZA\_CORRENTE è invece un'associazione uno a uno. Tra le tante possibilità che abbiamo scegliamo in questo caso di incorporare questa associazione nella relazione EDIZIONE\_CORSO aggiungendo come foreign key la chiave di DOCENTE. Dunque la relazione diventa \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)}.
 
 \subsubsection*{Riepilogo}
 
-Riepiloghiamo quindi tutte le relazioni che costituiscono il nostro nuovo schema logico con tutti i loro vincoli:
+Riepiloghiamo quindi tutte le relazioni che costituiscono il nostro nuovo schema logico:
 \begin{itemize}
-    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)} \\
-    Vincoli:
-    \begin{itemize}
-        \item TipoP NOT NULL
-        \item TipoP = 'Professionista' OR TipoP = 'Dipendente'
-        \item (TipoP = 'Professionista' AND Area NOT NULL AND Titolo NOT NULL AND Posizione IS NULL AND Livello IS NULL) OR (TipoP = 'Dipendente' AND Posizione NOT NULL AND Livello NOT NULL AND Area IS NULL AND Titolo IS NULL)
-        \item Se NomeDatore NOT NULL allora questo deve essere già presente in una tupla in DATORE
-        \item TipoP = 'Dipendente' OR (TipoP = 'Professionista' AND NomeDatore IS NULL AND DataInizio IS NULL) 
-        \item (NomeDatore IS NULL AND DataInizio IS NULL) OR (NomeDatore NOT NULL AND DataInizio NOT NULL)
-        \item Se DataInizio NOT NULL AND CF è presente in IMPIEGO\_PASSATO allora DataInizio > MAX(DataFine presenti nelle tuple con lo stesso CFPart in \mbox{IMPIEGO\_PASSATO})
-    \end{itemize}
+    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}
     \item \textbf{DATORE(\underline{Nome}, \underline{Indirizzo}, \underline{Numero})}
-    \item \textbf{DOCENTE(\underline{CF}, CognomeEtà, CittàNascita, Cognome, TIpoD)} \\
-    Vincoli:
-    \begin{itemize}
-        \item TipoD NOT NULL
-        \item TipoD = 'Collaboratore' OR TipoD = 'Interno'
-    \end{itemize}
-    \item \textbf{TELEFONO(\underline{Numero}, CFDocente)} \\
-    Vincoli:
-    \begin{itemize}
-        \item CFDocente deve essere già presente in una tupla di DOCENTE
-    \end{itemize}
-    \item \textbf{CORSO(\underline{Codice}, Titolo)} \\
-    Vincoli:
-    \begin{itemize}
-        \item Titolo NOT NULL
-    \end{itemize}
-    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)} \\
-    Vincoli:
-    \begin{itemize}
-        \item DataInizio <= DataFine 
-        \item NPart > 0
-        \item Se CFDocente NOT NULL allora CFDocente deve essere già presente in una tupla in DOCENTE
-        \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in ABILITAZIONE
-    \end{itemize}
-    \item \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{Orario}, CodiceCorso, DataInizio)} \\
-    Vincoli:
-    \begin{itemize}
-        \item CodiceCorso NOT NULL AND DataInizio NOT NULL
-        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-    \end{itemize}
-    \item \textbf{IMPIEGO\_PASSATO(\underline{CFPart}, \underline{NomeDatore}, DataInizio, DataFine)} \\
-    Vincoli:
-    \begin{itemize}
-        \item CFPart deve essere già presente in una tupla in PARTECIPANTE
-        \item NomeDatore deve essere giò presente in una tupla in DATORE
-        \item DataInizio < DataFine
-    \end{itemize}
-    \item \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})} \\
-    Vincoli:
-    \begin{itemize}
-        \item CFPart deve essere già presente in una tupla in PARTECIPANTE
-        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-    \end{itemize}
-    \item \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} \\
-    Vincoli:
-    \begin{itemize}
-        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-    \end{itemize}
-    \item \textbf{ABILITAZIONE(\underline{CFDocente}, \underline{CodiceCorso})} \\
-    Vincoli:
-    \begin{itemize}
-        \item CFDocente deve essere già presente in una tupla di DOCENTE
-        \item CodiceCorso deve essere già presente in una tupla di CORSO
-    \end{itemize}
-    \item \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})} \\
-    Vincoli:
-    \begin{itemize}
-        \item CFDocente deve essere già presente in una tupla di DOCENTE
-        \item (CodiceCorso, DataInizio) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-        \item (CFDocente, CodiceCorso) devono essere già presenti nella stessa tupla in \mbox{EDIZIONE\_CORSO}
-    \end{itemize}
+    \item \textbf{DOCENTE(\underline{CF}, CognomeEtà, CittàNascita, Cognome, TIpoD)} 
+    \item \textbf{TELEFONO(\underline{Numero}, CFDocente)} 
+    \item \textbf{CORSO(\underline{Codice}, Titolo)} 
+    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)}
+    \item \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{Orario}, CodiceCorso, DataInizio)} 
+    \item \textbf{IMPIEGO\_PASSATO(\underline{CFPart}, \underline{NomeDatore}, DataInizio, DataFine)} 
+    \item \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})} 
+    \item \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} 
+    \item \textbf{ABILITAZIONE(\underline{CFDocente}, \underline{CodiceCorso})} 
+    \item \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})}
 \end{itemize}
 
 \chapter{SQL}
@@ -1521,7 +1399,7 @@ In questo modo stiamo creando un dominio che parte come uno SMALLINT (dominio el
 
 \subsection*{Tabelle}
 
-Per creare una nuova tabella si utilizza il comando \codeb{CREATE TABLE}, che definisce lo schema della tabella e ne crea un'istanza vuota. Ci permette di specificarne attributi, domini e vincoli di integritò. Se ad esempio vogliamo creare una relazione Impiegato con i suoi vari attributi, dobbiamo scrivere
+Per creare una nuova tabella si utilizza il comando \codeb{CREATE TABLE}, che definisce lo schema della tabella e ne crea un'istanza vuota. Ci permette di specificarne attributi, domini e di integritò. Se ad esempio vogliamo creare una relazione Impiegato con i suoi vari attributi, dobbiamo scrivere
 \begin{lstlisting}
 CREATE TABLE Impiegato(
     Matricola VARCHAR(6) PRIMARY KEY,
@@ -1602,9 +1480,7 @@ Con il comando \codeb{DROP} è poi possibile eliminare:
 
 Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturare del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
 
-\section{Interrogare un database}
-
-\subsection{Algebra relazionale}
+\section{Algebra Relazionale}
 
 Prima di studiare il DQL (la componente di SQL dedicata all'interrogazione dei dati), è fondamentale comprendere un linguaggio formale più astratto: l'\textbf{algebra relazionale}. Si tratta di un insieme di operatori che si applicano a una o due relazioni per produrre come risultato una \textit{nuova relazione}. \\
 L'algebra relazionale è poi un linguaggio \textit{procedurale}: ogni espressione specifica in modo esplicito la sequenza di operazioni da eseguire per calcolare il risultato.
@@ -1627,6 +1503,8 @@ Tra le operazioni derivate (ossia sostituitibili con una combinazione di operazi
 \end{itemize}
 
 Tratteremo qui diversi operatori dell'algebra di relazione, partendo prima da quelli riguardanti un'unica relazione, per poi passare a quelli che combinano le informazion di più relazioni.
+
+\subsection{Operatori a una relazione}
 
 \begin{Definizione}[Proiezione]
 \label{def-proiezione}
@@ -1676,6 +1554,7 @@ Rossi   & 1 & Roma   \\
 Rossi   & 2 & Milano \\ \hline
 \end{tabular}
 \end{center}
+
 
 
 
