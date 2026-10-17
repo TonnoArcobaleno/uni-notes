@@ -1480,12 +1480,12 @@ Con il comando \codeb{DROP} è poi possibile eliminare:
 
 Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturare del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
 
-\section{Algebra Relazionale}
+\section{Algebra relazionale}
 
 Prima di studiare il DQL (la componente di SQL dedicata all'interrogazione dei dati), è fondamentale comprendere un linguaggio formale più astratto: l'\textbf{algebra relazionale}. Si tratta di un insieme di operatori che si applicano a una o due relazioni per produrre come risultato una \textit{nuova relazione}. \\
 L'algebra relazionale è poi un linguaggio \textit{procedurale}: ogni espressione specifica in modo esplicito la sequenza di operazioni da eseguire per calcolare il risultato.
 
-Tra le operazioni fondamentali dell'algebra relazionale ci sono:
+Tra gli operatori fondamentali dell'algebra relazionale ci sono:
 \begin{itemize}
     \item \textbf{Selezione}
     \item \textbf{Proiezione}
@@ -1495,14 +1495,12 @@ Tra le operazioni fondamentali dell'algebra relazionale ci sono:
     \item \textbf{Prodotto cartesiano}
 \end{itemize}
 
-Tra le operazioni derivate (ossia sostituitibili con una combinazione di operazioni fondamentali) dell'algebra relazionale ci sono:
+Tra gli operatori derivati (ossia sostituitibili con una combinazione di operatori fondamentali) dell'algebra relazionale ci sono:
 \begin{itemize}
     \item \textbf{Join naturale}
     \item \textbf{Theta join}
     \item \textbf{Intersezione}
 \end{itemize}
-
-Tratteremo qui diversi operatori dell'algebra di relazione, partendo prima da quelli riguardanti un'unica relazione, per poi passare a quelli che combinano le informazion di più relazioni.
 
 \subsection{Operatori a una relazione}
 
@@ -1538,8 +1536,8 @@ La proiezione $\pi_{\text{Nome, Città}}(r)$ sarà una tabella del genere:
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Nome} & \textbf{Città} \\ \hline
-Rossi   & Roma   \\
-Rossi   & Milano \\
+Rossi   & Roma  \\
+Rossi   & Milano\\
 Bianchi & Roma   \\
 Verdi   & Roma   \\ \hline
 \end{tabular}
@@ -1555,7 +1553,249 @@ Rossi   & 2 & Milano \\ \hline
 \end{tabular}
 \end{center}
 
+\subsection{Operatori a due relazioni}
 
+\begin{Definizione}[Union compatibili]
+\label{def-union-compatibili}
+Due relazioni $r_1$ e $r_2$ sono \textbf{union compatibili} se:
+\begin{itemize}
+    \item hanno lo stesso \textbf{numero di attributi}
+    \item gli attributi corrispondenti \textbf{nell'ordine} sono \textbf{definiti sullo stesso dominio} e \textbf{hanno un significato omogeneo} (gli attributi Età e Altezza sono definiti sullo stesso dominio dei numeri interi, ma hanno due significati molto distanti)
+\end{itemize}
+Per il seconmdo
+\end{Definizione}
+
+Ad esempio, le due relazioni
+
+
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Attaccanti  
+
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Cognome} & \textbf{Età} & \textbf{Gol} \\ \hline
+Paolo   & Rossi & 32  & 400 \\
+Lionel  & Ronaldo & 23 & 2 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Calciatori 
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Cognome} & \textbf{Ruolo} \\ \hline
+Antonio   & Raimondo & Attaccante   \\
+Franco  & Messi & Portiere \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+Non sono union compatibili, perché hanno un numero di attributi diverso, e il loro terzo attributo è definito su campi diversi. Se vogliamo fare un' unione tra queste relazioni, dobbiamo fare una proiezione su entrambe prendendo solo le prime due colonne di entrambe. Dunque possiamo dire che le relazioni
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    $\pi_{\text{Nome, Cognome}}(\text{Attaccanti})$ 
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Nome} & \textbf{Cognome}  \\ \hline
+Paolo   & Rossi   \\
+Lionel  & Ronaldo  \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    $\pi_{\text{Nome, Cognome}}(\text{Calciatori})$ 
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Nome} & \textbf{Cognome} \\ \hline
+Antonio   & Raimondo    \\
+Franco  & Messi \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+sono \textbf{union compatibili}. \\
+\NB Non era importante che il nome dei campi fosse lo stesso. Se avessimo avuto "Nome" e "Soprannome" come nomi dei campi, essendo definiti questi sullo stesso dominio e avendo significato simile, le due relazioni sarebbero comunque rimaste union compatibili.
+
+\begin{Definizione}[Unione]
+\label{def-unione}
+L'\textbf{unione} è un operatore che permette di creare una nuova relazione partendo da due relazioni \textit{union compatibili} con tuple che appartengono ad almeno uno dei due operandi. Per indicare una relazione scriviamo $\bm{r_1 \cup r_2}$, che indica un'unione tra le relazioni $r_1$ e $r_2$.
+\end{Definizione}
+
+Proviamo a fare l'unione tra le due proiezioni viste prima:
+
+\begin{center}
+    $\pi_{\text{Nome, Cognome}}(\text{Attaccanti}) \cup \pi_{\text{Nome, Cognome}}(\text{Calciatori})$ 
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Nome} & \textbf{Cognome} \\ \hline
+Paolo   & Rossi   \\
+Lionel  & Ronaldo  \\ 
+Antonio & Raimondo    \\
+Franco  & Messi \\ \hline
+\end{tabular}
+\end{center}
+
+Vediamo ora un altro esempio. Ipotizziamo di voler unire le seguenti relazioni:
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Docenti
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodDoc} & \textbf{Dipartimento} \\ \hline
+Rossi & C1 & Matematica \\
+Rossi & C2 & Lettere \\
+Bianchi & C3 & Lingue \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Amministrativi
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+Riccio & C1 & Lingue \\
+Pierro & C2 & Lettere \\
+Bianchi & C3 & Lingue \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+Avremmo come risultato questa relazione:
+
+\begin{center}
+    Docenti $\cup$ Amministrativi \nopagebreak
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+Rossi & C1 & Matematica \\
+Rossi & C2 & Lettere \\
+Bianchi & C3 & Lingue \\
+Riccio & C1 & Lingue \\
+Pierro & C2 & Lettere \\ \hline
+\end{tabular}
+\end{center}
+
+Notiamo una cosa importante: la tupla (Bianchi, C3, Lingue) si trova in tutte e due le relazioni, dunque nell'unione questa viene scritta una volta sola. Ma ciò non significa che questa tupla indichi in entrambe le relazioni la stessa persona. È infatti possibile che due signor Bianchi, entrambi al dipartimento di Lingue, abbbiano lo stesso numero di codice ma che uno sia un Docente e uno sia un Amministrativo, rimanendo due persone diverse. Dobbiamo quindi modificare le relazioni iniziali cambiando i codici, così da eliminare questa ambiguità:
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Docenti
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodDoc} & \textbf{Dipartimento} \\ \hline
+Rossi & D1 & Matematica \\
+Rossi & D2 & Lettere \\
+Bianchi & D3 & Lingue \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Amministrativi
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+Riccio & A1 & Lingue \\
+Pierro & A2 & Lettere \\
+Bianchi & A3 & Lingue \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+L'unione tra queste due relazioni sarà quindi:
+
+\begin{center}
+    Docenti $\cup$ Amministrativi
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+Rossi & D1 & Matematica \\
+Rossi & D2 & Lettere \\
+Bianchi & D3 & Lingue \\
+Riccio & A1 & Lingue \\
+Pierro & A2 & Lettere \\ 
+Bianchi & A3 & Lingue \\\hline
+\end{tabular}
+\end{center}
+
+\begin{Definizione}[Differenza]
+\label{def-differenza}
+La \textbf{differenza} è un operatore che permette di creare una nuova relazione partendo da due relazioni \textit{union compatibili} con tuple che appartengono al primo operando e NON appartengono al secondo. Per indicare una differenza scriviamo $\bm{r_1 - r_2}$, che indica una differenza tra le relazioni $r_1$ e $r_2$.
+\end{Definizione}
+
+Riprendendo l'esempio di prima dei docenti (quello con ancora i codici uguali, altrimenti la differenza sarebbe superflua essendo tutte le tuple diverse), troviamo che la relazione Docenti $-$ Amministativi (che rappresenta tutti i docenti non amministrativi) è pari a
+
+\begin{center}
+    Docenti $-$ Amministrativi
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+Rossi & C1 & Matematica \\
+Rossi & C2 & Lettere \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{Definizione}[Intersezione]
+\label{def-intersezione}
+L'\textbf{intersezione} è un operatore che permette di creare una nuova relazione partendo da due relazioni \textit{union compatibili} con tuple che appartengono a entrambi gli operandi. Per indicare un'intersezione scriviamo $\bm{r_1 \cap r_2}$. \\
+È un operatore derivato perché equivale a effettuare una doppia differenza ($r_1 \cap r_2 = (r_1 - (r_1 - r_2))$).
+\end{Definizione}
+
+Riprendendo sempre lo stesso esempio di prima, troviamo che la relazione Docenti $\cap$ Amministrativi è pari a 
+
+\begin{center}
+    Docenti $\cap$ Amministrativi
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+Bianchi & C3 & Lingue \\ \hline
+\end{tabular}
+\end{center}
+
+
+
+
+
+
+
+
+
+\end{document}
 
 
 
