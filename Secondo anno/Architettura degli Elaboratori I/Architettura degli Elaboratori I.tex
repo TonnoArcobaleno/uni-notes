@@ -456,18 +456,18 @@ Per prima cosa estraiamo l'esponente e i bit frazionari:
 C0200000_{16} &= 1|10000000|01000000000000000000000
 \end{align*}
 
-La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\cdot 2^2)$. Possiamo ora sottarre (dato che la seconda è negativa) le due mantisse :
+La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\cdot 2^2)$. Dato che però il secondo numero è negativo, dobbiamo fare un complemento a 2 per renderlo positivo. Prendiamo dunque la mantissa ($0.101$), cambiamo tutti i bit ($1.010$), e aggiungiamo $0.001$ ($1.011$). Ora possiamo sommare le mantisse:
 
 \[
 \begin{array}{rcccc}
-1. & 1 & 0 & 0 & - \\
-0. & 1 & 0 & 1 & = \\
+1. & 1 & 0 & 0 & + \\
+1. & 0 & 1 & 1 & = \\
 \hline
-0. & 1 & 1 & 1 &
+1 0. & 1 & 1 & 1 &
 \end{array}
 \]
 
-Dobbiamo ora normalizzare la mantissa: $0.111 \cdot 2^2 = 1.11 \cdot 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
+Dalla mantissa eliminiamo il primo bit perché va in overflow. Dato che il nuovo primo bit è $0$, il numero è positivo, dunque non dobbiamo rieffettuare il complemento a due. Possiamo quindi normalizzare la mantissa: $0.111 \cdot 2^2 = 1.11 \cdot 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
 \[
 0|10000000|11000000000000000000000 = 0x40600000
 \]
@@ -839,7 +839,7 @@ A & B & \textbf{Mintermine} \\
 \end{array}
 \]
 
-Adesso, ogni equazione booleana $Y$ ha per ogni riga un risultato prestabilito. Ad esempio, $Y = A + B$ vale 1 per ogni riga tranne che per la prima. Dunque possiamo riscrivere $Y$ come \textbf{somma di tutti i mintermini delle righe dove} $\bm{Y = 1}$. Dunque \mbox{$Y = A + B = \bar{A} B + A \bar{B} + AB = m_1 + m_2 + m_3 = \sum(1,2,3)$}. \\
+Adesso, ogni equazione booleana $Y$ ha per ogni riga un risultato prestabilito. Ad esempio, $Y = A + B$ vale 1 per ogni riga tranne che per la prima. Dunque possiamo riscrivere $Y$ come \textbf{somma di tutti i mintermini delle righe dove} $\bm{Y = 1}$. Dunque \mbox{$Y = A + B = \bar{A} B + A \bar{B} + AB = m_1 + m_2 + m_3 = \sum(1,2,3)$}. Questa forma prende il nome di \textbf{forma canonica della SOP}. \\
 \NB Per convenzione usiamo come indice di ogni mintermine il valore delle variabili della riga che rappresenta trasformato in binario. Ad esempio, quando $A = 0$ e $B = 1$ abbiamo il mintermine $01_2 = 1_{10}$. La stessa convenzione la vedremo anche per i maxtermini.
 
 \subsection{Prodotto di somme (POS)}
@@ -859,7 +859,7 @@ A & B & \textbf{Maxtermine} \\
 \end{array}
 \]
 
-Dunque ogni equazione booleana $Y$ sappiamo già che ha per ogni riga un risultato prestabilito ($Y$ con $A = 1$ e $B = 0$ vale sempre o $1$ o $0$, qualsiasi funzione sia è già scritto). Ad esempio, $Y = AB$ vale 0 per ogni riga tranne che per l'ultima. Dunque possiamo riscrivere $Y$ come \textbf{prodotto di tutti i maxtermini delle righe dove} $\bm{Y = 0}$- Dunque \mbox{$Y = AB = (A + B) (A + \bar{B}) (\bar{A} + B) = M_0 M_1 M_2 = \prod(0,1,2)$}.
+Dunque ogni equazione booleana $Y$ sappiamo già che ha per ogni riga un risultato prestabilito ($Y$ con $A = 1$ e $B = 0$ vale sempre o $1$ o $0$, qualsiasi funzione sia è già scritto). Ad esempio, $Y = AB$ vale 0 per ogni riga tranne che per l'ultima. Dunque possiamo riscrivere $Y$ come \textbf{prodotto di tutti i maxtermini delle righe dove} $\bm{Y = 0}$- Dunque \mbox{$Y = AB = (A + B) (A + \bar{B}) (\bar{A} + B) = M_0 M_1 M_2 = \prod(0,1,2)$}. Questa forma prende il nome di \textbf{forma canonica della POS}.
 
 \subsection{Assiomi e teoremi}
 
@@ -1102,10 +1102,10 @@ Abbiamo per ora visto, fatta eccezione per il Full Adder, solo circuiti con un o
 
 \begin{Definizione}[Priority Circuit]
 \label{def-priority-circuit}
-Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra). Questi tipi di circuiti che restituiscono al più un output TRUE per ogni combinazione di input sono detti circuiti \textbf{one-hot}.
+Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra). Questi tipi di circuiti che restituiscono un solo output TRUE per ogni combinazione di input sono detti circuiti \textbf{one-hot}.
 \end{Definizione}
 
-Preso quindi un priority circuit con 4 input $A_3, A_2, A_1$ e $A_0$, questo avrà 4 output $Y_3, Y_2, Y_1$ e $Y_0$, e come già accennato per ogni combinazione di input si accenderà sempre l'output corrispondente all'input TRUE più a sinistra. Quindi, se ad esempio è acceso l'input $A_3$ (ossia vale 1), sicuramente sarà acceso l'output $Y_3$. Se invece è acceso $A_2$, se $A_3$ non è acceso allora si accenderà $Y_2$. Se è acceso $A_1$, se $A_3$ e $A_2$ non sono accesi allora si accenderà $Y_1$, e infine se $A_0$ è l'unico acceso allora si accenderà $Y_0$. Abbiamo quindi un circuito con le uscite \textbf{mutualmente esclusive}: con una determinata combinazione di input \textbf{al più un output sarà acceso}.
+Preso quindi un priority circuit con 4 input $A_3, A_2, A_1$ e $A_0$, questo avrà 4 output $Y_3, Y_2, Y_1$ e $Y_0$, e come già accennato per ogni combinazione di input si accenderà sempre l'output corrispondente all'input TRUE più a sinistra. Quindi, se ad esempio è acceso l'input $A_3$ (ossia vale 1), sicuramente sarà acceso l'output $Y_3$. Se invece è acceso $A_2$, se $A_3$ non è acceso allora si accenderà $Y_2$. Se è acceso $A_1$, se $A_3$ e $A_2$ non sono accesi allora si accenderà $Y_1$, e infine se $A_0$ è l'unico acceso allora si accenderà $Y_0$. Abbiamo quindi un circuito con le uscite \textbf{mutualmente esclusive}: con una determinata combinazione di input \textbf{un solo output sarà acceso}.
 
 \begin{Definizione}[Don't Care]
 \label{def-dont-care}
@@ -1359,7 +1359,7 @@ Grazie allo stato di alta impedenza, è possibile riprodurre lo stesso identico 
 \includegraphics[width=1\textwidth, valign=t]{MUX tristate 2.png}
 \end{minipage}
 
-Nella prima immagine usiamo 6 tristate buffer, praticamente 2 per multiplexer. Nella seconda invece ne usiamo solo 4, ma usiamo 4 porte \code{AND} per gestire gli ingressi di questi tristate per far partire il segnale solo da un singolo tristate alla volta, così da non creare mai contention.
+Nella prima immagine usiamo 6 tristate buffer, mentre nella seconda ne usiamo solo 4, ma usiamo 4 porte \code{AND} per gestire gli ingressi di questi tristate per far partire il segnale solo da un singolo tristate alla volta, così da non creare mai contention.
 
 \subsubsection*{Usare i multiplexer per rappresentare funzioni booleane}
 
@@ -1428,6 +1428,177 @@ Notiamo però anche qui una cosa: i primi 4 MUX sono praticamente superflui. Inf
 \centering
 \includegraphics[width=0.4\textwidth]{Da 7 a 3 MUX.png}
 \end{figure}
+
+\begin{Proposizione}[Teorema di Shannon]
+\label{propos-teorema-shannon}
+Data una funzione booleana $f$ a $n$ variabili, vale sempre l'uguaglianza
+\[
+\bm{f(x_1, \ldots, x_n) = x_1 f(1, \ldots, x_n) + \bar{x_1} f(0, \ldots, x_n)}
+\]
+\end{Proposizione}
+
+Questo teorema è la dimostrazione formale di ciò che abbiamo visto la pagina scorsa, ossia del perché possiamo riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, e espande questo concetto a MUX a un qualsiasi numero di ingressi $n$ formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione a $n$ ingressi, possiamo realizzarla usando un MUX che prende in input 2 funzioni a $n-1$ ingressi, dunque una funzione a 4 ingressi diventa un MUX con 2 funzioni a 2 ingressi che a loro volta diventano due MUX con due funzioni a 1 ingresso, con un totale quindi di 3 MUX a 2 ingressi. 
+
+\subsection{Decoder}
+
+\begin{Definizione}[Decoder]
+\label{def-decoder}
+Un \textbf{decoder} è un circuito combinatorio con $n$ input e $2^n$ output e che restituisce un solo output TRUE per ogni combinazione di input, ossia è un circuito \textbf{one-hot}, come il priority circuit.  
+\end{Definizione}
+
+\NB Per far uscire solo un output TRUE tra tutti gli output il decoder utilizza una tecnica chiamata \textbf{mascheramento}. In sostanza, applicando un operazione \code{AND} a tutti gli output il sistema si assicura di azzerare tutti i bit non desiderati a 0 così da isolare l'output voluto.
+
+\begin{minipage}[c]{0.6\textwidth}
+Un decoder si raffigura semplicemente con un rettangolo verticale con la scritta "Decoder" in alto, con gli $n$ ingressi a sinistra (in questo caso $2$), e gli $2^n$ output a destra (in questo caso $4$). \\
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Decoder.png}
+\end{minipage}
+
+Possiamo vedere un decoder come una delle due componenti di un MUX. Infatti, un MUX con $n$ input e $\log_2 n$ selettori non è che composto da un decoder a $\log_2 n$ input con $n$ output che sono collegati da una serie di \code{AND} e un \code{OR} finale. Vediamo con i circuiti come si presenta questa idea:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{MUX con decoder.png}
+\caption{MUX creato tramite decoder e \code{AND/OR}}
+\end{figure}
+
+Capire perché questo altro non è che un MUX a 4 ingressi è molto semplice. Sappiamo che la funzione booleana che descrive un MUX a 4 ingressi è $Y = \bar{S_0}\bar{S_1} D_0 + S_0 \bar{S_1} D_1 + \bar{S_0} S_1 D_2 + S_0 S_1 D_3$. In questo decoder abbiamo che $Y_0 = \bar{S_0}\bar{S_1}, Y_1 = S_1 \bar{S_0}, Y_2 = \bar{S_0} S_1, Y_3 = S_0 S_1$, e dato che la funzione di questo circuito che abbiamo creato è $Y = Y_0 D_0 + Y_1 D_1 + Y_2 D_2 + Y_3 D_3$, sostituendo tutti gli $Y_i$ con i loro rispettivi valori troviamo proprio la funzione booleana di un classico MUX a 4 ingressi.
+
+Vediamo ora però com'è fatto al suo interno un decoder. Abbiamo già visto come, in un decoder a 2 ingressi, ogni output corrisponda a un mintermine, nell'ordine $\bar{S_0} \bar{S_1}, S_0 \bar{S_1}, \bar{S_0} S_1, S_0 S_1$. Dunque possiamo usare quattro \code{AND} per formare un decoder, in questo modo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Decoder interno.png}
+\end{figure}
+
+Con i decoder possiamo scrivere qualsiasi funzione booleana a $n$ variabili nella forma SOP. Infatti, basta collegare in un \code{OR} tutti i mintermini che formano tale funzione. Vediamo ad esempio come rappresentare un full adder a 3 ingressi tramite un decoder. Ricordiamo che un full adder è un circuito combinatorio utilizzato per eseguire somme di bit.
+
+Abbiamo quindi due output da rappresentare: $S$ per la somma e $R$ per il resto, con la seguente tabella della verità (avremo in questa tabella 0 per $S$ se la somma dei tre bit $n$ è $n\%2 = 0$ e 1 altrimenti, e 0 per $R$ se il resto della somma dei tre bit è 0 e 1 altrimenti):
+
+\[
+\begin{array}{ccc|cc|c}
+A & B & C & S & R & \text{mintermini} \\
+\hline
+0 & 0 & 0 & 0 & 0 & \bar{A} \bar{B} \bar{C} = m_0 \\
+0 & 0 & 1 & 1 & 0 & \bar{A} \bar{B} C = m_1 \\
+0 & 1 & 0 & 1 & 0 & \bar{A} B \bar{C} = m_2 \\
+0 & 1 & 1 & 0 & 1 & \bar{A} B C = m_3 \\
+1 & 0 & 0 & 1 & 0 & A \bar{B} \bar{C} = m_4 \\
+1 & 0 & 1 & 0 & 1 & A \bar{B} C = m_5 \\
+1 & 1 & 0 & 0 & 1 & A B \bar{C} = m_6 \\
+1 & 1 & 1 & 1 & 1 & A B C = m_7
+\end{array}
+\]
+
+Dunque troviamo che $S = \sum m(1,2,4,7)$ e $R = \sum m(3,5,6,7)$, che si traduce in questo circuito combinatorio:
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Full adder con decoder.png}
+\end{figure}
+
+\section{Dispositivi logici programmabili}
+
+Passiamo ora allo studio di dispositivi più complessi, i cui collegamenti interni non sono sempre stabiliti a priori ma possono in alcuni casi essere \textbf{configurabili dall'utente}. Questi dispositivi prendono il nome di \textbf{dispositivi logici programmabili}. Vedremo due tipologie:
+\begin{itemize}
+    \item \textbf{PLAs} 
+    \item \textbf{FPGAs} (l'evoluzione dei PLAs)
+\end{itemize}
+
+\subsection{PLA}
+
+\begin{Definizione}[PLA]
+\label{def-PLA}
+I \textbf{PLA} (Programmable Logic Arrays) sono dispositivi logici programmabili che utilizzano un array di \code{AND} seguito da un array di \code{OR} per formare dei circuiti combinatori con connessioni interne fisse.
+\end{Definizione}
+
+Un PLA ha $M$ input, $P$ output e $N$ implicanti rappresentabili (dunque non rappresentiamo tutti gli $2^M$ implicanti possibili, ma solo una certa porzione). Vediamo ad esempio una PLA che ha 3 input $A,B$ e $C$ e ha come output $X = \bar{A} \bar{B} C + A B \bar{C}$ e $Y = A\bar{B}$:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textwidth]{PLA Esempio.png}
+\end{figure}
+
+Esiste un altro modo più semplice per rappresentare una PLA che prende il nome di \textbf{dot notation}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textwidth]{PLA Dot notation.png}
+\end{figure}
+
+\begin{Osservazione}[]
+\label{oss-PLA}
+Nelle PLAs conviene quasi sempre \textbf{non minimizzare} le SOP.
+\end{Osservazione}
+
+Capiamo con un esempio perché. Prendiamo due funzioni a 3 input $X$ e $Y$, con $X = \sum m(3,5,6)$ e $Y = \sum m(3,5,6,7)$ e studiamone le rispettive mappe di Karnaugh:
+
+\begin{minipage}[c]{0.47\textwidth}
+    \centering
+    $X$ 
+    
+    \vspace{0.2cm}
+
+    
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\diagbox{$C$}{$AB$} & 00 & 01 & 11 & 10 \\ \hline
+0 & 0 & 0 & 1 & 0 \\ \hline
+1 & 0 & 1 & 0 & 1 \\ \hline
+\end{tabular}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.47\textwidth}
+    \centering
+    $Y$     
+
+    \vspace{0.2cm}
+    
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\diagbox{$C$}{$AB$} & 00 & 01 & 11 & 10 \\ \hline
+0 & 0 & 0 & 1 & 0 \\ \hline
+1 & 0 & 1 & 1 & 1 \\ \hline
+\end{tabular}
+\end{minipage}
+
+Notiamo che possiamo minimizzare $Y$ da $\bar{A} BC + AB \bar{C} + ABC + A \bar{B} C$ a $BC + AC + AB$, lasciando invece $X$ invariato come $\bar{A} BC + AB \bar{C} + A \bar{B} C$. Minimizzando $Y$, però, stiamo creando 3 nuovi invarianti da rappresentare, quando prima invece ne avevamo già 3 in comune con $X$. In questo modo, al posto di rappresentare $X$ e $Y$ con un totale di 4 invarianti li staremmo rappresentando con un totale di 6 invarianti, peggiorando di fatto la situazione.
+
+\subsection{FPGA}
+
+\begin{Definizione}[FPGA]
+\label{def-FPGA}
+I \textbf{FPGA} (Field Programmable Gate Array) sono dispositivi logici programmabili che utilizzano array di elementi logici (\textbf{LE}) per formare dei circuiti combinatori e sequenziali con connessioni interne programmabili. Questi dispositivi permettono di collegare gli elementi logici con blocchi di input e output, creando così dei nuovi circuiti configurabili dall'utente.
+\end{Definizione}
+
+I LE (ossia gli elementi logici) sono composti da:
+\begin{itemize}
+    \item un \textbf{LUT}, che si occupa della logica combinatoria
+    \item un \textbf{flip-flop}, che si occupa della logica sequenziale
+    \item un \textbf{MUX}, che collega i LUT alle flip-flops
+\end{itemize}
+
+Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta una funzione. Ad esempio, se vogliamo rappresentare la funzione $X = \bar{A} \bar{B} C + AB \bar{C}$, il LUT che useremo avrà una tabella della verità di questo tipo:
+
+\[
+\begin{array}{cccc|c}
+Data 1 (A) & Data 2 (B) & Data 3(C) & Data 4 & LUT (X) \\
+\hline
+0 & 0 & 0 & X & 0 \\
+0 & 0 & 1 & X & 1 \\
+0 & 1 & 0 & X & 0 \\
+0 & 1 & 1 & X & 0 \\
+1 & 0 & 0 & X & 0 \\
+1 & 0 & 1 & X & 0 \\
+1 & 1 & 0 & X & 1 \\
+1 & 1 & 1 & X & 0
+\end{array}
+\]
+
+dove Data 4 indica il quarto ingresso non utilizzato, che può avere come valore fisso o un Don't Care o uno 0.
+
+
+
 
 
 
