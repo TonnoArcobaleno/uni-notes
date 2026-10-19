@@ -727,7 +727,8 @@ Dunque se $C = 0$, allora avremo che $A \oplus B \oplus C = A \oplus B$ che vale
 
 \begin{Definizione}[Circuito logico]
 \label{def-circuito-logico}
-Un \textbf{circuito logico} è un circuito elettrico digitale dotato di una serie di input e output che elaborano segnali binari.
+Un \textbf{circuito logico} è un circuito elettrico digitale dotato di una serie di input e output che elaborano segnali binari.  \\
+\NB \textbf{Analizzare} una funzione booleana $f$ significa creare un circuito logico che rappresenti tale funzione.
 \end{Definizione}
 Il comportamento logico è descritto dalla \textbf{specifica funzionale}, che descrive cosa fa il circuito. Inoltre, è a volte presente una \textbf{specifica temporale}, che ne ritarda le operazioni per poter decidere quando far restituire l'output.
 
@@ -771,7 +772,6 @@ Questo ad esempio non è un circuito combinatorio corretto. Infatti, il nodo $\b
 Questo invece è uno dei circuiti combinatori dell'architettura degli elaboratori: si chiama \textbf{Full Adder} e serve per eseguire delle somme di bit. In questo caso prendiamo i due bit da sommare $A$ e $B$ e il riporto proveniente da un'eventuale somma precedente $C_{in}$. L'output è $S = A \oplus B \oplus C_{in}$, che sarebbe la somma tra bit, e $C_{out}$, l'evenutale riporto generato.\\
 \NB Il blocco CL centrale indica un circuito logico. Si potrebbe pensare che in questo caso avremmo potuto mettere uno \code{XOR} a 3 input, ma questo non funziona: infatti, uno \code{XOR} rilascia solo un output, mentre noi in questo caso abbiamo un circuito che rilascia due output. Dunque creiamo questo blocco CL che rappresenta un circuito logico di cui i dettagli implementativi non ci interessano.
 \end{minipage}
-
 
 \begin{Definizione}[Alte impedenza]
 \label{def-alta-impedenza}
@@ -1437,7 +1437,7 @@ Data una funzione booleana $f$ a $n$ variabili, vale sempre l'uguaglianza
 \]
 \end{Proposizione}
 
-Questo teorema è la dimostrazione formale di ciò che abbiamo visto la pagina scorsa, ossia del perché possiamo riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, e espande questo concetto a MUX a un qualsiasi numero di ingressi $n$ formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione a $n$ ingressi, possiamo realizzarla usando un MUX che prende in input 2 funzioni a $n-1$ ingressi, dunque una funzione a 4 ingressi diventa un MUX con 2 funzioni a 2 ingressi che a loro volta diventano due MUX con due funzioni a 1 ingresso, con un totale quindi di 3 MUX a 2 ingressi. 
+Questo teorema è la dimostrazione formale di ciò che abbiamo visto la pagina scorsa, ossia del perché riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, e espande questo concetto a MUX a un qualsiasi numero di ingressi $n$ formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione a $n$ ingressi, possiamo realizzarla usando un MUX che prende in input 2 funzioni a $n-1$ ingressi, dunque una funzione a 4 ingressi diventa un MUX con 2 funzioni a 2 ingressi che a loro volta diventano due MUX con due funzioni a 1 ingresso, con un totale quindi di 3 MUX a 2 ingressi. 
 
 \subsection{Decoder}
 
