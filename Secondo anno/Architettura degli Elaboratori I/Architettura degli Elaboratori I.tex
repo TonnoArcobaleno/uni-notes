@@ -561,8 +561,8 @@ Il \textbf{buffer} si rappresenta tramite un trinagolo. In questo caso abbiamo $
 \begin{array}{c|c}
 A & Y \\
 \hline
-1 & 0 \\
-1 & 0
+0 & 0 \\
+1 & 1
 \end{array}
 \]
 
@@ -1060,7 +1060,7 @@ Il \textbf{bubble pushing} è una tecnica utilizzata nei circuiti per passare da
 \includegraphics[width=1\textwidth, valign=t]{Bubble pushing.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Grazie al teorema di DeMorgan, riusciamo dimostrare che i due circuiti qui a sinistra sono identici. I pallini in corrispondenza dell'input del \code{OR} indicano un valore \code{NOT}. Se ad esempio avevamo un \code{NAND} che collegava $A$ e $B$, lo avremmo ora trasformato in un \code{OR} che collega $\bar{A}$ e $\bar{B}$. Lo stesso ragionamento varrebbe anche con un \code{NOR} che diventerebbe un \code{AND}. 
+Grazie al teorema di DeMorgan, riusciamo dimostrare che i due circuiti qui a sinistra sono identici. I pallini in corrispondenza dell'input del \code{OR} indicano un valore \code{NOT}. Se ad esempio avevamo un \code{NAND} che collegava $A$ e $B$, lo avremmo ora trasformato in un \code{OR} che collega $\bar{A}$ e $\bar{B}$. Lo stesso ragionamento varrebbe anche con un \code{NOR} che diventerebbe un \code{AND}.
 \end{minipage}
 
 Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando questa tecnica.
@@ -1085,6 +1085,8 @@ Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette
 \begin{minipage}[c]{0.60\textwidth}
 Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} (\mbox{$\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$}). L'\code{OR} infine è rappresnetato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} (\mbox{$\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$}). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
 \end{minipage}
+
+In particolare, grazie a questa tecnica possiamo rappresentare una SOP come una serie di \code{NAND}, e una POS come una serie di \code{NOR}  (negando due volte la funzione e usando DeMorgan). Ad esempio, se abbiamo $Y = AB + BC$, possiamo riscriverla con una serie di \code{NAND} semplicemente scrivendo $Y = \bar{\bar{Y}} = \overline{\overline{AB + BC}} = \overline{\overline{AB} \cdot \overline{BC}}$.
 
 Nascono quindi le \textbf{reti a due livelli}, dove il primo livello è rappresentato da tanti \code{ANDs} e il secondo da un \code{OR} (o viceversa). In questo modo, è possibile rappresentare qualsiasi SOP come circuiti logici nel modo più chiaro possibile. Tramite il bubble pushing è poi possibile trasformare queste funzioni in funzioni composte solo da tanti \code{NAND} e da un altro \code{NAND} finale (o da due \code{NOR}, se si parte con tanti \code{ORs} e si finisce con un \code{AND}). 
 
@@ -1529,7 +1531,7 @@ Esiste un altro modo più semplice per rappresentare una PLA che prende il nome 
 
 \begin{Osservazione}[]
 \label{oss-PLA}
-Nelle PLAs conviene quasi sempre \textbf{non minimizzare} le SOP.
+Nelle PLAs non conviene sempre \textbf{minimizzare} le SOP.
 \end{Osservazione}
 
 Capiamo con un esempio perché. Prendiamo due funzioni a 3 input $X$ e $Y$, con $X = \sum m(3,5,6)$ e $Y = \sum m(3,5,6,7)$ e studiamone le rispettive mappe di Karnaugh:
@@ -1574,7 +1576,7 @@ I \textbf{FPGA} (Field Programmable Gate Array) sono dispositivi logici programm
 I LE (ossia gli elementi logici) sono composti da:
 \begin{itemize}
     \item un \textbf{LUT}, che si occupa della logica combinatoria
-    \item un \textbf{flip-flop}, che si occupa della logica sequenziale
+    \item un \textbf{flip-flop}, che si occupa della logica sequenziale (che vedremo più avanti quando parleremo nel concreto di circuiti sequenziali)
     \item un \textbf{MUX}, che collega i LUT alle flip-flops
 \end{itemize}
 
@@ -1582,7 +1584,7 @@ Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta un
 
 \[
 \begin{array}{cccc|c}
-Data 1 (A) & Data 2 (B) & Data 3(C) & Data 4 & LUT (X) \\
+\text{Data 1 } (A) & \text{Data 2 } (B) & \text{Data 3 } (C) & \text{Data 4} & LUT (X) \\
 \hline
 0 & 0 & 0 & X & 0 \\
 0 & 0 & 1 & X & 1 \\
@@ -1597,8 +1599,78 @@ Data 1 (A) & Data 2 (B) & Data 3(C) & Data 4 & LUT (X) \\
 
 dove Data 4 indica il quarto ingresso non utilizzato, che può avere come valore fisso o un Don't Care o uno 0.
 
+\chapter{Circuiti sequenziali}
 
+\section{Introduzione}
 
+Abbiamo parlato fino ad ora di circuiti combinatori, che non avevano memoria. È arrivato ora il momento di iniziare a parlare del secondo tipo di circuiti logici, ossia i \textbf{circuiti sequenziali}.
+
+Sappiamo già che i circuiti sequenziali sono dei circuiti logici che si differenziano dai circuiti combinatori per due motivi principali:
+\begin{itemize}
+    \item hanno \textbf{memoria}
+    \item dipendono dall'\textbf{input di un utente}
+\end{itemize}
+
+Prima di poter parlare concretamente di circuiti sequenziali è importante però dare delle definizioni importanti:
+\begin{itemize}
+    \item lo \textbf{stato} di un circuito sequenziale sono tutte le informazioni riguardo tale circuito necessarie per spiegarne il comportamento presente e futuro
+    \item i \textbf{latches} e i \textbf{flip-flops} sono degli elementi di stato che salvano un bit di stato
+    \item i circuiti \textbf{sequenziali sincroni} sono circuiti combinatori seguiti da un banco di flip flops
+\end{itemize}
+
+\section{Elementi di stato}
+
+\begin{Definizione}[Elemento di stato]
+\label{def-elemento-stato}
+Un \textbf{elemento di stato} è un elemento di un circuito che salva uno stato al suo interno.
+\end{Definizione}
+
+Vedremo quattro elementi di stato:
+
+\begin{itemize}
+    \item \textbf{Circuiti bistabili}
+    \item \textbf{SR Latch}
+    \item \textbf{D Latch}
+    \item \textbf{D Flip-flop}
+\end{itemize}
+
+\subsection{Circuiti bistabili}
+
+\begin{Definizione}[Circuito bistabile]
+\label{def-circuito-bistabile}
+Un \textbf{circuito bistabile} è un circuito \textit{stabile} con, nella forma base, due output e nessun input.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Bistabl.png}
+\caption{Due rappresentazioni di un circuito bistabile}
+\end{figure}
+
+Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, se in qualche modo riuscissimo a modificare il valore di $Q$ e metterlo a $0$ ad esempio, questo rimarebbe sempre a $0$ non cambierebbe mai, e stessa cosa se lo mettessimo a $1$. Il problema di questo circuito è proprio che manca il modo per poter modificare il valore di $Q$. Per questo motivo introduciamo dei nuovi circuiti chiamati \textbf{SR Latch}.
+
+\subsection{SR Latch}
+
+\begin{Definizione}[SR Latch]
+\label{def-SR-latch}
+Un \textbf{SR Latch} (Set/Reset Latch) è un circuito bistabile che permette di modificare il valore di $Q$ attraverso due input, $\bm{S}$ (set) e $\bm{R}$ (reset).
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{SR Latch.png}
+\caption{Rappresentazione di un SR Latch base}
+\end{figure}
+
+Avendo 2 variabili in input, abbiamo 4 casi possibili:
+\begin{itemize}
+    \item Se $\bm{S = 0}$ e $\bm{R = 0}$ allora l'SR Latch si comporta come  un banale circuito bistabile: se $Q$ aveva già un valore, questo non cambia, ossia $\bm{Q_{\textbf{prev}} = Q}$.
+    \item Se $\bm{S = 1}$ e $\bm{R = 0}$ allora $\bm{Q = 1}$ e $\bm{\bar{Q} = 0}$
+    \item Se $\bm{S = 0}$ e $\bm{R = 1}$ allora $\bm{Q = 0}$ e $\bm{\bar{Q} = 1}$
+    \item Se $\bm{S = 1}$ e $\bm{R = 1}$ allora $\bm{Q = \bar{Q} = 0}$. Essendo questo impossibile, quando $S = 1 $ e $R = 1$ diciamo che il circuito si trova in uno stato invalido.
+\end{itemize}
+
+Dunque quando $S = 1$ e $R = 0$ stiamo settando $Q$ a $1$; quando invece $S = 0$ e $R = 1$ lo stiamo resettando a $0$; quando poi $S = 0$ e $R = 0$ lo stiamo tenendo in memoria. L'unico caso da evitare è quando $S = 1$ e $R = 1$, dato che il circuito in quel caso non sa quanto vale $Q$ e quindi finisce in uno stato invalido.
 
 
 
