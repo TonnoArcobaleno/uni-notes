@@ -922,7 +922,7 @@ Notiamo da questo esempio, però, una cosa molto interessante, ossia che da un n
 
 \begin{Proposizione}[]
 \label{propos-arco-indietro-collega-antenato}
-Preso un grafo $G$ connesso e non diretto, e $T$ un albero di ricerca derivante da un DFS su $G$, e $xy$ un arco di $T$, dove $y$ è un discendente di $x$, allora esiste un arco $uv \neq xy$, con $u \in T_y$ (dove $T_y$ è il sottoalbero formato dai discendenti di $y$, dunque anche da $y$ stesso) e $v$ antenato di $x \iff xy$ non è un ponte.  
+Preso un grafo $G$ connesso e non diretto, e $T$ un albero di ricerca derivante da un DFS su $G$, e $xy$ un arco di $T$, dove $y$ è un discendente di $x$, allora esiste un arco $uv \neq xy$, con $u \in T_y$ (dove $T_y$, o $tree(u)$, è il sottoalbero formato dai discendenti di $y$, dunque anche da $y$ stesso) e $v$ antenato di $x \iff xy$ non è un ponte.  
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -1120,7 +1120,167 @@ Vediamo come funziona questo algoritmo con un esempio. Preso il grafo
 
 troviamo prima il ciclo C formato da i nodi $1,2,3,4$ e $6$, lo trasformiamo in $v_C$, e cerchiamo altri cicli in modo ricorsivo. Non trovandoli, la chiamata ricorsiva ritorna $\{\{v_C\}, \{5\}\}$, e il \code{for} trasforma questo insieme in $\{\{1,2,3,4,6\},\{5\}\}$. Dunque troviamo che il grafo ha solo 2 componenti fortemente connesse: $\{1,2,3,4,6\}$ e $\{5\}$.
 
-Per quanto riguara il costo di questo algoritmo, sappiamo che la ricerca di un ciclo in un grafo richiede una DFS e quindi un costo di $\O(n+m)$, e anche la contrazione e l'espansione di un ciclo nel grafo possono arrivare a costare $\O(n+m)$. Andando in modo ricorsivo, è possibile dover effettuare queste operazioni in totale $\O(n)$ volte, arrivando a un costo di $\textbf{O}\bm{(n(n+m))}$.
+Per quanto riguara il costo di questo algoritmo, sappiamo che la ricerca di un ciclo in un grafo richiede una DFS e quindi un costo di $\O(n+m)$, e anche la contrazione e l'espansione di un ciclo nel grafo possono arrivare a costare $\O(n+m)$. Andando in modo ricorsivo, è possibile dover effettuare queste operazioni in totale $\O(n)$ volte, arrivando a un costo di $\textbf{O}\bm{(n(n+m))}$. Cerchiamo però ora di arrivare a un algoritmo con un costo computazionale $\O(n+m)$.
+
+\begin{Proposizione}[]
+\label{propos-antenato-comune}
+Preso un grafo diretto $G$, un'arborescenza di questo grafo $T$ e un nodo $u \in V(G)$, $\exists$ un arco di attraversamento $(x,y) \in E(G)$ con $x \in T_u$ e $y \notin T_u \implies \exists$ l'antenato comune più vicino di $x$ e $y$ $z \in G$ che è anche antenato di $u$, e esistono due figli $u_1$ e $u_2$ di $z$ tali che $x \in T_{u_1}$ e $y \in T_{u_2}$ e, $\forall x' \in T_{u_1}$ e $\forall y' \in T_{u_2}$, $t(x') > t(y')$ (ossia tutti i nodi nel sottoalbero $T_{u_2}$ sono visitati prima di quelli del sottoalbero $T_{u_1}$).
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Cerchiamo prima di tutto di capire visiamente come si presenta questa proposizione (vediamo l'arborescenza $T$ rappresentata, non tutto il grafo $G$, fatta eccezione per l'arco $(x,y) \in E(G)$ e $\notin E(T)$):
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Proposizione rappresentazione grafica.png}
+\end{figure}
+
+Per quanto riguarda la proposizione vera e propria, sappiamo che $z$ sicuramente esiste, dato che $x$ e $y$ hanno in comune come antenato almeno la radice dell'arborescenza. Questo $z$ è sicuramente anche antenato di $u$, perché se fosse suo discendente avremmo che $y \in T_z \subseteq T_u$, ossia $y \in T_u$ che per ipotesi non è vero. Essendo poi $z$ l'antenato comune più vicino, da $z$ i due nodi $x$ e $y$ seguono sicuramente due percorsi differenti, e chiamiamo quindi $u_1$ il primo nodo sul percorso che porta a $x$ e $u_2$ il primo nodo sul percorso che porta a $y$. Ora, essendo $T$ un arborescenza, questa deriva da un DFS. Dato che esiste l'arco $(x,y)$, sicuramente $x$ è stato visitato quando $y$ era già stato visitato, altrimenti avremmo $(x,y) \in E(T)$. Ma se $x$ è stato visitato dopo di $y$, significa che tutto il sottoalbero $T_{u_1}$ è stato visitato dopo del sottoalbero $T_{u_2}$, proprio per come funziona l'algoritmo di un DFS. Dunque $\forall x' \in T_{u_1}$ e $\forall y' \in T_{u_2}$ si ha che $t(y') < t(x')$. $\blacksquare$
+
+\begin{Definizione}[C-radice]
+\label{def-c-radice}
+Preso un componente fortemente connesso $C$ di un grafo $G$ e un arborescenza $T$ di un DFS su tale grafo, la \textbf{c-radice} di $C$ è il primo nodo di $C$ visitato nel DFS. 
+\end{Definizione}
+
+\begin{figure}[htbp]
+  \begin{minipage}[c]{0.50\textwidth}
+Vediamo questo grafo come esempio per capire cosa sono le c-radici. In rosso vi è un arborescenza $T$ di questo grafo, con i valori di visita $t$ di ogni nodo segnati al loro interno. Preso dunque ogni componente fortemente connesso del grafo, la c-radice di ogni componente sarà il nodo con il minor valore di visita all'interno di tale componente. In $C_1$ quindi sarà il nodo $1$, in $C_2$ sarà il nodo $3$ e in $C_3$ il nodo $6$.
+  \end{minipage}\hfill
+  \begin{minipage}[c]{0.45\textwidth}
+    \centering
+    \includegraphics[width=1\textwidth, valign=t]{Esempio c-radice.png}
+    \caption{}
+    \label{fig-esempio-c-radice}
+  \end{minipage}
+\end{figure}
+
+\begin{Proposizione}[]
+\label{propos-c-radice}
+Preso $u$ una c-radice di un componente fortemente connesso:
+\begin{enumerate}
+    \item $\bm{C(u) \subseteq T_u}$ (dove $C(u)$ indica il componente fortemente connesso a cui appartiene $u$)
+    \item Prese le c-radici $u_1, \ldots, u_k \in T_u$, $\bm{V(T_u) = C(u_1) \cup \ldots \cup C(u_k)}$
+\end{enumerate}
+\end{Proposizione}
+
+\vspace{2cm}
+
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}
+    \item Supponiamo per assurdo che $C(u) \nsubseteq T_u$. Questo significa che $\exists y \notin T_u \land y \in C(u)$, ossia che $\exists (x,y) \in C(u)$, con $x \in T_u$. Sicuramente sappiamo che $(x,y)$ non è un arco in avanti, perché altrimenti avremmo $y \in T_x$ e quindi $y \in T_u$, dunque può essere solo di attraversamento o all'indietro. Analizziamo entrambi i casi:
+    \begin{itemize}
+        \item $(x,y)$ è di attraversamento \\
+        In questo caso ci troviamo nelle esatte condizioni della Proposizione \ref{propos-antenato-comune}. Dunque sappiamo che $y$ viene visitato prima di $u$ nell'arborescenza, e dato che $y \in C(u)$ troviamo che $u$ non può essere una c-radice essendoci $y$ prima di lui. Ma per ipotesi sappiamo che $u$ è una c-radice, dunque concludiamo che $(x,y)$ non può essere un arco di attraversamento.
+        \item $(x,y)$ è all'indietro \\
+        In questo caso abbiamo quindi che $y$ è un anteanto di $x$ ma non un discendente di $u$, dunque $y$ è anche un antenato di $u$. Ma per essere antenato di $u$ deve esser stato visitato prima di $u$, e dato che $y \in C(u)$, troviamo che $u$ non può essere usa c-radice, trovando nuovamente una contraddizione con l'ipotesi iniziale.
+    \end{itemize}
+    Dato che $(x,y)$ non è un arco né di attraversamento, né all'indietro, né in avanti concludiamo che $(x,y)$ non esiste, dunque $C(u) \subseteq T_u$. $\blacksquare$
+    \item $\forall u_i$ sappiamo che $C(u_i) \subseteq T_{u}$ per 1) (infatti $C(u_i) \subseteq T_{u_i} \subseteq T_u$). Supponiamo ora per assurdo che 2) sia falso. Dunque sappiamo che $\exists w \in T_u$ con la c-radice $z$ di $C(w)$ che non appartiene a $T_u$ ($z \notin T_u$). $z$ è quindi sicuramente un antenato di $w$, ma è anche antenato di $u$ dato che $z \notin T_u$ e $z$ e $u$ si trovano su uno stesso cammmino, essendo entrambi antenati di $w$. Dato che $z \in C(w)$, sappiamo che esiste un cammino da $z$ a $w$, e dato che $z$ è antenato di $u$ esiste un cammino tra $z$ e $u$, e dato che $u$ è antenato di $w$ esiste un cammino da $u$ a $w$. Possiamo quindi sempre trovare un cammino che parta da un nodo $z,w$ o $u$ e che arrivi a uno di questi tre nodi, dunque questi tre nodi si trovano nello stesso componente fortemente connesso. Ma dato che $z$ è un antenato di $u$, in questo componente fortemente connesso sicuramente $u$ non è una c-radice, e dato che per ipotesi $u$ è una c-radice, abbiamo trovato un assurdo. Concludiamo quindi che $\nexists w \in T_u$ con c-radice $z$ di $C(w)$ che non appartiene a $T_u$, ossia che $V(T_u) = C(u_1) \cup \ldots \cup C(u_k)$.
+\end{enumerate}
+
+Vediamo ora un primo algoritmo ricorsivo per trovare tutti i componenti fortemente connessi di un grafo basato sulle c-radici:
+
+\begin{lstlisting}[style=Python]
+DFS_SCC_beta(G,u,Open,Output,Vis): // G grafo diretto, Open stack nuovo e Output insieme con tutti i componenti fortemente connessi
+    Vis[u] = 1
+    Open.push(u)
+    for v adiacente a u:
+        if Vis[v] == 0:
+        DFS_SCC_iniziale(G,v,Open,Output,Vis)
+    if u è una c-radice: // Ipotizziamo di avere un modo per verificare che un nodo sia una c-radice
+        C = []
+        do:
+            w = Open.pop()
+            C.append(w)
+        while w != u // Tutti i componenti nello stack prima della c-radice fanno parte dello stesso componente fortemente connesso
+    Output.add(C) 
+\end{lstlisting}
+
+Cerchiamo di capire come funziona questo algoritmo dandogli in input il grafo visto in Figura \ref{fig-esempio-c-radice}.In particolare, studiamo come ad ogni chiamata ricorsiva si modificano l'insieme Output e lo stack Open.
+\begin{enumerate}[label=\arabic*°]
+    \item Chiamata su 1: \code{Output = \{\}} e \code{Open = [1]}
+    \item Chiamata su 2: \code{Output = \{\}} e \code{Open = [2,1]} (la testa dello stack è l'elemento più a sinistra, in questo caso 2)
+    \item Chiamata su 3: \code{Output = \{\}} e \code{Open = [3,2,1]}
+    \item Chiamata su 4: \code{Output = \{\}} e \code{Open = [4,3,2,1]}
+    \item Chiamata su 5: \code{Output = \{\}} e \code{Open = [5,4,3,2,1]} 
+    \item Chiamata su 6: \code{Output = \{\}} e \code{Open = [6,5,4,3,2,1]}
+    \item Fine chiamata su 6: \code{Output = \{\{6\}\}} e \code{Open = [5,4,3,2,1]} (6 è una c-radice)
+    \item Fine chiamata su 5: \code{Output = \{\{6\}\}} e \code{Open = [5,4,3,2,1]} 
+    \item Fine chiamata su 4: \code{Output = \{\{6\}\}} e \code{Open = [5,4,3,2,1]} 
+    \item Fine chiamata su 3: \code{Output = \{\{6\}, \{5,4,3\}\}} e \code{Open = [2,1]} (3 è una c-radice e si porta con sè 5 e 4 che fanno parte del suo stesso componente fortemente connesso)
+    \item Chiamata su 7: \code{Output = \{\{6\}, \{5,4,3\}\}} e \code{Open = [7,2,1]}
+    \item Fine chiamata su 7: \code{Output = \{\{6\}, \{5,4,3\}\}} e \code{Open = [2,1]}
+    \item Fine chiamata su 2: \code{Output = \{\{6\}, \{5,4,3\}\}} e \code{Open = [2,1]}
+    \item Fine chiamata su 1: \code{Output = \{\{6\}, \{5,4,3\}, \{7,2,1\}\}} e \code{Open = []} (1 è una c-radice e si porta con sè 7 e 2 che fanno parte del suo stesso componente fortemente connesso)
+    \item Ritorniamo \code{Output = \{\{6\}, \{5,4,3\}, \{7,2,1\}\}}
+\end{enumerate}
+
+Dato che l'algoritmo funziona, non ci resta che cercare un modo per verificare se un nodo è una c-radice o no.
+
+\begin{Proposizione}[]
+\label{propos-nodo-c-radice}
+Un nodo $u$ \textbf{non è una c-radice} $\iff$ nella chiamata ricorsiva di \code{DFS\_SCC\_beta} sul nodo $u$ viene attraversato un arco $(v,w)$ tale che $w$ è già stato visitato ($\bm{t(w) < t(u)}$) ma il componente di $w$ ancora non è stato scelto ($\bm{w \in \codeb{Open}}$).
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}[label=\arabic*°]
+    \item $u$ non è una c-radice $\implies$ esiste un arco $(v,w)$ tale che $t(w) < t(u)$ e $w \in \code{Open}$ \\
+    Sappiamo che $\exists \alpha$ c-radice di $C(u)$. Dunque $\alpha$ è un antenato di $u$ ma esiste anche un cammino da $u$ a $\alpha$, trovandosi questi nello stesso componente fortemente connesso $C(u)$, che per forza di cose parte da $T_u$ e esce da questo sottoalbero per arrivare a $\alpha$. Sia $(v,w)$ il primo arco uscente da $T_u$ (ossia $v \in T_u$ e $w \notin T_u$). Questo arco non può essere ovviamente in avanti perché altrimenti avremmo $w \in T_u$, dunque o è all'indietro o è di attraversamento. Vediamo entrambi i casi:
+    \begin{itemize}
+        \item $(v,w)$ è all'indietro \\
+        In questo caso quindi $w$ è un antenato di $v$, e siccome $w \notin T_u$, questo è anche antenato di $u$, e perciò questo è stato sicuramente visitato prima di $u$, dunque $t(w) < t(u)$. Essendo però $u$ discendente di $w$, sappiamo che la chiamata ricorsiva di $w$ è ancora aperta, e dunque $w$ è ancora in \code{Open}.
+        \item $(v,w)$ è di attraversamento \\
+        In questo caso, per la Proposizione \ref{propos-antenato-comune}, troviamo che $t(w) < t(u)$ (altrimenti $w$ avrebbe fatto parte del sottoalbero $T_u$). Poiché $(v,w)$ è un arco facente parte del cammino tra $u$ e $\alpha$, dato che $\alpha$ e $u$ fanno parte dello stesso componente fortemente connesso troviamo che $w$ fa parte anche lui del componente $C(u)$. Dato che la chiamata ricorsiva su $\alpha$ ancora deve finire, essendo antenato di $u$, troviamo che $w$ è ancora in \code{Open}, dato che un nodo esce dallo stack quando finisce la chiamata ricorsiva della c-radice del suo componente.
+    \end{itemize}
+    Possiamo quindi concludere che $t(w) < t(u)$ e che $w \in \code{Open}$. $\blacksquare$
+    \item $u$ non è una c-radice $\impliedby$ esiste un arco $(v,w)$ tale che $t(w) < t(u)$ e $w \in \code{Open}$ \\
+    Dato che $w \in \code{Open}$, sappiamo che $w$ è stato visitato ma la sua componente ancora non è stata definita. Dunque, trovandoci noi ora nella chiamata ricorsiva di $u$, sappiamo sicuramente che la radice del componente $C(w)$, che chiamiamo $z$, è un antenato di $u$, dunque esiste sicuramente un cammino da $z$ a $u$, e dato che esiste un cammino da $w$ a $z$, esiste un cammino anche da $w$ a $u$. Ma esiste anche un cammino da $u$ a $w$, di cui fa parte proprio l'arco $(v,w)$. Dunque $u$ e $w$ fanno parte dello stesso componente fortemente connesso, e dato che $w$ è visitato prima di $u$, sicuramente $u$ non può essere la c-radice di questo componente. $\blacksquare$
+\end{enumerate}
+
+Grazie a questa proposizione, riusciamo a trovare un nuovo algoritmo \code{DFS\_SCC} che, per capire se un nodo è una c-radice, sfrutta una logica molto simile a quella usata per l'algoritmo \code{CercaPonti\_ric} visto per trovare tutti i ponti in un grafo. Vediamolo prima e cerchiamo di capirlo:
+
+\begin{lstlisting}[style=Python]
+DFS_SCC(G): // G grafo diretto
+    n = numero di nodi in G
+    Open = stack nuovo
+    CC = [0] * n
+    t = 0
+    comp = 0
+    for u in V(G):
+        if CC[u] == 0:
+            DFS_SCC_ric(G,u,CC,Open,t,comp)
+    return CC
+\end{lstlisting}
+
+dove \code{DFS\_SCC\_ric} è questa funzione ricorsiva:
+\begin{lstlisting}[style=Python]
+DFS_SCC_ric(G,u,CC,Open,t,comp):
+    t++
+    CC[u] = -t
+    Open.push(u)
+    back = t
+    for v con arco (u,v):
+        if CC[v] == 0: // Nodo mai visitato
+            b = DFS_SCC_ric(G,v,CC,Open,t,comp)
+            back = min(back,b)
+        else if CC[v] < 0: // Nodo visitato ma di cui non conosciamo ancora il componente fortemente connesso
+            back = min(back, -CC[v])
+    if back == -CC[u]: 
+        comp++
+        do:
+            w = Open.pop()
+            CC[w] = comp
+        while w != u
+    return back
+\end{lstlisting}
+
+Come nell'algoritmo visto per i ponti utilizziamo qui la variabile \code{back}. In questa inseriamo il valore di visita minore che troviamo percorrendo tutti gli archi con nodi di cui ancora non conosciamo il componente fortemente connesso nel sottoalbero $T_u$. In particolare, se troviamo un nodo che non è stato ancora visitato rifacciamo una chiamata ricorsiva e controlliamo quanto indietro andiamo seguendo il suo sottoalbero, mentre se troviamo un nodo che è già stato visitato ma di cui non conosciamo il componente controlliamo solo se il suo tempo di visita è minore di \code{back} e nel caso lo aggiorniamo. Se in questa ricerca troviamo anche solo un arco che porta a un nodo $w$ tale che $t(w) < t(u)$, ossia $back < -CC[u]$ (infatti in questo algoritmo $CC[u] = -t[u]$ quando non conosciamo ancora il componente di $u$, e diventa uguale a $comp$ solo quando capiamo in che componente si trova), allora siamo sicuri che $u$ non è una c-radice per la Proposizione \ref{propos-nodo-c-radice}.  \\
+Restitutiamo quindi un array finale \code{CC} dove all'indice i-esimo corrisponde il numero del componente i-esimo. Ad esempio, per il grafo in Figura \ref{fig-esempio-c-radice} avremmo in output l'array \code{[3,3,2,2,2,1,3]} (infatti, il primo componente trovato è \{6\}, il secondo \{5,4,3\} e il terzo \{7,2,1\}). \\
+Il costo totale di questo algoritmo è semplicemente $\textbf{O}(n+m)$, essendo di base un DFS con solo alcune modifiche che però apportano un costo di $\O(1)$ (come già visto per l'algoritmo dei ponti).
+
 
 
 \end{document}
