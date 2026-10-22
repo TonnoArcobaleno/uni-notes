@@ -1480,7 +1480,9 @@ Con il comando \codeb{DROP} è poi possibile eliminare:
 
 Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturare del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
 
-\section{Algebra relazionale}
+\section{Algebra relazione e DQL}
+
+\subsection{Introduzione all'algebra relazionale}
 
 Prima di studiare il DQL (la componente di SQL dedicata all'interrogazione dei dati), è fondamentale comprendere un linguaggio formale più astratto: l'\textbf{algebra relazionale}. Si tratta di un insieme di operatori che si applicano a una o due relazioni per produrre come risultato una \textit{nuova relazione}. \\
 L'algebra relazionale è poi un linguaggio \textit{procedurale}: ogni espressione specifica in modo esplicito la sequenza di operazioni da eseguire per calcolare il risultato.
@@ -1502,7 +1504,7 @@ Tra gli operatori derivati (ossia sostituitibili con una combinazione di operato
     \item \textbf{Intersezione}
 \end{itemize}
 
-\subsection{Operatori a una relazione}
+\subsubsection*{Operatori a una relazione}
 
 \begin{Definizione}[Proiezione]
 \label{def-proiezione}
@@ -1515,7 +1517,7 @@ Seguendo le regole dell'insiemistica, in una proiezione \textbf{NON prendiamo du
 La \textbf{selezione} è un operatore che permette di tagliare alcune righe di una relazione, selezionando così delle \textbf{specifiche righe di una relazione}. Per indicare una selezione scriviamo $\bm{\sigma_C(r)}$, che indica una selezione che prende della relazione $r$ tutte le righe che soddisfano la condizione $C$, scritta tramite operatori booleani.
 \end{Definizione}
 
-Ad esempio, $C$ può essere $A < B \land \neq A$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti.
+Ad esempio, $C$ può essere $A < B \land \neq A$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti, oppure può essere $\neq (A = B)$ per indicare che il valore dell'attributo $A$ non deve essere uguale a quello dell'attributo $B$.
 
 Se prendiamo quindi la relazione $r$
 
@@ -1553,7 +1555,7 @@ Rossi   & 2 & Milano \\ \hline
 \end{tabular}
 \end{center}
 
-\subsection{Operatori a due relazioni}
+\subsubsection*{Operatori a due relazioni}
 
 \begin{Definizione}[Union compatibili]
 \label{def-union-compatibili}
@@ -1784,16 +1786,309 @@ Bianchi & C3 & Lingue \\ \hline
 \end{tabular}
 \end{center}
 
+\subsection{Algebra relazionale in SQL 1}
+
+Abbiamo visto delle prime operazioni nell'algebra relazionale. Prima di andare a vedere operatori più complessi, vediamo come si traducono queste prime operazioni in SQL, introducendo quindi a tutti gli effetti il nuovo linguaggio DQL, che riguarda l'interrogazione dei dati.
+
+Per effettuare una \textbf{proiezione} utilizziamo il costrutto \codeb{SELECT}, mentre per efetturare una \textbf{selezione} utilizziamo \codeb{WHERE}. È importante però subito definire una differenza tra il comando \code{SELECT} e le proiezioni: sappiamo che nelle proiezioni in algebra relazionale  i doppioni vengono presi una volta sola, ma in SQL usando il comando \code{SELECT} questo non accade. Se si vuole questo comportamento è necessario aggiungere anche la parola chiave \codeb{distinct}.\\
+Se ad esempio abbiamo una relazione Studente con attributi Nome, Cognome e Età, e vogliamo fare una selezione sulle prime due colonne prendendo però solo gli studenti con età maggiore di 18 e minore di 60 o studenti con età maggiore di 90 (stiamo dunque effettuando una proiezione e una selezione insieme), scriveremmo:
+
+\begin{lstlisting}
+SELECT Nome, Cognome 
+FROM Studenti
+WHERE (Età > 18 and Età < 60) or (Età > 90)
+\end{lstlisting}
+
+effettuando una vera e propria \textbf{query}. \\
+La parola chiave \codeb{FROM} ci indica da quali relazioni prendere i dati (si possono prendere anche più tabelle insieme), in questo caso quindi da Studenti. Se si avessero più relazioni gli attributi andrebbero specificati scrivendo nome\_relazione.nome\_attributo. In questo caso, è comodo usare anche delle \textbf{abbreviazioni} (scrivendo ad esempio \code{FROM Studenti s} e utilizzando poi la lettera \code{s} per indicare gli studenti, o scrivendo \code{SELECT s.nome as nome} per utilizzare la parola \code{nome} per indicare l'attributo nome di studenti). Ipotizziamo di avere anche un'altra relazione Esami con attributi Codice, MatricolaStudente, Voto e Data. Se volessimo effettuare una query su queste due tabelle che restituisce una relazione con il nome dello studente e il rispettivo voto, scriveremmo:
+
+\begin{lstlisting}
+SELECT Studenti.Nome, Esami.Voto 
+FROM Studenti, Esami
+WHERE Studenti.Matricola = Esami.MatricolaStudente
+\end{lstlisting}
+
+\NB In questo caso stiamo effettuando un vero e propprio prodotto cartesiano tra le due relazioni, concetto che approfondiremo tra poco ritornando a studiare l'algebra relazionale.
+
+Inoltre, in SQL (ma non in algebra relazionale) è possibile effettuare anche un \code{SELECT} prendendo tutti gli attributi usando l'\textbf{*}, scrivendo ad esempio \code{SELECT Studenti.*}. 
+
+È possibile anche effettura delle operazioni su tutta una colonna scrivendo ad esempio \codeb{SELECT Studenti.Età / 2 as EtàDimezzata}. In questo caso creiamo quindi una nuova relazione che ha come colonna l'età di ogni studente ma divisa già per due, che prende il nome di EtàDimezzata. 
+
+Tra le condizioni che possiamo effettuare esistono anche le \textbf{condizioni like}, che permettono di effettuare controlli sulle stringhe. Ad esempio, se vogliamo tutti i nomi che hanno come primo carattere una "A" e come terzo carattere una "d", scriveremmo \codeb{WHERE Nome like 'A\_d\%'}, dove usiamo l'\_ per indicare che la "d" deve essere la terza lettera (se doveva essere la quinta avremmo usato 3 \_ al posto di uno).
+
+Per verificare poi che un valore sia \code{NULL} non usiamo gli operatori normali ma scriviamo \codeb{IS NULL} o \codeb{IS NOT NULL}. Ad esempio, possiamo effettuare una query scrivendo \code{WHERE Età IS NOT NULL}.
+
+\Esempio \nopagebreak
+
+Presa la relazione \nopagebreak
+
+\begin{center}
+  Studenti \nopagebreak
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Matricola} & \textbf{Cognome} & \textbf{Università} & \textbf{Media} \\
+    \hline
+    7309 & Neri  & Sapienza    & 23 \\
+    5998 & Neri  & Roma Tre    & 22 \\
+    9553 & Rossi & Sapienza    & 18 \\
+    5698 & Rossi & Sapienza & 29 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+creare una nuova relazione con gli studenti con la media maggiore di 27 o  minore di 20 e con campi con solo il cognome e l'università, eliminando eventuali duplicati. 
+
+Dobbiamo quindi effettuare questa query:
+
+\begin{lstlisting}
+SELECT distinct Cognome, Università
+FROM Studenti
+WHERE Media > 27 or Media < 20
+\end{lstlisting}
+
+che ci restituirà questa relazione:
+
+\begin{center}
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Cognome} & \textbf{Università} \\
+    \hline
+     Rossi & Sapienza \\ 
+    \hline
+  \end{tabular}
+\end{center}
+
+\subsection{Altri operatori dell'algebra relazionale}
+
+\begin{Definizione}[Prodotto cartesiano]
+\label{def-prodotto-cartesiano}
+Il \textbf{prodotto cartesiano} tra due relazioni permette di unire le informazioni di due relazioni in una nuova relazione creando delle nuove tuple ottenute concatenando le tuple della prima relazione con quella della seconda. Per indicare un prodotto cartesiano scriviamo $\bm{r_1 \times r_2}$, che indica un prodotto cartesiano tra le relazioni $r_1$ e $r_2$. 
+\end{Definizione}
+
+Vediamo un esempio. Prendiamo le relazioni
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Operatore
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} \\ \hline
+Rossi & C1 & Napoli \\
+Rossi & C2 & Roma \\
+Bianchi & C3 & Milano \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Ordine
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Ordine} & \textbf{CodiceOperatore} & \textbf{NPezzi} \\ \hline
+O1 & C2 & 300 \\
+O2 & C2 & 200 \\
+O3 & C3 & 100 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+La nuova relazione Operatore $\times$ Ordine non è applicabile senza effettuare dei cambiamenti alle altre relazioni. Questo perché le due relazioni hanno una colonna con lo stesso nome (CodiceOperatore), dunque nella nuova relazione formata dal prodotto cartesiano avremmo due colonne con lo stesso nome, cosa non possibile. Per risolvere questo problema, introduciamo un nuovo operatore chiamato \textbf{ridenominazione}.
+
+\begin{Definizione}[ridenominazione]
+\label{def-ridenominazione}
+La \textbf{ridenominazione} è un operaotre che permette di modificare lo schema di una relazione (è l'unico operatore che non lavora sulle istanze ma sullo schema), permettendo di cambiare il nome di alcuni campi. Per indicare una ridenominazione scriviamo $\textbf{Nuova\_Relazione} \bm{= \rho_{\textbf{nome1, nome2,}\ldots \rightarrow \textbf{nuovo\_nome1, nuovo\_nome2,}\ldots}}$ oppure $\textbf{Nuova\_Relazione} \bm{= \rho_{\textbf{nuovo\_nome1, nuovo\_nome2,}\ldots \leftarrow \textbf{nome1, nome2,}\ldots}}$, che indica una ridenominazione dei vecchi nomi con quelli nuovi.
+\end{Definizione}
+
+Possiamo quindi effettuare una ridenominazione sulla relazione Ordine, creando una nuova relazione in questo modo: $\text{OrdineR} = \rho_{\text{CodiceOperatore} \rightarrow  \text{Codice}}$. Abbiamo quindi ora queste due relazioni su cui fare il prodotto cartesiano:
 
 
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Operatore
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} \\ \hline
+Rossi & C1 & Napoli \\
+Rossi & C2 & Roma \\
+Bianchi & C3 & Milano \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Ordine
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
+O1 & C2 & 300 \\
+O2 & C2 & 200 \\
+O3 & C3 & 100 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+Dunque troviamo ora una nuova relazione:
+
+\begin{center}
+    Operatore $\times$ Ordine
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} &\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
+Rossi & C1 & Napoli & O1 & C2 & 300 \\
+Rossi & C1 & Napoli & O2 & C2 & 200 \\
+Rossi & C1 & Napoli & O3 & C3 & 100 \\ 
+Rossi & C2 & Roma & O1 & C2 & 300 \\
+Rossi & C2 & Roma & O2 & C2 & 200 \\
+Rossi & C2 & Roma & O3 & C3 & 100 \\
+Bianchi & C3 & Milano & O1 & C2 & 300 \\
+Bianchi & C3 & Milano & O2 & C2 & 200 \\
+Bianchi & C3 & Milano & O3 & C3 & 100 \\ \hline
+\end{tabular}
+\end{center}
+
+Questa nuova relazione, però, ha delle righe che sono inutili. Guardiamo ad esempio la prima riga: abbiamo l'operatore C1 collegato a un ordine eseguito dall'operatore C2. Questa cosa non ha senso, dunque dobbiamo effettuare una \textbf{selezione}, prendendo solo le tuple dove CodiceOperatore = Codice. Dunque dobbiamo prendere la relazione $\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine})$, ossia la tabella
 
 
+\begin{center}
+ $\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine})$ \nopagebreak
+    
+    \vspace{0.2cm}
 
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} &\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
+Rossi & C2 & Roma & O1 & C2 & 300 \\
+Rossi & C2 & Roma & O2 & C2 & 200 \\
+Bianchi & C3 & Milano & O3 & C3 & 100 \\ \hline
+\end{tabular}
+\end{center}
 
+Notiamo, però, che in questa nuvoa relazione c'è sia la colonna CodiceOperatore che la colonna Codice. Queste due colonne portano la stessa informazione, dunque è ridondante scriverle due volte. Per questo, effettuiamo una proiezione, eliminando una delle due colonne. Prendiamo quindi la tabella $\pi_{\text{Nome, CodiceOperatore, Città, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$, ossia la tabella
 
+\begin{center}
+$\pi_{\text{Nome, CodiceOperatore, Città, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$
 
-\end{document}
+    \vspace{0.2cm}
 
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} &\textbf{Ordine}  & \textbf{NPezzi} \\ \hline
+Rossi & C2 & Roma & O1 & 300 \\
+Rossi & C2 & Roma & O2 & 200 \\
+Bianchi & C3 & Milano & O3 & 100 \\ \hline
+\end{tabular}
+\end{center}
+
+\NB Questa sequenza di operatori che abbiamo scritto non è molto efficiente. Infatti, effettuiamo prima il prodotto cartesiano e poi la selezione e la proiezione, facendo quindi un prodotto cartesiano su più tuple e su tuple più lunghe del necessario. Questo però in SQL non è un problema dato che il DBMS in automatico sceglie l'ordine delle operazioni più efficiente possibile.
+
+\begin{Definizione}[Join Naturale] 
+\label{def-join-Naturale} 
+Il \textbf{Join Naturale} è un operatore che permette di effettuare un prodotto cartesiano, una selezione e una proiezione tutto insieme, risolvendo i problemi che abbiamo appena visto con il prodotto cartesiano base. Prese infatti due relazioni $r_1$ e $r_2$ con $A_1, \ldots, A_k$ attributi in comune (ossia con lo stesso nome), scriviamo $\bm{r_1 \bowtie r_2}$ per indicare un join naturale tra $r_1$ e $r_2$, che ritornerà una nuova relazione con come colonne gli attributi di $r_1$ e $r_2$ senza duplicati, e come tuple tutte le tuple di $r_1 \times r_2$ dove $r_1.A_1 = r_2.A_1 \land r_1.A_2 = r_2.A_2 \land \ldots \land r_1.A_k = r_2.A_k$. 
+\end{Definizione}
+
+Dunque possiamo dire che $r_1 \bowtie r_2 = \pi_{XY}(\sigma_C(r_1 \times r_2))$, dove $X$ sono gli attributi di $r_1$, $Y$ gli attributi di $r_2$ non in comune con $r_1$ e $C = r_1.A_1 = r_2.A_1 \land r_1.A_2 = r_2.A_2 \land \ldots \land r_1.A_k = r_2.A_k$.
+
+La query che quindi prima abbiamo scritto con una proiezione, selezione e prodotto cartesiano può quindi essere scritta ora facilmente con un semplice join naturale, scrivendo \mbox{Operatore $\bowtie$ Ordine}.  
+
+\begin{Proprieta}[Casi limite del join naturale]
+\label{prop-casi-limite-join-naturale}
+Vediamo ora due casi limite del join naturale:
+\begin{itemize}
+    \item Se le due relazioni hanno attributi con lo stesso nome ma \textbf{non hanno tuple con lo stesso valore per quegli attributi} il join naturale  restituirà una \textbf{relazione vuota}.
+    \item Se le due relazioni \textbf{non hanno attributi con lo stesso nome} il join degenera in un \textbf{prodotto cartesiano normale}.
+\end{itemize}
+\end{Proprieta}
+
+Il secondo caso è quello più pericoloso: riguardando infatti le tabelle iniziali Operatore e Ordine, queste hanno l'attributo CodiceOperatore in comune, ma nella tabella Operatore poteva avere molto senso scrivere semplicemente Codice (lasciando sottinteso Operatore). Se questo fosse stato fatto, il join naturale non avrebbe fatto altro che restituire un prodotto cartesiano tra le due tabelle, nonostante il codice dell'operatore si trovi in entrambe, solo con un nome diverso. È fondamentale in questo caso la \textit{ridenominazione}, così da modificare il nome dei vari attributi così che il join naturale possa confrontarli. 
+
+Un'altro problema importante del join naturale è che, nonostante due attributi possano avere lo stesso nome, non è detto che abbiamo lo stesso significato. Pensiamo ad esempio a due relazioni, Docente e Studente, che hanno entrambi l'attributo Codice. È scontato per noi che Docente.Codice e Studente.Codice non indichino lo stesso codice, ma piuttosto indichino, rispettivamente, il codice del docente e quello dello studente.
+
+\begin{Definizione}[$\bm{\theta}$ Join]
+\label{def-theta-join}
+Il $\bm{\theta}$ \textbf{join} è un prodotto cartesiano effettuato tra due relazioni che prende solo delle tuple di tale join che rispettano una certa condizione $A \theta B$, dove $A$ è un'attributo dello schema della prima relazione, $B$ della seconda (ricordiamo dom$(A) =$ dom$(B)$), e $\theta$ è un operatore di confronto ($=, \leq, \geq, \ldots$). Per indicare un $\theta$ join scriviamo $\bm{r_1 \bowtie_{A \theta B} r_2 }$, che indica un $\theta$ join tra le relazioni $r_1$ e $r_2$ con la condizione $A \theta B$.
+\end{Definizione}
+
+Possiamo quindi dire che $r_1 \bowtie_{A \theta B} r_2 = \sigma_{A \theta B}(r_1 \times r_2)$.
+
+Ad esempio, prese le relazioni
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Tutor
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Età} & \textbf{Stipendio} \\ \hline
+Mario & 30 & 300 \\
+Erling & 20 & 2000 \\
+Arturo & 25 & 5000 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    FasceStipendio
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Fascia} & \textbf{Min} & \textbf{Max} \\ \hline
+Basso & 0 & 1000 \\
+Medio & 1001 & 2000 \\
+Alto & 2001 & 10000 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+il $\theta$ join Tutor $\bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}}$ FasceStipendio sarà questa tabella:
+
+\begin{center}
+Tutor $\bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}}$ FasceStipendio \nopagebreak
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Età} & \textbf{Stipendio} & \textbf{Fascia} & \textbf{Min} & \textbf{Max} \\ \hline
+Mario & 30 & 300 & Basso & 0 & 1000 \\
+Erling & 20 & 2000 & Medio & 1001 & 2000 \\
+Arturo & 25 &  5000 & Alto & 2001 & 10000 \\ \hline
+\end{tabular}
+\end{center}
+
+Dato che però qui abbiamo ancora le colonne Min e Max che nella tabella finale sono inutili perché servono solo per stabilire in che fascia mandare un Tutor, possiamo effettuare una proiezione, creando dunque la relazione $\pi_{\text{Nome, Età, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$, ossia la tabella
+
+\begin{center}
+$\pi_{\text{Nome, Età, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$ \nopagebreak
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Età} & \textbf{Stipendio} & \textbf{Fascia} \\ \hline
+Mario & 30 & 300 & Basso \\
+Erling & 20 & 2000 & Medio  \\
+Arturo & 25 &  5000 & Alto \\ \hline
+\end{tabular}
+\end{center}
 
 
 
