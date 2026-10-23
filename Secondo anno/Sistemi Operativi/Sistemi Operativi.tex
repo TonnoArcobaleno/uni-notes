@@ -431,7 +431,7 @@ Esistono due tipi di virtualizzazione:
 
 Per quanto riguarda invece la sicurezza, come già accenato prima è necessario che ogni programma abbia il suo spazio di memoria virtuale a cui gli altri non possono accedere, e se un singolo programma crasha deve crashare solo lui e non tutto il sistema. Inoltre, in un sistema multi-user, per i file protetti è necessario controllare che l'utente che vuole accedervi abbia l'autorizzazione necessaria per poterlo fare.
 
-Infine, per quanto riguarda l'efficienza, è importante capire che il SO fa sempre dei "\textit{trade-off}", ossia deve scegliere se dare priorità a una cosa piuttosto che a un altra. La domanda più classica è: "Velocità o sicurezza?" Purtroppo è necessario scegliere: se infatti si vuole la sicurezza, allora bisognerà aumentare i controlli e dunque la velocità diminuirà, altrimenti se si vuole aumentare quest'ultima il nostro sistema diventerà più vulnerabile.
+Infine, per quanto riguarda l'efficienza, è importante capire che il SO fa sempre dei "\textit{trade-off}", ossia deve scegliere se dare priorità a una cosa piuttosto che a un'altra. La domanda più classica è: "Velocità o sicurezza?" Purtroppo è necessario scegliere: se infatti si vuole la sicurezza, allora bisognerà aumentare i controlli e dunque la velocità diminuirà, altrimenti se si vuole aumentare quest'ultima il nostro sistema diventerà più vulnerabile.
 
 \subsubsection*{Storia del sistema operativo}
 
@@ -1252,7 +1252,7 @@ Per generare codice assemly dal file \code{hello.c} usiamo il comando \code{gcc 
     \item \codeb{sub dst, src}, che sottrae il valore di \code{src} a \code{dst} e lo sovrascrive in \code{dst}
     \item \codeb{cmp a,b}, che calcola la differenza aritmetica tra \code{a} e \code{b} senza però modificare \code{a} o \code{b}
     \item \codeb{je / jne / jl}, che esegue un salto se due valori sono uguali / diversi / minore
-    \item \codeb{call label}, che salva l'indirizzo di ritorno sullo stack e salta all'esecuzione di un altra funzione specificata in \code{label}
+    \item \codeb{call label}, che salva l'indirizzo di ritorno sullo stack e salta all'esecuzione di un'altra funzione specificata in \code{label}
     \item \codeb{ret}, che prende l'indirizzo di ritorno dallo stack e riprende il flusso di esecuzione dopo la fine di una funzione
     \item \codeb{lea dst}, che calcola un indirizzo di memoria e memorizza l'indirizzo in \code{dst}
 \end{itemize}
@@ -1555,7 +1555,7 @@ perror("execvp failed"); // Se arrivo qui allora non è riuscito a saltare al nu
 exit(EXIT_FAILURE);
 \end{lstlisting}
 
-Se \code{exec()} fallisce, come vediamo qui sopra il codice del programma semplicemente continua a essere eseguito. Se invece è eseguito correttamente, questa funzione non ritorna nulla. Questo ha molto senso: stiamo andando a eseguire del nuovo codice modificando interamente i dati, l'heap e lo stack, quindi l'indirizzo al quale l'\code{exec()} dovrebbe ritornare un valore semplciemente non esiste più, perché è stato sovrascritto.
+Se \code{exec()} fallisce, come vediamo qui sopra il codice del programma semplicemente continua a essere eseguito. Se invece è eseguito correttamente, questa funzione non ritorna nulla. Questo ha molto senso: stiamo andando a eseguire del nuovo codice modificando interamente i dati, l'heap e lo stack, quindi l'indirizzo al quale l'\code{exec()} dovrebbe ritornare un valore semplicemente non esiste più, perché è stato sovrascritto.
 
 \begin{lstlisting}[style=C]
 pid_t pid = fork();
@@ -1748,7 +1748,7 @@ Dagli anni 50 agli anni 60 era la FIFO e la SJF la policy più usata nei compute
 
 \subsection{MLFQ}
 
-Abbiamo visto come l'assunzione più irrealistica tra tutte quelle fatte sia il conoscere a priori il runtime di un processo. Dato che ciò è impossibile nei sistiemi reali, abbiamo bisogno di uno scheduler che riesca a \textbf{prevedere} il runtime di un processo in qualche modo. Per cercare di creare uno scheduler del genere, dobbiamo prima dividere i processi in due macrogruppi:
+Abbiamo visto come l'assunzione più irrealistica tra tutte quelle fatte sia il conoscere a priori il runtime di un processo. Dato che ciò è impossibile nei sistemi reali, abbiamo bisogno di uno scheduler che riesca a \textbf{prevedere} il runtime di un processo in qualche modo. Per cercare di creare uno scheduler del genere, dobbiamo prima dividere i processi in due macrogruppi:
 \begin{itemize}
     \item \textbf{Processi interattivi}, ossia processi composti da brevi calcoli sulla CPU seguiti da periodi di WAITING, che hanno bisogno di poco tempo di reazione
     \item \textbf{Batch/Processi CPU}, ossia processi composti da lunghi periodi sulla CPU e da poco I/O, che hanno bisogno di un tempo di turnaround ottimale
@@ -1907,7 +1907,7 @@ Gli spazi d'indirizzamento più vecchi avevano 16 o 32 bit di spazio allocato. N
 Un indirizzo virtuale contiene tre regioni logiche distinte:
 \begin{itemize}
     \item \textbf{Stack + Heap}, dove si trovano le variabili locali e le allocazioni dinamiche richieste con \code{malloc}
-    \item \textbf{Static Data}, dove si trovano le variabili statiche e globali
+    \item \textbf{Static Data}, dove si trovano le variabili statiche e globali (molto piccolo, lo trascureremo spesso)
     \item \textbf{Code}, dove si trovano le istruzioni del programma
 \end{itemize}
 
@@ -1967,7 +1967,7 @@ Nel caso il check fallisca, l'OS passa in modalità kernel e termina il processo
 Il base and bounds ci permette anche di \textbf{muovere un processo} mentre questo già è in esecuzione, al contrario della riallocazione statica. Banalmente, l'OS lo toglie dalla CPU con un context switch, trova una nuova porzione di memoria dove spostare il processo e aggiorna il suo base register. Per cercare un indirizzo vuoto, l'OS cerca in una linked list dove salva tutti i range di memoria liberi sulla RAM. \\
 Ricordiamo che il processo è allo scuro di tutto ciò: non saprà mai dove si trova al livello fisico e nemmeno gli interessa, dato che usa gli indirizzi virtuali.
 
-Alla conclusione di un processo, il sistema operativo deve verificare se la memoria appena liberata sia adiacente ad altri spazi vuoti e, in tal caso, unire questi blocchi per formarne uno più grande da allocare in futuro a un altro programma. Per decidere quale regione di memoria assegnare a un nuovo processo, il sistema operativo può seguire diverse politiche:
+Alla conclusione di un processo, il sistema operativo deve verificare se la memoria appena liberata sia adiacente ad altri spazi vuoti e, in tal caso, unire questi blocchi per formarne uno più grande da allocare in futuro a un altro programma, in un processo che prende il nome di \textbf{coalescing}. Per decidere quale regione di memoria assegnare a un nuovo processo, il sistema operativo può seguire diverse politiche:
 \begin{itemize}
     \item \textbf{First-Fit}: scansiona la lista dall'inizio e seleziona la prima regione di dimensione sufficiente. È una tecnica veloce, ma tende ad accumulare molti piccoli frammenti nella parte iniziale della lista.
     \item \textbf{Best-Fit}: cerca la regione più piccola in grado di contenere il processo. Minimizza lo spazio sprecato nella singola allocazione, ma tende a lasciare un gran numero di frammenti di piccolissime dimensioni.
@@ -1982,6 +1982,195 @@ Questo fenomeno di inefficienza si presenta anche all'interno dello spazio d'ind
 Un altro problema del base and bounds è l'impossibilità di eseguire qualsiasi processo il cui spazio d'indirizzamento virtuale sia più grande della memoria RAM fisica disponibile. \\
 Infine, con il base and bounds non è possibile condividere alcuna porzione di memoria tra processi distinti, anche quando questi condividono dati o codice.
 
+\subsubsection*{Segmentazione (evoluzione del base and bounds)}
+
+Per risolvere alcuni di questi problemi del base and bounds, si è pensato di dividere il blocco contiguo di memoria di un singolo processo in tre diversi segmenti: \textbf{code segment}, \textbf{heap segment} e \textbf{stack segment}, ognuno con la sua coppia di registri base and bounds e con i propri permessi (il code segment ha permessi R-X, ossia di lettura e esecuzione ma non scrittura, mentre l'heap e lo stack segment hanno permessi RW-, ossia di lettura e scrittura ma non di esecuzione). In questo modo eliminiamo tutta la memoria allocata in eccesso tra l'heap e lo stack in modo preventivo, così da allocare solo la memoria necessaria per il processo in sé. Inoltre, rendendo il blocco del codice di un programma un segmento indipendente dal resto del processo, è possibile ora usare un singolo code segment per più processi di uno stesso programma, risparmiando ulteriore memoria.
+
+Gli indirizzi di memoria virtuale si presentano ora in questo modo:\\
+2 bit per il \textbf{segmento} (00 per il code, 01 per l'heap e 11 per lo stack), e il resto dei bit per l'\textbf{offset}, ossia quanto dobbiamo spostarci dal base del segmento interessato per trovare l'indirizzo fisico che realmente vogliamo. Ad esempio, se abbiamo VA = $01000000001100$ (dove VA significa virtual address, ossia l'indirizzo di memoria), allora stiamo puntando a un indirizzo fisico nell'heap segment (01, calcolato dal computer facendo uno shift a destra di 12) con offset $000000001100 = 12_{10}$ (calcolato dal computer facendo una maschera, facendo un \code{AND} con $0x0FFF$), dunque dobbiamo prendere il base register dell'heap segment di tale processo e aggiungere 12 per trovare l'indirizzo fisico richiesto (ricordiamo che tutto ciò è eseguito dall'MMU a livello hardware, che controlla anche che questo valore di 12 + base rientri nel bound di quel specifico segmento, in questo caso dell'heap segment). 
+
+Lo stack è un caso particolare. Infatti, abbiamo già visto di come questo \textit{si muova verso il basso}, dunque il ruolo dell'offset è differente per lui. Avremo un valore base che indica la cima della pila, e dunque l'indirizzo più alto raggiungibile, e un offset che quindi non va aggiunto al valore base, perché altrimenti saliremmo verso il basso, ma va usato per calcolarsi il \textbf{negative offset}. In sostanza, preso un offset di 12, un bounds di 20 e un base di 30, per trovare l'indirizzo fisico dobbiamo calcolare il negative offset, che è pari all'offset - bounds, e poi dobbiamo sommare questo valore (che deve essere negativo, altrimenti andiamo fuori dal bounds) al base, che quindi diminuirà, scendendo verso il basso. Nel nostro esempio avremo quindi un negative offset pari a -8, dunque il nostro indirizzo di memroia fisico si trovera al byte 30-8 = 22.
+
+Anche l'heap si comporta in modo particolare, ma non per quanto riguarda la traduzione da VA a PA (physical address), ma per quanto riguarda la richiesta di memoria aggiuntiva. Se ad esempio un programma esegue una \code{malloc()} ma l'heap è pieno, questo non restituisce un errore, ma chiama prima la syscall \textbf{sbrk()}, che prende un valore in input pari alla memoria in più richiesta e cerca se c'è memoria fisica contigua grande abbastanza per ospitare l'heap più la nuova memoria richiesta. Prima di spostare l'intero blocco, però, l'OS controlla sempre se c'è memoria fisica vuota vicina all'heap grande quanto la richiesta di \code{sbrk()}, e solo se non trova questa memoria vicina va a cercarla altrove. Se poi non dovesse trovare mai questa memoria, restituirebbe un errore, e questa che sembra una situazione molto difficile in realtà con la segmentazione è più frequente di quello che si potrebbe pensare. Infatti, avendo noi eliminato la frammentazione interna, rimuovendo lo spreco di memoria che vi era prima tra heap e stack, abbiamo introdotto ora la \textbf{frammentazione esterna}: in poche parole, con la segmentazione si vengono a formare velocemente tanti piccoli blocchi di memoria contigua che occupano da soli poca memoria, ma che insieme formano uno spreco di RAM considerevole. Questi blocchi, essendo troppo piccoli per qualsiasi segment di qualsiasi processo importante, rimangono lì inutilizzati, sprecando memoria. \\ 
+Vediamo visivamente perché questo è un problema. Supponiamo di richiedere al sistema operativo 25 KB di memoria contigua libera, e di avere 3 processi A,B e C che già occupano memoria sulla RAM, che si trova in questa situazione:
+
+\begin{center}
+\begin{tikzpicture}[
+    box/.style={draw, minimum height=1.2cm, inner sep=2pt, align=center, font=\sffamily}
+]
+
+  \node[box, minimum width=1.2cm] (b1) at (0,0) {OS\\8 KB};
+  \node[box, minimum width=1.0cm, anchor=west] (b2) at (b1.east) {FREE\\2 KB};
+  \node[box, minimum width=1.4cm, anchor=west] (b3) at (b2.east) {A\\7 KB};
+  \node[box, minimum width=1.1cm, anchor=west] (b4) at (b3.east) {FREE\\3 KB};
+  \node[box, minimum width=1.2cm, anchor=west] (b5) at (b4.east) {B\\5 KB};
+  \node[box, minimum width=1.5cm, anchor=west] (b6) at (b5.east) {FREE\\8 KB};
+  \node[box, minimum width=1.1cm, anchor=west] (b7) at (b6.east) {C\\4 KB};
+  \node[box, minimum width=1.0cm, anchor=west] (b8) at (b7.east) {FREE\\1 KB};
+  \node[box, minimum width=1.1cm, anchor=west] (b9) at (b8.east) {D\\3 KB};
+  \node[box, minimum width=2.4cm, anchor=west] (b10) at (b9.east) {FREE\\23 KB};
+
+  \node[font=\sffamily, anchor=north east] at (b1.south west) {0};
+  \node[font=\sffamily, anchor=north] at (b1.south east) {8};
+  \node[font=\sffamily, anchor=north] at (b2.south east) {10};
+  \node[font=\sffamily, anchor=north] at (b3.south east) {17};
+  \node[font=\sffamily, anchor=north] at (b4.south east) {20};
+  \node[font=\sffamily, anchor=north] at (b5.south east) {25};
+  \node[font=\sffamily, anchor=north] at (b6.south east) {33};
+  \node[font=\sffamily, anchor=north] at (b7.south east) {37};
+  \node[font=\sffamily, anchor=north] at (b8.south east) {38};
+  \node[font=\sffamily, anchor=north] at (b9.south east) {41};
+  \node[font=\sffamily, anchor=north west] at (b10.south east) {64};
+
+\end{tikzpicture}
+
+\end{center}
+
+La nostra memoria libera totale è 37KB (2+3+8+1+23), dunque 25 KB ci entrano senza alcun problema, ma purtroppo la nostra RAM è frammentata in piccoli blocchi di RAM da pochi KB, e il blocco contiguo più grande è di soli 23KB, non sufficiente. Questo spreco non è assolutamente accettabile! Si potrebbe risolvere compattando la memoria, ma è una soluzione con costo troppo elevato, dunque non attuabile. Per questo motivo nasce un nuovo modo di virtualizzare la memoria, che prende il nome di \textbf{memoria con paginazione}.
+
+\subsubsection*{Memoria con paginazione (paging)}
+
+L'idea alla base della memoria con paginazione (o \textbf{paging}, in inglese) è semplice: smettiamo di allocare blocchi di memoria variabili, come nel base and bounds, e iniziamo a dividere la memoria in \textbf{blocchi fissi}, che prendono il nome di \textbf{pagine} (\NB pagine è il termine per la memoria virtuale, per quella fisica dovemmo parlare di frame, ma spesso useremo pagine in entrambi i contesti). Il sistema operativo ha poi il compito di mantenere una \textbf{page table} per ogni processo dove ad ogni sua pagina virtuale vi è mappata una fisica (tramite un \textbf{PFN}, physical frame number), in una corrispondenza uno a uno essendo le pagine e i frame della stessa dimensione. Questa divisione in pagine rompe il vincolo più pesante che ci siamo sempre portati con noi, ossia il \textbf{vincolo di contiguità}. Infatti, pagine contigue nella memoria virtuale NON devono corrispondere per forza a pagine contigue nella memoria fisica, eliminando quindi il problema della frammentazione esterna. Torna però ovviamente il problema della frammentazione interna: infatti, se le pagine sono tutte di 4KB (standard nei sistemi moderni) e io ho un programma che richiede 4KB + 1B, a questo verranno allocate due pagine, di cui una però sarà totalmente vuota fatta eccezione per un byte solo. 
+
+I VA in questa nuova virtualizzazione si dividono in due: i primi $n$ bit servono per la \textbf{VPN} (virtual page number), ossia per indicare in quale pagina virtuale si trova quell'indirizzo, mentre i restanti $m$ bit servono per l'\textbf{offset}, ossia per dire dove si trova l'informazione all'interno della pagina virtuale. Ad esempio, in un sistema a 32 bit con pagine da 4K, useremo 12 bit per l'offset e 20 per la VPN, permettendoci quindi di avere $2^20 \approx 1000000$ di pagine virtuali diverse, anche se magari abbiamo una memoria fisica che ci permette di avere solo $500000$ pagine diverse. 
+
+\begin{minipage}[c]{0.48\textwidth}
+    Per capire meglio come funziona il paging vediamo un esempio. Ipotizziamo di avere una memoria RAM di 128 byte divisa in 8 frame da 16 byte ciascuno con all'attivo un processo A così diviso.
+
+\end{minipage}\hfill
+\begin{minipage}[c]{0.47\textwidth}
+\centering
+\begin{tikzpicture}[font=\ttfamily]
+
+  \def\w{7.5}
+  \def\h{0.7}
+
+  \draw[thick] (0,0) rectangle (\w, 8*\h);
+  \foreach \i in {1,...,7} {
+    \draw (0, \i*\h) -- (\w, \i*\h);
+  }
+
+  \node[anchor=west] at (0.4, 0.5*\h) {Frame 0 \quad (16 byte) \quad [OS Kernel]};
+  \node[anchor=west] at (0.4, 1.5*\h) {Frame 1 \quad (16 byte) \quad [Page 1 of A]};
+  \node[anchor=west] at (0.4, 2.5*\h) {Frame 2 \quad (16 byte) \quad [Page 0 of A]};
+  \node[anchor=west] at (0.4, 3.5*\h) {Frame 3 \quad (16 byte) \quad [Page 2 of A]};
+  \node[anchor=west] at (0.4, 4.5*\h) {Frame 4 \quad (16 byte) \quad [FREE]};
+  \node[anchor=west] at (0.4, 5.5*\h) {Frame 5 \quad (16 byte) \quad [Page 3 of A]};
+  \node[anchor=west] at (0.4, 6.5*\h) {Frame 6 \quad (16 byte) \quad [FREE]};
+  \node[anchor=west] at (0.4, 7.5*\h) {Frame 7 \quad (16 byte) \quad [FREE]};
+
+\end{tikzpicture}
+\end{minipage}
+
+
+\begin{minipage}[c]{0.50\textwidth}
+Nella page table di A avremo quindi quattro righe, una per ogni pagina. La pagina virtuale 0 sarà quindi mappatta a quella fisica 2, è valida (vedremo ora cosa sono questi bit di validità), e ha protezione R-X (notiamo quindi come non ci interessi più sapere se è code/heap/stack, ma solo che operazioni possiamo eseguire su essa). La pagina virtuale 1 è mappata a quella fisica 1, è valida e ha protezione RW-X e così via. 
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\begin{tabular}{|c|l|}
+  \hline
+  VPN & Page Table Entry (PTE) \\
+  \hline
+  0 & PFN = 2, \ valid=1, \ prot=R-X \\
+  1 & PFN = 1, \ valid=1, \ prot=RW- \\
+  2 & PFN = 3, \ valid=1, \ prot=RW- \\
+  3 & PFN = 5, \ valid=1, \ prot=RW- \\
+  4 & PFN = 0, \ valid = 0 \\
+  $\vdots$ & $\vdots$ \\
+  $2^{12} - 1$ & PFN = 0, \ valid = 0 \\
+  \hline
+\end{tabular}
+\end{minipage}
+
+Ipotizzando di trovarci in un sistema a 16 bit, useremo quindi 12 bit per il VPA e 4 per l'offset. Preso ad esempio un virtual address $0000000000110101$, l'MMU sa già che ci stiamo riferendo alla virtual page $000000000011_2 = 3_{10}$, con un offset di $0101_2 = 5_{10}$, dunque andrà nella Page Table del processo A alla riga 3, prenderà il PFN, troverà la page fisica giusta e aggiungerà l'offset di 5, che è \textbf{uguale tra pagine fisiche e virtuali} proprio perché la dimensione di queste due pagine è uguale (sono tutte e due pagine da 16 byte). Tutto ciò si riassume quindi nella formula $\bm{\textbf{PA} = \textbf{PFN} \times \textbf{page\_size} + \textbf{offset}}$.
+
+Per quanto riguardarda le PTE (page table entry), oltre al PFN questa ha, come già visto nella tabella, altre informazioni, come la validità, la possibilità di leggere/scrivere/eseguire un file e anche diverse altre. Tra i bit più importanti troviamo:
+\begin{itemize}
+    \item \textbf{Valid bit}: 1 se la pagina è nella RAM, 0 se non è presente (nel caso venga richiesto un indirizzo con valid bit pari a 0, se questo oltre a non essere presente non è un indirizzo valido per tale processo, parte un fault chiamato \textbf{SIGSEGV})
+    \item \textbf{Readable/Writable/Executable bit} (3 bit differenti, uno per scrivere uno per leggere e uno per eseguire): 1 se la pagina è leggibile/scrivibile/eseguibile, 0 se non lo è
+    \item \textbf{User bit}: 1 se è accessibile in user-mode, 0 se è accessibile solo in kernel mode
+    \item \textbf{Accessed bit}: 1 se la pagina è stata letta di recente, 0 se non lo è stata
+    \item \textbf{Dirty bit}: 1 se la pagina è stata riscritta, 0 se non lo è stata
+    \item \textbf{Global bit}: 1 se la pagina è condivisa tra tutti i processi (come una kernel-page), 0 se non lo è
+\end{itemize}
+
+
+Questo nuovo sistema, che sembra perfetto tralasciando un po' di spreco riguardante la frammentazione interna, ha ovviamente anche lui dei problemi  importanti. Infatti, per effettuare un accesso in memoria in questo modo avremo bisogno non di un solo accesso, ma di \textbf{due accessi}: uno per arrivare alla page table e uno per arrivare all'indirizzo che realmente ci interessa. Inoltre, una singola page table consuma molto spazio da sola. Riguardiamo la page table di A dell'esempio precedente: questa ha $2^{12}$ righe, ognuna di $2$ byte, dunque consuma $2^{12} \cdot 2 = 2^{13}$ byte, ossia 8KB. Sembra poco, ma se ci spostiamo in un sistema a 64 bit (ossia 48 bit realmente utilizzati), con pagine da 4KB, avremo $2^{48} / 2^{12} = 2^{36}$ righe di $8$ byte ciascuna, per un costo totale di $2^{36} \cdot 8 = 2^{39}$ byte, ossia 512 GB di RAM solo per una singola page table! Cerchiamo quindi di capire come possiamo risolvere questi problemi.
+
+\subsubsection*{TLB}
+
+Per quanto riguarda il doppio tempo di accesso, viene introdotto un nuovo dispositivo hardware che prende il nome di \textbf{TLB} (Translation Lookaside Bufer), che non è altro che una piccola cache all'interno dell'MMU che contiene un insieme delle \textbf{PTE usate recentemente}. Può contenere tipicamente dalle 32 alle 1024 entrate, a cui si accede di solito in pochissimo tempo, qualche nanosecondo. Essendo gestita dal SO, il programma non sa mai che questa esiste: per lui prendere un indirizzo fisico da questa o dalla page table è la stessa identica cosa. \\
+Ogni entrata della TLB ha, oltre al VPN e la sua PTE corrispettiva, un \textbf{ASID} (Address Space ID), ossia un identificatore che indica a quale processo appartiene tale PTE. Senza di lui, ad ogni contex-swtich bisognerebbe cancellare l'intero TLB e riempirlo da capo con il nuovo processo, provocando tanti miss inutili. 
+
+Ogni volta che viene effettuato un memory access da un programma l'MMU controllerà quindi sempre prima la TLB, e se l'entrata richiesta è lì allora non deve passare dalla page table per poter trovare l'indirizzo fisico. Per calcolare il tempo medio di accesso alla memoria, ossia l'\textbf{EMAT} (che ricorda molto l'AMAT, visto quando abbiamo parlato di cache), dobbiamo introdurre l'\textbf{hit-rate}, ossia la probabilità che l'entrata richiesta da un processo sia effettivamente nel TLB. Troviamo quindi questa formula:
+\[
+\text{EMAT} = h \cdot (T_{\text{TLB}} + T_{\text{mem}}) + (1-h) \cdot (T_{\text{TLB}} + T_{\text{PT}} + T_{\text{mem}})
+\]
+
+Sembra molto complicata ma in realtà è molto semplice: semplicemente, il costo di un accesso in memoria è pari alla probabilità che l'entrata richiesta sia nell'TLB moltiplicata per il costo di accesso al TLB e il costo di accesso alla RAM più la probabilità che l'entrata non sia nel TLB moltiplicata per il costo di accesso al TLB, alla page table e alla RAM. Se assumiamo che $T_{\text{TLP}} \approx 0$, essendo questo tempo molto piccolo, semplifichiamo la formula in $\textbf{EMAT} \bm{ \approx T_{\textbf{mem}} + (1-h) \cdot T_{\textbf{PT}}}$. Se ipotizziamo di avere $T_{\text{mem} = 100 ns}, T_{\text{PT} = 100 ns}, h = 0.99$, troviamo che $\text{EMAT} \approx 100 + 0.01 \times 100 = 101 ns$, un costo ben migliore rispetto a quello che avremmo avuto senza TLP, che sarebbe pari a $200 ns$. È indispensabile però che l'hit-rate sia molto alto (generalmente tra 95 e 99\%): questo per fortuna è quasi sempre rispettato anche con poche entrate nel TL. Per capire perché questo è vero, guardiamo questo codice:
+\begin{lstlisting}[style=C]
+int sum = 0;
+for (int i = 0; i <1000; i++){
+    sum += A[i]; // A è un array di 1000 interi 
+}
+\end{lstlisting}
+Salvando la VPN della pagina dello stack dove si trova la variabile \code{sum} e la variabile \code{i}, e salvando le VPN delle pagine dove si trova l'array \code{A} (per 1000 interi serviranno circa 1/2 pagine) nel TLB, dopo i primi 3/4 miss quando ancora le variabili non sono salvate avremo sempre degli hit per 996/997 iterazioni, arrivando a un hit rate > 99\%. \\
+La \textbf{TLB coverage} è poi un altro valore importante che corrisponde alla quantità di spazio di indirizzamento virtuale mappabile dalla TLB. Banalmente, $\text{TLB coverage} = \text{entrate della TLB} \times \text{grandezza della pagina}$. Se ad esempio abbiamo una pagina di 4KB e 1024 entrate sulla TLB, avremo una TLB coverage di $4 \times 1024 = 4096$ KB, ossia 4 MB. 
+
+La TLB può essere gestita sia a livello hardware (cosa che fanno architetture tipo x86 o ARM, ossia le architetture più moderne), sia a livello software (cosa che fanno architetture tipo MIPS R2000). Vediamo le differenze:
+\begin{itemize}
+    \item Se è gestita a livello \textbf{hardware}, l'MMU si sposta sulla page table del processo in esecuzione e cerca la PTE come se la TLB non fosse esistita, rendendo il processo veloce (dato che il sistema operativo non viene mai coinvolto), ma a patto che l'hardware conosca l'esatto formato della page table che usa il sistema operativo (altrimenti non riuscirebbe a trovare la PTE corretta)
+    \item Se è gestita a livello \textbf{software}, l'hardware lancia un'eccezione (una trap) alla CPU, che passa a kernel mode e scorre la page table tramite codice software, rendendo il processo più lento (dato che entra in azione il sistema operativo), ma più flessibile, perché può lavorare con qualsiasi formato di page table esistente (questo perché la page table viene letta tramite software)
+\end{itemize}
+
+Un fenomeno da tenere bene a mente quando si lavora con la TLB è la \textbf{TLB thrashing}. In poche parole, se si hanno diverse pagine che lavorano in circolo, senza averne nessuna prediletta rispetto alle altre, avremo un continuo circolo di indirizzi che vengono scritti per poi essere eliminati prima ancora di essere letti dall'MMU che non porta alcun vantaggio. Ipotizziamo ad esempio di avere un TLB con spazio per 64 PTE, e di avere un ciclo che gira sempre tra le stesse 100 pagine. Una volta arrivata alla 65° pagina, il TLB è pieno, dunque per far spazio a questa sul TLB bisogna eliminare la 1° pagina, ma facendo così quando torneremo alla 1° pagina non la avremo di nuovo sul TLB, e per rimetterla dovremo eliminare un'altra pagina. Continuando così, notiamo che ogni volta che il TLB potrebbe rivelarsi utile la pagina da noi richiesta è già stata tolta per fare spazio a un'altra. \\
+Un modo per risolvere il TLB thrashing è quello di usare delle \textbf{pagine più grandi} (\textbf{huge pages}, da 1GB o da 2MB nelle architetture x86-64, dove le pagine da 2MB prendono il nome di large pages), così da aumentare la TLB coverage. In questo modo riusciamo a coprire più RAM e evitare che una pagina venga sovrascritta prima che torni a essere richiesta. Per usare le huge pages, spesso piuttosto che modificare tutta la virtualizzazione della memoria cambiando dimensione delle pagine si preferisce adottare un altro sistema, ossia quello delle \textbf{THP} (transparent huge pages). In poche parole, il kernel in automatico se vede più pagine diverse che lavorano, cerca un blocco di memoria contiguo dove riscriverle tutte insieme per salvarle come un'unica pagina da mettere nel TLB, usandone così solo un entrata.
+
+\subsubsection*{Page table a più livelli}
+
+Per quanto riguarda invece il problema dello spazio eccessivo delle page table, si è osservata una cosa molto importante: una page table alloca sempre il numero massimo di entrate possibili, ma un processo normale non utilizza mai questo numero di entrate: non ci va nemmeno vicino! Un processo di solito utilizza circa 500 pagine da 4KB, ossia circa 2MB, ma in un sistema a 64 bit abbiamo visto che gliene vengono allocate $2^{36}$ di righe nella page table, un numero decisamente eccessivo. Nascono per questo le \textbf{page table a più livelli}. Da questo momento in poi non esiste più una singola page table per ogni processo, ma tante page table diverse, tutte facenti parte di una tabella più grande, che viene puntata da una \textbf{PDE} (page directory entry). La memoria diventa quindi una specie di albero: le PDE sono le radici, e ogni PDE ha diverse foglie che sono le PTE. Ogni PDE punta a una tabella con 1024 PTE, e ogni PTE ha 1024 entrate possibili. Un bit di validità pari a 1 alla riga i-esima per una PDE indica che esiste una PTE alla riga i-esima della tabella a cui punta. \\
+Con la page table a 2 livelli stiamo però aggiungendo un nuovo accesso in memoria: arriviamo quindi a 3 accessi in memoria se la TLB fallisce. Purtroppo, questo è un costo necessario: è il famoso trade-off di cui spesso parliamo. Non sarà mai possibile avere un sistema velocissimo e perfettamente efficiente a livello di memoria, ma bisogna piuttosto trovare un giusto compromesso così da avere un sistema funzionante. \\
+
+I VA dunque vengono modificati: in un sistema a 32 bit, i 20 bit prima destinati alla VPN si dividono ora in due gruppi. Il primo, che rappresenta la \textbf{VPN1}, serve per indicare a quale PDE bisogna andare a cercare, mentre il secondo gruppo, che rappresenta la \textbf{VPN2}, serve per indicare a quale PTE bisogna andare nella tabella puntata dalla PDE. 
+
+In un sistema a 64 bit, però, una page table a 2 livelli non basta più. Infatti, avremmo 36 bit da dividere per le due VPN, arrivando a 18 bit per ogni VPN, ossia $2^{18}$ entrate per ogni livello. Dato che ogni entrata costa 8 byte, avremmo un costo totale di $2^{18} \times 8 \approx $2MB per ogni PDE più 2MB per ogni PTE interna, un costo comunque troppo elevato. Per questo motivo, si introducono le page table \textbf{a quattro livelli} (standard per l'architettura intel x86-64). Qui dividiamo i 36 bit tra 4 VPN, ognuna da 9 bit, arrivando a tabelle di massimo 4KB, pochissimo rispetto ai 2MB visti con le page table a due livelli, e infinitamente piccolo rispetto ai 512GB visti per le page table a un solo livello (ora arriviamo a 512GB solo se un processo richiede davvero una quantità di pagine tali da arrivare a 512 GB totali, cosa però ovviamente praticamente impossibile). I diversi gruppi nei sistemi x86-64 non sono chiamati semplicemente VPN1, VPN2..., ma invece sono detti, in ordine dal più alto in gerarchia al più basso:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{PML4} (Page Map Level 4, la radice puntata dal registro \code{CR3})
+    \item \textbf{PDPT} (Page Directory Pointer Table)
+    \item \textbf{PD} (Page Directory)
+    \item \textbf{PT} (Page table, le foglie)
+\end{enumerate}
+
+Il SO gestisce una page table a quattro livelli in modo molto schematico:
+\begin{enumerate}[label=\arabic*°]
+    \item Appena un \textbf{processo viene creato}, il sistema operativo crea la page table radice PML4, con tutte entrate invalide.
+    \item Quando una \textbf{pagina viene richiesta}, se la TLB missa inizia la camminata lungo le diverse page-table. Se lungo questa camminata si arriva a un entrata con bit di validità pari a 0, la MMU lancia un'eccezione \textbf{page fault}, gestita dal page-fault handler del sistema operativo che controlla se la richiesta era valida o meno. In caso questa sia valida, l'OS identifica quali livelli lungo la camminata manca e alloca in memoria fisica le pagine necessarie per contenere queste sottotabelle intermedie ancora non esistenti, che vengono poi linkate ai rispettivi genitori. Se poi è necessario, l'OS alloca anche la memoria fisica per i dati richiesti, e chiude l'eccezione continuando così la camminata, che avrà ora successo.
+\end{enumerate}
+
+Per quanto riguarda le large e huge pages, queste saltano rispettivamente uno e due livelli della gerarchia: dunque le large pages seguono una page table a 3 livelli, con il PD che fa da foglia, mentre le huge pages seguono una page table a 2 livelli, con il PDPT che fa da foglia.
+
+\subsection{Swapping}
+
+Arriviamo ora a una delle domande più importanti da farsi quando si parla di memoria virtuale. Abbiamo visto come ogni processo, tramite il paging, in un sistema a 64 bit può avere potenzialmente a disposizione 512GB di pagine, che diventano 256TB di informazioni se si parla di pagine da 4KB. Moltiplicato questo per diversi processi attivi in contemporanea, si arrivano a quantità di memoria che anche i migliori pc si sognano. Arriveremo quindi a un certo punto a dover affrontare un problema: cosa succede quando la somma degli spazi di indirizzamento virtuale supera la memoria fisica a disposizione? Nasce una nuova tecnica per gestire questa situazione, che prende il nome di \textbf{swapping}. L'illusione che da lo swapping è semplice: ogni processo pensa di avere RAM illimitata, sempre e comunque. Questo però ovviamente non è vero, e il SO gestisce questa situazione semplicemente spostando (swapping) la maggior parte delle pagine del processo sulla memoria secondaria, così da risparmiare memoria sulla RAM. Queste pagine vanno a finire in una zona specifica della memoria secondaria, che prende il nome di \textbf{swap space} Quando poi queste pagine swappate verranno richieste dal processo, viene chiamata l'eccezione page-fault e la pagina viene ricaricata seguendo un processo che prende il nome di \textbf{page-in} (o major page fault), che legge dove si trova sul disco scondario dalla PTE e trova uno spazio in memoria RAM dove inserire la pagina in questione, in un tempo che varia dai $100 \mu s$ per le SSD ai $10 ms$ per gli HDD. Tutto ciò, ricordiamo, avviene totalmente allo scuro del processo, che pensa di aver ricevuto l'informazione come se fosse sempre stata sulla RAM.
+
+Per supportare lo swapping, nella PTE nasce un nuovo bit: il \textbf{present bit}, che vale 1 se la PTE è presente in RAM e 0 se è presente sul disco (questo però solo se valid bit = 1, altrimenti l'indirizzo non è nemmeno presente sul disco). Entra qui in gioco anche un altro bit di cui abbiamo già parlato, ossia il \textbf{dirty bit}, che ricordiamo evidenzia se una pagina è stata sovrascritta o meno. Ipotizziamo di avere una pagina sulla memoria secondaria che, dopo un page-in, viene trasferita nella RAM (ricordiamo che, dopo un page-in, la pagina swappata rimane su entrambe le memorie, non viene eliminata dalla memoria secondaria). Quando questa deve essere riswappata, ossia deve essere effettuato un \textbf{page-out}, il SO controlla prima di tutto il dirty bit: se questo è pari a 1 allora bisognerà sovrascrivere la pagina in memoria secondaria con quella nuova perché questa è stata modificata, ma se è questo è invece pari a 0 significa che la pagina presente in memoria secondaria è una copia identica di quella sulla RAM, dunque non serve riscrivere nulla sulla memoria secondaria ma basta solo eliminare sulla RAM la pagina da swappare. 
+
+\subsubsection*{Page fault}
+
+Abbiamo parlato spesso dell'eccezione \textbf{page-fault}, ma vediamo bene ora cos'è e da cosa può essere provocato. \\
+Un page fault è un'eccezione sollevata dall'MMU quando un accesso in memoria riscontra dei problemi. Questo può essere provocato in diverse situazioni:
+\begin{itemize}
+    \item Una pagina swapped out, che ha quindi un valid bit = 1 e present bit = 0 
+    \item Una pagina mai allocata, che ha quindi un present bit = 0 e che, se non accessibile dal processo che la chiama, può sfociare in un SIGSEGV, uccidendo il processo chiamante
+    \item Un tipo di accesso non permesso su una pagina, come ad esempio una scrittura su una pagina riguardante il codice che ha protezione R-X, e che sfocia in un SIGSEGV che uccide il programma
+    \item Un'azione write su una pagina \textit{Copy-on-Write}: brevemente, quando un processo esegue una \code{fork}, padre e figlio puntano allo stesso frame fisico. Questa pagina, che logicamente dovrebbe essere scrivibile, viene contrassegnata dall'OS come read-only nella page table: quando un processo prova a scriverci, la MMU genera un page-fault. L'OS gestisce l'eccezione allocando un nuovo frame, copiandovi i dati e rendendolo writable per il processo che ha scritto. Il vecchio frame del padre tornerà writable solo se il padre rimarrà l'unico processo a puntare a quel frame fisico.
+    \item \textit{Minor page fault}, ossia una pagina che si trova sulla RAM ma non nella page table di questo processo. Ciò si verifica spesso quando parlaimo di spazi di memoria condivisi tra più processi o quando si fa un primo accesso alla memoria anonima: in poche parole, quando con una \code{malloc} allochiamo un oggetto dinamico, il sistema operativo non assegna subito dei frame fisici, dunque al nostro primo accesso su tale memoria la MMU genererà un page fault e il SO prenderà un frame vuoto in RAM e lo mapperà alla PTE corrispondente. In entrambi i casi, però, tutto ciò avviene senza però dover effettuare alcuna operazione I/O sulla memoria secondaria, dunque le operazioni non sono lente come nei major page fault, che richiedono fino in media $100 \mu s$ (su una SSD), ma richiedono $1-10 \mu s$.
+    \item \textit{Major page fault}, ossia un page-in.
+\end{itemize}
+
+I major page fault sono la causa che rallenta più di tutte il processo. Infatti, richiedendo un I/O sulla memoria secondaria, rallentano un sacco il processo. Per questo motivo, è necessario minimizzarli studiando delle corrette \textbf{page replacement policy}, delle policy che ogni volta decidono quali pagine devono essere swappate e quali no.
 
 
 
