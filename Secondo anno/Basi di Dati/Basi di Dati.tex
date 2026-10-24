@@ -1824,6 +1824,8 @@ Presa la relazione \nopagebreak
 
 \begin{center}
   Studenti \nopagebreak
+
+
   \begin{tabular}{|c|c|c|c|}
     \hline
     \textbf{Matricola} & \textbf{Cognome} & \textbf{Università} & \textbf{Media} \\
@@ -2089,6 +2091,120 @@ Erling & 20 & 2000 & Medio  \\
 Arturo & 25 &  5000 & Alto \\ \hline
 \end{tabular}
 \end{center}
+
+\subsection{Algebra relazionale in SQL 2}
+
+Abbiamo già accennato quando abbiamo parlato della parola chiave \code{FROM} che aggiungendo più relazioni a questa è possibile effettuare dei prodotti cartesiani. Non solo: in questo modo è possibile anche effettuare dei join. \\
+Ad esempio, il join naturale visto in precedenza Operatore $\bowtie$ Ordine in SQL diventa:
+\begin{lstlisting}
+SELECT distinct Nome, CodiceOperatore, Città, Ordine, NPezzi
+FROM Operatore, Ordine
+WHERE CodiceOperatore = Codice
+\end{lstlisting}
+
+In realtà, sia un prodotto cartesiano che un qualasiasi join in SQL si scrivono sempre allo stesso modo, ossia scrivendo le due (o più) relazioni interessate affianco la parola chiave \code{FROM} separate da una virgola. Sarà poi DBMS a decidere quale operazione eseguire per rendere il tutto il più efficiente possibile. 
+
+Torna qui importante un costrutto che avevamo già accenato quando abbiamo iniziato a tradurre l'algebra relazionale in SQL, ossia le \textbf{abbreviazioni}. Queste sono fondamentali solitamente quando abbiamo più tabelle con i campi con lo stesso nome e vogliamo essere più chiari nella decisione di quali campi scegliere nella selezione. Se ad esempio abbiamo le relazioni
+
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Docenti
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Cognome} & \textbf{Codice} \\ \hline
+Antonio & Messi & 1 \\
+Lionel & Ronaldo & 2 \\
+Cristiano & Raimondo & 3 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Esami
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Codice} & \textbf{Data} \\ \hline
+Chimica & 1 & 02/03/2002 \\
+Fisica & 2 & 02/02/1900 \\
+Geometria & 3 & 02/03/1700 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+se vogliamo fare una query per prendere tutti gli esami effettuati dal docente col codice 1 (Codice come campo in Esame è una foreign key che collega la relazione a Docente), le abbreviazioni ci renderebbero la vita più facile. Infatti, al posto di scrivere
+
+\begin{lstlisting}
+SELECT distinct Esame.Nome, Data, Docenti.Codice
+FROM Docenti, Esami
+WHERE Docenti.Codice = Esami.Codice = 1
+\end{lstlisting}
+
+potremmo semplicemente scrivere
+
+\begin{lstlisting}
+SELECT distinct e.Nome as NomeEsame, Data, d.Codice as CodiceDocente
+FROM Docenti d, Esami e
+WHERE d.Codice = e.Codice = 1
+\end{lstlisting}
+
+Entrabbe le query restituirebbero comunque la relazione
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{NomeEsame} & \textbf{Data} & \textbf{CodiceDocente} \\ \hline
+Chimica & 02/03/2002 & 1 \\ \hline
+\end{tabular}
+\end{center}
+
+Questa è comoda quando abbiamo due o più relazioni nella query, ma è necessaria se abbiamo una query su un prodotto cartesiano / join eseguito sulla stessa relazione. Se ad esempio abbiamo le relazioni
+
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Paternità
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Padre} & \textbf{Figlio} \\ \hline
+Giuseppe & Antonio \\
+Luigi & Alberto \\
+Luigi & Mario  \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Persone
+    
+    \vspace{0.2cm}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Età} & \textbf{Reddito} \\ \hline
+Giuseppe & 45 & 1000 \\
+Antonio & 21 & 1500 \\
+Luigi & 30 & 1200 \\
+Alberto & 2 & 0 \\
+Mario & 1 & 0 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+E voglimo creare una nuova relazione con tutti i figli che guadagnano più del padre, dovremmo scrivere una query di questo tipo:
+
+\begin{lstlisting}
+
+\end{lstlisting}
 
 
 
