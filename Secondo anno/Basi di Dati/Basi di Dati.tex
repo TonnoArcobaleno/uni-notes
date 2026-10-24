@@ -2359,7 +2359,7 @@ P6 & 09/09/1990 & D3 \\ \hline
 \end{tabular}
 \end{center}
 
-Per trovare il minimo di ogni dipendente, prendiamo questa tabella e efettuiamo una ridenominazione: ProgettoPL2 = $\rho_{\text{ProgId}, \text{Data}, \text{DipenId} \rightarrow \text{ProgId2}, \text{Data2}, \text{DipenId2}}$. A questo punto possiamo effettuare un $\theta$ join, ponendo come condizione che DipenId sia uguale a DipenId2, così da avere una nuova tabella con tutte coppie di progetti con lo stesso project leader. Troviamo quindi la tabella
+Per trovare il minimo di ogni dipendente, prendiamo questa tabella e efettuiamo una ridenominazione: ProgettoPL2 = $\rho_{\text{ProgId}, \text{Data}, \text{DipenId} \rightarrow \text{ProgId2}, \text{Data2}, \text{DipenId2}}(\text{ProgettoPL})$. A questo punto possiamo effettuare un $\theta$ join, ponendo come condizione che DipenId sia uguale a DipenId2, così da avere una nuova tabella con tutte coppie di progetti con lo stesso project leader. Troviamo quindi la tabella
 
 \begin{center}
 ProgettoPL $\bowtie_{\text{DipenId} = \text{DipenId2}}$ ProgettoPL2 \nopagebreak
