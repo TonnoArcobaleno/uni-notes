@@ -581,7 +581,7 @@ In questo esempio, Minorenni e Maggiorenni sono due sottoclassi esclusive e copr
 \begin{Definizione}[Associazioni]
 \label{def-associazioni}
 Un'\textbf{associazione} è un \textbf{fatto che correla due o più entità}, creando un legame tra loro. \\
-Un'associazione \textbf{R(X, Y)} fra due collezioni di entità \textbf{X} e \textbf{Y} è un \textbf{insieme di instanze di associazione} tra gli elementi di X e di Y. Il prodotto cartesiano X $\times$ Y è detto \textbf{dominio dell'associazione}. Le associazioni possono avere poi anche delle proprie \textbf{proprietà}, e possono essere anche \textbf{ricorsive} (o riflessive). \\
+Un'associazione \textbf{R(X, Y)} fra due collezioni di entità \textbf{X} e \textbf{Y} è un \textbf{insieme di istanze di associazione} tra gli elementi di X e di Y. Il prodotto cartesiano X $\times$ Y è detto \textbf{dominio dell'associazione}. Le associazioni possono avere poi anche delle proprie \textbf{proprietà}, e possono essere anche \textbf{ricorsive} (o riflessive). \\
 \NB Il concetto di associazione riprende in modo chiaro il concetto di \textbf{relazione matematica}.
 \end{Definizione}
 
@@ -718,7 +718,7 @@ Ad esempio, l'associazione Studente --- Esame --- Corso, per lo studente la card
 In realtà, per la cardinalità si usano per convenzione solo \textbf{3 simboli}:
 \begin{itemize}
     \item Per la cardinalità \textbf{minima} si usano solo lo \textbf{0}, che indica che un'istanza potrebbe anche non partecipare a nessuna associazione, come uno studente che non ha ancora effettuato esami, o l'\textbf{1}, che invece indica che ogni istanza deve partecipare per forza ad almeno un'associazione, come l'entità Corso che deve per forza avere almeno un esame. 
-    \item Per la caridnalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'istanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'istanza può partecipare ad un numero indeterminato di instanze.
+    \item Per la caridnalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'istanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'istanza può partecipare ad un numero indeterminato di istanze.
 \end{itemize}\end{Proprieta}
 
 \begin{Proprieta}[Classficazione di associazioni]
@@ -1131,7 +1131,7 @@ Un attributo \textbf{derivabile} lo vediamo quando abbiamo come attributi ad ese
 
 Un attributo \textbf{derivabile da un'altra entità} ad esempio è l'attributo importo totale di un entità Acquisto che è collegata tramite un'associazione a un'entità Prodotto che ha come unico attributo il prezzo. In questo caso importo totale è ridondante dato che possiamo calcolarlo sommando i prodotti tra il prezzo e la quantità di ogni prodotto.
 
-Un attributo \textbf{derivabile per conteggio} ad esempio è l'attributo numero di prodotti di un entità Acquisto che è collegata tramite un'associazione a un'entitò Prodotto che ha come unico attributo il prezzo. In questo caso il numero di prodotti è ridondante dato che possiamo calcolarlo contando le instanze di associazione riguardano quel determinato acquisto.
+Un attributo \textbf{derivabile per conteggio} ad esempio è l'attributo numero di prodotti di un entità Acquisto che è collegata tramite un'associazione a un'entitò Prodotto che ha come unico attributo il prezzo. In questo caso il numero di prodotti è ridondante dato che possiamo calcolarlo contando le istanze di associazione riguardano quel determinato acquisto.
 
 \begin{minipage}[c]{0.60\textwidth}
 Una relazione \textbf{derivabile dovuta a un ciclo} ad esempio è l'associazione Docenza in questo schema ER. Infatti, non sta aggiungendo nulla di nuovo. Tramite le associazioni Frequenza e Insegmamento infatti possiamo capire se un insegnante insegna a uno studente o meno, rendendo ridondante l'associazione Docenza. 
@@ -1151,8 +1151,8 @@ Il modello relazionale non permette la rappresentazion delle generalizzazioni, d
     \item Sostituire le \textbf{generalizzazioni con le associazioni}
 \end{enumerate}
 
-Conviene accorpare le \textbf{specializzazioni nella generalizzazione} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Si creerà in questo caso un attributo \code{tipo} che specifica il tipo di istanza, così da mantenere distinte le istanze di due specializzazioni diverse. Se la generalizzazione è sovrapposta bisognerà prevedere per l'attributo \code{tipo} un valore preciso per quelle instanze che fanno parte di più specializzazioni. Ad esempio, se abbiamo due specializzazioni studente e lavoratore creeremo un tipo chiamato studente-lavoratore. \\ 
-Lo svantaggio è che avremo molti valori nulli per gli attributi delle specializzazioni (la matricola è un valore che va salvato solo per gli studenti e gli studenti-lavoratori, ma per le instanze dei lavoratori il valore rimarrà vuoto). 
+Conviene accorpare le \textbf{specializzazioni nella generalizzazione} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Si creerà in questo caso un attributo \code{tipo} che specifica il tipo di istanza, così da mantenere distinte le istanze di due specializzazioni diverse. Se la generalizzazione è sovrapposta bisognerà prevedere per l'attributo \code{tipo} un valore preciso per quelle istanze che fanno parte di più specializzazioni. Ad esempio, se abbiamo due specializzazioni studente e lavoratore creeremo un tipo chiamato studente-lavoratore. \\ 
+Lo svantaggio è che avremo molti valori nulli per gli attributi delle specializzazioni (la matricola è un valore che va salvato solo per gli studenti e gli studenti-lavoratori, ma per le istanze dei lavoratori il valore rimarrà vuoto). 
 
 Conviene accorpare le \textbf{generalizzazioni nelle specializzazioni} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Questo metodo, però, è applicabile solo se la generalizzazione è \textbf{totale}: infatti, se non lo fosse, avremmo delle istanze della generalizzazione che non potremmo rappresentare in alcun modo.
 
@@ -1500,7 +1500,7 @@ Tra gli operatori fondamentali dell'algebra relazionale ci sono:
 Tra gli operatori derivati (ossia sostituitibili con una combinazione di operatori fondamentali) dell'algebra relazionale ci sono:
 \begin{itemize}
     \item \textbf{Join naturale}
-    \item \textbf{Theta join}
+    \item $\bm{\theta}$ \textbf{join}
     \item \textbf{Intersezione}
 \end{itemize}
 
@@ -1562,7 +1562,7 @@ Rossi   & 2 & Milano \\ \hline
 Due relazioni $r_1$ e $r_2$ sono \textbf{union compatibili} se:
 \begin{itemize}
     \item hanno lo stesso \textbf{numero di attributi}
-    \item gli attributi corrispondenti \textbf{nell'ordine} sono \textbf{definiti sullo stesso dominio} e \textbf{hanno un significato omogeneo} (gli attributi Età e Altezza sono definiti sullo stesso dominio dei numeri interi, ma hanno due significati molto distanti)
+    \item gli attributi corrispondenti \textbf{nell'ordine} sono \textbf{definiti sullo stesso dominio} e \textbf{hanno un significato omogeneo} (ad esempio gli attributi Età e Altezza sono definiti sullo stesso dominio dei numeri interi, ma hanno due significati molto distanti)
 \end{itemize}
 \end{Definizione}
 
@@ -1571,8 +1571,6 @@ Ad esempio, le due relazioni
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Attaccanti  
-
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|l|}
 \hline
@@ -1584,9 +1582,7 @@ Lionel  & Ronaldo & 23 & 2 \\ \hline
 \end{minipage}\hfill
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
-    Calciatori 
-    
-    \vspace{0.2cm}
+    Calciatori
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1602,8 +1598,6 @@ Non sono union compatibili, perché hanno un numero di attributi diverso, e il l
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     $\pi_{\text{Nome, Cognome}}(\text{Attaccanti})$ 
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|}
 \hline
@@ -1616,8 +1610,6 @@ Lionel  & Ronaldo  \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     $\pi_{\text{Nome, Cognome}}(\text{Calciatori})$ 
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|}
 \hline
@@ -1656,8 +1648,6 @@ Vediamo ora un altro esempio. Ipotizziamo di voler unire le seguenti relazioni:
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Docenti
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1671,8 +1661,6 @@ Bianchi & C3 & Lingue \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Amministrativi
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1705,8 +1693,6 @@ Notiamo una cosa importante: la tupla (Bianchi, C3, Lingue) si trova in tutte e 
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Docenti
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1720,8 +1706,6 @@ Bianchi & D3 & Lingue \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Amministrativi
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1872,8 +1856,6 @@ Vediamo un esempio. Prendiamo le relazioni
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Operatore
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1887,8 +1869,6 @@ Bianchi & C3 & Milano \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Ordine
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1913,8 +1893,6 @@ Possiamo quindi effettuare una ridenominazione sulla relazione Ordine, creando u
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Operatore
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1928,8 +1906,6 @@ Bianchi & C3 & Milano \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Ordine
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -1945,8 +1921,6 @@ Dunque troviamo ora una nuova relazione:
 
 \begin{center}
     Operatore $\times$ Ordine
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
@@ -1968,8 +1942,6 @@ Questa nuova relazione, però, ha delle righe che sono inutili. Guardiamo ad ese
 
 \begin{center}
  $\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine})$ \nopagebreak
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
@@ -1984,8 +1956,6 @@ Notiamo, però, che in questa nuvoa relazione c'è sia la colonna CodiceOperator
 
 \begin{center}
 $\pi_{\text{Nome, CodiceOperatore, Città, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$
-
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|l|l|}
 \hline
@@ -2032,8 +2002,6 @@ Ad esempio, prese le relazioni
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Tutor
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -2047,8 +2015,6 @@ Arturo & 25 & 5000 \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     FasceStipendio
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -2064,8 +2030,6 @@ il $\theta$ join Tutor $\bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stip
 
 \begin{center}
 Tutor $\bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}}$ FasceStipendio \nopagebreak
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
@@ -2080,8 +2044,6 @@ Dato che però qui abbiamo ancora le colonne Min e Max che nella tabella finale 
 
 \begin{center}
 $\pi_{\text{Nome, Età, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$ \nopagebreak
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|l|}
 \hline
@@ -2092,9 +2054,10 @@ Arturo & 25 &  5000 & Alto \\ \hline
 \end{tabular}
 \end{center}
 
+
 \subsection{Algebra relazionale in SQL 2}
 
-Abbiamo già accennato quando abbiamo parlato della parola chiave \code{FROM} che aggiungendo più relazioni a questa è possibile effettuare dei prodotti cartesiani. Non solo: in questo modo è possibile anche effettuare dei join. \\
+Abbiamo già accennato quando abbiamo parlato della parola chiave \code{FROM} che aggiungendo più relazioni a questa è possibile effettuare dei prodotti cartesiani. Non solo: questa è anche la sintassi utilizzata per effettuare dei join.
 Ad esempio, il join naturale visto in precedenza Operatore $\bowtie$ Ordine in SQL diventa:
 \begin{lstlisting}
 SELECT distinct Nome, CodiceOperatore, Città, Ordine, NPezzi
@@ -2110,8 +2073,6 @@ Torna qui importante un costrutto che avevamo già accenato quando abbiamo inizi
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Docenti
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -2125,8 +2086,6 @@ Cristiano & Raimondo & 3 \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Esami
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -2170,8 +2129,6 @@ Questa è comoda quando abbiamo due o più relazioni nella query, ma è necessar
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Paternità
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|}
 \hline
@@ -2185,8 +2142,6 @@ Luigi & Mario  \\ \hline
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
     Persone
-    
-    \vspace{0.2cm}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -2200,12 +2155,269 @@ Mario & 1 & 0 \\ \hline
 \end{center}
 \end{minipage}
 
-E voglimo creare una nuova relazione con tutti i figli che guadagnano più del padre, dovremmo scrivere una query di questo tipo:
+E voglimo creare una nuova relazione con tutti i figli che guadagnano più del padre, in cui salviamo anche il reddito del figlio e quello del padre, dovremmo scrivere una query di questo tipo:
 
 \begin{lstlisting}
-
+SELECT Figlio, f.Reddito as Reddito, p.Reddito as RedditoPadre
+FROM Persone p, Paternità, Persone f
+WHERE p.Reddito < f.Reddito AND p.Nome = Padre AND f.Nome = Figlio
 \end{lstlisting}
 
+che ci restituirebbe la seguente tabella:
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Figlio} & \textbf{Reddito} & \textbf{RedditoPadre} \\ \hline
+Antonio & 1500 & 1000 \\ \hline
+\end{tabular}
+\end{center}
+
+Abbiamo detto che SQL da solo decide quando effettuare un join e quando effettuare un prodotto cartesiano senza che noi facciamo nulla, ma in realtà è possibile anche effettuare un \textbf{join esplicito}. Per capire meglio come vediamo un esempio. Ipotizziamo di voler creare una relazione con Figlio, Padre e Reddito Padre. Normalmente noi scriveremmo la query
+\begin{lstlisting}
+SELECT Figlio, Padre, Reddito as RedditoPadre
+FROM Paternità, Persone
+WHERE Nome = Padre AND Reddito > 1000
+\end{lstlisting}
+
+Potremmo però anche scriverla in quest'altro modo, utilizzando proprio un join esplicito:
+\begin{lstlisting}
+SELECT Figlio, Padre, Reddito as RedditoPadre
+FROM Paternità join Persone on Nome = Padre 
+WHERE Reddito > 1000
+\end{lstlisting}
+
+Entrabbe le query restituirebbero la relazione
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Figlio} & \textbf{Padre} & \textbf{RedditoPadre} \\ \hline
+Alberto & Luigi & 1200 \\
+Mario & Luigi & 1200 \\ \hline
+\end{tabular}
+\end{center}
+
+La logica è molto semplice: nel \code{FROM} scriviamo tutte le condizioni riguardanti il join tra le due relazioni, separate tutte dalla parola chiave \code{on} (dunque se avessimo avuto altre condizioni avremmo dovuto scrivere \code{FROM r1 x r2 on C1 on C2...}), e se abbiamo altre condizioni che non riguardano il join le aggiungiamo come delle normali condizioni affianco la parola chiave \code{WHERE}.  \\
+\NB Il join esplicito non è sempre implementato: soprattutto in sistemi più vecchi è possibile che questo non sia presente.
+
+Infine, in SQL (ma non in algebra relazionale), a seguito di una query è possibile \textbf{riordinare le tuple} seguendo il valore di una delle colonne, aggiungendo, alla fine della query, la scritta \codeb{ORDER BY} + il nome del campo desiderato. Ad esempio, la query
+
+\begin{lstlisting}
+SELECT Nome, Reddito 
+FROM Persone
+WHERE Età > 10
+ORDER BY Età
+\end{lstlisting}
+
+restituirebbe la relazione
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{Età} & \textbf{Reddito} \\ \hline
+Antonio & 21 & 1500 \\
+Luigi & 30 & 1200 \\
+Giuseppe & 45 & 1000 \\ \hline
+\end{tabular}
+\end{center}
+
+Notiamo che le tuple sono state ordinate in modo crescente, dalla tupla con l'età più piccola a quella con l'età più grande. Se volessimo il contrario, dovremmo aggiungere affianco Età la parola chiave \codeb{DESC}.
+
+\subsection{Problemi particolari nell'algebra relazionale}
+
+Fino ad ora abbiamo studiato query con condizioni facili da rispondere, del tipo "Nomi di tutte le persone con \textbf{età > 50"}, oppure "Clienti che hanno effettuato \textbf{almeno} un ordine da 50 o più pezzi". Queste sono facili perché per ognuna di queste condizioni basta prendere in sequenza ogni tupla della relazione iniziale (o di un eventuale join, ad esempio tra Clienti e Ordini), e verificare la condizione richiesta. Arriviamo ora a studiare però query più complesse, che non chiedono più se ci sono persone che hanno effettuato almeno un ordine da 50 o più pezzi, ma piuttosto se esistono clienti che hanno effettuato \underline{\textbf{sempre}} ordini da 50 o più pezzi. \\
+Per capire come risolvere queste situazioni, vediamo un esempio concreto prendendo le tabelle Clienti e Ordini:
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Clienti
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{CodiceCliente} & \textbf{Città} \\ \hline
+Giuseppe & C1 & Roma \\
+Giuseppe & C2 & Milano \\
+Antonio & C3 & Roma  \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    Ordini
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{CodiceCliente} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
+C1 & A1 & 200 \\
+C1 & A2 & 10 \\
+C2 & A3 & 1000 \\
+C2 & A4 & 500 \\
+C2 & A5 & 300 \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+In questo caso scansionare le tuple una a una e inserire i clienti che rispettano la condizione non basta più: infatti, guardando solo la prima tupla dovremmo aggiungere Giuseppe nella soluzione, ma guardando poi la seconda notiamo che questi non soddisfa interamente la condizione. Come traduciamo però questo in algebra relazionale? Possiamo risolvere il problema usando la \textbf{doppia negazione}. Infatti, l'insieme dei clienti che hanno sempre effettuato ordini da almeno 50 pezzi è pari all'insieme dei clienti - l'insieme dei clienti che almeno una volta hanno effettuato un ordine da meno 50 pezzi. Dunque la query $\bm{\pi_{\textbf{Nome}}(\pi_{\textbf{Nome}, \textbf{CodiceCliente}}(\textbf{Cliente} \bowtie \textbf{Ordine}) - \pi_{\textbf{Nome}, \textbf{CodiceCliente}}(\sigma_{\textbf{NPezzi}<50}(\textbf{Cliente} \bowtie \textbf{Ordine})))}$ contiene tutti i clienti che hanno fatto sempre ordini da almeno 50 pezzi. Dunque con questa query troviamo la relazione
+
+\begin{center}
+\begin{tabular}{|l|}
+\hline
+\textbf{Nome} \\ \hline
+Giuseppe \\ \hline
+\end{tabular}
+\end{center}
+
+C'è però un piccolo particolare: scrivendo la query in questo modo stiamo eliminando anche tutti i clienti che non hanno mai effettuato ordini. Ciò può essere corretto o meno in base alla query: in questo caso non è esplicitato se questi clienti dovrebbero essere considerati nella soluzione o meno, dunque è sempre preferibile non inserirli. Ma nel caso fosse stato specificato avremmo semplicemente dovuto scrivere $\pi_{\text{Nome}}(\pi_{\text{Nome}, \text{CodiceCliente}}(\text{Cliente}) - \pi_{\text{Nome}, \text{CodiceCliente}}(\sigma_{\text{NPezzi}<50}(\text{Cliente} \bowtie \text{Ordine})))$ (in questa nostra situazione con questa seconda query oltre a Giuseppe avremmo avuto in relazione anche Antonio). 
+\NB Abbiamo qui prima proiettato sia il Nome che il CodiceCliente e poi solo il nome perché questo da solo non è un identificativo sufficiente. Infatti, proiettando fin da subito solo sul nome entrambi i Giuseppe sarebbero stati eliminati, nonostante Giuseppe con codice C2 rispettasse la condizione.
+
+Se avessimo avuto come query quella di trovare tutti i clienti che non hanno ad esempio \underline{\textbf{mai}} effettuato ordini con più di 200 pezzi il ragionamento non cambiava di una virgola: sfruttando la doppia negazione bisognava trovare tutti i clienti che hanno mai fatto un ordine con più di 200 pezzi e eliminarli dalla lista dei clienti che hanno effetuato ordini (o solo dei clienti, se si vogliono anche considerare i clienti con 0 ordini), così da avere infine solo i clienti che rispettano la nostra condizione.
+
+Vediamo ora invece un 'altra situazione. Ipotizziamo di avere la seguente relazione:
+
+\begin{center}
+            Impiegati 
+
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{C\#} & \textbf{Stip} & \textbf{Capo\#}\\ \hline
+Rossi & C1 & 100 & C3 \\
+Pirlo & C2 & 200 & C3 \\
+Bianchi & C3 & 500 & NULL \\
+Verdi & C4 & 200 & C2 \\
+Neri & C5 & 150 & C1 \\
+Tosi & C6 & 100 & C1 \\ \hline
+\end{tabular}
+\end{center}
+
+La query ci chiede di trovare il nome e il codice di ogni impiegato che guadagna quanto o di più del proprio capo. Notiamo subito una cosa particolare: le informazioni dei capi sono sempre nella relazione impiegato. Dunque stiamo effettuando una query che ci richiede di fare un $\theta$ join tra una relazione e sé stessa. Per poterlo fare, però, è necessaria prima di tutto una ridenominazione: ImpiegatiC $= \rho_{\text{Nome, C\#, Stip, Capo\#} \rightarrow CNome, CC\#, CStip, CCapo\#}$(Impiegati) (non è per forza necessaria, potremmo esplicitare i nomi degli attributi scrivendo ogni volta Impiegati.Nome o ImpiegatiC.Nome, ma con la ridenominazione rendiamo sicuramente questa query più chiara). Possiamo ora studiare la relazione Impiegati$\bowtie_{\text{Capo\#} = \text{CC\#}}$ImpiegatiC, che si traduce nella tabella
+
+\begin{center}
+            Impiegati$\bowtie_{\text{Capo\#} = \text{CC\#}}$ImpiegatiC
+
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Nome} & \textbf{C\#} & \textbf{Stip} & \textbf{Capo\#} & \textbf{CNome} & \textbf{CC\#} & \textbf{CStip} & \textbf{CCapo\#} \\ \hline
+Rossi & C1 & 100 & C3 & Bianchi & C3 & 500 & NULL \\
+Pirlo & C2 & 200 & C3 & Bianchi & C3 & 500 & NULL \\
+Verdi & C4 & 200 & C2 & Pirlo & C2 & 200 & C3 \\
+Neri & C5 & 150 & C1 & Rossi & C1 & 100 & C3 \\
+Tosi & C6 & 100 & C1 & Rossi & C1 & 100 & C3\\ \hline
+\end{tabular}
+\end{center}
+
+Notiamo che in questa tupla non è presente dalla parte della relazione Impiegati le informazioni riguardanti Bianchi. Questo accade perché semplicemente Bianchi non ha un capo, dunque Capo\# = CC\# per lui non è mai vero, perché non esiste nessun impiegato che ha come $C\#$ il valore NULL.  \\
+A questo punto non ci resta che confrontare il valore Stip con il valore CStip e prendere le tuple tali che Stip $\geq$ CStip, e infine proiettare. Troviamo quindi la relazione $\pi_{\text{Nome}, \text{C\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#} \land \text{Stip} \geq \text{CStip}}\text{ImpiegatiC})$, che si traduce nella relazione
+
+\begin{center}
+            $\pi_{\text{Nome}, \text{C\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#} \land \text{Stip} \geq \text{CStip}}\text{ImpiegatiC})$
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Nome} & \textbf{C\#}  \\ \hline
+Verdi & C4  \\
+Neri & C5 \\
+Tosi & C6  \\ \hline
+\end{tabular}
+\end{center}
+
+E se invece volessimo ora il nome e il codice di tutti i capi che guadagnano di più di tutti i loro impiegati? In questo caso torna fondamentale la doppia negazione. Possiamo sfruttare la query appena studiata per trovare tutti i capi che guadagnano quanto o meno dei loro impiegati, per poi prendere la relazione con tutti i capi e fare una differenza proprio con questa query. Se chiamiamo la query precedente $r$, troviamo che la soluzione a questo problema è la query $\pi_{\text{CNome}, \text{CC\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#}}\text{ImpiegatiC}) - \pi_{\text{Cnome}, \text{CC\#}}(r)$, che si traduce nella relazione
+
+\begin{center}
+            $\pi_{\text{CNome}, \text{CC\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#}}\text{ImpiegatiC}) - \pi_{\text{Cnome}, \text{CC\#}}(r)$
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{CNome} & \textbf{CC\#}  \\ \hline
+Bianchi & C3  \\ \hline
+\end{tabular}
+\end{center}
+
+\NB È importante prendere CNome e CC\# come campi e non Nome e C\#. Infatti, noi vogliamo i capi degli impiegati e non gli impiegati stessi, altrimenti staremmo inserendo nella relazione finale anche impiegati che non sono capi, e questo non è corretto.
+
+Vediamo infine un'altra query interessante. Ci troviamo in un database con le seugenti relazioni:
+\begin{itemize}
+    \item DIPENDENTE(\underline{Id}, Nome, Cognome, DataN)
+    \item PROGETTO(\underline{Id}, Titolo, Data)
+    \item TEAM(\underline{ProgId}, \underline{DipenId}, Ruolo)
+\end{itemize}
+con l'attributo Ruolo che può assumere tre valori: "Project Leader", "Programmer" o "Designer". Ci viene chiesto di trovare il titolo del progetto \underline{\textbf{più vecchio}} di ogni dipendente a cui egli ha partecipato come Project Leader, salvando come informazioni nella relazione il Nome, il Cognome, la DataN del dipendente e il Titolo del progetto. La parte di interessante di questa query è la ricerca del progetto \textit{più vecchio}. Anche qui ci troviamo nello stesso vicolo cieco già visto quando ci siamo trovati davanti la parola \textit{sempre}: come possiamo essere sicuri che un progetto sia il più vecchio fra tutti? Prima di vedere come risolvere questo problema, troviamoci una relazione con all'interno diverse tuple con i progetti e i project leader di ogni progetto. \\
+Innanzitutto prendiamo tutti i project leader dalla relazione Team con i rispettivi progetti a cui erano a capo: ProjectLeader = $\pi_{\text{ProgId}, \text{DipenId}} (\sigma_{\text{Ruolo} = \text{"Project Leader"}}(\text{Team}))$. Creiamo ora una relazione con tutti i progetti associati al loro rispettivo project leader: \mbox{ProgettoPL = $\pi_{\text{ProgId}, \text{Data}, \text{DipenID}}(\text{Progetto} \bowtie_{\text{Id} = \text{ProgId}} \text{ProjectLeader})$}. Siamo così arrivati a una tabella di questo tipo:
+
+\begin{center}
+ProgettoPL
+    
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{ProgId} & \textbf{Data} & \textbf{DipenId}  \\ \hline
+P1 & 15/04/2023 & D1 \\
+P2 & 13/02/2023 & D1 \\
+P3 & 11/04/2010 & D3 \\
+P4 & 11/05/2020 & D2 \\
+P5 & 11/03/2019 & D1 \\
+P6 & 09/09/1990 & D3 \\ \hline
+\end{tabular}
+\end{center}
+
+Per trovare il minimo di ogni dipendente, prendiamo questa tabella e efettuiamo una ridenominazione: ProgettoPL2 = $\rho_{\text{ProgId}, \text{Data}, \text{DipenId} \rightarrow \text{ProgId2}, \text{Data2}, \text{DipenId2}}$. A questo punto possiamo effettuare un $\theta$ join, ponendo come condizione che DipenId sia uguale a DipenId2, così da avere una nuova tabella con tutte coppie di progetti con lo stesso project leader. Troviamo quindi la tabella
+
+\begin{center}
+ProgettoPL $\bowtie_{\text{DipenId} = \text{DipenId2}}$ ProgettoPL2 \nopagebreak
+    
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{ProgId} & \textbf{Data} & \textbf{DipenId} & \textbf{ProgId2} & \textbf{Data2} & \textbf{DipenId2}\\ \hline
+P1 & 15/04/2023 & D1 & P1 & 15/04/2023 & D1 \\
+P1 & 15/04/2023 & D1 & P2 & 13/02/2023 & D1 \\
+P1 & 15/04/2023 & D1 & P5 & 11/03/2019 & D1 \\
+P2 & 13/02/2023 & D1 & P1 & 15/04/2023 & D1 \\
+P2 & 13/02/2023 & D1 & P2 & 13/02/2023 & D1 \\
+P2 & 13/02/2023 & D1 & P5 & 11/03/2019 & D1 \\
+P3 & 11/04/2010 & D3 & P3 & 11/04/2010 & D3 \\
+P3 & 11/04/2010 & D3 & P6 & 09/09/1990 & D3 \\
+P4 & 11/05/2020 & D2 & P4 & 11/05/2020 & D2 \\
+P5 & 11/03/2019 & D1 & P1 & 15/04/2023 & D1 \\
+P5 & 11/03/2019 & D1 & P2 & 13/02/2023 & D1 \\
+P5 & 11/03/2019 & D1 & P5 & 11/03/2019 & D1\\
+P6 & 09/09/1990 & D3 & P3 & 11/04/2010 & D3 \\
+P6 & 09/09/1990 & D3 & P6 & 09/09/1990 & D3 \\\hline
+\end{tabular}
+\end{center}
+
+A questo punto, prendiamo solo le tuple dove la data a destra è strettamente maggiore di quella a sinistra:
+
+
+\begin{center}
+ProgettoPL $\bowtie_{\text{DipenId} = \text{DipenId2} \land \text{Data} < \text{Data2}}$ ProgettoPL2
+    
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\textbf{ProgId} & \textbf{Data} & \textbf{DipenId} & \textbf{ProgId2} & \textbf{Data2} & \textbf{DipenId2}\\ \hline
+P2 & 13/02/2023 & D1 & P1 & 15/04/2023 & D1 \\
+P5 & 11/03/2019 & D1 & P1 & 15/04/2023 & D1 \\
+P5 & 11/03/2019 & D1 & P2 & 13/02/2023 & D1 \\
+P6 & 09/09/1990 & D3 & P3 & 11/04/2010 & D3 \\\hline
+\end{tabular}
+\end{center}
+
+A questo punto notiamo una cosa: tutte le date che si trovano nella colonna Data2 sicuramente non possono corrispondere al progetto più vecchio del project leader a cui si riferiscono. Infatti, si riferiscono a progetti avvenuti sicuramente dopo rispetto a altri seguiti sempre dallo stesso project manager. Dunque, per ottenere i progetti più vecchi, non ci basta che prendere la tabella iniziale e eliminare tutte le tuple con i progetti che sono presenti nella parte destra di questa nostra tabella. Se chiamiamo la tabella qui sopra $r$, arriviamo alla query \mbox{Min = $\text{ProgettoPL} - \pi_{\text{ProgId2}, \text{Data2}, \text{DipenId2}}(r)$}, ossia alla tabella
+
+\begin{center}
+Min \nopagebreak
+    
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{ProgId} & \textbf{Data} & \textbf{DipenId}  \\ \hline
+P4 & 11/05/2020 & D2 \\
+P5 & 11/03/2019 & D1 \\
+P6 & 09/09/1990 & D3 \\ \hline
+\end{tabular}
+\end{center}
+
+Questo procedimento è quello standard per trovare il minimo di una relazione in algebra relazionale (dove purtroppo l'operatore \code{MIN} di SQL non è presente).
+
+Arrivati a questo punto non ci resta che fare un $\theta$ join con la relazione Dipendente e poi con la relazione Progetto e proiettare tutto. Troviamo quindi che \mbox{Sol = $\pi_{\text{Nome}, \text{Cognome}, \text{DataN}, \text{DipenId}, \text{Titolo}, \text{ProgId}}((\text{Min} \bowtie_{\text{DipenId} = \text{Id}} \text{Dipendente}) \bowtie_{\text{ProgId} = \text{Id}} \text{Progetto})$}. \\
+\NB Abbiamo aggiunto nella soluzione anche DipenId e ProgId. Nonostante questi non fossero esplicitamente richiesti dalla traccia è sempre buona norma portare con sé le chiavi delle entità coinvolte, che possono essere sempre utili per identificare in modo univoco una o più istanze.
 
 
 \end{document}
