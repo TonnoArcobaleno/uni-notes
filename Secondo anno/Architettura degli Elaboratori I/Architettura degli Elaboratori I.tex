@@ -1832,6 +1832,7 @@ A questo punto applichiamo una modifica semplicissima: in entrambi gli SR Latch,
 \label{fig-flip-flop-reset-asincrono}
 \end{figure}
 
+\NB Se $CLK = 0$ e $D = 1$, nel latch SR master si ha $S = 1$ e quindi $\bar{N} = 0$. Se si ha poi anche $RESET = 1$,torniamo a uno stato invalido, dato che anche $N = 0$. Questo però non crea problemi: lo slave infatti riceve in ingresso solo $N = 0$ ($\bar{N}$ è infatti inutilizzato), dunque non viene propagato nessun valore errato e le sue uscite restano corrette, con $Q = 0$ e $\bar{Q} = 1$. Quando $RESET$ tornerà a $0$, il master tornerà da solo a uno stato valido, seguendo $D$.
 
 \begin{minipage}[c]{0.50\textwidth}
 Rappresentiamo un Flip-Flop con enable e reset come un Flip-Flop con la scritta RESET in basso e senza evidenziare la variabile $\bar{Q}$.
