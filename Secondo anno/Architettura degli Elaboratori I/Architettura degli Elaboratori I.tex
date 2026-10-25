@@ -1466,7 +1466,7 @@ Possiamo vedere un decoder come una delle due componenti di un MUX. Infatti, un 
 \caption{MUX creato tramite decoder e \code{AND/OR}}
 \end{figure}
 
-Capire perché questo altro non è che un MUX a 4 ingressi è molto semplice. Sappiamo che la funzione booleana che descrive un MUX a 4 ingressi è $Y = \bar{S_0}\bar{S_1} D_0 + S_0 \bar{S_1} D_1 + \bar{S_0} S_1 D_2 + S_0 S_1 D_3$. In questo decoder abbiamo che $Y_0 = \bar{S_0}\bar{S_1}, Y_1 = S_1 \bar{S_0}, Y_2 = \bar{S_0} S_1, Y_3 = S_0 S_1$, e dato che la funzione di questo circuito che abbiamo creato è $Y = Y_0 D_0 + Y_1 D_1 + Y_2 D_2 + Y_3 D_3$, sostituendo tutti gli $Y_i$ con i loro rispettivi valori troviamo proprio la funzione booleana di un classico MUX a 4 ingressi.
+Capire perché questo altro non è che un MUX a 4 ingressi è molto semplice. Sappiamo che la funzione booleana che descrive un MUX a 4 ingressi è $Y = \bar{S_0}\bar{S_1} D_0 + S_0 \bar{S_1} D_1 + \bar{S_0} S_1 D_2 + S_0 S_1 D_3$. In questo decoder abbiamo che $Y_0 = \bar{S_0}\bar{S_1}, Y_1 = S_0 \bar{S_1}, Y_2 = \bar{S_0} S_1, Y_3 = S_0 S_1$, e dato che la funzione di questo circuito che abbiamo creato è $Y = Y_0 D_0 + Y_1 D_1 + Y_2 D_2 + Y_3 D_3$, sostituendo tutti gli $Y_i$ con i loro rispettivi valori troviamo proprio la funzione booleana di un classico MUX a 4 ingressi.
 
 Vediamo ora però com'è fatto al suo interno un decoder. Abbiamo già visto come, in un decoder a 2 ingressi, ogni output corrisponda a un mintermine, nell'ordine $\bar{S_0} \bar{S_1}, S_0 \bar{S_1}, \bar{S_0} S_1, S_0 S_1$. Dunque possiamo usare quattro \code{AND} per formare un decoder, in questo modo:
 
@@ -1477,7 +1477,7 @@ Vediamo ora però com'è fatto al suo interno un decoder. Abbiamo già visto com
 
 Con i decoder possiamo scrivere qualsiasi funzione booleana a $n$ variabili nella forma SOP. Infatti, basta collegare in un \code{OR} tutti i mintermini che formano tale funzione. Vediamo ad esempio come rappresentare un full adder a 3 ingressi tramite un decoder. Ricordiamo che un full adder è un circuito combinatorio utilizzato per eseguire somme di bit.
 
-Abbiamo quindi due output da rappresentare: $S$ per la somma e $R$ per il resto, con la seguente tabella della verità (avremo in questa tabella 0 per $S$ se la somma dei tre bit $n$ è $n\%2 = 0$ e 1 altrimenti, e 0 per $R$ se il resto della somma dei tre bit è 0 e 1 altrimenti):
+Abbiamo quindi due output da rappresentare: $S$ per la somma e $R$ per il riporto, con la seguente tabella della verità (avremo in questa tabella 0 per $S$ se la somma dei tre bit $n$ è $n\%2 = 0$ e 1 altrimenti, e 0 per $R$ se il riporto della somma dei tre bit è 0 e 1 altrimenti):
 
 \[
 \begin{array}{ccc|cc|c}
