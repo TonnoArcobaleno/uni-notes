@@ -1643,8 +1643,8 @@ Un \textbf{circuito bistabile} è un circuito \textit{stabile} con, nella forma 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textwidth]{Bistabl.png}
-\caption{Due rappresentazioni di un circuito bistabile}
+\includegraphics[width=0.5\textwidth]{Bistabl.png}
+\caption{Due rappresentazioni interne di un circuito bistabile}
 \end{figure}
 
 Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, se in qualche modo riuscissimo a modificare il valore di $Q$ e metterlo a $0$ ad esempio, questo rimarebbe sempre a $0$ non cambierebbe mai, e stessa cosa se lo mettessimo a $1$. Il problema di questo circuito è proprio che manca il modo per poter modificare il valore di $Q$. Per questo motivo introduciamo dei nuovi circuiti chiamati \textbf{SR Latch}.
@@ -1664,14 +1664,190 @@ Un \textbf{SR Latch} (Set/Reset Latch) è un circuito bistabile che permette di 
 
 Avendo 2 variabili in input, abbiamo 4 casi possibili:
 \begin{itemize}
-    \item Se $\bm{S = 0}$ e $\bm{R = 0}$ allora l'SR Latch si comporta come  un banale circuito bistabile: se $Q$ aveva già un valore, questo non cambia, ossia $\bm{Q_{\textbf{prev}} = Q}$.
+    \item Se $\bm{S = 0}$ e $\bm{R = 0}$ allora l'SR Latch si comporta come  un banale circuito bistabile: se $Q$ aveva già un valore, questo non cambia, ossia $\bm{Q_{\textbf{prev}} = Q}$. Diciamo in questo caso che il latch è in \textbf{hold}.
     \item Se $\bm{S = 1}$ e $\bm{R = 0}$ allora $\bm{Q = 1}$ e $\bm{\bar{Q} = 0}$
     \item Se $\bm{S = 0}$ e $\bm{R = 1}$ allora $\bm{Q = 0}$ e $\bm{\bar{Q} = 1}$
     \item Se $\bm{S = 1}$ e $\bm{R = 1}$ allora $\bm{Q = \bar{Q} = 0}$. Essendo questo impossibile, quando $S = 1 $ e $R = 1$ diciamo che il circuito si trova in uno stato invalido.
 \end{itemize}
 
-Dunque quando $S = 1$ e $R = 0$ stiamo settando $Q$ a $1$; quando invece $S = 0$ e $R = 1$ lo stiamo resettando a $0$; quando poi $S = 0$ e $R = 0$ lo stiamo tenendo in memoria. L'unico caso da evitare è quando $S = 1$ e $R = 1$, dato che il circuito in quel caso non sa quanto vale $Q$ e quindi finisce in uno stato invalido.
+Dunque quando $S = 1$ e $R = 0$ stiamo settando $Q$ a $1$; quando invece $S = 0$ e $R = 1$ lo stiamo resettando a $0$; quando poi $S = 0$ e $R = 0$ lo stiamo tenendo in memoria. L'unico caso da evitare è quando $S = 1$ e $R = 1$, dato che il circuito in quel caso non sa quanto vale $Q$ e quindi finisce in uno stato invalido. Riassumendo, $\bm{Q = S\bar{R} + \bar{R} Q_{\textbf{prev}}}$.
+
+\begin{minipage}[c]{0.60\textwidth}
+Rappresentiamo un SR Latch tramite un rettangolo con a sinistra i due input $S$ e $R$ e a destra l'output $Q$ e il suo negato $\bar{Q}$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=0.6\textwidth, valign=t]{SR Latch rappresentazione.png}
+\end{minipage}
+
+\subsection{D Latch}
+
+Per superare il problema dello stato indefinito $S = 1$ e $R = 1$ nasce un nuovo elemento di stato, che prende il nome di \textbf{D Latch}.
+
+\begin{Definizione}[D Latch]
+\label{def-d-latch}
+Un \textbf{D Latch} è un elemento di stato con due input, $\bm{D}$ e $\bm{CLK}$, e due output $Q$ e $\bar{Q}$.
+\end{Definizione}
+
+Il D Latch è molto semplice: quando $CLK = 0$ si ha sempre $Q = Q_{\text{prev}}$ (si dice che il circuito è \textit{opaco}), mentre quando $CLK = 1$ si ha $Q = D$ (si dice che il circuito è \textit{trasparente}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{D Latch interno.png}
+\caption{Rappresentazione interna di un D Latch base}
+\label{fig-d-latch}
+\end{figure}
+
+Un D Latch base si rappresenta quindi tramite un SR Latch. Studiamone ora la tabella di verità:
+
+\[
+\begin{array}{cc|cc|c}
+CLK & D & S & R & Q \\
+\hline
+0 & X & 0 & 0 & Q_{\text{prev}} \\
+1 & 0 & 0 & 1 & 0 \\
+1 & 1 & 1 & 0 & 1
+\end{array}
+\]
+
+Notiamo una cosa fondamentale: in nessun caso si verifica lo stato indefinito $S = 1$ e $R = 1$, dunque questo latch non ha nessun caso particolare da evitare, cosa che invece era presente nei SR Latch. Dunque $\bm{Q = \overline{CLK} Q_{\textbf{prev}} + CLK D}$.
+
+\begin{minipage}[c]{0.50\textwidth}
+Rappresentiamo un D Latch tramite un rettangolo con a sinistra l'input $D$, in alto l'input $CLK$ e a destra l'output $Q$ e il suo negato $\bar{Q}$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.6\textwidth, valign=t]{D Latch rappresentazione.png}
+\end{minipage}
+
+Dei D latch studiamo anche la \textbf{forma d'onda}: in poche parole, la forma d'onda di un D latch è una rappresentazione grafica del latch, tramite delle linee che rappresentano i valori dei vari input/out. Una linea in alto a una variabile indica che il valore di quella variabile in quell'istante di tempo è 1, in basso indica che è 0, e se è sia in alto che in basso indica che il valore non si conosce.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Forma d'onda latch.png}
+\caption{Forma d'onda di un D Latch}
+\label{fig-forma-d-onda-d-latch}
+\end{figure}
+
+Inizialmente, quando $CLK = 0$, il valore $Q$ è un valore sconosciuto. Quando poi $CLK$ diventa $1$, con un po di ritardo (ricordiamo che questi circuiti nella realtà non possono essere istantanei, ma hanno tutti un minimo di delay) $Q$ assume un valore definito, pari a $D$, ossia in questo caso 0. Quando $D$ diventa pari a $1$, anche $Q$ cambia, ma non appena $CLK$ torna a essere $0$, $Q$ entra nella fase di \textit{hold}, rappresentata in figura dal quadrato rosso, nella quale non modifica più il proprio valore, anche se $D$ dovesse cambiare. Solo quando $CLK$ tornerà a valere 1 allora $Q$ cambierà nuovamente il proprio valore, che diventerà pari a $D$ ossia $0$.
+
+\subsection{D Flip-Flop}
+
+\begin{Definizione}[D Flip-Flop]
+\label{def-d-flip-flop}
+Un \textbf{D Flip-Flop} è un D Latch che modifica il valore di $Q$ solo quando $CLK$ passa da 0 a 1 o viceversa. I Flip-Flop che modificano $Q$ in corrispondenza di una salita (ossia quando $CLK$ passa da 0 a 1) sono anche detti \textbf{positive edge triggered}, mentre quelli che modificano $Q$ in corrispondenza di una discesa sono anche detti \textbf{negative edge triggered}. Quando parleremo di Flip-Flop, se non esplicitamente dichiarato faremo sempre riferimento a un positive edge triggered.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Rappresentazione interna di un D Flip-Flop.png}
+\caption{Rappresentazione interna di un D Flip-Flop base}
+\label{fig-rappresentazione-flip-flop-interna}
+\end{figure}
+
+\NB $N$ è un nome intermedio che diamo a $Q$ all'interno del circuito per comodità, ma rimane sempre $Q$. \\
+Il primo Flip-Flop viene detto \textit{master} (o L1), mentre il secondo \textit{slave} (o L2). Per capire perché funziona, guardiamone al volo la tabella di verità:
 
 
+\[
+\begin{array}{cc|cc}
+CLK & D & N & Q \\
+\hline
+0 & X & D & Q_{\text{prev}} \\
+1 & X & N_{\text{prev}} = D_{\text{prev}} & N = D_{\text{prev}}
+\end{array}
+\]
+
+Dunque troviamo che se $CLK = 0$ allora $Q$ rimane uguale, in stato di hold, mentre se $CLK = 1$ allora $Q$ diventa uguale a $D_{\text{prev}}$, che altro non è che il valore di $D$ nel momento in cui $CLK$ passa da 0 a 1. Dunque $\bm{Q = \overline{CLK} Q_{\textbf{prev}} + CLK D_{\textbf{prev}}}$. \\
+\NB Se avessimo voluto rappresentare un Flip-Flop negative edge triggered avremmo usato $CLK$ nel primo D Latch e $\overline{CLK}$ nel secondo D Latch.
+
+\begin{minipage}[c]{0.50\textwidth}
+Rappresentiamo un D Flip-Flop come un D Latch ma con un triangolo in alto al posto della variabile $CLK$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.6\textwidth, valign=t]{D Flip Flop.png}
+\end{minipage}
+
+Anche dei D FLip-Flop studiamo le forme d'onda. Vediamo un esempio come abbiamo fatto con i D Latch:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Forma d onda Flip flop.png}
+\caption{Forma d'onda di un D Flip-Flop}
+\label{fig-forma-onda-flip-flop}
+\end{figure}
+
+In questo caso, $Q$ modifica il suo valore quando per la prima volta $CLK$ passa da 0 a 1, diventando 0 come $D$, poi quando nuovamente $CLK$ ripassa da 0 a 1 diventa 1 come $D$, e quando per l'ultima volta $CLK$ sale, $Q$ rimane uguale dato che vale già quanto $D$ in quel momento, ossia $1$. 
+
+\begin{Definizione}[Registro]
+\label{def-registro}
+Un \textbf{registro} è un gruppo di D Flip-Flop collegati in parallelo e sincronizzati da uno stesso segnale $CLK$.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Registro Flip Flop.png}
+\caption{Un registro, a sinistra rappersentato con 4 Flip-Flop in parallelo, a destra come un unico blocco}
+\label{fig-registro-flip-flop}
+\end{figure}
+
+Esistono infine anche i D Flip-Flop \textbf{con enable} (e reset), che  non sono altro che dei Flip-Flop con due ingressi in input in più: $\bm{EN}$ e $\bm{RESET}$. L'input $EN$ serve a decidere semplicemente se il Flip-Flop è attivo: se $EN = 0$, il Flip-Flop non funziona, e in ogni caso $Q$ rimane uguale a $Q_{\text{prev}}$, a prescindere da $D$ e da $CLK$. Se invece $EN = 1$, il Flip-Flop funziona normalmente. L'input $RESET$, invece, quando vale 1 vuole forzare il Flip-Flop a uno stato noto, ponendo $Q = 0$. Esistono due modi per fare ciò, e per questo distinguiamo reset \textbf{sincrono} da reset \textbf{asincrono}:
+\begin{itemize}
+    \item Il reset \textbf{sincrono} non porta subito $Q = 0$, ma lo fa solo in corrispondenza della \textbf{prossima salita} del $CLK$
+    \item Il reset \textbf{asincrono} invece azzera \textbf{subito} $Q$, portandolo a 0 ignorando completamente il $CLK$.
+\end{itemize}
+
+Per quanto riguarda l'implementazione, l'input $EN$ è molto semplice: basta mettere in \code{AND} questo input e il $CLK$. In questo modo, se $E = 0$ avremo sempre $CLK \ \code{AND} \ E = 0$, mentre se $E = 1$ avremo $CLK \ \code{AND} \ E = CLK$, trovadonci quindi nella situazione di un Flip-Flop normale. Oltre all'\code{AND}, esiste un altro modo per implementare l'enable, più consigliato perché non va a toccare il $CL$: un MUX. Banalmente, basta usare $EN$ come bit di selezione, e avere in input $Q_{\text{prev}}$ quando $EN = 0$ e $D$ quando $EN = 1$. Troviamo quindi il seguente circuito:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Flip Flop Enable.png}
+\caption{Flip-Flop con enable}
+\label{fig-flip-flop-enable}
+\end{figure}
+
+Per quanto riguarda l'input $RESET$ abbiamo sempre due casi. Per un reset sincrono, bisogna prendere $D$ e metterlo in \code{AND} con $\overline{RESET}$. In questo modo, se $RESET = 0$ avremo $D \code{AND} 1 = D$, che è corretto dato che $RESET = 0$ non deve modificare in alcun modo il circuito, mentre se abbiamo $RESET = 1$ avremo $D \code{AND} 0 = 0$, che è corretto dato che con $RESET = 1$ vogliamo che, alla prossima salita di $CLK$, $Q$ diventi 0. Troviamo quindi il seguente circuito:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Flip Flop reset sincrono.png}
+\caption{Flip-Flop con reset sincrono}
+\label{fig-flip-flop-reset-sincrono}
+\end{figure}
+
+Per un reset asincrono, invece, la questione si fa più complessa. Si potrebbe pensare di mettere semplicemente in \code{AND} $Q$ e $\overline{RESET}$, un po come fatto con $D$ nel reset sincrono, ma questo non funziona per un motivo molto semplice: nonostante stiamo effettivamente modificando il dato in uscita, il valore interno nel Flip-Flop non viene mai toccato, e quindi annullato. Per capire come creare un vero reset asincrono, dobbiamo tornare alla rappresentazione più interna di un Flip-Flop, ossia quella formata da due SR Latch, e rappresentare entrambi gli SR Latch con la propria rappresentazione interna:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Flip Flop SR latch.png}
+\end{figure}
+
+A questo punto applichiamo una modifica semplicissima: in entrambi gli SR Latch, aggiungiamo al \code{NOR} con output $N$ e $Q$ un altro input, ossia $RESET$. In questo modo, se poniamo $RESET = 1$, avremo in modo istantaneo $N = 0$ e $Q = 0$, annulando di fatto il valore di $Q$ in tutto il circuto. Troviamo quindi il seguente circuito:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Flip Flop reset asincrono.png}
+\caption{Flip-Flop con reset asincrono}
+\label{fig-flip-flop-reset-asincrono}
+\end{figure}
+
+
+\begin{minipage}[c]{0.50\textwidth}
+Rappresentiamo un Flip-Flop con enable e reset come un Flip-Flop con la scritta RESET in basso e senza evidenziare la variabile $\bar{Q}$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=0.6\textwidth, valign=t]{Flip Flop rappresentazione.png}
+\end{minipage}
+
+I Flip-Flop con enable sono fondamentali e molto utilizzati per i registri. Infatti, in un sistema più complesso con decine di registri che lavorano sullo stesso clock globale, avere un segnale di enable e uno di reset è fondamentale per poter selezionare quali registri far lavorare e quali mantenere in hold. Ad esempio, il circuito
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Flip Flop multiplo con enable e reset.png}
+\end{figure}
+
+rappresenta un registro con enable e reset (\NB le linee più spesse rappresentano Flip-Flop in parallelo).
 
 \end{document}
