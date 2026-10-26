@@ -2128,7 +2128,7 @@ Questa è comoda quando abbiamo due o più relazioni nella query, ma è necessar
 
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
-    Paternità
+    Paternita
 
 \begin{tabular}{|l|l|}
 \hline
@@ -2159,7 +2159,7 @@ E voglimo creare una nuova relazione con tutti i figli che guadagnano più del p
 
 \begin{lstlisting}
 SELECT Figlio, f.Reddito as Reddito, p.Reddito as RedditoPadre
-FROM Persone p, Paternità, Persone f
+FROM Persone p, Paternita, Persone f
 WHERE p.Reddito < f.Reddito AND p.Nome = Padre AND f.Nome = Figlio
 \end{lstlisting}
 
@@ -2176,14 +2176,14 @@ Antonio & 1500 & 1000 \\ \hline
 Abbiamo detto che SQL da solo decide quando effettuare un join e quando effettuare un prodotto cartesiano senza che noi facciamo nulla, ma in realtà è possibile anche effettuare un \textbf{join esplicito}. Per capire meglio come vediamo un esempio. Ipotizziamo di voler creare una relazione con Figlio, Padre e Reddito Padre. Normalmente noi scriveremmo la query
 \begin{lstlisting}
 SELECT Figlio, Padre, Reddito as RedditoPadre
-FROM Paternità, Persone
+FROM Paternita, Persone
 WHERE Nome = Padre AND Reddito > 1000
 \end{lstlisting}
 
 Potremmo però anche scriverla in quest'altro modo, utilizzando proprio un join esplicito:
 \begin{lstlisting}
 SELECT Figlio, Padre, Reddito as RedditoPadre
-FROM Paternità join Persone on Nome = Padre 
+FROM Paternita join Persone on Nome = Padre 
 WHERE Reddito > 1000
 \end{lstlisting}
 
@@ -2419,5 +2419,138 @@ Questo procedimento è quello standard per trovare il minimo di una relazione in
 Arrivati a questo punto non ci resta che fare un $\theta$ join con la relazione Dipendente e poi con la relazione Progetto e proiettare tutto. Troviamo quindi che \mbox{Sol = $\pi_{\text{Nome}, \text{Cognome}, \text{DataN}, \text{DipenId}, \text{Titolo}, \text{ProgId}}((\text{Min} \bowtie_{\text{DipenId} = \text{Id}} \text{Dipendente}) \bowtie_{\text{ProgId} = \text{Id}} \text{Progetto})$}. \\
 \NB Abbiamo aggiunto nella soluzione anche DipenId e ProgId. Nonostante questi non fossero esplicitamente richiesti dalla traccia è sempre buona norma portare con sé le chiavi delle entità coinvolte, che possono essere sempre utili per identificare in modo univoco una o più istanze.
 
+\subsection{Operatori avanzati in SQL}
+
+\subsubsection*{Operatori aggregati}
+
+\begin{Definizione}[Operatori aggregati]
+\label{def-operatori-aggregati}
+Gli \textbf{operatori aggregati} sono operatori che lavorano non sulle singole tuple ma sugli insiemi di tuple. Questi sono messi a disposizione da SQL, ma non esiste alcuna controparte in algebra relazionale.
+\end{Definizione}
+
+L'operatore \codeb{COUNT} è un operatore aggregato che conta tutte le tuple che rispettano una certa condizione. Ad esempio, se vogliamo contare il numero di figli di Paolo scriveremmo
+\begin{lstlisting}
+SELECT count(*) as NumFigliDiFranco
+FROM Paternita
+WHERE Padre = "Paolo"
+\end{lstlisting}
+
+Possiamo anche aggiungere alla funzione count il nome di un attributo, scrivendo \code{count(attributo)}, contando così il numero di tuple in cui quell'attributo non è nullo. Se scriviamo poi anche \code{count(distinct attributo)}, non solo contiamo le tuple dove l'attributo non è nullo, ma evitiamo di contare anche tutti i duplicati.
+
+Esistono poi altri operatori aggregati come \codeb{SUM,AVG,MAX} e \codeb{MIN} che ci permettono, rispettivamente, di calcolare la somma, la media, il massimo e il minimo di un insieme di valori. Ovviamente queste operazioni hanno senso solo su attributi numerici (non possiamo fare la media di tante stringhe, ovviamente), e in questi operatori tutte le tuple con valore \code{NULL} sono sempre evitate.
+
+Vediamo ora una query errata con gli operatori aggregati:
+\begin{lstlisting}
+SELECT Nome, MAX(Reddito)
+FROM Persone
+\end{lstlisting}
+
+Quale nome dovremmo affiancare al valore \code{MAX(Reddito)} nella relazione risultante? Nessuno dei nomi presenti nella relazione Persone è un nome corretto da affiancare al valore \code{MAX(Reddito)}, dunque ci ritroveremmo con una relazione con tante righe con tutti i nomi affiancati dal \code{MAX(Reddito)}, che non ha senso. In questo caso, diciamo che la \textbf{target list} (ossia l'insieme degli attributi di una query) è errata. Infatti questa deve essere \textit{omogenea}, dunque o sono presenti solo operatori aggregati oppure non ne deve essere presente nemmeno uno. In questo caso, per rendere la query sensata, avremmo dovuto aggiungere la clausola \code{WHERE Reddito = MAX(Reddito)}, trovando così una relazione con tante tuple quanti sono le persone con reddito massimo.
+
+Un'altro operatore aggregato importante è il \codeb{GROUP BY}. Scrivendo \code{GROUP BY ListaAttributi} possiamo raggruppare tutte le tuple di una relazione che hanno valori uguali per tutti gli attributi presenti nella lista di attributi. Questo operatore ci permette anche di avere target list non omogenee che funzionano lo stesso. Ad esempio, la query
+
+\begin{lstlisting}
+SELECT Padre, count(*) as NumFigliDiFranco
+FROM Paternita
+GROUP BY Padre
+\end{lstlisting}
+
+crea una relazione con il numero di figli non solo di Paolo, ma di tutti i diversi padri. Ad esempio, partendo dalla relazione
+
+\begin{center}
+Paternita \nopagebreak
+    
+\begin{tabular}{|l|l|}\hline
+\textbf{Padre} & \textbf{Figlio}   \\ \hline
+Paolo & Luigi \\
+Paolo & Mario \\
+Fabrizio & Antonio \\
+Diego & Giuseppe \\
+Diego & Pietro \\ \hline
+\end{tabular}
+\end{center}
+
+troveremmo la tabella
+
+\begin{center} 
+\begin{tabular}{|l|l|}\hline
+\textbf{Padre} & \textbf{NumFigliDiFranco}   \\ \hline
+Paolo & 2 \\
+Fabrizio & 1 \\
+Diego & 2 \\ \hline
+\end{tabular}
+\end{center}
+
+Dunque il GROUP BY ci permette di creare target list non omogenee, con operatori aggregati e non insieme. La condizione fondamentale, però, è che tutto ciò che nel SELECT non è un operatore aggregato \textbf{vada nel GROUP BY}. Ad esempio, la query 
+\begin{lstlisting}
+SELECT Padre, AVG(f.Reddito), p.Reddito 
+FROM Persone f join Paternita on Figlio = Nome join Persone p on Padre = p.Nome
+GROUP BY Padre
+\end{lstlisting}
+
+è errata, perché non abbiamo messo \code{p.Reddito} nel GROUP BY. Se avessimo un padre con più redditi il SELECT su \code{p.Reddito}  non avrebbe più senso (torniamo al problema del Nome visto priam con la query riguardo il MAX(Reddito)).
+
+Possiamo poi aggiungere delle condizioni ai raggruppamenti. Ad esempio, se volessimo solo i padri i cui figli hanno un reddito medio $\geq 25$, possiamo aggiungere questa condizione scrivendo \codeb{HAVING AVG(F.Reddito) >= 25}. Non possiamo scrivere questa condizione con il \code{WHERE} sia perché questo opera sulle singole tuple, dunque aggiungergli una condizione con un operatore aggregato in mezzo non ha senso.
+
+\subsubsection*{Operatori insiemistici}
+
+Vediamo ora tutti gli operatori insiemistici in SQL che già abbiamo accennato in algebra relazionale. Ricordiamo che queste operazioni sono effettuabili sono tra tabelle \textit{union compatibili}.
+
+Per effettuare un unione aggiungiamo la parola chiave \codeb{UNION} tra due query. Ad esempio, la query
+
+\begin{lstlisting}
+SELECT Padre, Figlio
+FROM paternita
+UNION
+SELECT Madre, Figlio
+FROM maternita
+\end{lstlisting}
+
+restituirà una relazione con tutti i padri e i rispettivi figli e tutte le madri e i rispettivi figli. Notiamo però un problema: che nome diamo al primo attributo? Madre o Padre? Per convenzione viene sempre data la priorità ai nomi degli attributi del primo operando, dunque avremo come risutlato una relazione con attributi Padre e Figlio. In questo caso, dato che Padre Figlio non ha molto senso per la tabella risultante, dovremmo effettuare una rinominazione sulla prima relazione, scrivendo \code{SELECT Padre as Genitore, Figlio} al posto del semplice \code{SELECT Padre, Figlio}.  \\
+\NB L'ordine degli attributi è importante: non aveva senso scrivere \code{SELECT Figlio Padre as Genitore} e poi \code{SELECT Madre Figlio}, perché avremmo avuto una relazione con tutte le madri nella colonna dei genitori e tutti i figli nella colonna dei padri.
+
+Per effettuare una differenza invece aggiungiamo la parola chiave \codeb{EXCEPT} tra due query. Anche qui, come per l'unione, i nomi degli attributi della relazione finale saranno quelli ereditati dalla prima relazione. Ricordiamo che, come nell'algebra relazionale, le differenze in SQL NON sono commutative. Ad esempio, la query 
+
+\begin{lstlisting}
+SELECT Nome
+FROM Impiegato
+EXCEPT
+SELECT Cognome
+FROM Impiegato
+\end{lstlisting}
+
+restituisce tutti i nomi di impegati che non sono cognomi di qualche impiegato.
+
+Infine, per effettuareun intersezione aggiungiamo la parola chiave \codeb{INTERSECT} tra due query. 
+
+\subsubsection*{Interrogazioni nidificate}
+
+È possibile anche effettuare una \textbf{query in una query}. Per capire come fuzionano vediamo un esempio. Ipotizziamo di voler trovare il nome e il reddito del padre di Franco. Possiamo scrivere
+
+\begin{lstlisting}
+SELECT Nome, Reddito
+FROM Persone, Paternita
+WHERE Nome = Padre and Figlio = "Franco"
+\end{lstlisting}
+
+ma possiamo anche scriverla in modo equivalente attraverso le \textbf{interrogazioni nidificate}, in questo modo:
+
+\begin{lstlisting}
+SELECT Nome, Reddito
+FROM Persone
+WHERE Nome = (SELECT Padre
+              FROM Paternita
+              WHERE Figlio = "Franco")
+\end{lstlisting}    
+
+In questo caso abbiamo scritto Nome = query\_interna. Questo funziona perché figlio nella relazione Paternita è chiave, dunque sappiamo che da quella query uscirà al più un valore. Se invece avessimo come risultato una relazione con più di una tupla, non avremmo dovuto scrivere \code{=} ma avremmo dovuto utilizzare l'operatore di appartenenza \codeb{= ANY} o \codeb{IN} (che si traducono entrambi in "appartiene a"). Se invece volessimo tutti i Nomi che NON appartengono alla relazione restituita dalla query interna dovremmo scrivere \codeb{<> ALL} o \codeb{NOT IN} (che si traducono in "non appartiene a").
+
+\begin{Proprieta}[Regole delle interrogazioni nidificate]
+\label{prop-regole-interr-nd}
+\begin{itemize}
+    \item Le query più interne NON possono contenere al proprio interno degli operatori insiemistici
+    \item Non si può fare riferimento a variabili definite in blocchi più interni (con ad esempio nomi temporanei definiti con l'operatore \code{as}), ma si può fare riferimetno a variabili definite in blocchi più esterni
+\end{itemize}
+\end{Proprieta} 
 
 \end{document}
