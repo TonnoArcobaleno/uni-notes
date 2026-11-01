@@ -1385,7 +1385,7 @@ se poniamo i diversi input del nostro multiplexer tutti a 0 tranne che per l'ult
 \includegraphics[width=0.4\textwidth]{MUX a 4 AND.png}
 \end{figure}
 
-dove la freccia verso il basso indica un input fisso di $0$, mentre la barretta indica un input fisso di $1$. Abbiamo quindi rappresentato la funzione $Y = AB$, ossia la porta logica \code{AND}, tramite un MUX a 4 ingressi. Notiamo però che possiamo migliorare questa rappresentazione utilizzando un MUX a soli due ingressi. Infatti, modificando la tabella della verità in questo modo
+dove la freccia verso il basso indica un input fisso di $0$ (prende il nome di \textit{massa}), mentre la barretta indica un input fisso di $1$. Abbiamo quindi rappresentato la funzione $Y = AB$, ossia la porta logica \code{AND}, tramite un MUX a 4 ingressi. Notiamo però che possiamo migliorare questa rappresentazione utilizzando un MUX a soli due ingressi. Infatti, modificando la tabella della verità in questo modo
 \[
 \begin{array}{c|c}
 A & Y \\
@@ -1647,7 +1647,16 @@ Un \textbf{circuito bistabile} è un circuito \textit{stabile} con, nella forma 
 \caption{Due rappresentazioni interne di un circuito bistabile}
 \end{figure}
 
-Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, se in qualche modo riuscissimo a modificare il valore di $Q$ e metterlo a $0$ ad esempio, questo rimarebbe sempre a $0$ non cambierebbe mai, e stessa cosa se lo mettessimo a $1$. Il problema di questo circuito è proprio che manca il modo per poter modificare il valore di $Q$. Per questo motivo introduciamo dei nuovi circuiti chiamati \textbf{SR Latch}.
+Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, se in qualche modo riuscissimo a modificare il valore di $Q$ e metterlo a $0$ ad esempio, questo rimarebbe sempre a $0$ non cambierebbe mai, e stessa cosa se lo mettessimo a $1$. Un circuito che invece non è stabile è ad esempio il circuito \textbf{astabile}:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Astabile.png}
+\end{figure}
+
+Qui il valore di $Q$ cambia ad ogni \textbf{ciclo}: se inizia con $0$, alla fine del primo ciclo avrà come valore $1$, e solo alla fine del secondo ciclo avrà di nuovo come valore $0$.
+
+Tornando al circuito bistabile, c'è però un grosso problema: non è possibile modificare il valore salvato all'interno. Per questo motivo introduciamo dei nuovi circuiti chiamati \textbf{SR Latch}.
 
 \subsection{SR Latch}
 
@@ -1762,7 +1771,7 @@ Dunque troviamo che se $CLK = 0$ allora $Q$ rimane uguale, in stato di hold, men
 \NB Se avessimo voluto rappresentare un Flip-Flop negative edge triggered avremmo usato $CLK$ nel primo D Latch e $\overline{CLK}$ nel secondo D Latch.
 
 \begin{minipage}[c]{0.50\textwidth}
-Rappresentiamo un D Flip-Flop come un D Latch ma con un triangolo in alto al posto della variabile $CLK$.
+Rappresentiamo un D Flip-Flop come un D Latch ma con un triangolo in alto al posto della scritta $CLK$.
 \end{minipage}\hfill
 \begin{minipage}[c]{0.45\textwidth}
 \centering
@@ -1816,26 +1825,10 @@ Per quanto riguarda l'input $RESET$ abbiamo sempre due casi. Per un reset sincro
 \label{fig-flip-flop-reset-sincrono}
 \end{figure}
 
-Per un reset asincrono, invece, la questione si fa più complessa. Si potrebbe pensare di mettere semplicemente in \code{AND} $Q$ e $\overline{RESET}$, un po come fatto con $D$ nel reset sincrono, ma questo non funziona per un motivo molto semplice: nonostante stiamo effettivamente modificando il dato in uscita, il valore interno nel Flip-Flop non viene mai toccato, e quindi annullato. Per capire come creare un vero reset asincrono, dobbiamo tornare alla rappresentazione più interna di un Flip-Flop, ossia quella formata da due SR Latch, e rappresentare entrambi gli SR Latch con la propria rappresentazione interna:
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{Flip Flop SR latch.png}
-\end{figure}
-
-A questo punto applichiamo una modifica semplicissima: in entrambi gli SR Latch, aggiungiamo al \code{NOR} con output $N$ e $Q$ un altro input, ossia $RESET$. In questo modo, se poniamo $RESET = 1$, avremo in modo istantaneo $N = 0$ e $Q = 0$, annulando di fatto il valore di $Q$ in tutto il circuto. Troviamo quindi il seguente circuito:
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=1\textwidth]{Flip Flop reset asincrono.png}
-\caption{Flip-Flop con reset asincrono}
-\label{fig-flip-flop-reset-asincrono}
-\end{figure}
-
-\NB Se $CLK = 0$ e $D = 1$, nel latch SR master si ha $S = 1$ e quindi $\bar{N} = 0$. Se si ha poi anche $RESET = 1$,torniamo a uno stato invalido, dato che anche $N = 0$. Questo però non crea problemi: lo slave infatti riceve in ingresso solo $N = 0$ ($\bar{N}$ è infatti inutilizzato), dunque non viene propagato nessun valore errato e le sue uscite restano corrette, con $Q = 0$ e $\bar{Q} = 1$. Quando $RESET$ tornerà a $0$, il master tornerà da solo a uno stato valido, seguendo $D$.
+Il caso del reset asincorno, invece, non lo vediamo.
 
 \begin{minipage}[c]{0.50\textwidth}
-Rappresentiamo un Flip-Flop con enable e reset come un Flip-Flop con la scritta RESET in basso e senza evidenziare la variabile $\bar{Q}$.
+Rappresentiamo un Flip-Flop con enable e reset come un Flip-Flop con la scritta EN e RESET (o anche solo R) in basso e senza evidenziare la variabile $\bar{Q}$ (per rappresentare un Flip-Flop con solo enable o solo reset basta scrivere solo uno dei due nomi).
 \end{minipage}\hfill
 \begin{minipage}[c]{0.45\textwidth}
 \centering
@@ -1850,5 +1843,353 @@ I Flip-Flop con enable sono fondamentali e molto utilizzati per i registri. Infa
 \end{figure}
 
 rappresenta un registro con enable e reset (\NB le linee più spesse rappresentano Flip-Flop in parallelo).
+
+Oltre ai D Flip-Flop con reset esistono anche i Flip-Flop con \textbf{set}. Questo lavora all'opposto del reset, dunque quando $SET = 1$ non abbiamo $Q = 0$ ma $Q = 1$. In un Flip-Flop si può usare un reset o un set, non fa differenza perché entrambi hanno lo stesso obiettivo, ossia portare $Q$ a uno stato noto. 
+
+\subsection{Altri Flip-Flop}
+
+Oltre ai D Flip-Flop esistono altri due tipi di Flip-Flop:
+\begin{itemize}
+    \item \textbf{T Flip-Flop} (Toggle Flip-Flop)
+    \item \textbf{JK Flip-Flop}
+\end{itemize}
+
+\begin{Definizione}[T Flip-Flop]
+\label{def-t-flip-flop}
+Un \textbf{T Flip-Flop} è un è un D Flip-Flop che, ad ogni salita del $CLK$, passa da $Q$ a $\bar{Q}$.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{T Flip Flop interno.png}
+\caption{Rappresentazione interna di un T Flip-Flop base utilizzando un D Flip-Flop}
+\label{fig-flip-flop-interno}
+\end{figure}
+
+\begin{minipage}[c]{0.55\textwidth}
+Rappresentiamo un T Flip-Flop come un D Flip-Flop ma con la $T$ al posto della $D$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{T Flip Flop rappresentazione.png}
+\end{minipage}
+
+\begin{Definizione}[JK Flip-Flop]
+\label{def-jk-flip-flop}
+Un \textbf{JK Flip-Flop} è un D Flip-Flop che ha, oltre al $CLK$, altri due input: $J$ e $K$. Ci sono quattro possibili casi:
+\begin{itemize}
+    \item Se $J = 0$ e $K = 0$ allora $Q = Q_{\text{prev}}$
+    \item Se $J = 0$ e $K = 1$ allora $Q = 0$
+    \item Se $J = 1$ e $K = 0$ allora $Q = 1$
+    \item Se $J = 1$ e $K = 1$ allora $Q = \bar{Q_{\text{prev}}}$
+\end{itemize}
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{JK Flip flop interno.png}
+\caption{Rappresentazione interna di un JK Flip-Flop base utilizzando un D Flip-Flop}
+\label{fig-JK-flip-flop}
+\end{figure}
+
+\begin{minipage}[c]{0.55\textwidth}
+Rappresentiamo un JK Flip-Flop come un D-Flip-Flop ma con in ingresso $J$ e $K$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{JK FlipFlop rappresentazione.png}
+\end{minipage}
+
+Comunque, quando parleremo di Flip-Flop senza specificare ci riferiremo sempre a un D-Flip-Flop.
+
+\section{Progettazione logica sequenziale sincrona}
+
+\begin{Definizione}[Progettazione logica sequenziale sincrona]
+\label{def-progettazione-logica-sequenziale-sincrona}
+La \textbf{progettazione logica sequenziale sincrona} è una metodologia di costruzione dei circuiti sequenziali.
+\end{Definizione}
+
+\begin{Proprieta}[Regole della progettazione logica sequenziale sincrona]
+\label{prop-regole-progettazione-sequenziale-sincrona}
+\begin{enumerate}
+    \item Ogni elemento del circuito è un \textbf{registro} o un \textbf{circuito combinatorio}
+    \item Almeno un elemento deve essere un registro
+    \item Tutti i registri sono collegati allo stesso clock ($CLK$)
+    \item Ogni ciclo presente deve essere interrotto da almeno un registro
+\end{enumerate}
+\end{Proprieta}
+
+Esistono due tipi di circuiti sequenziali sincroni:
+\begin{itemize}
+    \item \textbf{FSM} 
+    \item \textbf{Pipelines}
+\end{itemize}
+
+\subsection{FSM}
+
+\begin{Definizione}[FSM]
+\label{det-FSM}
+Una \textbf{FSM} (Finite State Machines, o Macchina a Stati Finiti) è un circuito sequenziale sincrono con due circuiti combionatori:
+\begin{itemize}
+    \item Il primo circuito combinatorio si occupa di generare il \textbf{prossimo stato} del registro, e prende il nome di \textbf{Next State Logic}
+    \item Il secondo circuito combinatorio si occupa di generare gli \textbf{output} del circuito sequenziale, e prende il nome di \textbf{Output Logic}
+\end{itemize}
+\end{Definizione}
+
+Il prossimo stato è sempre determinato dagli input e dal Current State (stato corrente), mentre, in base a come sono determinati gli output, distinguiamo due tipi di FSM:
+\begin{itemize}
+    \item \textbf{Moore FSM}, dove l'output è determinato solo dallo \textbf{stato corrente}
+    \item \textbf{Mealy FSM}, dove l'output è determinato sia dallo \textbf{stato corrente} che dagli \textbf{input}
+\end{itemize}
+
+Per capire bene questi circuiti sequenziali sincroni la cosa migliore è fare qualche esempio. 
+
+\subsubsection*{Moore FSM}
+
+Ipotizziamo quindi di voler rappresentare un semaforo all'incrocio tra due strade: $A$ e $B$. Prendiamo quindi in input $T_A$ e $T_B$, che valgono $1$ se c'è traffico nella loro strada e $0$ se non c'è, e mandiamo in output $L_A$ e $L_B$, che rappresentano la luce del semaforo sulla rispettiva strada (vedremo dopo come rappresentare i vari colori in binario). Vogliamo che, se c'è traffico sulla strada con la luce attuale rossa e non c'è traffico sulla strada con la luce attuale verde, i semafori si invertano, passando prima dal verde al giallo e poi dal giallo al rosso e dal rosso al verde. Ipotizziamo poi di avere un $RESET$ che ci riporti allo stato noto $L_A = \text{Verde}$ e $L_B = \text{Rosso}$. 
+
+Creiamo per questo esempio una Moore FSM. Per farla, utilizziamo dei cerchi, che rappresentano i vari stati del circuito, e degli archi, che indicano le transizioni da uno stato a un altro. In questo caso avremo una FSM di questo tipo:
+
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Semafori FSM.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Semafori FSM 2.png}
+\end{minipage}
+
+\NB Abbiamo due rappresentazioni del tutto equivalenti qui, ma per comodità useremo spesso la 1°, con $T_A$ e $T_B$ scritti in modo esplcito.
+
+Vediamo ora la \textbf{tabella di transizione degli stati}, ossia la tabella che, preso uno stato di partenza e degli input, ci dice quale sarà il prossimo stato (stiamo quindi scrivendo in tabella la logica del circuito combinatorio next state).
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Stato corrente} & \multicolumn{2}{c|}{\textbf{Input}} & \textbf{Stato successivo} \\
+    \hline
+    $\bm{S}$ & $\bm{T_A}$ & $\bm{T_B}$ & $\bm{S'}$ \\
+    \hline
+    $S_0$ & 0 & X & $S_1$ \\
+    $S_0$ & 1 & X & $S_0$ \\
+    $S_1$ & X & X & $S_2$ \\
+    $S_2$ & X & 0 & $S_3$ \\
+    $S_2$ & X & 1 & $S_2$ \\
+    $S_3$ & X & X & $S_0$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\NB $S'$ in questo caso NON indica $\bar{S}$ ma indica lo stato successivo di $S$ (usiamo questa notazione per non dover scrivere sempre $S_{\text{prev}}$ o $S_{\text{succ}}$).
+
+Dobbiamo ora però tradurre i nostri quattro possibili stati in $0$ e $1$. Possiamo farlo usando due codifiche:
+\begin{itemize}
+    \item Classico binario, usando due bit
+    \item \textbf{One-hot}, una codifica che abbiamo già accennato in passato e che fa utilizzo di 4 bit per rappresentare tutti gli stati: in questo caso ogni sequenza assegnata a uno stato avrà tutti 0 tranne uno dei 4 bit che sarà 1
+\end{itemize}
+
+Utilizzando la codifica binaria possiamo tradurre ogni stato in questo modo:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Stato} & \textbf{Codifica} \\
+    \hline
+    $S_0$ & $00$ \\
+    $S_1$ & $01$ \\
+    $S_2$ & $10$ \\
+    $S_3$ & $11$ \\ \hline
+  \end{tabular}
+\end{table}
+
+Mentre utilizzando la codifica one-hot possiamo farlo in quest'altro modo: 
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Stato} & \textbf{Codifica} \\
+    \hline
+    $S_0$ & $0001$ \\
+    $S_1$ & $0010$ \\
+    $S_2$ & $0100$ \\
+    $S_3$ & $1000$ \\ \hline
+  \end{tabular}
+\end{table}
+
+Per questo esempio scegliamo di usare la codifica binaria. Riscriviamo dunque la tabella di transizione degli stati sostituendo ogni stato con la sua corrispettiva codifica:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Stato corrente}} &
+    \multicolumn{2}{c|}{\textbf{Input}} &
+    \multicolumn{2}{c|}{\textbf{Stato successivo}} \\
+    \hline
+    $\bm{Q_1}$ & $\bm{Q_0}$ & $\bm{T_A}$ & $\bm{T_B}$ & $\bm{D_1}$ & $\bm{D_0}$ \\
+    \hline
+    0 & 0 & 0 & X & 0 & 1 \\
+    0 & 0 & 1 & X & 0 & 0 \\
+    0 & 1 & X & X & 1 & 0 \\
+    1 & 0 & X & 0 & 1 & 1 \\
+    1 & 0 & X & 1 & 1 & 0 \\
+    1 & 1 & X & X & 0 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\NB Abbiamo usato in questo caso $Q_i$ e $D_i$ al posto di $S_i$ e $S_i'$ per maggiore chiarezza, ma è possibile scriverlo in entrambi i modi.
+
+Troviamo quindi che \mbox{$D_1 = \bar{Q_1} Q_0 + Q_1 \bar{Q_0} \bar{T_B} + Q_1 \bar{Q_0} T_B = \bar{Q_1} Q_0 + Q_1 \bar{Q_0} = Q_1 \oplus Q_0 $}, e che \mbox{$D_0 = \bar{Q_1} \bar{Q_0} \bar{T_A} + Q_1 \bar{Q_0} \bar{T_B}$}.
+
+Vediamo ora invece la \textbf{tabella degli ouput}:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Stato corrente}} &
+    \multicolumn{2}{c|}{\textbf{Output}} \\
+    \hline
+    $\bm{Q_1}$ & $\bm{Q_0}$ & $\bm{L_A}$ & $\bm{L_B}$ \\
+    \hline
+    $0$ & $0$ & Verde & Rosso \\
+    $0$ & $1$ & Giallo & Rosso \\
+    $1$ & $0$ & Rosso & Verde \\
+    $1$ & $1$ & Rosso & Giallo \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Da questa tabella è evidente che questa FSM è una FSM di Moore. Infatti qui non sono presenti gli input $T_A$ e $T_B$, dunque possiamo dedurre che gli output NON dipendono dagli input. 
+
+Anche qui dobbiamo scegliere una codifica per le diverse luci. Scegliamo la one-hot in questo caso:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Luce} & \textbf{Codifica} \\
+    \hline
+    Verde & $001$ \\
+    Giallo & $010$ \\
+    Rosso & $100$ \\ \hline
+  \end{tabular}
+\end{table}
+
+Dunque troviamo questa come tabella degli output finale:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Stato corrente}} &
+    \multicolumn{6}{c|}{\textbf{Output}} \\
+    \hline
+    $\bm{Q_1}$ & $\bm{Q_0}$ & $\bm{L_{A_2}}$ &$\bm{L_{A_1}}$ & $L_{A_0}$ & $L_{B_2}$ & $\bm{L_{B_1}}$ & $L_{B_0}$ \\
+    \hline
+    $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ \\
+    $0$ & $1$ & $0$ & $1$ & $0$ & $1$ & $0$ & $0$ \\
+    $1$ & $0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $1$ \\
+    $1$ & $1$ & $1$ & $0$ & $0$ & $0$ & $1$ & $0$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Dunque troviamo:
+\begin{itemize}
+    \item $L_{A_2} = Q_1 \bar{Q_0} + Q_1 Q_0 = Q_1$
+    \item $L_{A_1} = \bar{Q_1} Q_0$
+    \item $L_{A_0} = \bar{Q_1} \bar{Q_0}$
+    \item $L_{B_2} = \bar{Q_1} \bar{Q_0} + \bar{Q_1} Q_0 = \bar{Q_1}$ 
+    \item $L_{B_1} = Q_1 Q_0$
+    \item $L_{B_0} = Q_1 \bar{Q_0}$
+\end{itemize} 
+
+Possiamo dunque tradurre questo circuito sequenziale sincrono con questo schema:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Semafori finale.png}
+\end{figure}
+
+A sinistra del registro abbiamo la NSL (Next State Logic), mentre a destra la OL (Output Logic).
+
+Ipotizzando ora di avere un $CLK$ con un periodo di $5$ secondi, vediamo come si muove il nostro circuito:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Diagramma semafori.png}
+\end{figure}
+
+Notiamo come $S$ cambi solo in corrispondenza di un $RESET = 1$ o di una salita del $CLK$, mentre $S'$ cambia subito in base agli input. Questo ha super senso: infatti $S'$ è l'output del Next State Logic, ossia di un circuito combinatorio, mentre $S$ è l'output del registro, ossia di tanti D Flip-Flop. $L_A$ e $L_B$, invece, cambiano appena $S$ cambia, in modo istantaneo senza aspettare il $CLK$, dato che anche loro fanno parte di un circuito combinatorio, ossia l'Output Logic.
+
+\subsubsection*{Mealy FSM}
+
+Vediamo ora un altro esempio. Ipotizziamo di avere una sequenza lunghissima di $1$ e $0$, e di voler restituire in output $1$ se gli ultimi due numeri letti sono, nell'ordine, $01$, e restituire $0$ se invece non lo sono. 
+
+Creiamo per questo esempio una Mealy FSM. Per farla, utilizziamo sempre dei cerchi per i vari stati e degli archi per le varie transizioni. La differenza maggiore con un Moore FSM è che qui ogni stato non ha un output prestabilito, dato che questo dipende anche dagli input. Dunque, su ogni arco, dobbiamo scrivere non solo gli input che ci portano a percorrere quell'arco ma anche l'output che ne fuoriesce. Tutto ciò si traduce quindi in questo schema:
+
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Mealy Lumaca.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Mealy Lumaca 2.png}
+\end{minipage}
+
+Anche qui abbiamo due rappresentazioni del tutto equivalenti: a sinistra della sbarra c'è sempre l'input, mentre a destra c'è l'output corrispettivo.
+
+Vediamo ora la tabella di transizione degli stati e degli output (le vediamo insieme, dato che sia gli input che gli stati sono importanti per l'output finale), codificando semplicemente $S_0$ a $0$ e $S_1$ a $1$:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Stato corrente} & \textbf{Input} & \textbf{Stato successivo} & \textbf{Output} \\
+    \hline
+    $\bm{S}$ & $\bm{X}$ & $\bm{S'}$ & $\bm{Y}$ \\ \hline
+    $0$ & $0$ & $1$ & $0$ \\
+    $0$ & $1$ & $0$ & $0$ \\
+    $1$ & $0$ & $1$ & $0$ \\
+    $1$ & $1$ & $0$ & $1$ \\ 
+    \hline
+  \end{tabular}
+\end{table}
+
+Dunque troviamo $S' = \bar{S} \bar{X} + S \bar{X} = \bar{X}$ e $Y = SX$, che si traduce in questo circuito molto semplice:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Schema Mealy.png}
+\end{figure}
+
+Questo stesso esempio avremmo potuto risolverlo con un Moody FSM, in questo modo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Moore Lumaca.png}
+\end{figure}
+
+\begin{Proposizione}[]
+\label{propos-moore-mealy}
+Un circuito sequenziale sincrono può sempre essere rappresentato con una FSM Moore o Mealy, ma quella Mealy avrà sempre \textbf{meno stati}.
+\end{Proposizione}
+
+Ipotizzando di avere sempre un $CLK$ con un periodo di 5 secondi, vediamo come si muovono i due circuiti Moore e Mealy:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Tempo Lumaca.png}
+\end{figure}
+
+Notiamo una cosa importante: in Moore, $Y$ cambia solo quando abbiamo una salita nel $CLK$, mentre in Moore cambia subito, non appena l'input passa da $0$ a $1$. Per questo motivo, a volte si potrebbe preferire usare uno o l'altro: se magari si vuole un sistema più controllato, Moore è la scelta corretta, mentre se si vuole precisione quasi istantanea meglio Mealy.
+
+
+
 
 \end{document}
