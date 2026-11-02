@@ -333,8 +333,8 @@ Questo riduce notevolmente il cache thrashing (dato che vi è spazio per più di
 
 Vi sono due tipi di memoria secondaria:
 \begin{itemize}
-    \item \textbf{HDD} (Hard Disk Drivers), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, ruoti, e legga/scriva sulla superficia meccanica. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
-    \item \textbf{SSD} (Solid State Drivers), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
+    \item \textbf{HDD} (Hard Disk Drive), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, ruoti, e legga/scriva sulla superficia meccanica. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
+    \item \textbf{SSD} (Solid State Drive), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
 \end{itemize}
 
 \subsection{I/O}
