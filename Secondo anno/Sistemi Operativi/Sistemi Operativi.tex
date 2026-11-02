@@ -183,7 +183,7 @@ Una pipeline standard si divide in \textbf{5 stage}:
 
 Tramite il Pipelining l'output ideale sarebbe di eseguire un'istruzione per clock cycle, ma questo è spesso quasi impossibile perché vi sono diversi \textbf{hazards} che rallentano la pipeline. Si dividono in:
 \begin{itemize}
-    \item \textbf{Structural Hazards}, quando due istruzioni diverse hanno bisogno dello stesso hardware fisico e duqnue non possono essere eseguite contemporaneamente.
+    \item \textbf{Structural Hazards}, quando due istruzioni diverse hanno bisogno dello stesso hardware fisico e dunque non possono essere eseguite contemporaneamente.
     \item \textbf{Data Hazards}, quando un'istruzione dipende dal risultato di un'altra e dunque deve aspettare che questa finisca.
     \item \textbf{Control Hazards}, quando il PC viene modificato da un \code{jump/branch}, modificando il flusso di esecuzione e rendendo le istruzioni prese inutili. Per risolvere tali problemi molte CPU moderne utilizzano i \textbf{branch predictors}, che provano a indovinare il risultato di un branch. Possono essere molto utili, ma quando questi dovessero sbagliare si perderebbe ancora più tempo del normale. 
 \end{itemize}
@@ -333,8 +333,8 @@ Questo riduce notevolmente il cache thrashing (dato che vi è spazio per più di
 
 Vi sono due tipi di memoria secondaria:
 \begin{itemize}
-    \item \textbf{HDD} (Hard Disk Drivers), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, ruoti, e legga/scriva sulla superficia meccanica. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
-    \item \textbf{SSD} (Solid State Drivers), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
+    \item \textbf{HDD} (Hard Disk Drive), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, ruoti, e legga/scriva sulla superficia meccanica. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
+    \item \textbf{SSD} (Solid State Drive), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
 \end{itemize}
 
 \subsection{I/O}
@@ -502,9 +502,9 @@ Le \textbf{istruzioni non privilegiate} sono invece le istruzioni che la CPU pu�
 
 Se ad esempio la CPU in modalità utente decodifica un'istruzione non privilegiata, la CPU non la esegue e l'hardware triggera un \textbf{GPF} (General Protection Fault) o un'Eccezione. La CPU switcha automaticamente alla modalità kernel e passa al gestore delle eccezioni del kernel, che termina il processo.
 
-Per cambiare dalla modalità utente a quella utente ci sono solo 3 modi:
+Per cambiare dalla modalità utente a quella kernel ci sono solo 3 modi:
 \begin{itemize}
-    \item \textbf{Chiamate di sistema / traps}: l'utente richiede al sistema operativo di eseguirgli per lui un'istruzione privilegiata
+    \item \textbf{Chiamate di sistema / traps}: l'utente chiede al sistema operativo di eseguire per lui un'istruzione privilegiata
     \item \textbf{Eccezioni}: il programma dell'utente fa qualcosa di illegale
     \item \textbf{Interruzioni hardware}: un dispositivo esterno manda un segnale di interruzione
 \end{itemize}
