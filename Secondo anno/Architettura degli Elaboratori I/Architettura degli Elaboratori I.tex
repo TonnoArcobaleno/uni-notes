@@ -1856,7 +1856,7 @@ Oltre ai D Flip-Flop esistono altri due tipi di Flip-Flop:
 
 \begin{Definizione}[T Flip-Flop]
 \label{def-t-flip-flop}
-Un \textbf{T Flip-Flop} è un è un D Flip-Flop che, ad ogni salita del $CLK$, passa da $Q$ a $\bar{Q}$.
+Un \textbf{T Flip-Flop} è un D Flip-Flop che, ad ogni salita del $CLK$, passa da $Q$ a $\bar{Q}$.
 \end{Definizione}
 
 \begin{figure}[H]
@@ -2168,7 +2168,7 @@ Dunque troviamo $S' = \bar{S} \bar{X} + S \bar{X} = \bar{X}$ e $Y = SX$, che si 
 \includegraphics[width=0.6\textwidth]{Schema Mealy.png}
 \end{figure}
 
-Questo stesso esempio avremmo potuto risolverlo con un Moody FSM, in questo modo:
+Questo stesso esempio avremmo potuto risolverlo con un Moore FSM, in questo modo:
 
 \begin{figure}[H]
 \centering
@@ -2187,7 +2187,7 @@ Ipotizzando di avere sempre un $CLK$ con un periodo di 5 secondi, vediamo come s
 \includegraphics[width=1\textwidth]{Tempo Lumaca.png}
 \end{figure}
 
-Notiamo una cosa importante: in Moore, $Y$ cambia solo quando abbiamo una salita nel $CLK$, mentre in Moore cambia subito, non appena l'input passa da $0$ a $1$. Per questo motivo, a volte si potrebbe preferire usare uno o l'altro: se magari si vuole un sistema più controllato, Moore è la scelta corretta, mentre se si vuole precisione quasi istantanea meglio Mealy.
+Notiamo una cosa importante: in Moore, $Y$ cambia solo quando abbiamo una salita nel $CLK$, mentre in Mealy cambia subito, non appena l'input passa da $0$ a $1$. Per questo motivo, a volte si potrebbe preferire usare uno o l'altro: se magari si vuole un sistema più controllato, Moore è la scelta corretta, mentre se si vuole precisione quasi istantanea meglio Mealy.
 
 
 
