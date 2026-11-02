@@ -573,7 +573,7 @@ Per dire che le sottoclassi sono disgiunte si usa un pallino nero, mentre per di
 \includegraphics[width=1\textwidth, valign=t]{Diagramma disgiunzione copertura.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.50\textwidth}
-In questo esempio, Minorenni e Maggiorenni sono due sottoclassi esclusive e coprono anche tutte le persone, duqnue c'è sia il pallino che la doppia freccia.
+In questo esempio, Minorenni e Maggiorenni sono due sottoclassi esclusive e coprono anche tutte le persone, dunque c'è sia il pallino che la doppia freccia.
 \end{minipage}
 
 \subsection{Associazioni}
@@ -1322,7 +1322,7 @@ L'associazione COMPOSIZIONE è anche questa un'associazione uno a molti, dove la
 
 L'associazione TIPOLOGIA è stata già tradotta quando abbiamo tradotto l'entità debole EDIZIONE\_CORSO, dunque non dobbiamo fare nulla.
 
-L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un'attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Duqnue TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}.
+L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un'attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Dunque TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}.
 
 L'associazione ABILITAZIONE è un'associazione molti a molti, dunque creiamo in questo caso una nuova relazione con chiave le due chiavi delle due entità collegate (DOCENTE e CORSO). Dunque creiamo la tabella \textbf{ABILITAZIONE(\underline{CFDocente} ,\underline{CodiceCorso})}
 

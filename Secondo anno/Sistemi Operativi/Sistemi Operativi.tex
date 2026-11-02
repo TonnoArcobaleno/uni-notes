@@ -183,7 +183,7 @@ Una pipeline standard si divide in \textbf{5 stage}:
 
 Tramite il Pipelining l'output ideale sarebbe di eseguire un'istruzione per clock cycle, ma questo è spesso quasi impossibile perché vi sono diversi \textbf{hazards} che rallentano la pipeline. Si dividono in:
 \begin{itemize}
-    \item \textbf{Structural Hazards}, quando due istruzioni diverse hanno bisogno dello stesso hardware fisico e duqnue non possono essere eseguite contemporaneamente.
+    \item \textbf{Structural Hazards}, quando due istruzioni diverse hanno bisogno dello stesso hardware fisico e dunque non possono essere eseguite contemporaneamente.
     \item \textbf{Data Hazards}, quando un'istruzione dipende dal risultato di un'altra e dunque deve aspettare che questa finisca.
     \item \textbf{Control Hazards}, quando il PC viene modificato da un \code{jump/branch}, modificando il flusso di esecuzione e rendendo le istruzioni prese inutili. Per risolvere tali problemi molte CPU moderne utilizzano i \textbf{branch predictors}, che provano a indovinare il risultato di un branch. Possono essere molto utili, ma quando questi dovessero sbagliare si perderebbe ancora più tempo del normale. 
 \end{itemize}
