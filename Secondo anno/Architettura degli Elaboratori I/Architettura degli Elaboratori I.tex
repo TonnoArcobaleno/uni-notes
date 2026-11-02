@@ -198,7 +198,7 @@ Vi sono due modi per risolvere questo problema:
 La \textbf{sign-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero (in Complemento a 2) così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{duplicare il bit più significativo a sinistra raddoppiando il numero di bit del numero} (raddoppiamo il numero di bit così da esser coperti sia sulle addizioni ma anche sulle moltiplicazioni, che vedremo tra poco).
 \end{Proprieta}
 
-Ad esempio, $3_{10} = 0011 = 00000011$, e $-5_{10} = 1011 = 1111011$. Questo con gli 0 ovviamente funziona, ma anche con gli 1: infatti, $-5 = 1011 = -8 + 2 + 1 = - 16 + 8 + 2 + 1 = -32 + 16 + 8 + 2 +1 = -64 + 32 + 16 + 8 +1 = 11111011$. 
+Ad esempio, $3_{10} = 0011 = 00000011$, e $-5_{10} = 1011 = 11111011$. Questo con gli 0 ovviamente funziona, ma anche con gli 1: infatti, $-5 = 1011 = -8 + 2 + 1 = - 16 + 8 + 2 + 1 = -32 + 16 + 8 + 2 +1 = -64 + 32 + 16 + 8 +1 = 11111011$. 
 
 \begin{Proprieta}[Zero-Extension]
 \label{zero-extension}
@@ -376,7 +376,7 @@ $\bm{-\infty}$ & 1 & 11111111 & 00000000000000000000000 \\
 
 Dunque lo 0 si rappresenta con il codice esadecimale 0x00000000 o il codice 0x80000000 (vi sono anche qui, come nel Segno e Ampiezza, due rappresentazioni per esso). \\
 Quando invece vogliamo rappresentare un operazione indefinita, come $\infty - \infty$ o $0/0$. \\
-Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché voglio rappresentare numeri ancora più piccoli di $10^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \cdot 10^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
+Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché voglio rappresentare numeri ancora più piccoli di $2^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \cdot 2^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
 
 \begin{Proprieta}[Livello di precisione]
 \label{prop-livello-di-precisione}
@@ -445,7 +445,7 @@ La mantissa del primo numero è quindi $1.1$, mentre per il secondo è $1.101$. 
 
 Dobbiamo ora normalizzare la mantissa: $10.011 \cdot 2^1 = 1.0011 \cdot 2^2$. Non serve arrotondare nulla, dato che i bit frazionari sono ben meno di 23, dunque possiamo riscrivere tutto nel formato a virgola mobile:
 \[
-0|10000001|00110000000000000000000 = 0x4098000_{16}
+0|10000001|00110000000000000000000 = 0x40980000_{16}
 \]
 
 Vediamo ora cosa succede se invece prendiamo due numeri con segno opposto, come ad esempio $0x40C00000$ e $0xC0200000$. 
@@ -472,7 +472,7 @@ Dalla mantissa eliminiamo il primo bit perché va in overflow. Dato che il nuovo
 0|10000000|11000000000000000000000 = 0x40600000
 \]
 
-\NB L'addizione tra numeri a virgola mobile \textbf{non è associativa}. Dunque $A + B$ non è sempre uguale a $B + A$.
+\NB L'addizione tra numeri a virgola mobile \textbf{non è associativa}.
 
 \subsection{Moltiplicazione con numeri in virgola mobile}
 
@@ -486,7 +486,7 @@ Anche la moltiplicazione tra numeri in virgola mobile è abbastanza schematica:
     \item Si riscrive il numero nel formato a virgola mobile
 \end{enumerate}
 
-Proviamo a moltiplicare $0x4040000$ e $0x40200000$.
+Proviamo a moltiplicare $0x40400000$ e $0x40200000$.
 
 Per prima cosa estraiamo quindi l'esponente e i bit frazionari da entrambi i numeri:
 \begin{align*}
@@ -783,7 +783,7 @@ Un nodo si trova nello stato di \textbf{alta impedenza} quando si stacca elettri
 \includegraphics[width=1\textwidth, valign=t]{Tristate Buffer.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Nei circuiti logici per far passare un nodo a uno stato di alta impedenza si usa il \textbf{Tristate Buffer} (letteralmente un buffer a tre stati, 0, 1 e Z). Oltre al nodo in input $A$ e all'output $Y$, vi è un terzo nodo $E$ che serve per attivare e disattivare il buffer. Se infatti $E = 0$, allora il buffer è attivo e $Y = Z$ sempre, se invece $E = 1$ allora il buffer è disattivo e quindi $Y = A$.
+Nei circuiti logici per far passare un nodo a uno stato di alta impedenza si usa il \textbf{Tristate Buffer} (letteralmente un buffer a tre stati, 0, 1 e Z). Oltre al nodo in input $A$ e all'output $Y$, vi è un terzo nodo $E$ che serve per attivare e disattivare il buffer. Se infatti $E = 0$, allora il buffer è inattivo e $Y = Z$ sempre, se invece $E = 1$ allora il buffer è attivo e quindi prende il segnale in input ponendo $Y = A$.
 \end{minipage}
 
 Questi tristate buffer sono fondamentali per creare dei circuiti dove non ci sono tante linee di dati, ma ce n'è una sola che collega tutti i diversi componenti. Facciamo un esempio per capire quanto sono importanti.
@@ -871,7 +871,7 @@ Nell'algebra booleana vi è una \textbf{dualità} tra le operazioni \code{AND} e
 \NB Questa dualità si applica SOLO alle \textbf{identità}, e non a tutte le equazioni booleane. Ci saranno quindi molto utili nei teoremi e negli assiomi che vedremo tra poco
 \end{Definizione}
 
-Ad esempio, presa l'idenità $A + 1 = A$ ($A$ \code{OR} $1 = A$), se applichiamo le regole di dualità otteniamo l'idenità $A \cdot 0 = A$ ($A$ \code{AND} $0 = A$), che è anch'essa vera.  
+Ad esempio, presa l'idenità $A + 1 = 1$ ($A$ \code{OR} $1 = 1$), se applichiamo le regole di dualità otteniamo l'idenità $A \cdot 0 = 0$ ($A$ \code{AND} $0 = 0$), che è anch'essa vera.  
 
 \begin{Proprieta}[Assiomi]
 \label{prop-assiomi}
@@ -940,7 +940,7 @@ Per dimostrare questi teoremi abbiamo due metodi:
     \hline
 \end{tabular}
 \end{center}
-\NB Il duale della proprietà distributiva ci dice che $B + (C \cdot D) = (B + C)(C + D)$, che non coincide con le proprietà dell'algebra che conosciamo, dove l'operatore + non si distribuisce.
+\NB Il duale della proprietà distributiva ci dice che $B + (C \cdot D) = (B + C)(B + D)$, che non coincide con le proprietà dell'algebra che conosciamo, dove l'operatore + non si distribuisce.
 \end{Proprieta}
 
 \Dimostrazione \nopagebreak
@@ -1041,7 +1041,7 @@ Il \textbf{teorema di DeMorgan} è uno dei teoremi più importanti dell'algebra 
     \hline
     \textbf{DeMorgan} & \textbf{Duale} \\
     \hline
-    $\bm{\overline{B_0 \cdot B_1 \cdot B_2 \ldots} = \overline{B_0} + \overline{B_1} + \overline{B_2} \cdot \ldots}$ & $\bm{\overline{B_0 + B_1 + B_2 + \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ \\
+    $\bm{\overline{B_0 \cdot B_1 \cdot B_2 \ldots} = \overline{B_0} + \overline{B_1} + \overline{B_2} + \ldots}$ & $\bm{\overline{B_0 + B_1 + B_2 + \ldots} = \overline{B_0} \cdot \overline{B_1} \cdot \overline{B_2} \cdot \ldots}$ \\
     \hline
 \end{tabular}
 \end{center}
@@ -1856,7 +1856,7 @@ Oltre ai D Flip-Flop esistono altri due tipi di Flip-Flop:
 
 \begin{Definizione}[T Flip-Flop]
 \label{def-t-flip-flop}
-Un \textbf{T Flip-Flop} è un D Flip-Flop che, ad ogni salita del $CLK$, passa da $Q$ a $\bar{Q}$.
+Un \textbf{T Flip-Flop} è un D Flip-Flop che, ad ogni salita del $CLK$, se $T = 1$ passa da $Q$ a $\bar{Q}$.
 \end{Definizione}
 
 \begin{figure}[H]
