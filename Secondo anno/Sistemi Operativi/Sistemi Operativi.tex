@@ -502,7 +502,7 @@ Le \textbf{istruzioni non privilegiate} sono invece le istruzioni che la CPU pu�
 
 Se ad esempio la CPU in modalità utente decodifica un'istruzione non privilegiata, la CPU non la esegue e l'hardware triggera un \textbf{GPF} (General Protection Fault) o un'Eccezione. La CPU switcha automaticamente alla modalità kernel e passa al gestore delle eccezioni del kernel, che termina il processo.
 
-Per cambiare dalla modalità utente a quella utente ci sono solo 3 modi:
+Per cambiare dalla modalità utente a quella kernel ci sono solo 3 modi:
 \begin{itemize}
     \item \textbf{Chiamate di sistema / traps}: l'utente richiede al sistema operativo di eseguirgli per lui un'istruzione privilegiata
     \item \textbf{Eccezioni}: il programma dell'utente fa qualcosa di illegale
