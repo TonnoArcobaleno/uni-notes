@@ -2203,4 +2203,63 @@ Per cercare di risolvere quindi il problema del thrashing, il sistema operativo 
 
 Tra tutte, sospendere i processi è quasi sempre la scelta migliore. Infatti, è sempre meglio eseguire pochi processi che bene ma pituttosto che tanti processi ma male: ridurre il multiporgramming da 10 a 5 processi può aumentare di 10 volte la velocità dei 5 processi rimasti in esecuzione.
 
+\chapter{Concorrenza}
+
+\begin{Definizione}[Concorrenza]
+\label{def-concorrenza}
+La \textbf{concorrenza} è la capacità di un sistema operativo di gestire più processi/thread in contemporanea, permettendo di portare avanti più attività contemporaneamente.
+\end{Definizione}
+
+\section{Thread}
+
+Abbiamo già accenato nel primo capitolo di come un processo possa dividersi in più \textbf{thread}, che sono la più piccola unità di esecuzione schedulabile dal sistema operativo. Questi è come se fossero dei processi separati che però condividono lo stesso spazio di indirizzamento e quindi gli stessi dati. Questi, nei sistemi moderni, sono l'unità di allocazione dello scheduling (quella che abbiamo visto finora era quindi una semplificazione, non sono i processi singoli ad essere schedulati ma i loro diversi thread). \\
+Sono importanti perché ci permettono di lavorare su un singolo processo in parallelo, prendendo tutti i suoi sottocompiti e eseguendoli insieme, risparmiando così tempo. Questo è ovviamente possibile solo se si hanno più core, che lavorano ognuno come una CPU a sé. Se abbiamo solo un singolo core e abbiamo un processo che non fa I/O, non ha senso dividerlo in thread perché c'è comunque solo un posto disponibile. 
+
+Si potrebbe pensare di utilizzare la syscall \code{fork()} per creare diversi processi figli piuttosto che dividerne uno solo in tanti thread. Questo era ciò che si faceva in passato, ma crea un limite non indifferente: infatti, più thread lavorano nello stesso ambiente (stesso code, heap, global data, spazio d'indirizzamento e page table, con invece ognuno un proprio stack, PC e registri), mentre più processi lavorano in ambienti totalmente indipendenti tra loro che per comunicare necessitano di IPC (Inter-Process-Comunication, come pipes o sockets). Inoltre, un context-switch tra due thread è molto più veloce rispetto a uno tra due processi, dato che molti ambienti non devono essere modificati. \\
+Un problema che però si verifica con l'utilizzo dei thread è quando vi è un crash: se creiamo tanti processi figli, se uno crasha il crash rimane isolato, gli altri processi non sono toccati. Invece, con diversi thread, il crash di uno comporta il crash dell'intero processo.
+
+Ogni thread ha poi, oltre al proprio Stack, PC e ai propri registri, ha anche un proprio \textbf{TCB}, dove sono salvati tutti questi dati. Questo è anche usato come identificatore dallo scheduler per poter selezionare i singoli thread di un singolo processo sulla CPU. Vi è anche salvata un'altra informazione, ossia lo \textbf{stato} del thread. Anche qui esistono i tre stati visti con i processi: READY, RUNNING, BLOCKED. 
+
+\subsection{\codeb{pthread} API}
+
+Per lavorare con i thread in C utilizziamo l'API \codeb{pthread}. Vediamone alcune funzioni qui presenti.
+
+\codeb{pthread\_create()} serve per \textbf{creare} un thread. Tra i parametri bisogna inserire il \textit{thread ID}, \textit{gli attributi} (\code{NULL} per gli attributi di default), \textit{una funzione} che il thread dovrà runnare e \textit{gli argomenti passati alla funzione}.
+
+\begin{lstlisting}[style=C]
+void *funzione_thread(void *arg){
+    int id = *(int *)arg;
+    return NULL;
+}
+int main(void){
+    pthread_t tid; // In pthread_create viene popolato
+    int arg = 1;
+    pthread_create(&tid, NULL, funzione_thread, &arg);
+}
+\end{lstlisting}
+
+In questo codice stiamo quindi creando un thread per eseguire la funzione \code{funzione\_thread}. Notiamo come il thread ID e gli argomenti della funzionedebbano essere passati tramite indirizzo, perché la funzione \code{pthread} utilizza dei puntatori per contenere questi valori. Anche la funzione che il thread deve eseguire deve essere un puntatore, e i suoi argomenti devono essere di tipo \code{void *} (ossia puntatori che puntano a variabili di un qualsiasi tipo).
+
+Si crea però in questa situazione un problema: abbiamo creato un nuovo thread, ma come facciamo a sapere quale thread finirà per primo? Quello che ha creato il nuovo thread, o quello appena creato? Non è possibile saperlo, perché dipende dalla politica di scheduling e quanta CPU venga assegnata a ogni thread. Per questo motivo nasce la funzione \codeb{pthread\_join(tid, NULL)}, che inserita nel codice del thread chiamante lo blocca finché non finisce il thread creato. Se al posto di \code{NULL} inseriamo poi una variabile, qui dentro ci andrà il valore di ritorno del thread che stiamo aspettando si chiuda. Questa funzione è molto necessaria perché, se il main thread finisce, anche tutti gli altri thread terminano, anche se avevano ancora istruzioni da eseguire. 
+
+\NB In un for su una variabile \code{i}, non si può passare come argomento di una funzione in una \code{pthread\_create} il valore \code{\&i}, dato che il main continua a modificarla dentro il for. Se si vuole fare ciò bisognerà passare come valore \code{(void *)i}, che passa il valore in \code{i} e non la variabile.
+
+\subsection{Race condition}
+
+Vediamo ora un classico problema riguardo la memoria condivisa tra thread. Ipotizziamo di avere un \code{counter} condiviso tra due thread che lo aumentano di 1 alla volta 1 milione di volte. Ci aspetteremmo giustamente come risultato 2 milioni, ma questo quasi mai succede, per diversi motivi:
+\begin{itemize}
+    \item Innanzitutto, aumentare di 1 il valore di \code{counter} richiede l'esecuzione di tre operazioni: una \code{LOAD}, un \code{ADD} e uno \code{STORE}. Queste operazioni non sono atomiche, dunque un thread può essere interrotto a metà di una di queste tre istruzioni e sovrascrivere il tutti gli incrementi eseguiti dall'altro thread non appena torna in esecuzione.
+    \item In un sistema multicore è anche possibile che i due thread, lavorando in contemporanea, leggando dei valori errati. Ad esempio, è possibile che il $T_1$ legga \code{counter = 0}, aggiunga uno, e il $T_2$, prima ancora che $T_1$ salva il nuovo valore, legga \code{counter = 0}, aggiunga 1, e salvi \code{counter = 1}, rendendo inutile il lavoro di $T_1$.
+\end{itemize}
+
+Questo è un caso classico di \textbf{race condition}, che accade proprio quando il risultato di un processo dipende dal modo in cui diversi thread sono schedulati, e producono risultati non deterministici, che cambiano ogni volta che eseguiamo lo stesso processo.
+
+È necessario quindi rendere \textit{atomica} la \textbf{sezione critica}, ossia la sezione che rende il risultato di un processo non deterministico (in questo caso l'incremento del \code{counter}), e renderla anche \textit{mutualmente esclusiva}, che impedisce l'esecuzione di questa operazione in diversi thread. Ovviamente, la mutuazione esclusiva non basta da sola, perché altrimenti basterebbe non far accedere nessun thread alla sezione critica per evitare problemi.  \\
+Per risolvere tutti questi problemi nasce un nuovo costrutto astratto che prende il nome di \textbf{lock}. Su questo pacchetto, che parte libero, possiamo fare due operazioni: \codeb{lock} e \codeb{unlock}. Se eseguo un \code{lock} su una sezione critica libera, tutti gli altri dovranno aspettare che io esegua \code{unlock} per poter accedere alla sezione critica (anche se il processo viene tolto dalla CPU bisognerà comunque aspettare che torni e che concluda la sezione critica: per questo motivo è necessario che queste siano molto brevi). \\
+Il lock viene implementato tramite la \code{pthread} API creando un oggetto di tipo \codeb{pthread\_mutex\_t} (mutex = MUTual EXclusion) (condiviso tra tutti) e chiamando \codeb{pthread\_mutex\_lock(\&lock)} per accedere alla sezione critica e \codeb{pthread\_mutex\_unlock(\&lock)} per lasciarla.
+
+
+
+
+
 \end{document}
