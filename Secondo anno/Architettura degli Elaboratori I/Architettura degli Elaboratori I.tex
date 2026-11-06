@@ -388,6 +388,8 @@ In base al numero di bit, si può raggiungere un livello di precisione più o me
 \end{itemize}
 \end{Proprieta}
 
+Per la Half-Precision vengono usati 5 bit per l'esponente e 10 per la mantissa, mentre per la Double-Precision 11 sono riservati all'esponente e 52 alla mantissa (ovviamente in entrambi i casi c'è sempre un bit riservato al segno).
+
 \subsection{Arrotondare numeri a virgola mobile}
 
 Abbiamo già affrontato il problema dell'overflow, ossia quando un numero sfora il numero di bit consenti (esiste poi anche l'\textbf{underflow}, ossia quando un numero è così piccolo da non poterlo rappresentare). Questo problema è risolvibile in parte grazie alla sign-extension o alla zero-extension, ma ci sono numeri che da un sistema binario non sono rappresentabili. Ad esempio, $1/3$ non è rappresentabile: si avrebbe bisogno di un numero di bit infinito. È per questo che in informatica spesso bisogna \textbf{arrotondare}.
