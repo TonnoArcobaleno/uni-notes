@@ -2238,27 +2238,172 @@ int main(void){
 }
 \end{lstlisting}
 
-In questo codice stiamo quindi creando un thread per eseguire la funzione \code{funzione\_thread}. Notiamo come il thread ID e gli argomenti della funzionedebbano essere passati tramite indirizzo, perché la funzione \code{pthread} utilizza dei puntatori per contenere questi valori. Anche la funzione che il thread deve eseguire deve essere un puntatore, e i suoi argomenti devono essere di tipo \code{void *} (ossia puntatori che puntano a variabili di un qualsiasi tipo).
+In questo codice stiamo quindi creando un thread per eseguire la funzione \code{funzione\_thread}. Notiamo come il thread ID e gli argomenti della funzionedebbano essere passati tramite indirizzo, perché la funzione \code{pthread} utilizza dei puntatori per contenere questi valori. Anche il tipo di ritorno della funzione che il thread deve eseguire deve essere un puntatore \code{void*} (ossia un puntatore che punta a una variabile di un qualsiasi tipo), e i suoi argomenti devono anch'essi essere di tipo \code{void*}.
 
 Si crea però in questa situazione un problema: abbiamo creato un nuovo thread, ma come facciamo a sapere quale thread finirà per primo? Quello che ha creato il nuovo thread, o quello appena creato? Non è possibile saperlo, perché dipende dalla politica di scheduling e quanta CPU venga assegnata a ogni thread. Per questo motivo nasce la funzione \codeb{pthread\_join(tid, NULL)}, che inserita nel codice del thread chiamante lo blocca finché non finisce il thread creato. Se al posto di \code{NULL} inseriamo poi una variabile, qui dentro ci andrà il valore di ritorno del thread che stiamo aspettando si chiuda. Questa funzione è molto necessaria perché, se il main thread finisce, anche tutti gli altri thread terminano, anche se avevano ancora istruzioni da eseguire. 
 
 \NB In un for su una variabile \code{i}, non si può passare come argomento di una funzione in una \code{pthread\_create} il valore \code{\&i}, dato che il main continua a modificarla dentro il for. Se si vuole fare ciò bisognerà passare come valore \code{(void *)i}, che passa il valore in \code{i} e non la variabile.
 
-\subsection{Race condition}
+\subsection{Problemi del multithreading}
 
-Vediamo ora un classico problema riguardo la memoria condivisa tra thread. Ipotizziamo di avere un \code{counter} condiviso tra due thread che lo aumentano di 1 alla volta 1 milione di volte. Ci aspetteremmo giustamente come risultato 2 milioni, ma questo quasi mai succede, per diversi motivi:
+Vediamo ora un classico problema riguardo la memoria condivisa tra thread. Ipotizziamo di avere un \code{counter} condiviso tra due thread, ciascuno dei quali lo incrementa di 1 per un milione di volte. Ci aspetteremmo giustamente come risultato 2 milioni, ma in pratica quasi mai lo otteniamo.
+
+Il motivo è che incrementare \code{counter} richiede tre istruzioni macchina distinte: una \code{LOAD}, una \code{ADD} e una \code{STORE}. La sequenza nel suo insieme non è atomica, quindi le istruzioni dei due thread possono alternarsi in modi diversi:
 \begin{itemize}
-    \item Innanzitutto, aumentare di 1 il valore di \code{counter} richiede l'esecuzione di tre operazioni: una \code{LOAD}, un \code{ADD} e uno \code{STORE}. Queste operazioni non sono atomiche, dunque un thread può essere interrotto a metà di una di queste tre istruzioni e sovrascrivere il tutti gli incrementi eseguiti dall'altro thread non appena torna in esecuzione.
-    \item In un sistema multicore è anche possibile che i due thread, lavorando in contemporanea, leggando dei valori errati. Ad esempio, è possibile che il $T_1$ legga \code{counter = 0}, aggiunga uno, e il $T_2$, prima ancora che $T_1$ salva il nuovo valore, legga \code{counter = 0}, aggiunga 1, e salvi \code{counter = 1}, rendendo inutile il lavoro di $T_1$.
+    \item Su un singolo core, un thread può essere tolto dalla CPU tra una di queste istruzioni e l'altra. Quando torna in esecuzione, salva un valore calcolato a partire da un dato ormai vecchio, sovrascrivendo tutti gli incrementi eseguiti nel frattempo dall'altro thread.
+    \item In un sistema multicore i due thread possono invece lavorare in contemporanea. Ad esempio, $T_1$ può leggere \code{counter = 0} e aggiungere 1, e prima che questo valore venga salvato è possibile che il thread $T_2$ legga anch'esso \code{counter = 0}, aggiunga 1 e salvi \mbox{\code{counter = 1}}. A quel punto anche $T_1$ avrà già salvato \code{counter = 1}, e $T_2$ sovrascriverà questo valore scrivendo sempre \code{counter = 1}, rendendo inutile l'incremento di $T_1$.
 \end{itemize}
 
-Questo è un caso classico di \textbf{race condition}, che accade proprio quando il risultato di un processo dipende dal modo in cui diversi thread sono schedulati, e producono risultati non deterministici, che cambiano ogni volta che eseguiamo lo stesso processo.
+Questo è un caso classico di \textbf{race condition}: il risultato dipende dall'ordine in cui i thread vengono schedulati, ed è quindi non deterministico, potendo cambiare da un'esecuzione all'altra. Ma non solo: si tratta anche di un \textbf{data race}, problema che si verifica quando due o più thread accedono alla stessa variabile, almeno uno in scrittura, senza alcuna sincronizzazione. I due concetti qui sono strettamente legati: è proprio perché gli accessi a \code{counter} non sono sincronizzati (ed è questo proprio il data race) che le istruzioni dei due thread possono alternarsi in modo da far lavorare un thread su un valore ormai vecchio (il che produce la race condition). \\
+\NB In C un data race è un \textit{undefined behavior} (come già visto con l'heap buffer overflow): il compilatore pensa che questa situazione non capiti mai e ne ottimizza il codice di conseguenza. Il programma potrebbe quindi funzionare correttamente, andare in crash o produrre risultati inspiegabili che noi possiamo prevederlo.
 
-È necessario quindi rendere \textit{atomica} la \textbf{sezione critica}, ossia la sezione che rende il risultato di un processo non deterministico (in questo caso l'incremento del \code{counter}), e renderla anche \textit{mutualmente esclusiva}, che impedisce l'esecuzione di questa operazione in diversi thread. Ovviamente, la mutuazione esclusiva non basta da sola, perché altrimenti basterebbe non far accedere nessun thread alla sezione critica per evitare problemi.  \\
-Per risolvere tutti questi problemi nasce un nuovo costrutto astratto che prende il nome di \textbf{lock}. Su questo pacchetto, che parte libero, possiamo fare due operazioni: \codeb{lock} e \codeb{unlock}. Se eseguo un \code{lock} su una sezione critica libera, tutti gli altri dovranno aspettare che io esegua \code{unlock} per poter accedere alla sezione critica (anche se il processo viene tolto dalla CPU bisognerà comunque aspettare che torni e che concluda la sezione critica: per questo motivo è necessario che queste siano molto brevi). \\
-Il lock viene implementato tramite la \code{pthread} API creando un oggetto di tipo \codeb{pthread\_mutex\_t} (mutex = MUTual EXclusion) (condiviso tra tutti) e chiamando \codeb{pthread\_mutex\_lock(\&lock)} per accedere alla sezione critica e \codeb{pthread\_mutex\_unlock(\&lock)} per lasciarla.
+Chiamiamo \textbf{sezione critica} la porzione di codice che accede a una risorsa condivisa (in questo caso l'incremento di \code{counter}). Per evitare il problema, la sezione critica deve essere eseguita in \textit{mutua esclusione}, ossia che solo un thread alla volta può eseguire la sezione. La mutua esclusione da sola però non basta, perché sarebbe soddisfatta anche impedendo a tutti i thread di entrare. È logico che, se nessun thread è nella sezione critica e qualcuno vuole entrarci, questo deve poterlo fare.
 
+Per ottenere tutto questo si introduce un costrutto astratto chiamato \textbf{lock}: una variabile, inizialmente libera, su cui si possono eseguire due operazioni, \codeb{lock} e \codeb{unlock}. Se un thread esegue \code{lock} su un lock libero, lo acquisisce ed entra nella sezione critica. Ogni altro thread che esegue \code{lock} su quel lock resta bloccato finché il primo non esegue \code{unlock}. Questo vale anche se il thread che detiene il lock viene tolto dalla CPU: gli altri dovranno comunque aspettare che torni in esecuzione e concluda la sezione critica. Per questo motivo le sezioni critiche devono essere il più brevi possibile. \\
+Con la \code{pthread} API il lock si implementa con una variabile condivisa di tipo \codeb{pthread\_mutex\_t} (mutex = MUTual EXclusion), inizializzata con \code{PTHREAD\_MUTEX\_INITIALIZER} oppure con \code{pthread\_mutex\_init}. Si chiama poi \codeb{pthread\_mutex\_lock(\&lock)} per entrare nella sezione critica e \codeb{pthread\_mutex\_unlock(\&lock)} per uscirne. Vedremo poi nella sezione successiva come sono implementate queste due funzioni nel dettaglio.
 
+Oltre alla race condition e alla data race esistono altri problemi riguardanti il multithreading. Tra questi uno dei più subdoli e nascosti è quello dell'\textbf{ordine di esecuzione delle operazioni}. Ipotizziamo di avere il seguente codice:
+\begin{lstlisting}[style=C]
+result = compute_answer();
+done = 1;
+\end{lstlisting}
+
+È molto semplice: esegue una funzione, ne salva il valore di ritorno nella variabile \code{result}, e segna \code{done = 1}. Se pensiamo di eseguire questo codice in un thread a parte, per capire quando questo è terminato potrebbe venire naturale pensare di porre la condizione \code{done == 1}. Questo, però, sarebbe un grande errore. Infatti, il compilatore potrebbe ottimizzare il nostro codice in questo modo:
+\begin{lstlisting}[style=C]
+done = 1;
+result = compute_answer();
+\end{lstlisting}
+
+Questo succede perché il compilatore pensa che questo codice verrà interamente eseguito da un unico thread, e dato che \code{result} e \code{done} sono indipendenti fra loro, cambiare l'ordine di esecuzione non dovrebbe essere un problema. Dunque il controllo \code{if done == 1} potrebbe restituire true ancora prima che \code{compute\_answer()} venga chimato, generando così un comportamento anomalo. \\
+Si potrebbe pensare di cambiare il compilatore e fare in modo che l'ordinamento del codice non venga toccato. Il problema, però, non verrebbe risolto ma semplicemente spostato, dal software all'hardware. Infatti, ogni core ha un proprio store buffer, un'area privata dove vengono salvate le informazioni prima che vadano a finire nella cache condivisa. È possibile a causa di questa architettura che un valore che si trova dopo nel codice venga reso visibile prima di uno che si trova prima di lui, ossia è possibile che \code{done = 1} venga reso visibile prima del valore in \code{result}, creando un comportamento altrettanto anomalo.  
+
+Per risolvere questo problema esiste uno strumento che prende il nome di \textbf{memory barrer} (o \textbf{fence}). Questo strumento rende vero ciò che a noi è sempre sembrato ovvio, ossia fa in modo che tutto ciò che si trova prima debba essere reso visibile prima di tutto ciò che si trova dopo. In C questo viene fatto utilizzando una funzione built-in, ossia \code{\_\_sync\_synchronize()}, in questo modo:
+\begin{lstlisting}[style=C]
+result = compute_answer();
+__sync_synchronize()
+done = 1;
+\end{lstlisting}
+
+Questa semplicemente impedisce al compilatore di spostare del codice dalla parte sopra alla parte sotto: rappresenta proprio una barriera non oltrepassabile. Questo lavoro, però, non va fatto solo nel thread che lavora, ma anche in quello che attende, altrimenti avremmo lo stesso problema che abbiamo già affrontato. Scriviamo quindi
+\begin{lstlisting}[style=C]
+while(done == 0){} // Attesa di avere done = 1
+__sync_synchronize();
+use(result);
+\end{lstlisting}
+
+Tutto ciò che abbiamo visto fino ad ora viene racchiuso in una relazione che prende il nome di \textbf{happens-before}. Semplicemente, dire che "A happens-before B" non significa che A succede prima nel tempo di B, dato che abbiamo già visto che questo non basta a causa del riordinamento del compilatore e degli store buffer, ma significa proprio che \textit{tutti gli effetti derivanti da A sono già visibili prima che B venga eseguito}.
+
+\section{Implementazione del \codeb{lock}}
+
+Abbiamo già visto cosa fanno le funzioni \code{lock} e \code{unlock} e il motivo per cui queste sono così importanti per gestire le sezioni critiche. È arrivato però il momento di capire \textbf{come vengono create} queste due funzioni e gestite in modo efficiente.
+
+Ci sono tre parametri che dobbiamo tenere bene a mente:
+\begin{enumerate}
+    \item \textbf{Correttezza}: se un thread sta lavorando su una sezione critica, nessun'altro può entrarci, se la sezione è libera e qualcuno vuole entrarci deve poterlo fare.
+    \item \textbf{Equità}: bisogna evitare che sempre lo stesso thread abbia l'accesso alla sezione critica. Bisogna implementare una policy FIFO: se ci sono $n$ thread che vogliono una sezione critica, un thread dovrà aspettare al più $n-1$ volte che un'altro finisca, non di più.
+    \item \textbf{Performance}: quanto costa usare un lock quando questo è libero? E quanto quando invece è occupato?
+\end{enumerate}
+
+\subsection{Implementazioni software-only}
+
+L'implementazione più semplice di un lock consiste nel \textbf{disabilitare le interruzioni}: quando un thread chiama \code{lock}, le interruzioni vengono disabilitate, e vengono riabilitate solo quando il thread chiama \code{unlock}. In questo modo il timer interrupt che farebbe uscire il thread dalla CPU non può partire, il sistema operativo non riprende mai il controllo della CPU e lo scheduler non ha occasione di sostituire il thread con un altro: la sezione critica viene quindi eseguita senza interruzioni.
+
+Questa implementazione ha però molti problemi:
+\begin{itemize}
+    \item Modificare il timer interrupt è un'operazione privilegiata, e renderla accessibile tramite codice dagli utenti non è una grande idea perché può significare lasciare un thread che non fa nulla sulla CPU per sempre, facendo freezare il computer.
+    \item Nei sistemi multicore questa idea semplicementen non funziona: infatti anche se bloccassimo il timer interrupt di un core, tutti gli altri sarebbero liberi di lavorare e degli altri thread potrebbero così accedere alla sezione critica.
+    \item Lasciare un thread sulla CPU finché non finisce un'operazione che non si conosce non è mai una grande idea: se questa operazione è troppo lunga finirebbe per rallentare tutto il sistema.
+\end{itemize}
+
+Quest'idea, che è attuabile solo per del codice kernel molto breve, non è una buona implementazione generale.
+
+Un'altra idea molto intuitiva sarebbe quella di usare una variabile \codeb{flag} per segnare se il lock è libero o meno: 0 se è libero, 1 se non lo è. Il problema qui si verifica a causa della non atomicità delle istruzioni. Infatti, se implementiamo il \code{lock} in questo modo, staremmo creando una funzione di questo tipo:
+\begin{lstlisting}[style=C]
+int flag = 0;
+void lock() {while (flag == 1); flag = 1}
+void unlock() {flag = 0};
+\end{lstlisting}
+Con questa implementazione è possibile che un thread chiami \code{lock()}, legga \code{flag == 0}, e prima di poter porre \code{flag = 1} venga tolto dalla CPU. Dunque avremmo a questo punto un thread dentro la sezione critica ma con \code{flag = 0}, il che viola completamente il principio di mutua esclusività. 
+
+Si potrebbe allora pensare di usare un'altra variabile condivisa, chiamata \code{turn}, che decida di chi è il turno sulla sezione critica. L'implementazione è semplice:
+\begin{lstlisting}[style=C]
+int turn = 0;
+void lock(i) {while(turn != i);}
+void unlock(i) {turn = 1 - i} // Passo il turno a quello dopo di me
+\end{lstlisting}
+
+Il problema, però, è altrettanto semplice: dato che \code{turn} parte pari a 0, se $T_1$ vuole accedere per primo alla sezione critica non può farlo, ma deve aspettare sempre che acceda per primo $T_0$ (problema che riaccade poi ogni volta che un thread vuole accedere per due volte di fila alla sezione critica senza aspettare che l'altro gli ripassi il turno).
+
+Dall'unione del \code{flag} e del \code{turn} nasce un altro algoritmo, che prende il nome di \textbf{algoritmo di Peterson}. Vediamo come viene implementato:
+\begin{lstlisting}[style=C]
+int flag[2] = {0,0};
+int turn;
+void lock(int i){
+    flag[i] = 1; // Voglio entrare
+    turn = 1-i; // Controllo però prima se l'altro non voglia entrare
+    while(flag[1-i] == 1 && turn == 1-i){} // Solo se l'altro non vuole entrare e non è dentro allora entro io
+}
+void unlock(int i) {flag[i] = 0;}
+\end{lstlisting}
+
+In questo algoritmo viene assegnato a ogni thread un proprio flag, e la variabile \code{turn} decide sempre di chi è il turno. Non appena \code{lock(int i)} viene chiamata, poniamo \code{flag[i] = 1} per indicare la volontà di entrare, ma poniamo allo stesso tempo \code{turn = 1-i} per lasciare la precedenza all'altro thread. A questo punto entriamo in attesa: o aspettiamo che l'altro thread ponga \code{turn = i}, o aspettiamo che chiami \code{unlock} e ponga \code{flag[1-i] = 0}. Una volta che ciò succede possiamo finalmente entrare nella sezione critica. 
+
+Questo algoritmo, teoricamente, funziona: infatti, anche nel caso limite in cui due thread chiamino contemporaneamente \code{lock()}, l'ultimo che modificherà la variabile \code{turn} sarà sempre quello che aspetterà, senza eccezioni. Il problema, però, si veriica per colpa di un costrutto hardware che abbiamo visto poco tempo fa, ossia lo \textbf{store buffer}. Quando un thread modifica \code{flag[i]}, questa modifica non arriva subito nella cache comune, ma ha un po di ritardo. A causa di questa architettura, è possibile che due thread diversi leggano l'uno il \code{flag} dell'altro pari a 0, rendendo immediatamente la condizione del while falsa e dando immediatamente accesso ad entrambi alla sezione critica.
+
+\subsection{Implementazioni hardware}
+
+È quindi purtorppo evidente come un'implementazione puramente software non sia a tutti gli effetti possibile, e sia invece necessario un aiuto riguardo hardware. Questo ci permette di avere:
+\begin{itemize}
+    \item \textbf{Atomicità}, effettuando le operazioni lettura e scrittura in un unico passaggio
+    \item \textbf{Visibilità}, permettendoci di leggere le nuove informazioni scritte da un thread istantaneamente, senza ritardi
+    \item \textbf{Ordine}, evitando problemi riguardanti la lettura di variabili in ordine diverso da quello scritto sul codice (problema già visto quando abbiamo parlato di memory barrer)
+\end{itemize}
+
+\begin{Definizione}[RMW]
+\label{def-RMW}
+Una \textbf{RMW} (atomic Read-Modify-Write) è un'istruzione che legge un valore, ne calcola uno nuovo e lo scrive, \textbf{tutto in un unico passaggio}.
+\end{Definizione}
+
+Esistono diverse istruzioni RMW:
+\begin{itemize}
+    \item \textbf{TAS} 
+    \item \textbf{CAS} (Compare And Swap)
+    \item \textbf{FAA} (Fetch And Add)
+\end{itemize}
+
+\begin{Definizione}[TAS]
+\label{def-TAS}
+Una \textbf{TAS} (Test And Set) è un'istruzione che in modo atomico scrive un nuovo valore e ne ritorna quello vecchio.
+\end{Definizione}
+
+\begin{lstlisting}[style=C]
+int TAS(int *p, int new_value){
+    int old = *p;
+    *p = new_value;
+    return old;
+}
+\end{lstlisting}
+
+Una TAS è perfetta per verificare se un lock sia occupato o meno e, nel caso, occuparlo. Per fare ciò basta chiamare \code{TAS(\&flag, 1)} e verificare se \code{flag} sia pari a 0 o 1. Se \code{flag == 0} allora abbiamo trovato che il lock era libero e lo abbiamo occupato, altrimenti lo abbiamo trovato occupato e ci tocca aspettare (non abbiamo modificato nulla, dato che abbiamo semplicemente sovracsritto 1 su 1). Tutto ciò viene implementato in questo modo:
+
+\begin{lstlisting}[style=C]
+#include <stdatomic.h> // Libreria per implementare le istruzioni atomiche, tra cui le TAS
+
+typedef struct { atomic_int flag; } spinlock_t; // 0 = Libero, 1 = Occupato
+static inline int TAS(atomic_int *p, int v) { return atomic_exchange(p, v); }
+
+void spin_init(spinlock_t *l) { atomic_init(&l->flag, 0); } // Poniamo inizialmente flag = 0
+
+void spin_lock(spinlock_t *l) {
+while (TAS(&l->flag, 1) == 1){}
+}
+
+void spin_unlock(spinlock_t *l) {
+atomic_store_explicit(&l->flag, 0, memory_order_release); // mark FREE
+}
+\end{lstlisting}
+
+\NB La freccia \code{->} serve per accedere ad un campo di una struct tramite un puntatore. In sostanza, \code{\&l -> flag} equivale a dire \code{\&(l -> flag)} ossia \code{\&((*l).flag)}.
 
 
 
