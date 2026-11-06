@@ -1361,8 +1361,8 @@ Questo linguggio nasce nel 1974 con SEQUEL, diventando uno standard di fatto dal
 Il linguaggio SQL si può dividere in diversi sottolinguaggi con pacchetti di comandi specifici per alcune operazioni:
 \begin{itemize}
     \item \textbf{DDL} (Data Definition Language), che serve per \textbf{creare e strutturare} le tabelle e gli oggetti del database
-    \item \textbf{DML} (Data Manipulation Language), che serve per \textbf{manipolare} i dati nelle tabelle
     \item \textbf{DQL} (Data Query Language), che serve per \textbf{interrogare} i dati
+    \item \textbf{DML} (Data Manipulation Language), che serve per \textbf{manipolare} i dati nelle tabelle
     \item \textbf{DCL} (Data Control Language), che serve per gestire i \textbf{permessi} di accesso ai dati
 \end{itemize}
 
@@ -1427,7 +1427,7 @@ Sia \code{UNIQUE} che \code{PRIMARY KEY} che \code{FOREIGN KEY} possono racchiud
 \subsection*{Vincoli}
 
 Abbiamo già visto come inserire dei vincoli a un campo, ad esempio scrivendo \code{NOT NULL} o \code{UNIQUE}. È possibile specificare delle \textbf{reazioni alla violazione di vincoli d'integrità} che eseguono delle istruzioni specifiche quando si prova a violare un vincolo (se queste non sono presenti le azioni che violerebbero i vincoli semplicemente non vengono eseguite). Nell'esempio di prima avevamo una foreign key \code{Dipart} in riferimento a una tupla in \code{Dipartimento} (chiamiamo la tabella Impiegato \textbf{slave} mentre la tabella Dipartimento \textbf{master}). Normalmente, non potremmo eliminare una riga in Dipartimento prima di aver eliminato tutte le references a quella riga in Impiegato. È possibile però definire una reazione alla violazione di questo vincolo di integrità che in automatico elimina tutte le references in Impiegato e elimina anche la riga in Dipartimento. Per fare ciò scriviamo \codeb{ON DELETE CASCADE}(\NB Questo funziona perfettamente, ma è MOLTO rischioso, dato che con un'operazione eliminiamo più righe in tabelle diverse). Se invece non vogliamo eliminare tutte le righe ma semplicemente impostarle a un valore NULL (se ammesso), possiamo scrivere \codeb{ON DELETE CASCADE SET NULL}. \\
-E se invece un dipartimento non viene eliminato ma modificato? Esiste l'operazione \codeb{ON UPDATE <CASCADE>}, che aggiorna a cascata tutte le reference a quel dipartimento in Impiegato. \\
+E se invece un dipartimento non viene eliminato ma modificato? Esiste l'operazione \codeb{ON UPDATE CASCADE}, che aggiorna a cascata tutte le reference a quel dipartimento in Impiegato. \\
 Dunque, se vogliamo che una volta eliminato un dipartimento mettiamo a NULL le references in Impiegato, e una volta modificato invece a cascata modifichiamo tutto in Impiegato, dobbiamo scrivere \code{FOREIGN KEY Dipart VARCHAR(15) REFERENCES Dipartimento(Codice) ON DELETE SET NULL ON UPDATE CASCADE}.
 
 Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore di 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere codeb{CHECK(DataInizio <= DataFine)} in una riga a parte. Inoltre, essendo \code{CHECK} un tipo particolare di CONSTRAINT, possiamo usare proprio la parola chiave \codeb{CONSTRAINT} che non solo deifnisce ma \textbf{nomina} il vincolo così che in futuro possa essere modificato o eliminato. Ad esempio, possiamo scrivere \mbox{\code{CONSTRAINT CHK\_StipedioNonNegativo (Stipendio >= 0)}} per creare un nuovo CONSTRAINT su Stipendio chiamato \code{CHK\_StipendioNonNegativo} che controlli che ogni Stipendio sia $\geq 0$. Per modificare/eliminare poi un vincolo si usano le parole chiavi \codeb{ALTER TABLE}. Per eliminare un vincolo usiamo poi la parola chiave \codeb{DROP}. Ad esempio, se vogliamo eliminiare il vincolo \code{CHK\_StipedioNonNegativo} dovremo scrivere \mbox{\code{ALTER TABLE Stipendio DROP CONSTRAINT CHK\_StipendioNonNegativo}}. Se volessimo invece modificare il vincolo dovremmo usare la parola chiave \codeb{ADD}. Ad esempio, se volessimo imporre che lo stipendio non è più solo non negativo ma sempre positivo, scriveremmo \code{ALTER TABLE Stipendio ADD CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio > 0)}.
@@ -1479,6 +1479,7 @@ Con il comando \codeb{DROP} è poi possibile eliminare:
 \subsection*{View}
 
 Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturare del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
+
 
 \section{Algebra relazione e DQL}
 
@@ -2335,7 +2336,7 @@ Bianchi & C3  \\ \hline
 
 \NB È importante prendere CNome e CC\# come campi e non Nome e C\#. Infatti, noi vogliamo i capi degli impiegati e non gli impiegati stessi, altrimenti staremmo inserendo nella relazione finale anche impiegati che non sono capi, e questo non è corretto.
 
-Vediamo infine un'altra query interessante. Ci troviamo in un database con le seugenti relazioni:
+Vediamo infine un'altra query interessante. Ci troviamo in un database con le seguenti relazioni:
 \begin{itemize}
     \item DIPENDENTE(\underline{Id}, Nome, Cognome, DataN)
     \item PROGETTO(\underline{Id}, Titolo, Data)
@@ -2552,5 +2553,369 @@ In questo caso abbiamo scritto Nome = query\_interna. Questo funziona perché fi
     \item Non si può fare riferimento a variabili definite in blocchi più interni (con ad esempio nomi temporanei definiti con l'operatore \code{as}), ma si può fare riferimetno a variabili definite in blocchi più esterni
 \end{itemize}
 \end{Proprieta} 
+
+Le interrogazioni nidificate ci permettono di risolvere anche query che prima non sapevamo come gestire. Se ad esempio vogliamo i nomi di tutte le persone con il reddito massimo, possiamo scrivere semplicemente
+
+\begin{lstlisting}
+SELECT *
+FROM Persone
+WHERE Reddito = SELECT (MAX(Reddito) FROM Persone) 
+\end{lstlisting}
+
+\begin{Proprieta}[Tipi di query annidate]
+\label{prop-tipi-query-annidate}
+Distinguiamo due tipi di query annidate:
+\begin{itemize}
+    \item Query \textbf{subordinata} (o \textbf{correlata}), dove la query interna dipende da una o più colonne di quella esterna. La query interna viene qui eseguita riga per riga per ogni record della query principale (ossia quella esterna).
+    \item Query \textbf{coordinata} (o \textbf{non correlata}), dove le query interne ed esterne sono totalmente indipendenti. La query interna qui viene eseguita una sola volta, e il risultato viene poi utilizzato dalla query principale
+\end{itemize}
+\end{Proprieta}
+
+\begin{Proposizione}[]
+\label{propos-nidiifcazione}
+Non è possibile sfruttare la nidificazione con \textbf{having}.
+\end{Proposizione}
+
+Ad esempio, la query
+
+\begin{lstlisting}
+SELECT Dipartimento
+FROM Impiegato
+GROUP BY Dipartimento
+HAVING SUM(Stipendio) >= ALL (SELECT SUM(Stipendio)
+                              FROM Impiegato
+                              GROUP BY Dipartimento) 
+\end{lstlisting}
+
+è errata, ed andrebbe risolta creando una \textbf{nuova view}, che si fa in questo modo:
+
+\begin{lstlisting}
+CREATE VIEW Budget(Dip,TotStipendi) as 
+    SELECT Dipartimento, SUM(Stipendio)
+    FROM Impiegato
+    GROUP BY Dipartimento
+\end{lstlisting}
+
+e facendo poi la query
+
+\begin{lstlisting}
+SELECT Dipartimento
+FROM Budget
+WHERE TotStipendi = (SELECT MAX(TotStipendi)
+                     FROM Budget)
+\end{lstlisting}        
+
+\begin{Proposizione}[]
+\label{propos-nidificazione-2}
+La nidificazione di operatori aggregati \textbf{non è ammessa}.
+\end{Proposizione}
+
+Ad esempio, la query
+
+\begin{lstlisting}
+SELECT AVG(COUNT(DISTINCT Ufficio))
+FROM Impiegato 
+GROUP BY Dipartimento
+\end{lstlisting}
+
+è errata, e va sempre risolta creando una nuova view:
+
+\begin{lstlisting}
+CREATE VIEW DipartUffici(NomeDip, NumeroUffici) as
+    SELECT Dipart, COUNT(DISTINCT UFFICIO)
+    FROM Impiegato
+    GROUP BY Dipartimento
+\end{lstlisting}
+
+e facendo poi la query
+
+\begin{lstlisting}
+SELECT AVG(NumeroUffici)
+FROM DipartUffici
+\end{lstlisting}
+
+\section{DML}
+
+Una volta compreso come creare un database e come interrogarne i dati bisogna passare allo step successivo, e capire come \textbf{manipolare i dati} di un database. Per fare ciò abbiamo a disposizione tre diverse operazioni:
+\begin{itemize}
+    \item \codeb{INSERT}, per \textbf{inserire i dati} in una o più relazioni
+    \item \codeb{DELETE}, per \textbf{eliminare i dati} di una o più relazioni
+    \item \codeb{UPDATE}, per \textbf{modificare i dati} di una o più relazioni (già accennato in precedenza quando abbiamo visto il comando \code{ON UPDATE CASCADE})
+\end{itemize}
+
+\subsection*{\codeb{INSERT}}
+
+Per inserire una tupla \code{Valore} in una relazione \code{Tabella} già esistente basta scrivere
+
+\begin{lstlisting}
+INSERT INTO Tabella (Attributi)
+VALUES(Valore)
+\end{lstlisting}
+
+dove \code{Attributi} sono alcuni degli attributi della relazione \code{Tabella} (è possibile anche non specificare questa tupla di \code{Attributi}: in tal caso verranno presi tutti gli attributi della relazione nell'ordine descritto dallo schema). La tupla \code{Valore} deve avere valori nello stesso numero e ordine di quelli in \code{Attributi}, ma non è necessario che questi siano nello stesso ordine definiti nella \code{CREATE TABLE}. Infatti, è possibile anche saltare alcuni attributi definiti nella relazione: questi verranno segnati con un valore di default se presente o come \code{NULL}. Se però saltiamo un attributo definito come \code{NOT NULL} ci verrà restituito un errore. Ad esempio non possiamo inserire una tupla che abbia come valore della chiave \code{NULL}.
+
+È possibile anche inserire una o più tuple da altre relazioni tramite una query:
+
+\begin{lstlisting}
+INSERT INTO Persone
+SELECT Nome, Eta
+FROM Padre
+WHERE Eta > 50
+\end{lstlisting}
+
+Ad esempio, con questa query stiamo inserendo nella tabella Persone tutti i padri con un età $\geq 50$ anni. Dato che abbiamo selezionato \code{Nome} e \code{Eta} nella query, nella tabella Persone dovremo avere questi due attributi con questo ordine e, nel caso, possiamo avere solo attributi con default o che ammettono il valore \code{NULL}.
+
+\subsection*{\codeb{DELETE}}
+
+Per eliminare invece una serie di tuple di una tabella che rispondono a una certa condizione basta scrivere
+
+\begin{lstlisting}
+DELETE FROM Tabella
+WHERE Condizione
+\end{lstlisting}
+
+Nel caso si vogliano eliminare tutte le tuple di una relazione, basta scrivere semplicemente \code{DELETE FROM Tabella}, senza alcuna condizione (che per SQL equivale a dire \code{WHERE TRUE}), come già accennato in precedenza. Ovviamente, se una tupla è presente come foreign key in un'altra relazione ed è specificato una politica \code{CASCADE}, la sua eliminazione può modificare o eliminare delle tuple in altre relazioni.
+
+\subsection*{\codeb{UPDATE}}
+
+Per aggiornare una serie di tuple di una tabella che rispondono a una certa condizione modificandone un'attributo con un nuovo valore basta scrivere
+\begin{lstlisting}
+UPDATE Tabella
+SET Attributo = Espressione
+WHERE Condizione
+\end{lstlisting}
+
+L'espressione definita può essere un valore predefinito, come un numero o una stringa, ma può essere anhce una sottoquery. Ad esempio, è totalmente lecito scrivere
+
+\begin{lstlisting}
+UPDATE Impiegato
+SET Stipendio = AVG(SELECT AVG(Stipendio) FROM Impiegato)
+WHERE Stipendio < 1000
+\end{lstlisting}
+
+per impostare tutti gli stipendi minori di 1000 pari alla media degli stipendi di questa stessa tabella.
+
+Anche qui, nel caso si vogliano modificare tutte le tuple di una relazione cambiando un attributo con lo stesso valore per tutte basta non porre nessuna condizione.
+
+\section{DCL}
+
+Passiamo ora all'ultimo sottolinguaggio di SQL, ossia \textbf{DCL}, dedito alla gestione dei permessi di accesso ai dati. Tramite questo linguaggio è possibile specificare chi può accedere a quali dati e con quali permessi.
+
+\begin{Definizione}[Privilegio]
+\label{def-privilegio}
+Un \textbf{privilegio} è un diritto di accesso che un utente possiede per poter accedere a una certa risorsa, che può essere una tabella ma anche un singolo attributo/dominio o una vista.
+\end{Definizione}
+
+\begin{Proprieta}[Tipi di privilegi]
+\label{prop-tipi-privilegi}
+Esistono diversi tipi di privilegi:
+\begin{itemize}
+    \item \codeb{INSERT}, che permette di inserire nuovi oggetti
+    \item \codeb{UPDATE}, che permette di modificare il contenuto di oggetti
+    \item \codeb{DELETE}, che permette di eliminare oggetti
+    \item \codeb{SELECT}, che permette di leggere la risorsa selezionata
+    \item \codeb{REFERENCES}, che permette la definizione di nuovi vincoli sulla risorsa  selezionata
+    \item \codeb{USAGE}, che permette l'utilizzo della risorsa selezionata (ad esempio l'utilizzo di un dominio creato) 
+\end{itemize}
+\end{Proprieta}
+
+Per concedere uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{GRANT}, scrivendo ad esempio \mbox{\code{GRANT Privilegi on Risorsa to Utente}}. Inoltre, se si vuole che l'utente a cui garantiamo i privilegi possa a sua volta concedere questi stessi privilegi a qualcun'altro, dobbiamo aggiungere la scritta \codeb{WITH GRANT OPTION}. \\
+Per revocare invece uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{REVOKE}, scrivendo ad esempio \code{REVOKE Privilegi on Risorsa from Utente}. Oltre a ciò, se all'utente sono stati dati anche i permessi per poterli concedere lui stesso a altri utenti, bisogna anche specificare \codeb{RESTRICT} se si vuole annullare la revoca nel caso l'utente a cui stiamo revocando i permessi li abbia concessi a qualcun'altro, o specificare \codeb{CASCADE} se si vuole revocare i permessi anche a tutti gli utenti che li hanno ricevuti da colui che li sta perdendo.
+
+\section{DTL}
+
+Esiste in realtà un altro sottolinguaggio di SQL con un solo obiettivo: effettuare delle \textbf{transazioni}, e prende proprio il nome di \textbf{DTL} (Data Transaction Language).
+
+\begin{Definizione}[Transazione]
+\label{def-transazione}
+Una \textbf{transazione} è una sequenza di operazioni che deve rispettare una serie di proprietà:
+\begin{itemize}
+    \item \textbf{Atomicità}: le operazioni devono essere eseguite SEMPRE tutte insieme. Se una transazione viene annullata a metà, tutte le operazioni eseguite al suo interno devono essere annullate
+    \item \textbf{Consistenza}: al termine di ogni istruzione non deve essere violato alcun vincolo di integrità
+    \item \textbf{Isolata}: le transazioni devono essere indipendenti fra loro
+    \item \textbf{Durabilità}: una transazione completata correttamente deve riportare risultati durabili nel tempo 
+\end{itemize}
+\end{Definizione}
+
+Per effettuare una transizione in SQL esistono tre istruzioni fondamentali:
+\begin{itemize}
+    \item \codeb{BEGIN TRANSACTION}, che specifica l'inizio della transizione (in questa fase le operazioni non vengono ancora eseguite sulla base di dati)
+    \item \codeb{COMMIT WORK}, che conclude la transizione (tutte le operazioni a partire da \code{BEGIN TRANSACTION})
+    \item \codeb{ROLLBACK WORK}, che rinuncia completamente alla transizione e riporta la base di dati allo stato precedente alla transizione
+\end{itemize}
+
+Ad esempio una transizione classica viene effettuata quando si passa un tot di soldi da un saldo a un altro, scrivendo in questo modo:
+
+\begin{lstlisting}
+BEGIN TRANSACTION
+UPDATE ContoCorrente
+    SET Saldo = Saldo - 10
+    WHERE NumeroConto = 10000
+UPDATE ContoCorrente
+    SET SALDO = SALDO + 10
+    WHERE NumeroConto =  55555
+COMMIT WORK
+\end{lstlisting}
+
+
+\section{DBMS attivi}
+
+\NB La sintassi delle operazioni sui DBMS Attivi varia da DBMS a DBMS. Daremo quindi dei comandi generali che poi andranno approofnditi a seconda del DBMS utilizzato.
+
+Tutti i DBMS che abbiamo visto fino ad ora sono detti database \textbf{passivi}. Questo perché reagiscono SOLO a richieste effettuate dagli utenti. Spesso, però, si ha necessità di far reagire il DBMS in modo automatico ad alcuni eventi, e per questo motivo nascono i \textbf{DBMS attivi}.
+
+\begin{Definizione}[DBMS attivo]
+\label{def-DBMS attivo}
+Un DBMS viene detto \textbf{attivo} quando consente la definizione e gestione di \textbf{trigger}. Questi trigger vengono attiviati in modo automatico al verificarsi di eventi specifici sulla base di dati e dopo aver verificato eventuali condizioni, e nell'attivarsi eseguono delle operazioni sulla base di dati. \\
+Il paradigma che adottiamo per gestire i trigger è il paradigma \textbf{ECA} (Evento-Condizione-Azione). 
+\end{Definizione}
+
+Tra gli eventi possibili che possono attivare un trigger ci sono i vari \code{INSERT}, \code{DELETE}, \code{UPDATE} o \code{UPDATE OF Lista attributi}. In particolare, se si utilizza come evento \code{UPDATE OF Lista attributi}, il trigger si attiverà se e solo se l'evento modifica tutti e soli gli attributi della lista. 
+
+I comandi di SQL per gestire una base di dati attiva sono i seguenti:
+\begin{itemize}
+    \item \codeb{CREATE TRIGGER}, per \textbf{creare} un nuovo trigger
+    \item \codeb{DROP TRIGGER}, per \textbf{eliminare} un trigger
+    \item \codeb{ALTER TRIGGER}, per \textbf{modificare} un trigger (supportato da alcuni DBMS)
+\end{itemize}
+
+La struttura generale per creare un trigger in SQL è la seguente:
+
+\begin{lstlisting}
+CREATE TRIGGER Nome
+{BEFORE/AFTER} Evento ON Relazione
+REFERENCING OLD ROW AS Variabile / NEW ROW AS Variabile /
+OLD TABLE AS Variabile / NEW TABLE AS Variabile
+FOR EACH ROW/STATEMENT
+WHEN Condizione
+Comandi SQL da eseguire
+\end{lstlisting}
+
+Ci sono tante cose da analizzare qui:
+\begin{itemize}
+    \item \codeb{BEFORE/AFTER} ci permettono di eseguire operazioni SQL sia prima sia dopo un evento
+    \item \codeb{REFERENCING} ci permette di dare dei nomi a vecchie/nuove righe/tabelle per facilitare la scrittura delle condizioni. Nel caso questo non venga effettuato, si può scrivere \codeb{new.} o \code{old.} per riferirsi a righe/tabelle vecchie/nuove.
+    \item \codeb{FOR EACH ROW/STATEMENT} è particolare: bisogna utilizzare \code{FOR EACH ROW} se si ha un trigger che modifica il valore delle singole tuple che vengono modificate, mentre bisogna usare \code{FOR EACH STATEMENT} se c'è un azione che modifica globalmente tutte le tuple.
+    \NB Con il \code{FOR EACH STATEMENT} si potrà dare un nome usando \code{REFERENCING} solo alle tabelle vecchie/nuove, e non alle singole righe.
+\end{itemize}
+
+È possibile porre delle condizioni sia sulle righe/tabelle vecchie sia su quelle nuove grazie alle cosiddette \textbf{tabelle di transizione}, che congelano i dati prima che l'evento venga eseguito e li salva in una nuova tabella. Ovviamente tutto ciò ha senso se il trigger si attiva dopo che l'evento che lo ha scatenato viene eseguito: se il trigger si attiva prima dell'evento non esiste nessuna tabella con all'interno i dati post-evento, dato che l'evento deve ancora avvenire.
+
+\subsection{Relazione tra trigger e vicoli d'integrità}
+
+Possiamo vedere i trigger come dei vincoli più generali: i vincoli ci permettono di fare dei controlli su delle operazioni, mentre i trigger ci permettono non solo di fare dei controlli, ma anche di effettuare delle operazioni in risposta a queste operazioni. Questa flessibilità in più può essere sia un vantaggio che uno svantaggio: è un vantaggio perché ci permette di muoverci come vogliamo in base alla situazione creata, ma è uno svantaggio perché ogni volta che creiamo un trigger dobbiamo definire come il DBMS deve muoversi quando registra un evento e rispetta delle condizioni. 
+
+Vediamo ora un esempio in cui abbiamo dei trigger e dei vincoli che lavorano insieme. Ipotizziamo di avere i seguenti trigger:
+\begin{lstlisting}
+CREATE TRIGGER Trigger1 AFTER UPDATE ON Tabella1...;
+CREATE TRIGGER Trigger2 BEFORE UPDATE ON Tabella1...;
+CREATE TRIGGER Trigger3 AFTER UPDATE ON Tabella1...;
+\end{lstlisting}
+
+Decidiamo ora di modificare la nostra Tabella1, in questo modo:
+\begin{lstlisting}
+ALTER TABLE Tabella1 ADD CONSTRAINT Vincolo1...;
+\end{lstlisting}
+
+A questo punto, quando arriva un \code{UPDATE} sulla Tabella1, cosa succede? Innanzitutto, il Trigger2 viene attivato perché definito come BEFORE. Viene poi eseguito l'UPDATE, viene controllato il nuovo Vincolo1 che abbiamo aggiunto, viene poi attivato il Trigger1 (perché scritto prima del Trigger3) e infine il Trigger3.
+
+Dunque, in generale, viene seguito questo ordine:
+\begin{enumerate}[label=\arabic*°]
+    \item Trigger BEFORE STATEMENT
+    \item Per ogni tupla:
+    \begin{itemize}
+        \item TRIGGER BEFORE ROW
+        \item Evento sulla riga e verifica dei vincoli sulla riga
+        \item TRIGGER AFTER ROW
+    \end{itemize}
+    \item Verifica dei vincoli sul comando completato
+    \item Trigger AFTER STATEMENT
+\end{enumerate}
+e, come già visto nell'esempio, se esistono più trigger dello stesso tipo si considera l'ordine di creazione.
+
+\subsection{Quando i trigger sono veramente utili}
+
+Vediamo ora un esempio in cui i trigger diventano veramente utili. Ipotizziamo di avere una Warehouse nel nostro DB:
+
+\begin{center}
+Warehouse \nopagebreak
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Part} & \textbf{QtyAvbl} & \textbf{QtyLimit} & \textbf{QtyReord}\\ \hline
+1 & 200 & 150 & 100 \\
+2 & 780 & 500 & 200 \\
+3 & 450 & 400 & 120 \\ \hline
+\end{tabular}
+\end{center}
+
+dove Part è l'identificativo dell'articolo, QtyAvbl sono i pezzi disponibili, QtyLimit sono il numero minimo di pezzi da avere in magazzino e QtyReord è il numero di pezzi da riordinare se QtyAvbl scende sotto il limite imposto da QtyLimit. Vogliamo quindi un trigger che si attiva ogni volta che QtyAvbl scende sotto QtyLimit e che effettui un riordine di un numero di pezzi pari a QtyReord. \\
+Creiamo quindi il seguente trigger:
+
+\begin{lstlisting}
+CREATE TRIGGER Reorder
+AFTER UPDATE OF QtyAvbl ON Warehouse
+FOR EACH ROW
+WHEN(new.QtyAvbl < new.QtyLimit)
+DECLARE X Number
+BEGIN
+SELECT COUNT(*) INTO X
+FROM PendingOrders
+WHERE Part = new.Part;
+IF X = 0
+THEN
+    INSERT INTO PendingOrders
+    VALUES(new.Part, new.QtyReord, sysDate)
+END
+\end{lstlisting}
+
+Notiamo intanto due cose:
+\begin{itemize}
+    \item \codeb{DECLARE} dichiara una nuova variabile temporanea
+    \item \codeb{BEGIN-END} racchiudono tutte i comandi SQL da eseguire quando il trigger viene attivato
+    \item \codeb{;} è necessario per separare le diverse query/istruzioni che il trigger attiva
+    \item \codeb{IF - THEN} serve per eseguire un istruzione solo se la condizione nell'if è rispettata
+\end{itemize}
+
+Riprendendo ora la tabella Warehouse, ipotizziamo di effettuare la seguente transazione:
+\begin{lstlisting}
+UPDATE Warehouse
+SET QtyAvbl = QtyAvbl - 70
+WHERE Part = 1
+\end{lstlisting}
+
+Dato che non abbiamo nessun trigger BEFORE, effettuaimo subito l'operazione e otteniamo come risultato la tabella
+
+\begin{center}
+Warehouse \nopagebreak
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+
+\textbf{Part} & \textbf{QtyAvbl} & \textbf{QtyLimit} & \textbf{QtyReord}\\ \hline
+1 & 130 & 150 & 100 \\
+2 & 780 & 500 & 200 \\
+3 & 450 & 400 & 120 \\ \hline
+\end{tabular}
+\end{center}
+
+A questo punto parte il nostro trigger, che verifica ogni riga della nostra tabella. Dato che nella prima tupla abbiamo effettivamente QtyAvbl < QtyLimit, la condizione è rispettata e vengono eseguite le operazioni prestabilite dal trigger. Aggiungiamo quindi alla nostra tabella PendingOrders un nuovo ordine per il nostro articolo con codice Part = 1. Se adesso effettuiamo un'altra transazione di questo tipo
+\begin{lstlisting}
+UPDATE Warehouse
+SET QtyAvbl = QtyAvbl - 70
+WHERE Part = 2
+\end{lstlisting}
+
+il nostro trigger si attiverà lo stesso, la condizione sarà verificata, ma dato che avremo X = 1 non verrà inserito nessu nuovo ordine. In questo modo evitiamo di effettuare più di un ordine di restock.
+
+\chapter{Capire se una base di dati è ben strutturata}
+
+
+
+
+
+
+
+
 
 \end{document}
