@@ -25,14 +25,14 @@
 
 \begin{Definizione}[Sistema informativo]
 \label{def-sistema-informativo}
-Un \textbf{sistema informativo} di un'organizzazione è una combinazione di risorse, umane e materiali, e di procedure organizzate per \textit{raccogliere}, \textit{archiviare}, \textit{elaborare} e \textit{scambiare} le informazioni necessarie alle attività \textbf{operative} (informazioni di serivizio), di \textbf{programmazione e controllo} (informazioni di gestione) e di \textbf{pianificazione strategica} (informazioni di governo).
+Un \textbf{sistema informativo} di un'organizzazione è una combinazione di risorse, umane e materiali, e di procedure organizzate per \textit{raccogliere}, \textit{archiviare}, \textit{elaborare} e \textit{scambiare} le informazioni necessarie alle attività \textbf{operative} (informazioni di servizio), di \textbf{programmazione e controllo} (informazioni di gestione) e di \textbf{pianificazione strategica} (informazioni di governo).
 \end{Definizione}
 
-Questo sistema è quindi una componente dell'organizzazione che viene utilizzata per gestire le infromazioni di interesse, supportando  le altre componenti dell'organizzazione (come il sistema produttivo o decisionale, ad esempio). 
+Questo sistema è quindi una componente dell'organizzazione che viene utilizzata per gestire le informazioni di interesse, supportando  le altre componenti dell'organizzazione (come il sistema produttivo o decisionale, ad esempio). 
 
 \begin{Definizione}[Sistema informatico]
 \label{def-sistema-informatico}
-Il \textbf{sistema informatico} è l'insieme delle tecnologie informaitche e della comunicazione (ICT) a supporto delle attività di un'organizzazione.
+Il \textbf{sistema informatico} è l'insieme delle tecnologie informatiche e della comunicazione (ICT) a supporto delle attività di un'organizzazione.
 \end{Definizione}
 
 \begin{Definizione}[Sistema informativo automatizzato]
@@ -40,11 +40,11 @@ Il \textbf{sistema informatico} è l'insieme delle tecnologie informaitche e del
 Il \textbf{sistema informativo automatizzato} è quella parte del sistema informativo dove le informazioni sono raccolte, elaborate, archiviate e scambiate tramite l'ausilio di un sistema informatico.
 \end{Definizione}
 
-Dato che ormai quasi tutti i sistemi informativi sono digitalizzati, i tre termini appena visti tendono spesso a sovrapporsi e a essere usati come sinomini.
+Dato che ormai quasi tutti i sistemi informativi sono digitalizzati, i tre termini appena visti tendono spesso a sovrapporsi e a essere usati come sinonimi.
 
 \section{Gestione dei dati}
 
-Negli anni 60'/70' ogni applicazione aveva un proprio file privato dove venivano salvati i propri dati. Questo creava una serie di problemi:
+Negli anni '60/'70 ogni applicazione aveva un proprio file privato dove venivano salvati i propri dati. Questo creava una serie di problemi:
 \begin{itemize}
     \item \textbf{ridondanza}, dato che se due applicazioni usavano gli stessi dati questi venivano salvati due volte.
     \item \textbf{inconsistenza}, dato che aggiornare un dato in un file non significava aggiornarlo automaticamente in tutti i file
@@ -55,7 +55,7 @@ Proprio per questo motivo nascono le \textbf{basi di dati}.
 
 \begin{Definizione}[Basi di Dati]
 \label{def-basi-di-dati}
-Una \textbf{Base di Dati} (o Database, \textbf{DB}) è un \textbf{insieme di file connessi tra loro}. Gli insiemi di dati sono organizzati in delle \textit{strutture di dati} che rendono più facile la creazione, l'accesso e l'aggiornamento di tali e ottimizzano la gestione delle risorse fisiche.
+Una \textbf{Base di Dati} (o Database, \textbf{DB}) è un \textbf{insieme di file connessi tra loro}. Gli insiemi di dati sono organizzati in delle \textit{strutture di dati} che rendono più facile la creazione, l'accesso e l'aggiornamento di tali insiemi e ottimizzano la gestione delle risorse fisiche.
 \end{Definizione}
 
 \begin{Definizione}[Dati]
@@ -65,7 +65,7 @@ I \textbf{dati} sono dei fatti grezzi che bisogna interpretare e correlare per f
 
 Ad esempio, 3336669990 da solo è un semplice numero, ma se è la risposta alla domanda "Qual è il numero di telefono di X", allora ha tutto un altro significato, e diventa quindi una \textit{informazione} vera e propria.
 
-Quando si registrano delle informazioni, questi possono essere
+Quando si registrano delle informazioni, queste possono essere
 \begin{itemize}
     \item \textbf{dati strutturati}, ossia rappresentati da brevi stringhe di simboli e da numeri,
     \item o \textbf{dati non strutturati}, ossia testi scritti in linguaggio naturale.
@@ -75,11 +75,11 @@ La struttura dell'informazione dipende dal suo utilizzo e può essere modificata
 
 L'obiettivo di una base di dati non è solo il memorizzare i dati in modo compatto, ma soprattutto \textbf{facilitarne l'elaborazione} sulla base delle loro relazioni. Ad esempio, parlando dei dati strutturati, vi si può accedere singolarmente tramite delle "interrogazioni", dette \textit{query}, e le relazioni tra i dati individuali sono salvate nella \textit{struttura dei record}. 
 
-I dati contenuti DB sono suddivisi in due categorie:
+I dati contenuti nei DB sono suddivisi in due categorie:
 \begin{itemize}
-    \item \textbf{dati}: rappresentazioni di fatti conformi alla definizione dello scheam delle basi di dati. Questi hanno diverse caratteristiche:
+    \item \textbf{dati}: rappresentazioni di fatti conformi alla definizione dello schema delle basi di dati. Questi hanno diverse caratteristiche:
     \begin{itemize}
-        \item Sono organizzati in insieme strutturati e omogenei, con relazioni definite tra i vari insiemi.
+        \item Sono organizzati in insiemi strutturati e omogenei, con relazioni definite tra i vari insiemi.
         \item Sono molti di più rispetto ai metadati, e non sono gestiti nella RAM (memoria temporanea).
         \item Sono accessibili tramite transazioni, sequenze di istruzioni che devono tutte andare a buon fine per apportare vere modifiche.
         \item Sono protetti sia dall'accesso di utenti non autorizzati, sia da malfunzionamento di hardware e/o software.
@@ -129,11 +129,11 @@ L'\textbf{OLAP} (On-Line Analytical Processing) è il \textbf{paradigma} usato n
 
 Vediamo le molte differenze tra OLTP e OLAP.
 \begin{itemize}
-    \item L'OLTP supporta \textbf{l'operatiivà} dell'azienda, mentre l'OLAP le sue \textbf{decisioni}
+    \item L'OLTP supporta \textbf{l'operatività} dell'azienda, mentre l'OLAP le sue \textbf{decisioni}
     \item L'OLTP ha \textbf{molti utenti}, mentre l'OLAP è più \textbf{esclusivo}
-    \item I dati dell'OLTP sono \textbf{analitici e relazionali}, mentre quelli dell'OLAP sono \textbf{sintetici} e \textbf{multidirezionali}
+    \item I dati dell'OLTP sono \textbf{analitici e relazionali}, mentre quelli dell'OLAP sono \textbf{sintetici} e \textbf{multidimensionali}
     \item Gli utilizzi dell'OLTP sono \textbf{noti a priori}, mentre quelli dell'OLAP \textbf{non sono molto prevedibili}.
-    \item Per attività, la quantità di dati dell'OLPT è \textbf{bassa} (si parla di decine di dati), mentre quella dell'OLAP è \textbf{alta} (si parla di milioni di dati)
+    \item Per attività, la quantità di dati dell'OLTP è \textbf{bassa} (si parla di decine di dati), mentre quella dell'OLAP è \textbf{alta} (si parla di milioni di dati)
     \item L'OLTP è \textbf{orientato all'applicazione}, mentre l'OLAP al \textbf{soggetto}
     \item Nell'OLTP gli aggiornamenti sono \textbf{frequenti}, mentre nell'OLAP sono \textbf{rari}
     \item Nell'OLTP i dati sono \textbf{sovrascritti} (i dati vecchi non sono interessanti), mentre nell'OLAP sono \textbf{importanti anche i dati vecchi}
@@ -149,7 +149,7 @@ I dati dell'OLAP sono presi per essere analizzati. Questi hanno bisogno di requi
     \item Bisogna analizzare i dati su \textbf{diversi livelli di dettaglio}: ad esempio, se si scopre un calo nelle vendite in un periodo di una regione, bisogna analizzare quei dati in modo più approfondito per capirne le cause 
 \end{itemize}
 
-I sistemi informatici operativi, essendo progettati per un'elaborazione rapida delle transazioni, sono dunque l'\textbf{perfetti per OLTP} ma non adatti per l'OLAP.
+I sistemi informatici operativi, essendo progettati per un'elaborazione rapida delle transazioni, sono dunque \textbf{perfetti per OLTP} ma non adatti per l'OLAP.
 
 \section{Big Data e Data Lake}
 
@@ -168,20 +168,20 @@ I Big Data sono associati solitamente ai sistemi NoSQL, al Machine Learning, e a
 
 \begin{Definizione}[Data Lake]
 \label{def-data-lake}
-Un \textbf{Data Lake} è un \textbf{ambiente di data storage} a basso costo creato per gestire enormi quantità di dati non elaborati e di qualsiasi formati, inclusi dati strutturati, semi-strutturati e non strutturati.
+Un \textbf{Data Lake} è un \textbf{ambiente di data storage} a basso costo creato per gestire enormi quantità di dati non elaborati e di qualsiasi formato, inclusi dati strutturati, semi-strutturati e non strutturati.
 \end{Definizione}
 
-Quasi tutti i Data Lake utilizzano lo storage a ogetti basato su cloud, come Google Cloud Storage. Questi sono nati per gestire il flusso di nuovi big data, molti non strutturati, creati da app e servizi conessi a Internet. A differenza dei DB e DW tradizionali, questi non richiedono uno schema di dati definito e possono anche memorizzare diversi tipi di dati in più formati tutti nello stesso posto. Questo li rende più ideali per i data scientist, grazie al suo schema \textit{on-read}: i dati vengono strutturati solo quando vanno letti, al contrario dello schema \textit{on-write} delle DW dove i dati sono strutturati fin da subito.
+Quasi tutti i Data Lake utilizzano lo storage a oggetti basato su cloud, come Google Cloud Storage. Questi sono nati per gestire il flusso di nuovi big data, molti non strutturati, creati da app e servizi connessi a Internet. A differenza dei DB e DW tradizionali, questi non richiedono uno schema di dati definito e possono anche memorizzare diversi tipi di dati in più formati tutti nello stesso posto. Questo li rende più ideali per i data scientist, grazie al loro schema \textit{on-read}: i dati vengono strutturati solo quando vanno letti, al contrario dello schema \textit{on-write} delle DW dove i dati sono strutturati fin da subito.
 
 \section{Modelli di DBMS}
 
 \subsection{Prima del modello relazionale}
 
-Il modello relazionale è ad oggi lo standard per i DBMS. Lo analizzeremo tra poco, ma per ora diamo un occhiata ai modelli che lo hanno preceduto.
+Il modello relazionale è ad oggi lo standard per i DBMS. Lo analizzeremo tra poco, ma per ora diamo un'occhiata ai modelli che lo hanno preceduto.
 
-Il primo modello di DB è il \textbf{modello gerarchico}, uscito a metà degli anni 60'. Questo organizza i dati in una struttura ad albero dove ogni record figlio può avere solo un genitore. Questo modello è stato poi esteso dal modello \textbf{reticolare}, che ha trasformato l'albero (che è un grafo acircolare e connesso) in un grafo generico.
+Il primo modello di DB è il \textbf{modello gerarchico}, uscito a metà degli anni '60. Questo organizza i dati in una struttura ad albero dove ogni record figlio può avere solo un genitore. Questo modello è stato poi esteso dal modello \textbf{reticolare}, che ha trasformato l'albero (che è un grafo aciclico e connesso) in un grafo generico.
 
-A metà degli anni 80' arrivano anche i primi sistemi \textbf{orientati a oggetti}. In questo modello troviamo gli \textit{attributi} che descrivono lo stato di un oggetto, e i \textit{metodi} che ne descrivono invece il comportamento. Al contrario del modello relazionale, però, non esisteancora un modello universalmente riconosciuto.
+A metà degli anni '80 arrivano anche i primi sistemi \textbf{orientati a oggetti}. In questo modello troviamo gli \textit{attributi} che descrivono lo stato di un oggetto, e i \textit{metodi} che ne descrivono invece il comportamento. Al contrario del modello relazionale, però, non esiste ancora un modello universalmente riconosciuto.
 
 \subsection{Modello relazionale}
 
@@ -200,7 +200,7 @@ I record sono gli \textbf{oggetti}, mentre le informazioni di interesse sono i \
     \centering
       \caption*{Studenti}
     \small
-    \begin{tabular}{|c|c|c|c|}
+    \begin{tabular}{|c|c|c|}
       \hline
       \textbf{Matricola} & \textbf{Nome} & \textbf{Cognome} \\
       \hline
@@ -242,14 +242,14 @@ I record sono gli \textbf{oggetti}, mentre le informazioni di interesse sono i \
     \end{tabular}
 \end{table}
 
-Notiamo come le relazioni tra i diversi oggetti siano rappresentate dai valori stessi appunto: nella tabella Esami, riusciamo a capire chi ha svolto quale esame e ha preso quale voto grazie ai valori nella tabella. Ad esempio, capiamo che Mario Rossi ha preso 21 al corso di Chimia del prof. Sterbini. È importante capire, però, che queste relazioni non dipendono dal nome del campo: bisogna sempre poter rinomirare le colonne senza perdere le relazioni.
+Notiamo come le relazioni tra i diversi oggetti siano rappresentate dai valori stessi appunto: nella tabella Esami, riusciamo a capire chi ha svolto quale esame e ha preso quale voto grazie ai valori nella tabella. Ad esempio, capiamo che Mario Rossi ha preso 21 al corso di Chimica del prof. Sterbini. È importante capire, però, che queste relazioni non dipendono dal nome del campo: bisogna sempre poter rinominare le colonne senza perdere le relazioni.
 
 \subsection{Linguaggio per gestire i DB}
 
 Ora che abbiamo definito cosa sono i DB, abbiamo bisogno di un \textbf{linguaggio} per gestirli. Per capire come definire questo linguaggio, però, dobbiamo prima capire appieno come sono strutturati i database. Possiamo distinguere 3 livelli distinti:
 \begin{itemize}
     \item \textbf{Vista Logica}, ossia le diverse viste degli utenti in base ai loro diritti di accesso. Non tutti possono accedere a tutti i dati del database, e per questo è necessario creare viste diverse.
-    \item \textbf{Logico}, ossia la descrizione strutturale del database, come i dati vanno suddivisi, senza però importarsi di come questi vengano salvati fisicamente.
+    \item \textbf{Logico}, ossia la descrizione strutturale del database, come i dati vanno suddivisi, senza però preoccuparsi di come questi vengano salvati fisicamente.
     \item \textbf{Fisico}, ossia l'implementazione fisica dei dati sulle memorie di massa. 
 \end{itemize}
 
@@ -257,7 +257,7 @@ Per progettare un database, bisogna partire dal livello \textbf{logico}. Dobbiam
 \begin{center}
 Studenti(Matricola char(8), Nome char(20), Cognome char(20)) \\
 Corsi(Codice char(2), Titolo char(20), Insegnante char(20)) \\
-Esami(Studente char(8), Voto int, Corso int)
+Esami(Studente char(8), Voto int, Corso char(2))
 \end{center}
 
 Si passa poi al livello \textbf{fisico}, che descrive quali strutture dati ausiliarie bisogna utilizzare per facilitare l'uso del DB. Infine, vi sono le \textbf{viste logiche}, che permettono ad utenti con vari livelli di accesso di vedere solo determinate informazioni. 
@@ -271,7 +271,7 @@ Tramite l'approccio con tre livelli, si garantisce l'\textbf{indipendenza fisica
 \label{prop-modalita-accesso-DBMS}
 Dato che non tutti sono in grado di accedere a un DBMS come lo farebbe un programmatore, è necessario creare \textbf{diverse modalità di accesso} per soddisfare tutti gli utenti.
 \begin{itemize}
-    \item \textbf{Interfaccia grafica}: è lo strumento visivo per gli utenti finali che fa interagire al DBMS solo tramite bottoni e tabelle. Il più semplice di tutti.
+    \item \textbf{Interfaccia grafica}: è lo strumento visivo per gli utenti finali che fa interagire con il DBMS solo tramite bottoni e tabelle. Il più semplice di tutti.
     \item \textbf{Linguaggio di interrogazione per utenti non programmatori}: sono quelle interfacce usate dagli utenti per cercare qualcosa con dei filtri selezionati. L'esempio perfetto è quando si cerca su Amazon un oggetto con dei filtri selezionati (ad esempio \mbox{prezzo < 50€}).
     \item \textbf{Linguaggio di programmazione per sviluppatori di applicazioni}: sono quei linguaggi che fanno comunicare l'applicazione con il DBMS, come ad esempio Java o Python.
     \item \textbf{Linguaggio per lo sviluppo di interfacce di applicazioni}: sono quei linguaggi usati per progettare la grafica attraverso cui l'utente finale vede le tabelle e legge/inserisce i dati.
@@ -336,10 +336,10 @@ Un esempio di transazione è: "Trasferisci 1000€ dal conto c1 al conto c2". Il
 
 Quando due transazioni che lavorano sugli stessi dati lavorano insieme, possono verificarsi dei problemi. Facciamo un esempio.
 
-Ipotizziamo che in un DBMS due utenti in facciano partire due transazioni: la transazione 1 è "Aggiungi 1000€ sul conto c", mentre la transazione 2 è "Aggiungi 500€ sul conto c". Le transazioni partono insieme, e nel DBMS succede questo:
+Ipotizziamo che in un DBMS due utenti facciano partire due transazioni: la transazione 1 è "Aggiungi 1000€ sul conto c1", mentre la transazione 2 è "Aggiungi 500€ sul conto c1". Le transazioni partono insieme, e nel DBMS succede questo:
 \begin{enumerate}[label=\arabic*°]
     \item la transazione 1 cerca c1
-    \item la trasnazione 2 cerca c1
+    \item la transazione 2 cerca c1
     \item la transazione 1 modifica il \code{saldo} di c1 in \code{saldo + 1000}
     \item la transazione 2 modifica il \code{saldo} di c1 in \code{saldo + 500} 
 \end{enumerate}
@@ -349,8 +349,8 @@ Partendo con un valore \code{saldo = 0}, ci si aspetterebbe che il saldo finale 
 Si potrebbe pensare di risolvere questo problema semplicemente verificando a posteriori che il risultato sia corretto, ma questo è praticamente impossibile: infatti, in un DBMS reale arrivano transazioni di continuo, e dunque per fare queste verifiche dovremmo perdere un sacco di tempo e annullare molte transazioni mentre verifichiamo che sia tutto ok.
 
 \begin{Proposizione}[Transazioni concorrenti]
-\label{propos-trasnazioni-concorrenti}
-Per risolvere il problema della concorrenza, bisogna far si che più transazioni in parallelo \textbf{lavorino come se fossero in serie}. 
+\label{propos-transazioni-concorrenti}
+Per risolvere il problema della concorrenza, bisogna far sì che più transazioni in parallelo \textbf{lavorino come se fossero in serie}. 
 Esistono per questo scopo dei \textbf{protocolli} con regole rigide a priori che tutte le transazioni devono rispettare.
 \end{Proposizione}
  
@@ -359,7 +359,7 @@ Esistono per questo scopo dei \textbf{protocolli} con regole rigide a priori che
 Per progettare una base di dati si intende progettarne la struttura dei dati e delle applicazioni. Questa è la fase più importante e delicata, ma non è l'unica: fa parte di un contesto più grande, ossia il \textbf{ciclo di vita dei sistemi informativi}.
 
 \begin{Definizione}[Ciclo di vita dei sistemi informativi]
-\label{def-ciclo-vita-sistemi-informtivi}
+\label{def-ciclo-vita-sistemi-informativi}
 Il \textbf{ciclo di vita dei sistemi informativi} è la sequenza di attività svolte da analisti, progettisti, utenti... che permette di sviluppare e usare una base di dati.
 \end{Definizione}
 
@@ -370,7 +370,7 @@ Prende il nome di ciclo perché una fase può essere ripetuta anche più volte p
     \item \textbf{Progettazione}: si traducono le richieste degli utenti in modelli astratti e schemi formali. 
     \item \textbf{Implementazione}: si scrive il codice, si creano le tabelle e le si iniziano a popolare con i dati iniziali.
     \item \textbf{Validazione e collaudo}: si verifica che il sistema rispetti tutti i requisiti e vincoli e che non ci siano errori.
-    \item \textbf{Funzionamento}: si utilizza il sistema normalmente, monitorandolo constantemente per verificare il corretto funzionamento.
+    \item \textbf{Funzionamento}: si utilizza il sistema normalmente, monitorandolo costantemente per verificare il corretto funzionamento.
 \end{enumerate}
 
 Questo ciclo di vita dei sistemi informativi si traduce per le basi di dati in 4 fasi:
@@ -394,14 +394,14 @@ Entrambe le progettazioni, però, avvengono attraverso lo stesso mezzo: i \textb
 Un \textbf{modello informatico} (o, più in generale, \textbf{modello astratto}) è la rappresentazione formale di idee e di conoscenze relative a un fenomeno.
 \end{Definizione}
 
-La realtà è enorme e disordinata: per questo usiamo dei modelli che selezionano solo alcune conosce utili a descrivere il fenomeno che ci interessa, tramite costrutti matematici o schemi fissi. La stessa realtà, quindi, in base alle necessità può essere modellata in più modi, conservando ogni volta informazioni diverse.
+La realtà è enorme e disordinata: per questo usiamo dei modelli che selezionano solo alcune conoscenze utili a descrivere il fenomeno che ci interessa, tramite costrutti matematici o schemi fissi. La stessa realtà, quindi, in base alle necessità può essere modellata in più modi, conservando ogni volta informazioni diverse.
 
 \begin{Proprieta}[Tipi di modelli]
 \label{prop-tipi-modelli}
 Esistono due tipi di modelli:
 \begin{itemize}
     \item \textbf{modelli logici}: indipendenti dalle strutture fisiche ma supportati nativamente dai DBMS, come ad esempio il modello relazionale.
-    \item \textbf{modelli concettuali}: indipendenti dalle modalità di realizzazione, rappresentanti le entità del mondo reali e le loro relazioni nelle prime fasi della progettazione del DB, come ad esempio il modello ER (Entità-Relazione) che studieremo nello specifico più avanti. Si trovano a un livello di astrazione ancora più alto dei modelli logici.
+    \item \textbf{modelli concettuali}: indipendenti dalle modalità di realizzazione, rappresentanti le entità del mondo reale e le loro relazioni nelle prime fasi della progettazione del DB, come ad esempio il modello ER (Entità-Relazione) che studieremo nello specifico più avanti. Si trovano a un livello di astrazione ancora più alto dei modelli logici.
 \end{itemize}
 \end{Proprieta}
 
@@ -443,18 +443,18 @@ Un'\textbf{entità} rappresenta un \textbf{elemento del mondo reale} di cui ci i
 \begin{Definizione}[Proprietà di un'entità]
 \label{def-prop-entita}
 Le \textbf{proprietà} sono fatti che ci interessano solo perché \textbf{descrivono caratteristiche di determinate entità}. Queste sono rappresentate da una coppia di valori del tipo (Attributo, valore di un certo tipo). \\
-\NB Alcuni fatti in un contesto potrebbero essere interpetati come proprietà e in altri come entità. Ad esempio, un Autore in una Biblioteca può essere una proprietà di un'entità Libro, ma può essere un'entità a parte per una Casa Editrice.
+\NB Alcuni fatti in un contesto potrebbero essere interpretati come proprietà e in altri come entità. Ad esempio, un Autore in una Biblioteca può essere una proprietà di un'entità Libro, ma può essere un'entità a parte per una Casa Editrice.
 \end{Definizione}
 
-Ad esempio, Diego è un'entità di tipo Persona, con proprietà (Nome, "Diego":string) e (Età, 20:int), che fa parte della Collezione delle persone che studiano alla Sapienza.
+Ad esempio, Diego è un'entità di tipo Persona, con proprietà (Nome, "Diego":string) e (Eta, 20:int), che fa parte della Collezione delle persone che studiano alla Sapienza.
 
 \begin{Definizione}[Oggetto]
 \label{def-oggetto}
-Un'\textbf{oggetto} è la definizione informatica formale di un'entità del dominio, caratterizzato da 3 aspetti:
+Un \textbf{oggetto} è la definizione informatica formale di un'entità del dominio, caratterizzato da 3 aspetti:
 \begin{itemize}
     \item \textbf{stato}, ossia l'insieme delle costanti e variabili che lo modellano
     \item \textbf{comportamento}, ossia l'insieme delle sue procedure locali che prendono il nome di \textit{metodi}
-    \item \textbf{identità}, che lo rende unico e indistinguibile
+    \item \textbf{identità}, che lo rende unico e distinguibile dagli altri
 \end{itemize}
 Un oggetto può poi rispondere a una serie di messaggi attraverso valori memorizzati o calcolati al momento. Un \textbf{tipo oggetto} è l'insieme dei messaggi a cui un insieme di oggetti può rispondere. I nomi di questi messaggi sono detti \textbf{attributi degli oggetti}.
 \end{Definizione}
@@ -522,13 +522,13 @@ Oltre alle gerarchie di classe vi sono anche le \textbf{gerarchie di tipi oggett
 \end{Definizione}
 
 \begin{Definizione}[Ereditarietà]
-\label{def-ereditatieta}
+\label{def-ereditarieta}
 Abbiamo già definito il concetto di \textbf{ereditarietà} con le gerarchie di classi e di tipo oggetto, ma vi sono due diversi tipi di ereditarietà:
 \begin{itemize}
     \item \textbf{Ereditarietà di tipo}, che definisce solo quali attributi e metodi deve avere la classe derivata
-    \item \textbf{Ereditarietà di implementazione}, che rappresenta concreatemente il codice della classe derivata
+    \item \textbf{Ereditarietà di implementazione}, che rappresenta concretamente il codice della classe derivata
 \end{itemize}
-Si parla poi di \textbf{ereditarietà stretta} quando il codice l'ereditarietà viene usata non solo per riciclare codice, ma per creare delle vere sottoclassi logiche. Qui gli attributi delle sottoclassi ereditati possono solo essere aggiunti, e non cancellati (non si possono perdere attributi delle superclassi, così da mantenere il principio di sostitutività), ma si possono ridefinire solo specializzandone il tipo.
+Si parla poi di \textbf{ereditarietà stretta} quando l'ereditarietà viene usata non solo per riciclare codice, ma per creare delle vere sottoclassi logiche. Qui gli attributi delle sottoclassi ereditati possono solo essere aggiunti, e non cancellati (non si possono perdere attributi delle superclassi, così da mantenere il principio di sostitutività), ma si possono ridefinire solo specializzandone il tipo.
 \end{Definizione}
 
 Per indicare l'ereditarietà tra classi usiamo una freccia che va dalla sottoclasse alla superclasse che si chiude con un triangolo vuoto. Ad esempio, per definire Docenti come una sottoclasse di Utenti si usa uno schema di questo tipo: 
@@ -599,14 +599,14 @@ Un'associazione R(X,Y) è \textbf{univoca rispetto a X} se per ogni elemento x d
     \item R(X,Y) è \textbf{(1:1)} se è \textit{univoca su X} e \textit{univoca su Y}.
 \end{itemize}
 
-Ad esempio, l'associazione Frequenta(Studenti, Corsi) ha \textbf{cardinalità} (N:M). Infatti, uno studente può frequentare più corsi e un corso può essere frequentato da più studenti, mentre l'associazione NatoA(Persone,Città) ha cardinalità (N:1), dato che una persona può nascere in una sola città, ma in una citta possono nascere più persone.
+Ad esempio, l'associazione Frequenta(Studenti, Corsi) ha \textbf{cardinalità} (N:M). Infatti, uno studente può frequentare più corsi e un corso può essere frequentato da più studenti, mentre l'associazione NatoA(Persone,Citta) ha cardinalità (N:1), dato che una persona può nascere in una sola città, ma in una città possono nascere più persone.
 
 \begin{Proprieta}[Vincolo di totalità]
 \label{prop-vincolo-totalita}
 Un'associazione R(X,Y) è \textbf{totale su X} se per ogni elemento x di X esiste almeno un elemento y di Y associato a x. Se questo vincolo non è rispettato, allora l'associazione è \textbf{parziale su X}.
 \end{Proprieta}
 
-Ad esempio, l'associazione Frequenta(Studenti, Corsi) è totale su Corsi, dato che non può esistere un corso non frequentato da nessuno (verrebbe cancellato), ed è totale anche su Studenti (non esiste studente che non partecipi a nessun corso: in tal caso non sarebbe uno studente). Mentre l'associazione NatoA(Persone, Città) è totale su Persone, dato che ogni persona è nata per forza in una città, ma parziale su Città, dato che può esistere una città dove non è nato nessuno.
+Ad esempio, l'associazione Frequenta(Studenti, Corsi) è totale su Corsi, dato che non può esistere un corso non frequentato da nessuno (verrebbe cancellato), ed è totale anche su Studenti (non esiste studente che non partecipi a nessun corso: in tal caso non sarebbe uno studente). Mentre l'associazione NatoA(Persone, Citta) è totale su Persone, dato che ogni persona è nata per forza in una città, ma parziale su Citta, dato che può esistere una città dove non è nato nessuno.
 
 \subsection{Realizzare una vera base di dati}
 
@@ -634,19 +634,19 @@ Gli schemi logici e fisici sono creati prendendo in input quello a loro preceden
 Il \textbf{modello Entità-Relazione} (o \textbf{ER}) è il più diffuso modello concettuale.
 \end{Definizione}
 
-Avevamo già accenato a questo modello nelle pagine precedenti, ma ora lo studieremo nel dettaglio. I suoi costrutti principali sono:
+Avevamo già accennato a questo modello nelle pagine precedenti, ma ora lo studieremo nel dettaglio. I suoi costrutti principali sono:
 \begin{itemize}
     \item \textbf{Entità} (ossia \textit{classi di oggetti})
     \item \textbf{Relazioni} (ossia le \textit{associazioni})
     \item \textbf{Attributi} (ossia le \textit{proprietà} delle entità o delle relazioni)
 \end{itemize}
 
-\NB Avevamo già parlato del concetto di entità nella Definzione \ref{def-entità}, ma lì avevamo descritto un'entità come un singolo elemento nel mondo reale, mentre in questo modello parliamo di una classe di elementi. Per indicare un singolo elemento che fa parte di questa classe usiamo il nome di \textbf{istanza} (o \textbf{occorrenza}) di entità. Nello schema concettuale, però, non rappresentiamo mai le singole istanze ma sempre le entità. Esistono poi anche le occorrenze di associazione, ossia una n-tupla ordinata di occorrenze di entità legate tra loro da questa associazione.
+\NB Avevamo già parlato del concetto di entità nella Definizione \ref{def-entità}, ma lì avevamo descritto un'entità come un singolo elemento nel mondo reale, mentre in questo modello parliamo di una classe di elementi. Per indicare un singolo elemento che fa parte di questa classe usiamo il nome di \textbf{istanza} (o \textbf{occorrenza}) di entità. Nello schema concettuale, però, non rappresentiamo mai le singole istanze ma sempre le entità. Esistono poi anche le occorrenze di associazione, ossia una n-tupla ordinata di occorrenze di entità legate tra loro da questa associazione.
 
 \begin{Proprieta}[Convenzioni per i nomi di entità e associazioni]
 \label{prop-convenzioni-nomi-entita-associazioni}
 Il nome di un'\textbf{entità} deve essere \textit{espressivo} e \textit{al singolare}. \\
-Il nome di un'associazione deve essere \textit{espressivo}, \textit{al singolare} e deve essere \textit{un sostantivo} se possibile, altrimenti un \textit{verbo} (all'infinito, e evitando i veribi avere, essere e tutti quelli modali)
+Il nome di un'associazione deve essere \textit{espressivo}, \textit{al singolare} e deve essere \textit{un sostantivo} se possibile, altrimenti un \textit{verbo} (all'infinito, e evitando i verbi avere, essere e tutti quelli modali)
 \end{Proprieta}
 
 Vediamo alcuni esempi di schemi ER molto basilari: \nopagebreak
@@ -683,16 +683,16 @@ Vediamo alcuni esempi di schemi ER molto basilari: \nopagebreak
 
 \begin{Definizione}[Attributo]
 \label{def-attributo}
-Un'\textbf{attributo} è una proprietà di un'entità o di un'associazione.
+Un \textbf{attributo} è una proprietà di un'entità o di un'associazione.
 \end{Definizione}
 Negli schemi ER non sono scritti tutti gli attributi, ma solo \textbf{quelli di interesse}. Ad esempio, in uno schema ER riguardo un'università, per l'entità studenti non salveremo il colore degli occhi, perché non è un attributo che ci interessa.
 
 \begin{Definizione}[Attributo composto]
 \label{def-att-comp}
-Un \textbf{attributo composto} è un raggruppamento di attributi di una stessa entità o associazione che sono collegati fra loro e possono essere usati come un atrtibuto unico.
+Un \textbf{attributo composto} è un raggruppamento di attributi di una stessa entità o associazione che sono collegati fra loro e possono essere usati come un attributo unico.
 \end{Definizione}
 
-Ad esempio, per un'entità persona un'attributo composto classico è il suo \textbf{indirizzo}, che si divide in attributi più semplici quali via, numero civico e CAP.
+Ad esempio, per un'entità persona un attributo composto classico è il suo \textbf{indirizzo}, che si divide in attributi più semplici quali via, numero civico e CAP.
 
 
 Vediamo con un esempio come si rappresentano graficamente gli attributi:
@@ -711,17 +711,17 @@ Vediamo con un esempio come si rappresentano graficamente gli attributi:
 La \textbf{cardinalità di una associazione} è una \textbf{coppia di valori} che si associa ad ogni entità che partecipa all'associazione, che specifica il \textbf{minimo} e il \textbf{massimo} di occorrenze dell'altra (o altre) entità a cui può essere associata.
 \end{Definizione}
 
-Ad esempio, l'associazione Studente --- Esame --- Corso, per lo studente la cardinalità è (0,N), dato che uno studente può dare minimo 0 esami e massimo N esami (ossia un numero indeterminato di esami), mentre per l'entità Corso la cardinalità sarà ad esempio (1,25), ipotizzando che un corso abbia minimo un esame e massimo 25 (25 è un numero arbitrario che abbiamo deciso ora per questo esempio).
+Ad esempio, nell'associazione Studente --- Esame --- Corso, per lo studente la cardinalità è (0,N), dato che uno studente può dare minimo 0 esami e massimo N esami (ossia un numero indeterminato di esami), mentre per l'entità Corso la cardinalità sarà ad esempio (1,25), ipotizzando che un corso abbia minimo un esame e massimo 25 (25 è un numero arbitrario che abbiamo deciso ora per questo esempio).
 
 \begin{Proprieta}[Valori della cardinalità]
 \label{prop-valori-cardinalità}
 In realtà, per la cardinalità si usano per convenzione solo \textbf{3 simboli}:
 \begin{itemize}
     \item Per la cardinalità \textbf{minima} si usano solo lo \textbf{0}, che indica che un'istanza potrebbe anche non partecipare a nessuna associazione, come uno studente che non ha ancora effettuato esami, o l'\textbf{1}, che invece indica che ogni istanza deve partecipare per forza ad almeno un'associazione, come l'entità Corso che deve per forza avere almeno un esame. 
-    \item Per la caridnalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'istanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'istanza può partecipare ad un numero indeterminato di istanze.
+    \item Per la cardinalità \textbf{massima} si usano solo l'\textbf{1}, che indica che al massimo un'istanza può partecipare a un'associazione, e l'\textbf{N}, che indica che un'istanza può partecipare ad un numero indeterminato di istanze.
 \end{itemize}\end{Proprieta}
 
-\begin{Proprieta}[Classficazione di associazioni]
+\begin{Proprieta}[Classificazione di associazioni]
 \label{prop-classificazione-associazioni}
 In base alle cardinalità \textbf{massime}, nelle associazioni a 2 possiamo distinguere tre tipi di associazioni:
 \begin{itemize}
@@ -751,7 +751,7 @@ Vediamo alcuni esempi: \nopagebreak
 \caption{Associazione molti a molti}
 \end{figure}
 
-\NB La cardinalità riferità a un'entità la scriviamo sul ramo che collega questa entità all'associazione. Ad esempio, la cardinalità (0,1) nella prima figura indica che un Impiegato può dirigere uno o nessun progetto, mentre la cardinalità (1,1) vicino a Progetto indica che un progetto è diretto sempre da un impiegato.
+\NB La cardinalità riferita a un'entità la scriviamo sul ramo che collega questa entità all'associazione. Ad esempio, la cardinalità (0,1) nella prima figura indica che un Impiegato può dirigere uno o nessun progetto, mentre la cardinalità (1,1) vicino a Progetto indica che un progetto è diretto sempre da un impiegato.
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -768,7 +768,7 @@ Inoltre, è bene sapere che è possibile incontrare anche la cardinalità non sc
 \includegraphics[width=1\textwidth, valign=t]{UML Cardinalità.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Ad esempio, con questa \textbf{doppia freccia e barretta} indichiamo una \textbf{caridnalità (0,N)} (la doppia freccia indica la cardinalità \textbf{N}, mentre la barretta indica la cardinalità \textbf{0}). Per una cardinalità \textbf{(1,1)}, invece avremmo usato una normale \textbf{freccia}. Troviamo quindi che la cardinalità (1,N) si fa con una doppia freccia normale, mentre la cardinalità (0,1) si fa con una freccia e barretta.
+Ad esempio, con questa \textbf{doppia freccia e barretta} indichiamo una \textbf{cardinalità (0,N)} (la doppia freccia indica la cardinalità \textbf{N}, mentre la barretta indica la cardinalità \textbf{0}). Per una cardinalità \textbf{(1,1)}, invece avremmo usato una normale \textbf{freccia}. Troviamo quindi che la cardinalità (1,N) si fa con una doppia freccia normale, mentre la cardinalità (0,1) si fa con una freccia e barretta.
 \end{minipage}
 
 
@@ -801,13 +801,13 @@ Esistono poi gli \textbf{identificatori} delle entità, che permettono di identi
 \caption{Identificatore esterno}
 \end{figure}
 
-In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Università e Studente. Studente in questo caso è un'\textbf{entità debole}, dato che la sua identificazione dipende da un'associazione con un'entità esterna.
+In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Universita e Studente. Studente in questo caso è un'\textbf{entità debole}, dato che la sua identificazione dipende da un'associazione con un'entità esterna.
 
-\begin{Osservazione}[Osservazioni sugli dentificatori]
+\begin{Osservazione}[Osservazioni sugli identificatori]
 \label{oss-osservazioni-identificatori}
 \begin{itemize}
     \item Ogni entità deve avere \textbf{almeno un identificatore}
-    \item Un'identificatore esterno è possibile solo se l'entità partecipa all'associazione con cardinalità \textbf{(1,1)}
+    \item Un identificatore esterno è possibile solo se l'entità partecipa all'associazione con cardinalità \textbf{(1,1)}
     \item Un'associazione \textbf{non ha bisogno di un identificatore}, dato che è già identificata univocamente dalla combinazione degli identificatori delle entità che lega
 \end{itemize}
 \end{Osservazione}
@@ -816,13 +816,13 @@ In questo caso la matricola non è sufficiente per identificare in modo univoco 
 
 \begin{Definizione}[Generalizzazione]
 \label{def-generalizzazione}
-La \textbf{generalizzazione} è un costrutto che mette in relazione una o più entità ($E_1, \ldots, E_n$) con un'entità genitore $E$ che le comprende come casi particolari. Dunque $E_1, \ldots, E_n$ hanno tutti le stesse caratteristiche di $E$ più altre caratteristiche personali.
+La \textbf{generalizzazione} è un costrutto che mette in relazione una o più entità ($E_1, \ldots, E_n$) con un'entità genitore $E$ che le comprende come casi particolari. Dunque $E_1, \ldots, E_n$ hanno tutte le stesse caratteristiche di $E$ più altre caratteristiche personali.
 \end{Definizione}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textwidth]{Generalizzazione.png}
-\caption{Esempio di generalizzazione con 3 entità specializzazioni}
+\caption{Esempio di generalizzazione con 3 specializzazioni}
 \end{figure}
 
 \begin{Proprieta}[Proprietà delle generalizzazioni]
@@ -851,7 +851,7 @@ Queste proprietà ricordano molto le Proprietà \ref{prop-vincoli-sottoclassi} v
 \includegraphics[width=1\textwidth, valign=t]{Generalizzazione totale esclusiva.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-In base al tipo di generalizzazione cambia anche la rappresentazione. Presa infatti una generalizzazione totale e esclusiva, questa deve essere rappresentata da una \textbf{freccia vuota} (che indica che la generalizzazione è \textbf{totale}), e da un \textbf{pallino pieno} sotto la freccia (che indica che la generalizzazione è \textbf{esclusiva}.
+In base al tipo di generalizzazione cambia anche la rappresentazione. Presa infatti una generalizzazione totale e esclusiva, questa deve essere rappresentata da una \textbf{freccia vuota} (che indica che la generalizzazione è \textbf{totale}), e da un \textbf{pallino pieno} sotto la freccia (che indica che la generalizzazione è \textbf{esclusiva}).
 \end{minipage}
 
 \begin{minipage}[c]{0.35\textwidth}
@@ -862,11 +862,11 @@ In base al tipo di generalizzazione cambia anche la rappresentazione. Presa infa
 Oltre alla rappresentazione vista prima con freccia vuota e pallino pieno, è possibile anche semplicemente scrivere, affianco la freccia che indica la generalizzazione, il tipo di generalizzazione tra parentesi graffe. In questo caso abbiamo scritto \textbf{\{TOT,ESCL\}} per indicare quindi una generalizzazione totale e esclusiva.
 \end{minipage}
 
-\section{Esempio: Società di formazione - Progettazione Logica}
+\section{Esempio: Società di formazione - Progettazione Concettuale}
 
 Vediamo ora un esempio concreto.
 
-"Si vuole realizzare una base di dati per una società che eroga corsi, di cui vogliamo rappresentare i dati dei partecipanti e dei docenti. Per gli studenti (circa 5000), identificati da un codice, si vuole memorizzare il codice fiscale, il cognome, l'età, il sesso, il luogo di nascita, il nome dei loro attuali datori di lavoro, i posto dove hanno lavorato in precedenza insieme al periodo, l'indirizzo, il numero di telefono, i corsi che hanno frequentato (che in totale sono circa 200) e il giudizio finale. Rappresentiamo poi anche i seminari che stanno attualmente frequentando e, per ogni giorno, i luoghi e le ore dove sono tenute le lezioni. I corsi hanno un codice, un titolo e possono avere varie edizioni con date di inizio e fine e numero di partecipanti. Se gli studenti sono liberi professionisti, voglaimo conoscere l'area di interesse e, se lo possiedono, il tiolo. Per quelli che invece lavorano alle dipendenze di altri, vogliamo conoscere il livello e la posizione ricoperta. Per gli insegnanti (circa 300), rappresentiamo il cognome, l'età, il posto dove sono nati, il nome del corso che insegnano, quelli che hanno insegnato nel passato e quelli che possono insegnare. Rappresentiamo anche tutti i loro recapiti telefonici. I docenti possono essere dipendenti interni della società o collaboratori esterni."
+"Si vuole realizzare una base di dati per una società che eroga corsi, di cui vogliamo rappresentare i dati dei partecipanti e dei docenti. Per gli studenti (circa 5000), identificati da un codice, si vuole memorizzare il codice fiscale, il cognome, l'età, il sesso, il luogo di nascita, il nome dei loro attuali datori di lavoro, i posti dove hanno lavorato in precedenza insieme al periodo, l'indirizzo, il numero di telefono, i corsi che hanno frequentato (che in totale sono circa 200) e il giudizio finale. Rappresentiamo poi anche i seminari che stanno attualmente frequentando e, per ogni giorno, i luoghi e le ore dove sono tenute le lezioni. I corsi hanno un codice, un titolo e possono avere varie edizioni con date di inizio e fine e numero di partecipanti. Se gli studenti sono liberi professionisti, vogliamo conoscere l'area di interesse e, se lo possiedono, il titolo. Per quelli che invece lavorano alle dipendenze di altri, vogliamo conoscere il livello e la posizione ricoperta. Per gli insegnanti (circa 300), rappresentiamo il cognome, l'età, il posto dove sono nati, il nome del corso che insegnano, quelli che hanno insegnato nel passato e quelli che possono insegnare. Rappresentiamo anche tutti i loro recapiti telefonici. I docenti possono essere dipendenti interni della società o collaboratori esterni."
 
 Sembrano un sacco di informazioni, ma per questo è fondamentale schematizzare questo testo e prendere solo ciò di veramente interessante. Costruiamo innanzitutto un glossario dei termini per rendere il testo più chiaro:
 
@@ -886,11 +886,11 @@ Riorganizziamo ora le frasi in base a ciò che dicono.
 
 \begin{itemize}
     \item Contesto \textbf{generale}: Si vuole creare una base di dati per una società che eroga corsi, di cui vogliamo sapere i dati dei partecipanti e dei docenti.
-    \item Riguardo i \textbf{partecipanti}: I partecipanti (circa 5000) sono identificati da un codice. Di loro rappresentiamo del loro codice fiscale, cognome, età, sesso, città di nascita, i nomi dei loro attuali datori di lavoro e di quelli precedenti e le date di inizio e eventuale fine rapporto, le edizioni dei corsi che stanno frequentando e quelli che hanno frequentato, e la votazione generale in decimi.
+    \item Riguardo i \textbf{partecipanti}: I partecipanti (circa 5000) sono identificati da un codice. Di loro rappresentiamo il codice fiscale, cognome, età, sesso, città di nascita, i nomi dei loro attuali datori di lavoro e di quelli precedenti e le date di inizio e eventuale fine rapporto, le edizioni dei corsi che stanno frequentando e quelli che hanno frequentato, e la votazione generale in decimi.
     \item Riguardo i \textbf{datori di lavoro}: Dei datori di lavoro presenti e passati dei partecipanti rappresentiamo il nome, l'indirizzo e il numero di telefono.
-    \item Riguardo i \textbf{corsi}: Dei i corsi (circa 200) rappresentiamo il titolo, il codice e le varie edizioni con date di inizio e fine e, per ogni edizione, rappresentiamo il numero di partecipanti, i giorni della settimana, le aule e le ore dove sono tenute le lezioni.
-    \item Riguardo i \textbf{tipi di partecipanti}: Dei partecipanti liberi professionisti rappresentiamo l'area di interesse e l'eventuale titolo personale. Per i dipedenti invece rappresentiamo il loro livello e la loro posizione ricoperta.
-    \item Riguardo i \textbf{docenti}: Dei i docenti (circa 300) rappresentiamo il cognome, l'età, la città di nascita, il numero di telefono, il titolo del corso che insegnano, di quelli che hanno insegnato e di quelli che possono insegnare. Questi possono essere dipendenti interni o collaboratori esterni.
+    \item Riguardo i \textbf{corsi}: Dei corsi (circa 200) rappresentiamo il titolo, il codice e le varie edizioni con date di inizio e fine e, per ogni edizione, rappresentiamo il numero di partecipanti, i giorni della settimana, le aule e le ore dove sono tenute le lezioni.
+    \item Riguardo i \textbf{tipi di partecipanti}: Dei partecipanti liberi professionisti rappresentiamo l'area di interesse e l'eventuale titolo personale. Per i dipendenti invece rappresentiamo il loro livello e la loro posizione ricoperta.
+    \item Riguardo i \textbf{docenti}: Dei docenti (circa 300) rappresentiamo il cognome, l'età, la città di nascita, il numero di telefono, il titolo del corso che insegnano, di quelli che hanno insegnato e di quelli che possono insegnare. Questi possono essere dipendenti interni o collaboratori esterni.
 \end{itemize}
 
 Cerchiamo di capire ora quale costrutto del modello ER utilizzare in base alla situazione:
@@ -921,7 +921,7 @@ Quando si crea lo scheletro del progetto si devono individuare i concetti più i
 
 Questo schema può sembrare enorme, ma vediamo passo passo come è stato possibile realizzarlo velocemente e senza impazzire.
 
-Partiamo con le informazioni generali: vogliamo creare una base di dati per una società che eroga corsi, e vogliamo i dati di partecipanti e dei docenti. Già qui è facile trovare 3 entità principali: Corso, Docente e Partecipante. 
+Partiamo con le informazioni generali: vogliamo creare una base di dati per una società che eroga corsi, e vogliamo i dati dei partecipanti e dei docenti. Già qui è facile trovare 3 entità principali: Corso, Docente e Partecipante. 
 
 Riguardo i partecipanti sappiamo che sono identificati dal codice e che hanno vari attributi (codice fiscale, cognome, età, sesso, città di nascita e votazione in decimi). Di loro vogliamo conoscere gli attuali datori di lavoro  e quelli precedenti, con tanto di date di inizio e fine rapporto. Vogliamo poi sapere le edizioni dei corsi che stanno o hanno frequentato. Abbiamo quindi una serie di attributi per questi partecipanti, e troviamo due nuove entità: Datore e Edizione corso. A questo punto lo schema avrebbe più o meno questo aspetto:
 
@@ -934,12 +934,12 @@ Riguardo i partecipanti sappiamo che sono identificati dal codice e che hanno va
 Vediamo alcune cardinalità di questo schema parziale:
 
 \begin{itemize}
-    \item Edizione Corso --- \textbf{(1,1)} Tipologia ---  \textbf{(0,N)} Corso \\
+    \item Edizione Corso --- \textbf{(1,1)} Tipologia \textbf{(0,N)} ---  Corso \\
     Un corso può avere più edizioni o nessuna, dato che un corso appena aggiunto non ha edizioni. Ma un'edizione di un corso si riferisce a uno e un solo corso sempre.
-    \item Datore --- \textbf{(0,N)} Impiego corrente \textbf{(0,1)}--- Partecipante \\
+    \item Datore --- \textbf{(0,N)} Impiego corrente \textbf{(0,1)} --- Partecipante \\
     Un partecipante può avere nel proprio impiego 0 datori (se è un libero professionista) o un datore (se è un dipendente). E un datore può avere 0 dipendenti che attualmente lavorano per lui e svolgono corsi o più di 1. Nel caso ne avesse 0, questo datore potrebbe esser comunque salvato nel database nel caso un suo dipendente passato sia un partecipante.
-    \item Edizione corso --- \textbf{(0,N)} Docenza corrente \textbf{(0,1)} -- Docente \\
-    Un'edizione di un corso può avere 0 docenti correnti (se non gli sono ancora stati assegnati), o più di 1 (quando un corso è insegnato da più docenti). Ma un docente può insegnare nello stesso momento 0 o al massimo 1 corso.
+    \item Edizione corso --- \textbf{(0,N)} Docenza corrente \textbf{(0,1)} --- Docente \\
+    Un'edizione di un corso può avere 0 docenti correnti (se non le sono ancora stati assegnati), o più di 1 (quando un corso è insegnato da più docenti). Ma un docente può insegnare nello stesso momento 0 o al massimo 1 corso.
 \end{itemize}
 
 Aggiungendo sempre più informazioni riguardo i corsi, i docenti, i partecipanti e i datori di lavoro si arriva pian piano ad avere uno schema ER come quello visto sopra.
@@ -951,7 +951,7 @@ Aggiungendo sempre più informazioni riguardo i corsi, i docenti, i partecipanti
 \begin{Definizione}[Modello relazionale]
 \label{def-modello-relazionale-2}
 Il \textbf{modello relazionale} è un modello logico basato sulla nozione matematica di relazione. \\
-\NB Queste relazioni si traducono in modo naturale in tabelle, e per questo al posto di dire tabelle dirermo sempre relazioni.
+\NB Queste relazioni si traducono in modo naturale in tabelle, e per questo al posto di dire tabelle diremo sempre relazioni.
 \end{Definizione}
 
 \begin{Definizione}[Dominio]
@@ -965,12 +965,12 @@ Presi $D_1, \ldots, D_k$ domini,
 
 \begin{Definizione}[Relazioni matematiche]
 \label{def-relazioni-matematiche}
-Una relazione matematica è un qualsiasi \textbf{sottoinsieme} del prodotto cartesiano di uno o più domini. Una relazione sottoinsieme di un prodotto cartesiano tra $k$ domini si dice di \textbf{grado} $\bm{k}$. Gli elementi di una relazione sono \textbf{tuple} (o n-tuple o ennuple), e il numero di tuple in una relazione è la sua \textbf{cardinalità}. Ogni tupla di una relazione di grado $k$ ha $\bm{k}$ \textbf{componenti ordinate}, ma non c'è ordinamento tra le tuple, e le tuple di una relazione sono \textbf{tutte distinte}. Le possibili relazioni matematiche di un prodotto cartesiano tra k domini sarà $\bm{2^n}$, dove $n$ è il prodotto tra il numero degli elementi presenti nei diversi domini.
+Una relazione matematica è un qualsiasi \textbf{sottoinsieme} del prodotto cartesiano di uno o più domini. Una relazione sottoinsieme di un prodotto cartesiano tra $k$ domini si dice di \textbf{grado} $\bm{k}$. Gli elementi di una relazione sono \textbf{tuple} (o n-tuple o ennuple), e il numero di tuple in una relazione è la sua \textbf{cardinalità}. Ogni tupla di una relazione di grado $k$ ha $\bm{k}$ \textbf{componenti ordinate}, ma non c'è ordinamento tra le tuple, e le tuple di una relazione sono \textbf{tutte distinte}. Le possibili relazioni matematiche di un prodotto cartesiano tra k domini saranno $\bm{2^n}$, dove $n$ è il prodotto tra il numero degli elementi presenti nei diversi domini.
 \end{Definizione}
 
-Vediamo un esempio. Presi i domini $D_1 = \{\text{bianco,nero}\}$ e $D_2 = \{0,1,2\}$, \mbox{$D_1 \times D_2 = \{(\text{bianco}, 0), (\text{bianco}, 1), (\text{bianco}, 2), (\text{nero}, 0),(\text{nero}, 1),(\text{nero}, 2), \}$}. Una relazione di grado 2 e cardinalità 3 è ad esempio la relazione $r = \{(\text{bianco}, 0), (\text{nero}, 0), (\text{nero}, 2)\}$. $t = (\text{nero}, 0)$ è una delle tuple del prodotto cartesiano, e con \code{t[i]} indichiamo l'i-esimo elemento della tupla (\code{t[1] = nero}). Possiamo anche prendere più elementi di una stessa tupla: a esempio \code{t[1,2] = (nero, 0)} prende il primo e il secondo elemento della tupla (nel nostro esempio funziona poco, ma con n-ple ha più senso questa notazione). Se prendiamo un'altra tupla \code{t = (0,1,2,3)}, \code{t[1,3] = (0,2)}. Inoltre, con questi domini abbiamo $2^6$ possibili relazioni.
+Vediamo un esempio. Presi i domini $D_1 = \{\text{bianco,nero}\}$ e $D_2 = \{0,1,2\}$, \mbox{$D_1 \times D_2 = \{(\text{bianco}, 0), (\text{bianco}, 1), (\text{bianco}, 2), (\text{nero}, 0),(\text{nero}, 1),(\text{nero}, 2)\}$}. Una relazione di grado 2 e cardinalità 3 è ad esempio la relazione $r = \{(\text{bianco}, 0), (\text{nero}, 0), (\text{nero}, 2)\}$. $t = (\text{nero}, 0)$ è una delle tuple del prodotto cartesiano, e con \code{t[i]} indichiamo l'i-esimo elemento della tupla (\code{t[1] = nero}). Possiamo anche prendere più elementi di una stessa tupla: ad esempio \code{t[1,2] = (nero, 0)} prende il primo e il secondo elemento della tupla (nel nostro esempio funziona poco, ma con n-ple ha più senso questa notazione). Se prendiamo un'altra tupla \code{t = (0,1,2,3)}, \code{t[1,3] = (0,2)}. Inoltre, con questi domini abbiamo $2^6$ possibili relazioni.
 
-Un'altro esempio può essere anche la tabella
+Un altro esempio può essere anche la tabella
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
@@ -982,7 +982,7 @@ Lionel & Messi & 10 & 24.5 \\
 \end{tabular}
 \end{center}
 
-In questo caso abbiamo 4-ple con 2 String, un Integer e un Real. Ma non avendo informazioni su cosa rappresentano questi dati la tabella ci è inutile. Per questo è necessario dare i nomi alle tabelle:
+In questo caso abbiamo 4-ple con 2 String, un Integer e un Real. Ma non avendo informazioni su cosa rappresentano questi dati la tabella ci è inutile. Per questo è necessario dare i nomi alle colonne:
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
@@ -998,7 +998,7 @@ Lionel & Messi & 10 & 24.5 \\
 
 \begin{Definizione}[Attributi]
 \label{def-attributo-2}
-Un \textbf{attributo} è una coppia di valori: un \textbf{nome} $A$ e un \textbf{dominio} $dom(A)$. Preso R un insieme di attributi, questo prende il nome di \textbf{schema di relazione}, e una ennupla è definibile come una \textit{funzione} su R che ad ogni attributo associa un elemento del dominio. Se $t$ è un'ennupla di R e A è un attributo in R, allora \codeb{t[A]} indica il valore assunto dalla funzione $t$ in corrispondenza del attributo A. \\
+Un \textbf{attributo} è una coppia di valori: un \textbf{nome} $A$ e un \textbf{dominio} $dom(A)$. Preso R un insieme di attributi, questo prende il nome di \textbf{schema di relazione}, e una ennupla è definibile come una \textit{funzione} su R che ad ogni attributo associa un elemento del dominio. Se $t$ è un'ennupla di R e A è un attributo in R, allora \codeb{t[A]} indica il valore assunto dalla funzione $t$ in corrispondenza dell'attributo A. \\
 \NB Se una relazione è chiamata $R$ e i suoi attributi sono $A_1, \ldots, A_k$, lo schema è indicato scrivendo $\bm{R(A_1, \ldots, A_k)}$.
 \end{Definizione}
 
@@ -1014,7 +1014,7 @@ Uno \textbf{schema di base di dati} è un insieme di schemi di relazione con nom
 \centering
 \begin{tabular}{|l|l|r|}
 \hline
-\textbf{Città} & \textbf{Regione} & \textbf{Popolazione} \\
+\textbf{Citta} & \textbf{Regione} & \textbf{Popolazione} \\
 \hline
 Roma & Lazio & 2.748.109 \\
 \hline
@@ -1027,7 +1027,7 @@ Torino & Piemonte & 841.600 \\
 \end{tabular}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.40\textwidth}
-Ad esempio, la basi di dati qui a sinistra ha 3 attributi, e il proprio schema è Info\_Città(Città, Regione, popolazione).
+Ad esempio, la base di dati qui a sinistra ha 3 attributi, e il proprio schema è Info\_Citta(Citta, Regione, popolazione).
 \end{minipage}
 
 Nei modelli relazionali più recenti, le componenti di una relazione sono indicate dai nomi degli attributi e non dalla posizione. Scriviamo \code{t[}$A_i$\code{]} per indicare il valore dell'attributo di nome $A_i$, e non alla posizione $A_i$. Nell'esempio precedente per la seconda tupla avremmo che $t[\text{Regione}] = \text{Lombardia}$.
@@ -1045,7 +1045,7 @@ Una relazione può avere anche più chiavi alternative. Di solito si sceglie que
 Un insieme di attributi $X$ di una relazione R è una chiave di R se:
 \begin{enumerate}
     \item Per ogni istanza di R non esistono due tuple distinte $t_1$ e $t_2$ tali che $t_1[X] = t_2[X]$.
-    \item Nessun sottoinsieme proprio (ossia un sottinsieme diverso da $X$ stesso) di $X$ soddisfa la prima condizione. La chiave è quindi un insieme minimale: funziona solo con tutti i suoi elementi, non se ne possono levare.
+    \item Nessun sottoinsieme proprio (ossia un sottoinsieme diverso da $X$ stesso) di $X$ soddisfa la prima condizione. La chiave è quindi un insieme minimale: funziona solo con tutti i suoi elementi, non se ne possono levare.
 \end{enumerate}
 
 Il problema è che per trovare una chiave secondo questa definizione dovrei generare \textbf{TUTTE} le possibili istanze di R. Questo non solo è spesso dispendioso, ma è a volte \textbf{impossibile}, se si hanno domini infiniti. Bisognerà quindi trovare un modo diverso per stabilire quali attributi usare come chiavi.
@@ -1092,7 +1092,7 @@ Ad esempio, se abbiamo una tabella PERSONA(\underline{CF}, Nome, Lavoro), l'attr
 In una relazione possono essere definiti dei \textbf{vincoli di integrità} sui domini degli attributi. Questi vincoli possono essere:
 \begin{itemize}
     \item \textbf{vincoli di dominio}, ossia vincoli sul valore di un attributo (ad esempio VOTO <= 30 AND VOTO >= 0)
-    \item \textbf{vincoli di tupla}, ossia vincoli sul valore di due o più attributi nella stessa tupla (ad esempio (VOTO = 30) OR (NOT LODE = "Si"))
+    \item \textbf{vincoli di tupla}, ossia vincoli sul valore di due o più attributi nella stessa tupla (ad esempio (VOTO = 30) OR (NOT LODE = 'Si'))
     \item \textbf{vincoli tra tuple della stessa relazione}, ossia vincoli sul valore di uno o più attributi nelle diverse tuple della stessa relazione (ad esempio MATRICOLA UNIQUE)
     \item \textbf{vincoli tra tuple di relazioni diverse}, ossia i vincoli delle foreign key (ad esempio Esame.Studente REFERENCES Studente.Matricola)
 \end{itemize} 
@@ -1100,7 +1100,7 @@ In una relazione possono essere definiti dei \textbf{vincoli di integrità} sui 
 
 \section{Passare dal modello concettuale a quello logico}
 
-Vogliamo ora tradurre lo schema concettuale in quello logico, rappresentandone i dati in mono corretto (e efficiente, ma ci concentreremo maggiormente sulla correttezza). Non è una traduzione semplice, perché non vi è una vera e propria procedura da seguire alla lettera. Questo perché vi sono diversi aspetti che non sono direttamente rappresentabili, e anche perché è necessario prestare attenzione alle prestazioni.
+Vogliamo ora tradurre lo schema concettuale in quello logico, rappresentandone i dati in modo corretto (e efficiente, ma ci concentreremo maggiormente sulla correttezza). Non è una traduzione semplice, perché non vi è una vera e propria procedura da seguire alla lettera. Questo perché vi sono diversi aspetti che non sono direttamente rappresentabili, e anche perché è necessario prestare attenzione alle prestazioni.
 
 \subsection{Ristrutturare lo schema ER}
 
@@ -1123,18 +1123,18 @@ Una \textbf{ridondanza} in uno schema ER è un'informazione significativa ma \te
 
 Vi sono
 \begin{itemize}
-    \item \textbf{attributi derivabili}, che possono essere derivati dalla stessa entità, da attributi di altre entità o relazioni o da operazioni di conteggio sulla partecipazioni ad associazioni
+    \item \textbf{attributi derivabili}, che possono essere derivati dalla stessa entità, da attributi di altre entità o relazioni o da operazioni di conteggio sulle partecipazioni ad associazioni
     \item \textbf{relazioni derivabili} dalla composizione di altre relazioni in presenza di cicli
 \end{itemize}
 
 Un attributo \textbf{derivabile} lo vediamo quando abbiamo come attributi ad esempio l'importo lordo, l'IVA e l'importo netto: in questo caso uno tra i due importi è ridondante, dunque va eliminato.
 
-Un attributo \textbf{derivabile da un'altra entità} ad esempio è l'attributo importo totale di un entità Acquisto che è collegata tramite un'associazione a un'entità Prodotto che ha come unico attributo il prezzo. In questo caso importo totale è ridondante dato che possiamo calcolarlo sommando i prodotti tra il prezzo e la quantità di ogni prodotto.
+Un attributo \textbf{derivabile da un'altra entità} ad esempio è l'attributo importo totale di un'entità Acquisto che è collegata tramite un'associazione a un'entità Prodotto che ha come unico attributo il prezzo. In questo caso importo totale è ridondante dato che possiamo calcolarlo sommando i prodotti tra il prezzo e la quantità di ogni prodotto.
 
-Un attributo \textbf{derivabile per conteggio} ad esempio è l'attributo numero di prodotti di un entità Acquisto che è collegata tramite un'associazione a un'entitò Prodotto che ha come unico attributo il prezzo. In questo caso il numero di prodotti è ridondante dato che possiamo calcolarlo contando le istanze di associazione riguardano quel determinato acquisto.
+Un attributo \textbf{derivabile per conteggio} ad esempio è l'attributo numero di prodotti di un'entità Acquisto che è collegata tramite un'associazione a un'entità Prodotto che ha come unico attributo il prezzo. In questo caso il numero di prodotti è ridondante dato che possiamo calcolarlo contando le istanze di associazione che riguardano quel determinato acquisto.
 
 \begin{minipage}[c]{0.60\textwidth}
-Una relazione \textbf{derivabile dovuta a un ciclo} ad esempio è l'associazione Docenza in questo schema ER. Infatti, non sta aggiungendo nulla di nuovo. Tramite le associazioni Frequenza e Insegmamento infatti possiamo capire se un insegnante insegna a uno studente o meno, rendendo ridondante l'associazione Docenza. 
+Una relazione \textbf{derivabile dovuta a un ciclo} ad esempio è l'associazione Docenza in questo schema ER. Infatti, non sta aggiungendo nulla di nuovo. Tramite le associazioni Frequenza e Insegnamento infatti possiamo capire se un insegnante insegna a uno studente o meno, rendendo ridondante l'associazione Docenza. 
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -1144,20 +1144,20 @@ Una relazione \textbf{derivabile dovuta a un ciclo} ad esempio è l'associazione
 
 \subsubsection*{Eliminazione delle generalizzazioni}
 
-Il modello relazionale non permette la rappresentazion delle generalizzazioni, dato che le tabelle piatte utilizzate non permettono la definizione di sottotipi. Per questo dobbiamo eliminarle, e per farlo abbiamo 3 possibilità:
+Il modello relazionale non permette la rappresentazione delle generalizzazioni, dato che le tabelle piatte utilizzate non permettono la definizione di sottotipi. Per questo dobbiamo eliminarle, e per farlo abbiamo 3 possibilità:
 \begin{enumerate}
     \item Accorpare le \textbf{specializzazioni nella generalizzazione}
     \item Accorpare le \textbf{generalizzazioni nelle specializzazioni} (se possibile)
     \item Sostituire le \textbf{generalizzazioni con le associazioni}
 \end{enumerate}
 
-Conviene accorpare le \textbf{specializzazioni nella generalizzazione} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Si creerà in questo caso un attributo \code{tipo} che specifica il tipo di istanza, così da mantenere distinte le istanze di due specializzazioni diverse. Se la generalizzazione è sovrapposta bisognerà prevedere per l'attributo \code{tipo} un valore preciso per quelle istanze che fanno parte di più specializzazioni. Ad esempio, se abbiamo due specializzazioni studente e lavoratore creeremo un tipo chiamato studente-lavoratore. \\ 
+Conviene accorpare le \textbf{specializzazioni nella generalizzazione} quando le operazioni non fanno molta distinzione tra le diverse specializzazioni. Si creerà in questo caso un attributo \code{tipo} che specifica il tipo di istanza, così da mantenere distinte le istanze di due specializzazioni diverse. Se la generalizzazione è sovrapposta bisognerà prevedere per l'attributo \code{tipo} un valore preciso per quelle istanze che fanno parte di più specializzazioni. Ad esempio, se abbiamo due specializzazioni studente e lavoratore creeremo un tipo chiamato studente-lavoratore. \\ 
 Lo svantaggio è che avremo molti valori nulli per gli attributi delle specializzazioni (la matricola è un valore che va salvato solo per gli studenti e gli studenti-lavoratori, ma per le istanze dei lavoratori il valore rimarrà vuoto). 
 
 Conviene accorpare le \textbf{generalizzazioni nelle specializzazioni} quando quasi tutte le operazioni avvengono in modo differente tra le diverse specializzazioni. Questo metodo, però, è applicabile solo se la generalizzazione è \textbf{totale}: infatti, se non lo fosse, avremmo delle istanze della generalizzazione che non potremmo rappresentare in alcun modo.
 
-Conviene sostituire le \textbf{generalizzazioni con le associazioni} quando le operazioni avvengono in modo differenziato tra padre e figli. Ad esempio, se si ha l'entità Persona e le specializzazioni sono studente e lavoratore, si può sosistuire la generalizzazione con delle associazioni quando le operazioni sul padre richiedono solo le informazioni generali dell'entità Persona mentre le operazioni sui figli richiedono le informazioni specifiche di quel figlio. Inoltre, è necessario che la generalizzazione sia \textbf{parziale}. \\
-Lo svantaggio è che un'operazione che ha bisogno delle informazioni sia del padre che del figlio il database non trova tutto in una riga ma deve andare a cercare in tabelle diverse queste infromazioni.
+Conviene sostituire le \textbf{generalizzazioni con le associazioni} quando le operazioni avvengono in modo differenziato tra padre e figli. Ad esempio, se si ha l'entità Persona e le specializzazioni sono studente e lavoratore, si può sostituire la generalizzazione con delle associazioni quando le operazioni sul padre richiedono solo le informazioni generali dell'entità Persona mentre le operazioni sui figli richiedono le informazioni specifiche di quel figlio. Inoltre, è necessario che la generalizzazione sia \textbf{parziale}. \\
+Lo svantaggio è che per un'operazione che ha bisogno delle informazioni sia del padre che del figlio il database non trova tutto in una riga ma deve andare a cercare in tabelle diverse queste informazioni.
 
 Comunque, è possibile sempre trovare delle soluzioni \textit{ibride}, e anzi nelle gerarchie a più livelli possono essere l'idea migliore.
 
@@ -1215,10 +1215,10 @@ Ad esempio, quest'associazione si traduce nel modello relazionale in 3 tabelle:
     \item \textbf{Progetto(\underline{Codice}, Nome, Budget)}
     \item \textbf{Partecipazione(\underline{Matricola}, \underline{Codice}, DataInizio)}
 \end{itemize}
-Vi sono poi dei vincoli di integrià referenziale tra Matricola in Partecipazione e la chiave di Impiegato e fra Codice in Partecipazione e la chiave di Progetto.
+Vi sono poi dei vincoli di integrità referenziale tra Matricola in Partecipazione e la chiave di Impiegato e fra Codice in Partecipazione e la chiave di Progetto.
 \end{minipage}
 
-Spesso è consigliato rinominare gli attributi della chiave della relazione che rappresta l'associazione. Ad esempio, qui piuttosto che scrivere Matricola e Codice in Partecipazione, era più chiaro scrivere Impiegato e Progetto, trasfomarndo quindi Partecipazione in \textbf{Partecipazione(\underline{Impiegato}, \underline{Progetto}, DataInizio)}. 
+Spesso è consigliato rinominare gli attributi della chiave della relazione che rappresenta l'associazione. Ad esempio, qui piuttosto che scrivere Matricola e Codice in Partecipazione, era più chiaro scrivere Impiegato e Progetto, trasformando quindi Partecipazione in \textbf{Partecipazione(\underline{Impiegato}, \underline{Progetto}, DataInizio)}. 
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering          
@@ -1228,13 +1228,13 @@ Spesso è consigliato rinominare gli attributi della chiave della relazione che 
 Quello che era un consiglio nelle relazioni molti a molti normali, diventa un obbligo in quelle ricorsive. In questo caso infatti la ridenominazione è fondamentale per definire il ruolo di ogni partecipante. Nel modello relazionale avremo quindi 2 tabelle:
 \begin{itemize}
     \item \textbf{Prodotto(\underline{Codice}, Nome, Costo)}
-    \item \textbf{Composizione(\underline{Composto}, \underline{Componente}, Quantità)}
+    \item \textbf{Composizione(\underline{Composto}, \underline{Componente}, Quantita)}
 \end{itemize}
 \end{minipage}
 
 \subsubsection*{Uno a molti}
 
-In questo caso è possibile trasformare l'associazione in una \textbf{relazione} con un procedimento identico a quello visto nelle associazioni molti a molti, ma la chiave non sarà costituita dalle chiavi primarie delle entità collegate, ma solo la \textbf{chiave primaria dell'entità con cardinalità massima 1}. \\
+In questo caso è possibile trasformare l'associazione in una \textbf{relazione} con un procedimento identico a quello visto nelle associazioni molti a molti, ma la chiave non sarà costituita dalle chiavi primarie delle entità collegate, ma solo dalla \textbf{chiave primaria dell'entità con cardinalità massima 1}. \\
 È però possibile anche un'altra soluzione. Al posto di trasformare l'associazione in una relazione, si possono \textbf{trasferire tutti gli attributi dell'associazione} all'entità con cardinalità massima 1 e aggiungere a questa entità come attributo anche la chiave primaria dell'altra entità (che diventa quindi la \textbf{foreign key}). Questo ha senso perché l'entità con cardinalità massima 1 può essere associata a un solo elemento dell'altra entità, dunque da sola è in grado di identificare l'occorrenza di associazione.
 
 \subsubsection*{Uno a uno}
@@ -1254,13 +1254,13 @@ Per passare dal modello concettuale a quello logico dobbiamo quindi ora ristrutt
 
 \subsubsection*{Analisi delle ridondanze}
 
-L'unica ridondanza evidente in questo schema è l'attributo N. Part. presente nell'entità Edizione Corso. Infatti, questo potrebbe essere ricavato contando le occorrenze dell'associazione Partecipazione Corrente. Tuttavia, possiamo assumere che questa informazione sia utilizzata spesso nella base di dati, il che renderebbe il conteggio molto inefficiente. Dunque lasciamo tutto com'è senza effettuare modifiche per ora, facendo attenizone in futuro a aggiornare questa informazione tramite \textit{vincoli dinamici} (ossia dovremo fare in modo che questa infromazione si aggiorni da sola ogni volta che un partecipante si iscrive a un'edizione di un corso).
+L'unica ridondanza evidente in questo schema è l'attributo N. Part. presente nell'entità Edizione Corso. Infatti, questo potrebbe essere ricavato contando le occorrenze dell'associazione Partecipazione Corrente. Tuttavia, possiamo assumere che questa informazione sia utilizzata spesso nella base di dati, il che renderebbe il conteggio molto inefficiente. Dunque lasciamo tutto com'è senza effettuare modifiche per ora, facendo attenzione in futuro a aggiornare questa informazione tramite \textit{vincoli dinamici} (ossia dovremo fare in modo che questa informazione si aggiorni da sola ogni volta che un partecipante si iscrive a un'edizione di un corso).
 
 \subsubsection*{Eliminazione delle generalizzazioni}
 
-Per quanto riguarda la generalizzazione Partecipante --- Professionista - Dipendente, dato che queste non hanno associazioni specifiche e dato che dividere la superclasse nelle due sottoclassi richiederebbe di duplicare l'associazione Impiego Passato (infatti, anche un libero professionista può in passato aver lavorato come dipendente), decidiamo di accorpare le sottoclassi nella superclasse. Modifichiamo quindi quest'entità aggiungendole 4 attributi opzionali provenienti dalle sue sottoclassi, e aggiungendo anche un nuovo atrtibuto TipoP che indica il tipo di partecipante (professionista o dipendente).
+Per quanto riguarda la generalizzazione Partecipante --- Professionista --- Dipendente, dato che queste non hanno associazioni specifiche e dato che dividere la superclasse nelle due sottoclassi richiederebbe di duplicare l'associazione Impiego Passato (infatti, anche un libero professionista può in passato aver lavorato come dipendente), decidiamo di accorpare le sottoclassi nella superclasse. Modifichiamo quindi quest'entità aggiungendole 4 attributi opzionali provenienti dalle sue sottoclassi, e aggiungendo anche un nuovo attributo TipoP che indica il tipo di partecipante (professionista o dipendente).
 
-Per quanto riguarda invece la generalizzazione Docente --- Collaboratore - Interno, dato che queste non hanno attributi propri e non hanno associazioni specifiche ha anche qui molto senso accorpare le sottoclassi nella superclasse. Modifichiamo quindi quest'entità, aggiungendole un attributo TipoD che indica il tipo di docente (collaboratore o interno).
+Per quanto riguarda invece la generalizzazione Docente --- Collaboratore --- Interno, dato che queste non hanno attributi propri e non hanno associazioni specifiche ha anche qui molto senso accorpare le sottoclassi nella superclasse. Modifichiamo quindi quest'entità, aggiungendole un attributo TipoD che indica il tipo di docente (collaboratore o interno).
 
 \subsubsection*{Partizionamento/accorpamento di entità e relazioni}
 
@@ -1281,7 +1281,7 @@ Lo schema ER finale si presenta quindi in questo modo: \nopagebreak
 
 \subsection{Passaggio allo schema logico}
 
-Una votla ristrutturato lo schema ER non ci resta che tradurlo in uno schema logico. 
+Una volta ristrutturato lo schema ER non ci resta che tradurlo in uno schema logico. 
 
 Per questa traduzione, adottiamo fin da subito delle convenzioni che saranno utili per la successiva implementazione in SQL:
 \begin{itemize}
@@ -1292,39 +1292,37 @@ Per questa traduzione, adottiamo fin da subito delle convenzioni che saranno uti
 
 \subsubsection*{Traduzione delle entità}
 
-La traduzione delle entità non crea problemi: ogni entità diventa una tabella (che potrebbe \textit{non essere ancor anella sua forma finale}) e gli identificatori primari vengono sottolineati per rappresentare la chiave primaria scelta. Creiamo quindi una serie di nuove tabelle:
+La traduzione delle entità non crea problemi: ogni entità diventa una tabella (che potrebbe \textit{non essere ancora nella sua forma finale}) e gli identificatori primari vengono sottolineati per rappresentare la chiave primaria scelta. Creiamo quindi una serie di nuove tabelle:
 \begin{itemize}
-    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP)}
+    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Eta, Sesso, CittaNascita, Area, Titolo, Posizione, Livello, TipoP)}
     \item \textbf{DATORE(\underline{Nome}, \underline{Indirizzo}, \underline{Numero})}
-    \item \textbf{DOCENTE(\underline{CF}, Età, CittàNascita, Cognome, TipoD)}
+    \item \textbf{DOCENTE(\underline{CF}, Eta, CittaNascita, Cognome, TipoD)}
     \item \textbf{TELEFONO(\underline{Numero})}
     \item \textbf{CORSO(\underline{Codice}, Titolo)}
-    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine,NPart)} (CodiceCorso è la chiave che collega EDIZIONE\_CORSO a CORSO, ed è necessaria perché nello schema ER l'entità Edizione Corso è un entità debole, con un identificatore esterno) 
-    \item \textbf{LEZIONE (\underline{Giorno}, \underline{Aula}, \underline{Orario})}
+    \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart)} (CodiceCorso è la chiave che collega EDIZIONE\_CORSO a CORSO, ed è necessaria perché nello schema ER l'entità Edizione Corso è un'entità debole, con un identificatore esterno) 
+    \item \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{Orario})}
 \end{itemize}
 
 \subsubsection*{Traduzione delle associazioni}
 
 Le traduzioni delle associazioni sono un po' più complesse. Vediamole una alla volta.
 
-L'associazione IMPIEGO\_PASSATO tra PARTECIPANTE e DATORE è un'associazione molti a molti, dunque è necessario creare una relazione apposta per lei, ossia \mbox{\textbf{IMPIEGO\_PASSATO(\underline{CFPart},\underline{NomeDatore}, DataInizio, DataFine)}}.
+L'associazione IMPIEGO\_PASSATO tra PARTECIPANTE e DATORE è un'associazione molti a molti, dunque è necessario creare una relazione apposta per lei, ossia \mbox{\textbf{IMPIEGO\_PASSATO(\underline{CFPart}, \underline{NomeDatore}, DataInizio, DataFine)}}.
 
-L'associazione IMPIEGO\_CORRENTE è invece un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Dunque possiamo modificare questa relazione aggiungendo la chiave di DATORE e l'attributo DataInizio. Dunque PARTECIPANTE diventa \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}.
-
-Quest'ultimo vincolo sembra molto complesso ma serve solo per evitare di inserire nel database dei dati errati. Infatti, non ha senso inserire un impiego corrente il cui inizio è avvenuto prima della fine di uno degli impieghi passati della stessa persona (siamo nell'ipotesi di poter avere solo un impiego alla volta, dunque non avrebbe senso inserire un impiego il cui inizio è avvenuto prima della fine di un altro impiego, altrimenti staremmo ammettendo che questa persona ha avuto due impieghi nello stesso momento).
+L'associazione IMPIEGO\_CORRENTE è invece un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Dunque possiamo modificare questa relazione aggiungendo la chiave di DATORE e l'attributo DataInizio. Dunque PARTECIPANTE diventa \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Eta, Sesso, CittaNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}.
 
 L'associazione PARTECIPAZIONE\_PASSATA è un'altra associazione molti a molti, dunque creiamo anche per lei una relazione apposta, ossia \textbf{PARTECIPAZIONE\_PASSATA(\underline{CFPart}, \underline{CodiceCorso}, \underline{DataInizio})}.
 
-L'associazione PARTECIPAZIONE\_CORRENTE è un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Questa volta scegliamo di creare una relazione a parte per questa associazione, così da non appesantire la tabella PARTECIPANTE che ha già incorportato l'associazione IMPIEGO\_CORRENTE. 
-Dunque creiamo la nova tabella \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} che ha come chiave solo la chiave dell'entità con cardinalità massima 1, ossia la chiave di PARTECIPANTE.
+L'associazione PARTECIPAZIONE\_CORRENTE è un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione PARTECIPANTE. Questa volta scegliamo di creare una relazione a parte per questa associazione, così da non appesantire la tabella PARTECIPANTE che ha già incorporato l'associazione IMPIEGO\_CORRENTE. 
+Dunque creiamo la nuova tabella \textbf{PARTECIPAZIONE\_CORRENTE(\underline{CFPart}, CodiceCorso, DataInizio)} che ha come chiave solo la chiave dell'entità con cardinalità massima 1, ossia la chiave di PARTECIPANTE.
 
-L'associazione COMPOSIZIONE è anche questa un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione LEZIONE. Possiamo quindi incorporare l'assocazione COMPOSIZIONE in essa aggiungendo la chiave di EDIZIONE\_CORSO, ossia CodiceCorso e DataInizio. Dunque LEZIONE diventa \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{ORARIO}, CodiceCorso, DataInizio)}.
+L'associazione COMPOSIZIONE è anche questa un'associazione uno a molti, dove la cardinalità massima 1 è riferita alla relazione LEZIONE. Possiamo quindi incorporare l'associazione COMPOSIZIONE in essa aggiungendo la chiave di EDIZIONE\_CORSO, ossia CodiceCorso e DataInizio. Dunque LEZIONE diventa \textbf{LEZIONE(\underline{Giorno}, \underline{Aula}, \underline{Orario}, CodiceCorso, DataInizio)}.
 
 L'associazione TIPOLOGIA è stata già tradotta quando abbiamo tradotto l'entità debole EDIZIONE\_CORSO, dunque non dobbiamo fare nulla.
 
-L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un'attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Dunque TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}.
+L'associazione POSSESSIONE è un'associazione uno a molti. In questo caso, dato che TELEFONO (l'entità con cardinalità massima 1) ha solo un attributo, decidiamo di incorporare l'associazione in questa relazione, aggiungendo come foreign key la chiave di DOCENTE. Dunque TELEFONO diventa \textbf{TELEFONO(\underline{Numero}, CFDocente)}.
 
-L'associazione ABILITAZIONE è un'associazione molti a molti, dunque creiamo in questo caso una nuova relazione con chiave le due chiavi delle due entità collegate (DOCENTE e CORSO). Dunque creiamo la tabella \textbf{ABILITAZIONE(\underline{CFDocente} ,\underline{CodiceCorso})}
+L'associazione ABILITAZIONE è un'associazione molti a molti, dunque creiamo in questo caso una nuova relazione con chiave le due chiavi delle due entità collegate (DOCENTE e CORSO). Dunque creiamo la tabella \textbf{ABILITAZIONE(\underline{CFDocente}, \underline{CodiceCorso})}.
 
 L'associazione DOCENZA\_PASSATA è anche questa un'associazione molti a molti. Dunque creiamo anche qui una nuova relazione \textbf{DOCENZA\_PASSATA(\underline{CFDocente}, \underline{CodiceCorso}, \underline{DataInizio})}.
 
@@ -1334,9 +1332,9 @@ L'associazione DOCENZA\_CORRENTE è invece un'associazione uno a uno. Tra le tan
 
 Riepiloghiamo quindi tutte le relazioni che costituiscono il nostro nuovo schema logico:
 \begin{itemize}
-    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Età, Sesso, CittàNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}
+    \item \textbf{PARTECIPANTE(\underline{CF}, Codice, Cognome, Eta, Sesso, CittaNascita, Area, Titolo, Posizione, Livello, TipoP, NomeDatore, DataInizio)}
     \item \textbf{DATORE(\underline{Nome}, \underline{Indirizzo}, \underline{Numero})}
-    \item \textbf{DOCENTE(\underline{CF}, CognomeEtà, CittàNascita, Cognome, TIpoD)} 
+    \item \textbf{DOCENTE(\underline{CF}, Eta, CittaNascita, Cognome, TipoD)} 
     \item \textbf{TELEFONO(\underline{Numero}, CFDocente)} 
     \item \textbf{CORSO(\underline{Codice}, Titolo)} 
     \item \textbf{EDIZIONE\_CORSO(\underline{CodiceCorso}, \underline{DataInizio}, DataFine, NPart, CFDocente)}
@@ -1355,7 +1353,7 @@ Riepiloghiamo quindi tutte le relazioni che costituiscono il nostro nuovo schema
 \begin{Definizione}[SQL]
 \label{def-SQL}
 Il linguaggio \textbf{SQL} (Structured Query Language, ossia Linguaggio di Interrogazione Strutturato) è il linguaggio standard dei database relazionali usato per \textbf{definire} le basi di dati, \textbf{manipolarle} e \textbf{interrogarle} tramite \textbf{query} (interrogazioni).\\
-Questo linguggio nasce nel 1974 con SEQUEL, diventando uno standard di fatto dal 1983, ma formalmente solo dal 1986. 
+Questo linguaggio nasce nel 1974 con SEQUEL, diventando uno standard di fatto dal 1983, ma formalmente solo dal 1986. 
 \end{Definizione}
 
 Il linguaggio SQL si può dividere in diversi sottolinguaggi con pacchetti di comandi specifici per alcune operazioni:
@@ -1374,7 +1372,7 @@ Una volta tradotta la nostra base di dati in schema logico, vediamo come creare 
 
 \begin{Definizione}[Domini]
 \label{def-domini}
-Dentro SQL esistono due tipi di domini:\textbf{domini elementari}, che sono predefiniti, o \textbf{domini definiti dall'utente}.
+Dentro SQL esistono due tipi di domini: \textbf{domini elementari}, che sono predefiniti, o \textbf{domini definiti dall'utente}.
 \end{Definizione}
 
 I domini elementari sono:
@@ -1382,9 +1380,9 @@ I domini elementari sono:
     \item \textbf{Carattere} (singoli caratteri o stringhe)
     \item \textbf{Bit} (singoli bit o stringhe)
     \item \textbf{Numerici}
-    \item \textbf{Data, ora, intervalli di tempi}
+    \item \textbf{Data, ora, intervalli di tempo}
     \item \textbf{Boolean} (introdotto dal 1999)
-    \item \textbf{BLOB, CLOB} (introdotto dal 1999, utilizzati per grandi immagini e testi; non possono esserre oggetto di query)
+    \item \textbf{BLOB, CLOB} (introdotti dal 1999, utilizzati per grandi immagini e testi; non possono essere oggetto di query)
 \end{itemize}
 
 Ogni tipo di dati elementare è supportato da funzioni specifiche, come \code{year()}.
@@ -1395,42 +1393,43 @@ CREATE DOMAIN Voti
     AS SMALLINT DEFAULT NULL
     CHECK(Value >= 18 AND Value <= 30)
 \end{lstlisting}
-In questo modo stiamo creando un dominio che parte come uno SMALLINT (dominio elementare di interi), con default NULL e che può avere solo valori compresi tra 18 e 30. Sono molto utili se abbiamo più volte definito lo stesso vincolo di integrità: possiamo infatti creare un singolo dominio con questo vincolo così definirlo una volta sola. 
+In questo modo stiamo creando un dominio che parte come uno SMALLINT (dominio elementare di interi), con default NULL e che può avere solo valori compresi tra 18 e 30. Sono molto utili se abbiamo più volte definito lo stesso vincolo di integrità: possiamo infatti creare un singolo dominio con questo vincolo così da definirlo una volta sola. 
 
 \subsection*{Tabelle}
 
-Per creare una nuova tabella si utilizza il comando \codeb{CREATE TABLE}, che definisce lo schema della tabella e ne crea un'istanza vuota. Ci permette di specificarne attributi, domini e di integritò. Se ad esempio vogliamo creare una relazione Impiegato con i suoi vari attributi, dobbiamo scrivere
+Per creare una nuova tabella si utilizza il comando \codeb{CREATE TABLE}, che definisce lo schema della tabella e ne crea un'istanza vuota. Ci permette di specificarne attributi, domini e vincoli di integrità. Se ad esempio vogliamo creare una relazione Impiegato con i suoi vari attributi, dobbiamo scrivere
 \begin{lstlisting}
 CREATE TABLE Impiegato(
     Matricola VARCHAR(6) PRIMARY KEY,
     CF VARCHAR(16) UNIQUE,
     Nome VARCHAR(20) NOT NULL,
-    Cognome VARCHAR (20) NOT NULL,
-    FOREIGN KEY Dipart VARCHAR(15) REFERENCES Dipartimento(Codice),
+    Cognome VARCHAR(20) NOT NULL,
+    Dipart VARCHAR(15),
+    FOREIGN KEY (Dipart) REFERENCES Dipartimento(Codice),
     Stipendio NUMERIC(9) DEFAULT 0,
     UNIQUE(Cognome, Nome)
 )
 \end{lstlisting}
 
-Vediamo cosa significano queste diverse parole chiavi:
+Vediamo cosa significano queste diverse parole chiave:
 \begin{itemize}
     \item \codeb{PRIMARY KEY} indica che l'attributo Matricola è la nostra chiave primaria
-    \item \codeb{NOT NULL} indica che quell'attributo non può mai essere NULL (\NB In SQL di default un campo può essere nulla)
+    \item \codeb{NOT NULL} indica che quell'attributo non può mai essere NULL (\NB In SQL di default un campo può essere nullo)
     \item \codeb{VARCHAR(n)} indica una stringa che può avere al massimo n caratteri.
-    \item \codeb{UNIQUE} indiica che il CF deve essere unico tra tutte le tuple della relazione Impiegato
+    \item \codeb{UNIQUE} indica che il CF deve essere unico tra tutte le tuple della relazione Impiegato
     \item \codeb{FOREIGN KEY} + \codeb{REFERENCES} indica che Dipart è una foreign key di un'altra tabella chiamata Dipartimento, la cui chiave è Codice
     \item \codeb{DEFAULT} indica che lo stipendio di ogni nuovo impiegato si trova come default a 0
 \end{itemize}
 
-Sia \code{UNIQUE} che \code{PRIMARY KEY} che \code{FOREIGN KEY} possono racchiudere più campi insieme (come già visto nell'istruzione \code{UNIQUE(Cognome, Nome)}, che rende unica la coppia di attribuit (Cognome, Nome), e non i singoli campi ). Questo è fondamentale quando abbiamo una chiave primaria / foreign key composta da più attributi (infatti non si può scrivere più volte \code{PRIMARY KEY} affianco ai diversi attributi, ma bisogna scrivere a parte \code{PRIMARY KEY(att1, att2, ...)}).
+Sia \code{UNIQUE} che \code{PRIMARY KEY} che \code{FOREIGN KEY} possono racchiudere più campi insieme (come già visto nell'istruzione \code{UNIQUE(Cognome, Nome)}, che rende unica la coppia di attributi (Cognome, Nome), e non i singoli campi). Questo è fondamentale quando abbiamo una chiave primaria / foreign key composta da più attributi (infatti non si può scrivere più volte \code{PRIMARY KEY} affianco ai diversi attributi, ma bisogna scrivere a parte \code{PRIMARY KEY(att1, att2, ...)}).
 
 \subsection*{Vincoli}
 
-Abbiamo già visto come inserire dei vincoli a un campo, ad esempio scrivendo \code{NOT NULL} o \code{UNIQUE}. È possibile specificare delle \textbf{reazioni alla violazione di vincoli d'integrità} che eseguono delle istruzioni specifiche quando si prova a violare un vincolo (se queste non sono presenti le azioni che violerebbero i vincoli semplicemente non vengono eseguite). Nell'esempio di prima avevamo una foreign key \code{Dipart} in riferimento a una tupla in \code{Dipartimento} (chiamiamo la tabella Impiegato \textbf{slave} mentre la tabella Dipartimento \textbf{master}). Normalmente, non potremmo eliminare una riga in Dipartimento prima di aver eliminato tutte le references a quella riga in Impiegato. È possibile però definire una reazione alla violazione di questo vincolo di integrità che in automatico elimina tutte le references in Impiegato e elimina anche la riga in Dipartimento. Per fare ciò scriviamo \codeb{ON DELETE CASCADE}(\NB Questo funziona perfettamente, ma è MOLTO rischioso, dato che con un'operazione eliminiamo più righe in tabelle diverse). Se invece non vogliamo eliminare tutte le righe ma semplicemente impostarle a un valore NULL (se ammesso), possiamo scrivere \codeb{ON DELETE CASCADE SET NULL}. \\
+Abbiamo già visto come inserire dei vincoli a un campo, ad esempio scrivendo \code{NOT NULL} o \code{UNIQUE}. È possibile specificare delle \textbf{reazioni alla violazione di vincoli d'integrità} che eseguono delle istruzioni specifiche quando si prova a violare un vincolo (se queste non sono presenti le azioni che violerebbero i vincoli semplicemente non vengono eseguite). Nell'esempio di prima avevamo una foreign key \code{Dipart} in riferimento a una tupla in \code{Dipartimento} (chiamiamo la tabella Impiegato \textbf{slave} mentre la tabella Dipartimento \textbf{master}). Normalmente, non potremmo eliminare una riga in Dipartimento prima di aver eliminato tutte le references a quella riga in Impiegato. È possibile però definire una reazione alla violazione di questo vincolo di integrità che in automatico elimina tutte le righe di Impiegato che fanno riferimento a quel dipartimento ed elimina anche la riga in Dipartimento. Per fare ciò scriviamo \codeb{ON DELETE CASCADE} (\NB Questo funziona perfettamente, ma è MOLTO rischioso, dato che con un'operazione eliminiamo più righe in tabelle diverse). Se invece non vogliamo eliminare le righe di Impiegato ma semplicemente impostare a NULL (se ammesso) il valore della foreign key Dipart, possiamo scrivere \codeb{ON DELETE SET NULL} (non serve aggiungere \code{CASCADE}: \code{CASCADE}, \code{SET NULL} e \code{SET DEFAULT} sono reazioni alternative tra loro, e qualunque sia quella scelta il DBMS la applica automaticamente a tutte le righe di Impiegato che fanno riferimento al dipartimento eliminato). \\
 E se invece un dipartimento non viene eliminato ma modificato? Esiste l'operazione \codeb{ON UPDATE CASCADE}, che aggiorna a cascata tutte le reference a quel dipartimento in Impiegato. \\
-Dunque, se vogliamo che una volta eliminato un dipartimento mettiamo a NULL le references in Impiegato, e una volta modificato invece a cascata modifichiamo tutto in Impiegato, dobbiamo scrivere \code{FOREIGN KEY Dipart VARCHAR(15) REFERENCES Dipartimento(Codice) ON DELETE SET NULL ON UPDATE CASCADE}.
+Dunque, se vogliamo che una volta eliminato un dipartimento mettiamo a NULL le references in Impiegato, e una volta modificato invece a cascata modifichiamo tutto in Impiegato, dobbiamo scrivere \code{FOREIGN KEY (Dipart) REFERENCES Dipartimento(Codice) ON DELETE SET NULL ON UPDATE CASCADE}.
 
-Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore di 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere codeb{CHECK(DataInizio <= DataFine)} in una riga a parte. Inoltre, essendo \code{CHECK} un tipo particolare di CONSTRAINT, possiamo usare proprio la parola chiave \codeb{CONSTRAINT} che non solo deifnisce ma \textbf{nomina} il vincolo così che in futuro possa essere modificato o eliminato. Ad esempio, possiamo scrivere \mbox{\code{CONSTRAINT CHK\_StipedioNonNegativo (Stipendio >= 0)}} per creare un nuovo CONSTRAINT su Stipendio chiamato \code{CHK\_StipendioNonNegativo} che controlli che ogni Stipendio sia $\geq 0$. Per modificare/eliminare poi un vincolo si usano le parole chiavi \codeb{ALTER TABLE}. Per eliminare un vincolo usiamo poi la parola chiave \codeb{DROP}. Ad esempio, se vogliamo eliminiare il vincolo \code{CHK\_StipedioNonNegativo} dovremo scrivere \mbox{\code{ALTER TABLE Stipendio DROP CONSTRAINT CHK\_StipendioNonNegativo}}. Se volessimo invece modificare il vincolo dovremmo usare la parola chiave \codeb{ADD}. Ad esempio, se volessimo imporre che lo stipendio non è più solo non negativo ma sempre positivo, scriveremmo \code{ALTER TABLE Stipendio ADD CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio > 0)}.
+Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore o uguale a 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere \codeb{CHECK(DataInizio <= DataFine)} in una riga a parte. Inoltre, essendo \code{CHECK} un tipo particolare di CONSTRAINT, possiamo usare proprio la parola chiave \codeb{CONSTRAINT} che non solo definisce ma \textbf{nomina} il vincolo così che in futuro possa essere modificato o eliminato. Ad esempio, possiamo scrivere \mbox{\code{CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio >= 0)}} per creare un nuovo CONSTRAINT su Stipendio chiamato \code{CHK\_StipendioNonNegativo} che controlli che ogni Stipendio sia $\geq 0$. Per modificare/eliminare poi un vincolo si usano le parole chiave \codeb{ALTER TABLE}. Per eliminare un vincolo usiamo poi la parola chiave \codeb{DROP}. Ad esempio, se vogliamo eliminare il vincolo \code{CHK\_StipendioNonNegativo} dovremo scrivere \mbox{\code{ALTER TABLE Impiegato DROP CONSTRAINT CHK\_StipendioNonNegativo}}. Se volessimo invece modificare il vincolo, dovremmo prima eliminarlo con \codeb{DROP} e poi ricrearlo con la parola chiave \codeb{ADD}. Ad esempio, se volessimo imporre che lo stipendio non sia più solo non negativo ma sempre positivo, scriveremmo \code{ALTER TABLE Impiegato DROP CONSTRAINT CHK\_StipendioNonNegativo} e poi \code{ALTER TABLE Impiegato ADD CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio > 0)}.
 
 \subsection*{Indici}
 
@@ -1451,11 +1450,11 @@ Tra gli svantaggi invece troviamo:
     \item \textbf{Consumano più spazio sul disco}, essendo questi indici fisici
 \end{itemize}
 
-È consigliato quindi usare indici solo sulle colonne usate frequentemente nelle operazioni di ricerca filtra e sulle colonne che collegano più tabelle.
+È consigliato quindi usare indici solo sulle colonne usate frequentemente nelle operazioni di ricerca filtrata e sulle colonne che collegano più tabelle.
 
 \subsection*{Modifiche agli schemi}
 
-Abbiamo già visto che per modificare un vincolo \code{CONSTRAINT CHECK} si può usare il comando \codeb{ALTER TABLE}. Questo è uno dei diversi comandi che permettono di \textbf{modificare gli schemi}. Andrebbero evitate queste modifiche una volta già creata la base di dati, ma possono capitare situazioni particolari dove queste operazioni possono rilevarsi utili. Oltre a \code{ALTER TABLE} esistono:
+Abbiamo già visto che per modificare un vincolo \code{CONSTRAINT CHECK} si può usare il comando \codeb{ALTER TABLE}. Questo è uno dei diversi comandi che permettono di \textbf{modificare gli schemi}. Andrebbero evitate queste modifiche una volta già creata la base di dati, ma possono capitare situazioni particolari dove queste operazioni possono rivelarsi utili. Oltre a \code{ALTER TABLE} esistono:
 \begin{itemize}
     \item \codeb{ALTER DOMAIN}
     \item \codeb{DROP DOMAIN}
@@ -1463,10 +1462,10 @@ Abbiamo già visto che per modificare un vincolo \code{CONSTRAINT CHECK} si può
 \end{itemize}
 
 Con il comando \codeb{ALTER DOMAIN} possiamo impostare (\code{SET DEFAULT}) o rimuovere (\code{DROP DEFAULT}) un valore di default di un dominio. È possibile modificare i vincoli di nullabilità, scrivendo \code{SET NOT NULL} per impostare un campo NOT NULL, o scrivendo \code{DROP NOT NULL} per eliminare un vincolo NOT NULL a un campo. Si possono poi anche aggiungere (\code{ADD domain\_constraint}) o eliminare (\code{DROP CONSTRAINT domain\_constraint}) un vincolo di dominio. Infine, si può anche rinominare un dominio con il comando \code{RENAME TO}. \\
-Se ad esempio abbiamo un dominio Voti, e vogliamo mettere come default il valore 0, possiamo scrivere \code{ALTER DOMAIN Voti SET DEFAULT 0}. Se invece vogliamo aggiungere il vincolo che ogni voto sia $\leq 30$, possiamo scrivere \mbox{\code{ALTER DOMAIN Voti ADD CONSTRAINT CHK\_VotiMassimo30 CHECK(Voto <= 30)}}.
+Se ad esempio abbiamo un dominio Voti, e vogliamo mettere come default il valore 0, possiamo scrivere \code{ALTER DOMAIN Voti SET DEFAULT 0}. Se invece vogliamo aggiungere il vincolo che ogni voto sia $\leq 30$, possiamo scrivere \mbox{\code{ALTER DOMAIN Voti ADD CONSTRAINT CHK\_VotiMassimo30 CHECK(Value <= 30)}}.
 
 Con il comando \codeb{ALTER TABLE}, oltre che modificare/eliminare vincoli già esistenti sui campi, possiamo creare dei campi totalmente nuovi a una tabella, scrivendo \code{ADD nome\_colonna tipo\_dato}. Si può poi anche modificare il tipo di un campo di una tabella scrivendo \code{MODIFY nome\_colonna nome\_tipo}. Si può anche eliminare (\code{DROP}) o rinominare \code{RENAME TO} un campo di una tabella. Se rinominiamo un campo dobbiamo però stare attenti a eventuali foreign key su tale campo. Inoltre si possono anche aggiungere dei nuovi CONSTRAINT, oltre che modificarli/eliminarli, scrivendo \code{ADD CONSTRAINT}. Si può infine rinominare una tabella sempre con il comando \code{RENAME TO} (anche qui dovremo stare attenti per eventuali riferimenti esterni).  \\
-Se ad esempio, se vogliamo aggiungere a una tabella Matricola il campo Nome di tipo \code{VARCHAR(16)}, scriveremo \mbox{\code{ALTER TABLE Matricola ADD Nome VARCHAR(16)}}. Se invece vogliamo rinominare una tabella Voti in VotiStudenti scriveremo \code{ALTER TABLE Voti RENAME TO VotiStudenti}. Se infine vogliamo aggiungere un vincolo di foreign key su un campo Matricola di una tabella Voti che fa riferimento a un campo Matricola di una tabella Studenti, possiamo scrivere \code{ALTER TABLE Voti ADD CONSTRAINT FK\_MatricolaForeignKey FOREIGN KEY (Matricola) REFERENCES Studenti(Matricola)}.
+Se ad esempio vogliamo aggiungere a una tabella Matricola il campo Nome di tipo \code{VARCHAR(16)}, scriveremo \mbox{\code{ALTER TABLE Matricola ADD Nome VARCHAR(16)}}. Se invece vogliamo rinominare una tabella Voti in VotiStudenti scriveremo \code{ALTER TABLE Voti RENAME TO VotiStudenti}. Se infine vogliamo aggiungere un vincolo di foreign key su un campo Matricola di una tabella Voti che fa riferimento a un campo Matricola di una tabella Studenti, possiamo scrivere \code{ALTER TABLE Voti ADD CONSTRAINT FK\_MatricolaForeignKey FOREIGN KEY (Matricola) REFERENCES Studenti(Matricola)}.
 
 Con il comando \codeb{DROP} è poi possibile eliminare:
 \begin{itemize}
@@ -1478,10 +1477,10 @@ Con il comando \codeb{DROP} è poi possibile eliminare:
 
 \subsection*{View}
 
-Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturare del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
+Il comando \codeb{CREATE VIEW} crea una \textbf{tabella virtuale} con i dati ottenuti da una query sulla tabella originale. Crea dunque un nuovo oggetto strutturale del database, e poiché non manipola i record ma ne seleziona solo alcuni da mettere in una nuova tabella virtuale, rientra perfettamente nei comandi di definizione. Possiamo ad esempio scrivere \code{CREATE VIEW nome\_vista AS risultato\_query} e creare una nuova vista che può essere interrogata come una tabella normale, e che viene aggiornata automaticamente quando i dati vengono aggiornati (al contrario delle tabelle create con \code{SELECT} che, come vedremo, crea delle tabelle statiche che non si aggiornano). Torneremo a parlare di viste in modo più specifico quando tratteremo il linguaggio di query DQL, essendo queste per natura strettamente collegate alle query.
 
 
-\section{Algebra relazione e DQL}
+\section{Algebra relazionale e DQL}
 
 \subsection{Introduzione all'algebra relazionale}
 
@@ -1498,7 +1497,7 @@ Tra gli operatori fondamentali dell'algebra relazionale ci sono:
     \item \textbf{Prodotto cartesiano}
 \end{itemize}
 
-Tra gli operatori derivati (ossia sostituitibili con una combinazione di operatori fondamentali) dell'algebra relazionale ci sono:
+Tra gli operatori derivati (ossia sostituibili con una combinazione di operatori fondamentali) dell'algebra relazionale ci sono:
 \begin{itemize}
     \item \textbf{Join naturale}
     \item $\bm{\theta}$ \textbf{join}
@@ -1509,23 +1508,23 @@ Tra gli operatori derivati (ossia sostituitibili con una combinazione di operato
 
 \begin{Definizione}[Proiezione]
 \label{def-proiezione}
-La \textbf{proiezione} è un operatore che permette di tagliare alcune colonne di una relazione, selezionando così delle \textbf{specifiche colonne di una relazione}. Per indicare una proiezione scriviamo $\bm{\pi_{A_1, \ldots, A_k}(r)}$, che indica una proiezione che prende della relazione $r$ le colonne riferite agli attributi $A_1, \ldots, A_k$.
+La \textbf{proiezione} è un operatore che permette di tagliare alcune colonne di una relazione, selezionando così delle \textbf{specifiche colonne di una relazione}. Per indicare una proiezione scriviamo $\bm{\pi_{A_1, \ldots, A_k}(r)}$, che indica una proiezione che prende dalla relazione $r$ le colonne riferite agli attributi $A_1, \ldots, A_k$.
 \end{Definizione}
-Seguendo le regole dell'insiemistica, in una proiezione \textbf{NON prendiamo duplicati}. Se ad esempio prendiamo solo un attributo di una relazione in una proiezione, avremo l'insieme dei valori distinti di quell'atrtibuto. Se invece prendiamo più attributi, elimineremo solo i duplicati che hanno valori uguali in TUTTI i campi presi dalla proiezione.
+Seguendo le regole dell'insiemistica, in una proiezione \textbf{NON prendiamo duplicati}. Se ad esempio prendiamo solo un attributo di una relazione in una proiezione, avremo l'insieme dei valori distinti di quell'attributo. Se invece prendiamo più attributi, elimineremo solo i duplicati che hanno valori uguali in TUTTI i campi presi dalla proiezione.
 
 \begin{Definizione}[Selezione]
 \label{def-selezione}
-La \textbf{selezione} è un operatore che permette di tagliare alcune righe di una relazione, selezionando così delle \textbf{specifiche righe di una relazione}. Per indicare una selezione scriviamo $\bm{\sigma_C(r)}$, che indica una selezione che prende della relazione $r$ tutte le righe che soddisfano la condizione $C$, scritta tramite operatori booleani.
+La \textbf{selezione} è un operatore che permette di tagliare alcune righe di una relazione, selezionando così delle \textbf{specifiche righe di una relazione}. Per indicare una selezione scriviamo $\bm{\sigma_C(r)}$, che indica una selezione che prende dalla relazione $r$ tutte le righe che soddisfano la condizione $C$, scritta tramite operatori booleani.
 \end{Definizione}
 
-Ad esempio, $C$ può essere $A < B \land \neq A$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti, oppure può essere $\neq (A = B)$ per indicare che il valore dell'attributo $A$ non deve essere uguale a quello dell'attributo $B$.
+Ad esempio, $C$ può essere $A < B \land \neg A$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti, oppure può essere $\neg (A = B)$ per indicare che il valore dell'attributo $A$ non deve essere uguale a quello dell'attributo $B$.
 
 Se prendiamo quindi la relazione $r$
 
 \begin{center}
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{C\#} & \textbf{Città} \\ \hline
+\textbf{Nome} & \textbf{C\#} & \textbf{Citta} \\ \hline
 Rossi   & 1 & Roma   \\
 Rossi   & 2 & Milano \\
 Rossi   & 3 & Roma   \\
@@ -1534,11 +1533,11 @@ Verdi   & 5 & Roma   \\ \hline
 \end{tabular}
 \end{center}
 
-La proiezione $\pi_{\text{Nome, Città}}(r)$ sarà una tabella del genere:
+La proiezione $\pi_{\text{Nome, Citta}}(r)$ sarà una tabella del genere:
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline
-\textbf{Nome} & \textbf{Città} \\ \hline
+\textbf{Nome} & \textbf{Citta} \\ \hline
 Rossi   & Roma  \\
 Rossi   & Milano\\
 Bianchi & Roma   \\
@@ -1546,11 +1545,11 @@ Verdi   & Roma   \\ \hline
 \end{tabular}
 \end{center}
 
-mentre la selezione $\sigma_{C < 3}$ sarà una tabella del genere:
+mentre la selezione $\sigma_{C\# < 3}(r)$ sarà una tabella del genere:
 \begin{center}
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{C\#} & \textbf{Città} \\ \hline
+\textbf{Nome} & \textbf{C\#} & \textbf{Citta} \\ \hline
 Rossi   & 1 & Roma   \\
 Rossi   & 2 & Milano \\ \hline
 \end{tabular}
@@ -1563,7 +1562,7 @@ Rossi   & 2 & Milano \\ \hline
 Due relazioni $r_1$ e $r_2$ sono \textbf{union compatibili} se:
 \begin{itemize}
     \item hanno lo stesso \textbf{numero di attributi}
-    \item gli attributi corrispondenti \textbf{nell'ordine} sono \textbf{definiti sullo stesso dominio} e \textbf{hanno un significato omogeneo} (ad esempio gli attributi Età e Altezza sono definiti sullo stesso dominio dei numeri interi, ma hanno due significati molto distanti)
+    \item gli attributi corrispondenti \textbf{nell'ordine} sono \textbf{definiti sullo stesso dominio} e \textbf{hanno un significato omogeneo} (ad esempio gli attributi Eta e Altezza sono definiti sullo stesso dominio dei numeri interi, ma hanno due significati molto distanti)
 \end{itemize}
 \end{Definizione}
 
@@ -1575,7 +1574,7 @@ Ad esempio, le due relazioni
 
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{Cognome} & \textbf{Età} & \textbf{Gol} \\ \hline
+\textbf{Nome} & \textbf{Cognome} & \textbf{Eta} & \textbf{Gol} \\ \hline
 Paolo   & Rossi & 32  & 400 \\
 Lionel  & Ronaldo & 23 & 2 \\ \hline
 \end{tabular}
@@ -1594,7 +1593,7 @@ Franco  & Messi & Portiere \\ \hline
 \end{center}
 \end{minipage}
 
-Non sono union compatibili, perché hanno un numero di attributi diverso, e il loro terzo attributo è definito su campi diversi. Se vogliamo fare un' unione tra queste relazioni, dobbiamo fare una proiezione su entrambe prendendo solo le prime due colonne di entrambe. Dunque possiamo dire che le relazioni
+Non sono union compatibili, perché hanno un numero di attributi diverso, e il loro terzo attributo è definito su domini diversi. Se vogliamo fare un'unione tra queste relazioni, dobbiamo fare una proiezione su entrambe prendendo solo le prime due colonne di entrambe. Dunque possiamo dire che le relazioni
 
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
@@ -1626,7 +1625,7 @@ sono \textbf{union compatibili}. \\
 
 \begin{Definizione}[Unione]
 \label{def-unione}
-L'\textbf{unione} è un operatore che permette di creare una nuova relazione partendo da due relazioni \textit{union compatibili} con tuple che appartengono ad almeno uno dei due operandi. Per indicare una relazione scriviamo $\bm{r_1 \cup r_2}$, che indica un'unione tra le relazioni $r_1$ e $r_2$.
+L'\textbf{unione} è un operatore che permette di creare una nuova relazione partendo da due relazioni \textit{union compatibili} con tuple che appartengono ad almeno uno dei due operandi. Per indicare un'unione scriviamo $\bm{r_1 \cup r_2}$, che indica un'unione tra le relazioni $r_1$ e $r_2$.
 \end{Definizione}
 
 Proviamo a fare l'unione tra le due proiezioni viste prima:
@@ -1680,7 +1679,7 @@ Avremmo come risultato questa relazione:
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+\textbf{Nome} & \textbf{CodDoc} & \textbf{Dipartimento} \\ \hline
 Rossi & C1 & Matematica \\
 Rossi & C2 & Lettere \\
 Bianchi & C3 & Lingue \\
@@ -1689,7 +1688,7 @@ Pierro & C2 & Lettere \\ \hline
 \end{tabular}
 \end{center}
 
-Notiamo una cosa importante: la tupla (Bianchi, C3, Lingue) si trova in tutte e due le relazioni, dunque nell'unione questa viene scritta una volta sola. Ma ciò non significa che questa tupla indichi in entrambe le relazioni la stessa persona. È infatti possibile che due signor Bianchi, entrambi al dipartimento di Lingue, abbbiano lo stesso numero di codice ma che uno sia un Docente e uno sia un Amministrativo, rimanendo due persone diverse. Dobbiamo quindi modificare le relazioni iniziali cambiando i codici, così da eliminare questa ambiguità:
+Notiamo una cosa importante: la tupla (Bianchi, C3, Lingue) si trova in tutte e due le relazioni, dunque nell'unione questa viene scritta una volta sola. Ma ciò non significa che questa tupla indichi in entrambe le relazioni la stessa persona. È infatti possibile che due signor Bianchi, entrambi al dipartimento di Lingue, abbiano lo stesso numero di codice ma che uno sia un Docente e uno sia un Amministrativo, rimanendo due persone diverse. Dobbiamo quindi modificare le relazioni iniziali cambiando i codici, così da eliminare questa ambiguità:
 
 \begin{minipage}[c]{0.45\textwidth}
 \begin{center}
@@ -1725,7 +1724,7 @@ L'unione tra queste due relazioni sarà quindi:
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+\textbf{Nome} & \textbf{CodDoc} & \textbf{Dipartimento} \\ \hline
 Rossi & D1 & Matematica \\
 Rossi & D2 & Lettere \\
 Bianchi & D3 & Lingue \\
@@ -1740,14 +1739,14 @@ Bianchi & A3 & Lingue \\\hline
 La \textbf{differenza} è un operatore che permette di creare una nuova relazione partendo da due relazioni \textit{union compatibili} con tuple che appartengono al primo operando e NON appartengono al secondo. Per indicare una differenza scriviamo $\bm{r_1 - r_2}$, che indica una differenza tra le relazioni $r_1$ e $r_2$.
 \end{Definizione}
 
-Riprendendo l'esempio di prima dei docenti (quello con ancora i codici uguali, altrimenti la differenza sarebbe superflua essendo tutte le tuple diverse), troviamo che la relazione Docenti $-$ Amministativi (che rappresenta tutti i docenti non amministrativi) è pari a
+Riprendendo l'esempio di prima dei docenti (quello con ancora i codici uguali, altrimenti la differenza sarebbe superflua essendo tutte le tuple diverse), troviamo che la relazione Docenti $-$ Amministrativi (che rappresenta tutti i docenti non amministrativi) è pari a
 
 \begin{center}
     Docenti $-$ Amministrativi
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+\textbf{Nome} & \textbf{CodDoc} & \textbf{Dipartimento} \\ \hline
 Rossi & C1 & Matematica \\
 Rossi & C2 & Lettere \\ \hline
 \end{tabular}
@@ -1766,7 +1765,7 @@ Riprendendo sempre lo stesso esempio di prima, troviamo che la relazione Docenti
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodAmm} & \textbf{Dipartimento} \\ \hline
+\textbf{Nome} & \textbf{CodDoc} & \textbf{Dipartimento} \\ \hline
 Bianchi & C3 & Lingue \\ \hline
 \end{tabular}
 \end{center}
@@ -1775,13 +1774,13 @@ Bianchi & C3 & Lingue \\ \hline
 
 Abbiamo visto delle prime operazioni nell'algebra relazionale. Prima di andare a vedere operatori più complessi, vediamo come si traducono queste prime operazioni in SQL, introducendo quindi a tutti gli effetti il nuovo linguaggio DQL, che riguarda l'interrogazione dei dati.
 
-Per effettuare una \textbf{proiezione} utilizziamo il costrutto \codeb{SELECT}, mentre per efetturare una \textbf{selezione} utilizziamo \codeb{WHERE}. È importante però subito definire una differenza tra il comando \code{SELECT} e le proiezioni: sappiamo che nelle proiezioni in algebra relazionale  i doppioni vengono presi una volta sola, ma in SQL usando il comando \code{SELECT} questo non accade. Se si vuole questo comportamento è necessario aggiungere anche la parola chiave \codeb{distinct}.\\
-Se ad esempio abbiamo una relazione Studente con attributi Nome, Cognome e Età, e vogliamo fare una selezione sulle prime due colonne prendendo però solo gli studenti con età maggiore di 18 e minore di 60 o studenti con età maggiore di 90 (stiamo dunque effettuando una proiezione e una selezione insieme), scriveremmo:
+Per effettuare una \textbf{proiezione} utilizziamo il costrutto \codeb{SELECT}, mentre per effettuare una \textbf{selezione} utilizziamo \codeb{WHERE}. È importante però subito definire una differenza tra il comando \code{SELECT} e le proiezioni: sappiamo che nelle proiezioni in algebra relazionale  i doppioni vengono presi una volta sola, ma in SQL usando il comando \code{SELECT} questo non accade. Se si vuole questo comportamento è necessario aggiungere anche la parola chiave \codeb{distinct}.\\
+Se ad esempio abbiamo una relazione Studenti con attributi Nome, Cognome e Eta, e vogliamo fare una proiezione sulle prime due colonne prendendo però solo gli studenti con età maggiore di 18 e minore di 60 o studenti con età maggiore di 90 (stiamo dunque effettuando una proiezione e una selezione insieme), scriveremmo:
 
 \begin{lstlisting}
 SELECT Nome, Cognome 
 FROM Studenti
-WHERE (Età > 18 and Età < 60) or (Età > 90)
+WHERE (Eta > 18 and Eta < 60) or (Eta > 90)
 \end{lstlisting}
 
 effettuando una vera e propria \textbf{query}. \\
@@ -1793,15 +1792,15 @@ FROM Studenti, Esami
 WHERE Studenti.Matricola = Esami.MatricolaStudente
 \end{lstlisting}
 
-\NB In questo caso stiamo effettuando un vero e propprio prodotto cartesiano tra le due relazioni, concetto che approfondiremo tra poco ritornando a studiare l'algebra relazionale.
+\NB In questo caso stiamo effettuando un vero e proprio prodotto cartesiano tra le due relazioni, concetto che approfondiremo tra poco ritornando a studiare l'algebra relazionale.
 
 Inoltre, in SQL (ma non in algebra relazionale) è possibile effettuare anche un \code{SELECT} prendendo tutti gli attributi usando l'\textbf{*}, scrivendo ad esempio \code{SELECT Studenti.*}. 
 
-È possibile anche effettura delle operazioni su tutta una colonna scrivendo ad esempio \codeb{SELECT Studenti.Età / 2 as EtàDimezzata}. In questo caso creiamo quindi una nuova relazione che ha come colonna l'età di ogni studente ma divisa già per due, che prende il nome di EtàDimezzata. 
+È possibile anche effettuare delle operazioni su tutta una colonna scrivendo ad esempio \codeb{SELECT Studenti.Eta / 2 as EtaDimezzata}. In questo caso creiamo quindi una nuova relazione che ha come colonna l'età di ogni studente ma divisa già per due, che prende il nome di EtaDimezzata. 
 
 Tra le condizioni che possiamo effettuare esistono anche le \textbf{condizioni like}, che permettono di effettuare controlli sulle stringhe. Ad esempio, se vogliamo tutti i nomi che hanno come primo carattere una "A" e come terzo carattere una "d", scriveremmo \codeb{WHERE Nome like 'A\_d\%'}, dove usiamo l'\_ per indicare che la "d" deve essere la terza lettera (se doveva essere la quinta avremmo usato 3 \_ al posto di uno).
 
-Per verificare poi che un valore sia \code{NULL} non usiamo gli operatori normali ma scriviamo \codeb{IS NULL} o \codeb{IS NOT NULL}. Ad esempio, possiamo effettuare una query scrivendo \code{WHERE Età IS NOT NULL}.
+Per verificare poi che un valore sia \code{NULL} non usiamo gli operatori normali ma scriviamo \codeb{IS NULL} o \codeb{IS NOT NULL}. Ad esempio, possiamo effettuare una query scrivendo \code{WHERE Eta IS NOT NULL}.
 
 \Esempio \nopagebreak
 
@@ -1813,7 +1812,7 @@ Presa la relazione \nopagebreak
 
   \begin{tabular}{|c|c|c|c|}
     \hline
-    \textbf{Matricola} & \textbf{Cognome} & \textbf{Università} & \textbf{Media} \\
+    \textbf{Matricola} & \textbf{Cognome} & \textbf{Universita} & \textbf{Media} \\
     \hline
     7309 & Neri  & Sapienza    & 23 \\
     5998 & Neri  & Roma Tre    & 22 \\
@@ -1828,7 +1827,7 @@ creare una nuova relazione con gli studenti con la media maggiore di 27 o  minor
 Dobbiamo quindi effettuare questa query:
 
 \begin{lstlisting}
-SELECT distinct Cognome, Università
+SELECT distinct Cognome, Universita
 FROM Studenti
 WHERE Media > 27 or Media < 20
 \end{lstlisting}
@@ -1838,7 +1837,7 @@ che ci restituirà questa relazione:
 \begin{center}
   \begin{tabular}{|c|c|}
     \hline
-    \textbf{Cognome} & \textbf{Università} \\
+    \textbf{Cognome} & \textbf{Universita} \\
     \hline
      Rossi & Sapienza \\ 
     \hline
@@ -1849,7 +1848,7 @@ che ci restituirà questa relazione:
 
 \begin{Definizione}[Prodotto cartesiano]
 \label{def-prodotto-cartesiano}
-Il \textbf{prodotto cartesiano} tra due relazioni permette di unire le informazioni di due relazioni in una nuova relazione creando delle nuove tuple ottenute concatenando le tuple della prima relazione con quella della seconda. Per indicare un prodotto cartesiano scriviamo $\bm{r_1 \times r_2}$, che indica un prodotto cartesiano tra le relazioni $r_1$ e $r_2$. 
+Il \textbf{prodotto cartesiano} tra due relazioni permette di unire le informazioni di due relazioni in una nuova relazione creando delle nuove tuple ottenute concatenando le tuple della prima relazione con quelle della seconda. Per indicare un prodotto cartesiano scriviamo $\bm{r_1 \times r_2}$, che indica un prodotto cartesiano tra le relazioni $r_1$ e $r_2$. 
 \end{Definizione}
 
 Vediamo un esempio. Prendiamo le relazioni
@@ -1860,7 +1859,7 @@ Vediamo un esempio. Prendiamo le relazioni
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} \\ \hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Citta} \\ \hline
 Rossi & C1 & Napoli \\
 Rossi & C2 & Roma \\
 Bianchi & C3 & Milano \\ \hline
@@ -1883,12 +1882,12 @@ O3 & C3 & 100 \\ \hline
 
 La nuova relazione Operatore $\times$ Ordine non è applicabile senza effettuare dei cambiamenti alle altre relazioni. Questo perché le due relazioni hanno una colonna con lo stesso nome (CodiceOperatore), dunque nella nuova relazione formata dal prodotto cartesiano avremmo due colonne con lo stesso nome, cosa non possibile. Per risolvere questo problema, introduciamo un nuovo operatore chiamato \textbf{ridenominazione}.
 
-\begin{Definizione}[ridenominazione]
+\begin{Definizione}[Ridenominazione]
 \label{def-ridenominazione}
-La \textbf{ridenominazione} è un operaotre che permette di modificare lo schema di una relazione (è l'unico operatore che non lavora sulle istanze ma sullo schema), permettendo di cambiare il nome di alcuni campi. Per indicare una ridenominazione scriviamo $\textbf{Nuova\_Relazione} \bm{= \rho_{\textbf{nome1, nome2,}\ldots \rightarrow \textbf{nuovo\_nome1, nuovo\_nome2,}\ldots}}$ oppure $\textbf{Nuova\_Relazione} \bm{= \rho_{\textbf{nuovo\_nome1, nuovo\_nome2,}\ldots \leftarrow \textbf{nome1, nome2,}\ldots}}$, che indica una ridenominazione dei vecchi nomi con quelli nuovi.
+La \textbf{ridenominazione} è un operatore che permette di modificare lo schema di una relazione (è l'unico operatore che non lavora sulle istanze ma sullo schema), permettendo di cambiare il nome di alcuni campi. Per indicare una ridenominazione scriviamo $\textbf{Nuova\_Relazione} \bm{= \rho_{\textbf{nome1, nome2,}\ldots \rightarrow \textbf{nuovo\_nome1, nuovo\_nome2,}\ldots}}$ oppure $\textbf{Nuova\_Relazione} \bm{= \rho_{\textbf{nuovo\_nome1, nuovo\_nome2,}\ldots \leftarrow \textbf{nome1, nome2,}\ldots}}$, che indica una ridenominazione dei vecchi nomi con quelli nuovi.
 \end{Definizione}
 
-Possiamo quindi effettuare una ridenominazione sulla relazione Ordine, creando una nuova relazione in questo modo: $\text{OrdineR} = \rho_{\text{CodiceOperatore} \rightarrow  \text{Codice}}$. Abbiamo quindi ora queste due relazioni su cui fare il prodotto cartesiano:
+Possiamo quindi effettuare una ridenominazione sulla relazione Ordine, creando una nuova relazione in questo modo: $\text{OrdineR} = \rho_{\text{CodiceOperatore} \rightarrow  \text{Codice}}(\text{Ordine})$. Abbiamo quindi ora queste due relazioni su cui fare il prodotto cartesiano:
 
 
 \begin{minipage}[c]{0.45\textwidth}
@@ -1897,7 +1896,7 @@ Possiamo quindi effettuare una ridenominazione sulla relazione Ordine, creando u
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} \\ \hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Citta} \\ \hline
 Rossi & C1 & Napoli \\
 Rossi & C2 & Roma \\
 Bianchi & C3 & Milano \\ \hline
@@ -1925,7 +1924,7 @@ Dunque troviamo ora una nuova relazione:
 
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} &\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Citta} &\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
 Rossi & C1 & Napoli & O1 & C2 & 300 \\
 Rossi & C1 & Napoli & O2 & C2 & 200 \\
 Rossi & C1 & Napoli & O3 & C3 & 100 \\ 
@@ -1946,21 +1945,21 @@ Questa nuova relazione, però, ha delle righe che sono inutili. Guardiamo ad ese
 
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} &\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Citta} &\textbf{Ordine} & \textbf{Codice} & \textbf{NPezzi} \\ \hline
 Rossi & C2 & Roma & O1 & C2 & 300 \\
 Rossi & C2 & Roma & O2 & C2 & 200 \\
 Bianchi & C3 & Milano & O3 & C3 & 100 \\ \hline
 \end{tabular}
 \end{center}
 
-Notiamo, però, che in questa nuvoa relazione c'è sia la colonna CodiceOperatore che la colonna Codice. Queste due colonne portano la stessa informazione, dunque è ridondante scriverle due volte. Per questo, effettuiamo una proiezione, eliminando una delle due colonne. Prendiamo quindi la tabella $\pi_{\text{Nome, CodiceOperatore, Città, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$, ossia la tabella
+Notiamo, però, che in questa nuova relazione c'è sia la colonna CodiceOperatore che la colonna Codice. Queste due colonne portano la stessa informazione, dunque è ridondante scriverle due volte. Per questo, effettuiamo una proiezione, eliminando una delle due colonne. Prendiamo quindi la tabella $\pi_{\text{Nome, CodiceOperatore, Citta, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$, ossia la tabella
 
 \begin{center}
-$\pi_{\text{Nome, CodiceOperatore, Città, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$
+$\pi_{\text{Nome, CodiceOperatore, Citta, Ordine, NPezzi}}(\sigma_{\text{CodiceOperatore = Codice}}(\text{Operatore} \times \text{Ordine}))$
 
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Città} &\textbf{Ordine}  & \textbf{NPezzi} \\ \hline
+\textbf{Nome} & \textbf{CodiceOperatore} & \textbf{Citta} &\textbf{Ordine}  & \textbf{NPezzi} \\ \hline
 Rossi & C2 & Roma & O1 & 300 \\
 Rossi & C2 & Roma & O2 & 200 \\
 Bianchi & C3 & Milano & O3 & 100 \\ \hline
@@ -1989,11 +1988,11 @@ Vediamo ora due casi limite del join naturale:
 
 Il secondo caso è quello più pericoloso: riguardando infatti le tabelle iniziali Operatore e Ordine, queste hanno l'attributo CodiceOperatore in comune, ma nella tabella Operatore poteva avere molto senso scrivere semplicemente Codice (lasciando sottinteso Operatore). Se questo fosse stato fatto, il join naturale non avrebbe fatto altro che restituire un prodotto cartesiano tra le due tabelle, nonostante il codice dell'operatore si trovi in entrambe, solo con un nome diverso. È fondamentale in questo caso la \textit{ridenominazione}, così da modificare il nome dei vari attributi così che il join naturale possa confrontarli. 
 
-Un'altro problema importante del join naturale è che, nonostante due attributi possano avere lo stesso nome, non è detto che abbiamo lo stesso significato. Pensiamo ad esempio a due relazioni, Docente e Studente, che hanno entrambi l'attributo Codice. È scontato per noi che Docente.Codice e Studente.Codice non indichino lo stesso codice, ma piuttosto indichino, rispettivamente, il codice del docente e quello dello studente.
+Un altro problema importante del join naturale è che, nonostante due attributi possano avere lo stesso nome, non è detto che abbiano lo stesso significato. Pensiamo ad esempio a due relazioni, Docente e Studente, che hanno entrambe l'attributo Codice. È scontato per noi che Docente.Codice e Studente.Codice non indichino lo stesso codice, ma piuttosto indichino, rispettivamente, il codice del docente e quello dello studente.
 
 \begin{Definizione}[$\bm{\theta}$ Join]
 \label{def-theta-join}
-Il $\bm{\theta}$ \textbf{join} è un prodotto cartesiano effettuato tra due relazioni che prende solo delle tuple di tale join che rispettano una certa condizione $A \theta B$, dove $A$ è un'attributo dello schema della prima relazione, $B$ della seconda (ricordiamo dom$(A) =$ dom$(B)$), e $\theta$ è un operatore di confronto ($=, \leq, \geq, \ldots$). Per indicare un $\theta$ join scriviamo $\bm{r_1 \bowtie_{A \theta B} r_2 }$, che indica un $\theta$ join tra le relazioni $r_1$ e $r_2$ con la condizione $A \theta B$.
+Il $\bm{\theta}$ \textbf{join} è un prodotto cartesiano effettuato tra due relazioni che prende solo delle tuple di tale join che rispettano una certa condizione $A \theta B$, dove $A$ è un attributo dello schema della prima relazione, $B$ della seconda (ricordiamo dom$(A) =$ dom$(B)$), e $\theta$ è un operatore di confronto ($=, \leq, \geq, \ldots$). Per indicare un $\theta$ join scriviamo $\bm{r_1 \bowtie_{A \theta B} r_2 }$, che indica un $\theta$ join tra le relazioni $r_1$ e $r_2$ con la condizione $A \theta B$.
 \end{Definizione}
 
 Possiamo quindi dire che $r_1 \bowtie_{A \theta B} r_2 = \sigma_{A \theta B}(r_1 \times r_2)$.
@@ -2006,7 +2005,7 @@ Ad esempio, prese le relazioni
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{Età} & \textbf{Stipendio} \\ \hline
+\textbf{Nome} & \textbf{Eta} & \textbf{Stipendio} \\ \hline
 Mario & 30 & 300 \\
 Erling & 20 & 2000 \\
 Arturo & 25 & 5000 \\ \hline
@@ -2034,21 +2033,21 @@ Tutor $\bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{M
 
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{Età} & \textbf{Stipendio} & \textbf{Fascia} & \textbf{Min} & \textbf{Max} \\ \hline
+\textbf{Nome} & \textbf{Eta} & \textbf{Stipendio} & \textbf{Fascia} & \textbf{Min} & \textbf{Max} \\ \hline
 Mario & 30 & 300 & Basso & 0 & 1000 \\
 Erling & 20 & 2000 & Medio & 1001 & 2000 \\
 Arturo & 25 &  5000 & Alto & 2001 & 10000 \\ \hline
 \end{tabular}
 \end{center}
 
-Dato che però qui abbiamo ancora le colonne Min e Max che nella tabella finale sono inutili perché servono solo per stabilire in che fascia mandare un Tutor, possiamo effettuare una proiezione, creando dunque la relazione $\pi_{\text{Nome, Età, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$, ossia la tabella
+Dato che però qui abbiamo ancora le colonne Min e Max che nella tabella finale sono inutili perché servono solo per stabilire in che fascia mandare un Tutor, possiamo effettuare una proiezione, creando dunque la relazione $\pi_{\text{Nome, Eta, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$, ossia la tabella
 
 \begin{center}
-$\pi_{\text{Nome, Età, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$ \nopagebreak
+$\pi_{\text{Nome, Eta, Stipendio, Fascia}}(\text{Tutor} \bowtie_{\text{Stipendio} >= \text{Min} \land \text{Stipendio} <= \text{Max}} \text{FasceStipendio})$ \nopagebreak
 
 \begin{tabular}{|l|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{Età} & \textbf{Stipendio} & \textbf{Fascia} \\ \hline
+\textbf{Nome} & \textbf{Eta} & \textbf{Stipendio} & \textbf{Fascia} \\ \hline
 Mario & 30 & 300 & Basso \\
 Erling & 20 & 2000 & Medio  \\
 Arturo & 25 &  5000 & Alto \\ \hline
@@ -2061,14 +2060,14 @@ Arturo & 25 &  5000 & Alto \\ \hline
 Abbiamo già accennato quando abbiamo parlato della parola chiave \code{FROM} che aggiungendo più relazioni a questa è possibile effettuare dei prodotti cartesiani. Non solo: questa è anche la sintassi utilizzata per effettuare dei join.
 Ad esempio, il join naturale visto in precedenza Operatore $\bowtie$ Ordine in SQL diventa:
 \begin{lstlisting}
-SELECT distinct Nome, CodiceOperatore, Città, Ordine, NPezzi
+SELECT distinct Nome, CodiceOperatore, Citta, Ordine, NPezzi
 FROM Operatore, Ordine
 WHERE CodiceOperatore = Codice
 \end{lstlisting}
 
-In realtà, sia un prodotto cartesiano che un qualasiasi join in SQL si scrivono sempre allo stesso modo, ossia scrivendo le due (o più) relazioni interessate affianco la parola chiave \code{FROM} separate da una virgola. Sarà poi DBMS a decidere quale operazione eseguire per rendere il tutto il più efficiente possibile. 
+In realtà, sia un prodotto cartesiano che un qualsiasi join in SQL si scrivono sempre allo stesso modo, ossia scrivendo le due (o più) relazioni interessate affianco la parola chiave \code{FROM} separate da una virgola. Sarà poi il DBMS a decidere quale operazione eseguire per rendere il tutto il più efficiente possibile. 
 
-Torna qui importante un costrutto che avevamo già accenato quando abbiamo iniziato a tradurre l'algebra relazionale in SQL, ossia le \textbf{abbreviazioni}. Queste sono fondamentali solitamente quando abbiamo più tabelle con i campi con lo stesso nome e vogliamo essere più chiari nella decisione di quali campi scegliere nella selezione. Se ad esempio abbiamo le relazioni
+Torna qui importante un costrutto che avevamo già accennato quando abbiamo iniziato a tradurre l'algebra relazionale in SQL, ossia le \textbf{abbreviazioni}. Queste sono fondamentali solitamente quando abbiamo più tabelle con i campi con lo stesso nome e vogliamo essere più chiari nella decisione di quali campi scegliere nella selezione. Se ad esempio abbiamo le relazioni
 
 
 \begin{minipage}[c]{0.45\textwidth}
@@ -2101,9 +2100,9 @@ Geometria & 3 & 02/03/1700 \\ \hline
 se vogliamo fare una query per prendere tutti gli esami effettuati dal docente col codice 1 (Codice come campo in Esame è una foreign key che collega la relazione a Docente), le abbreviazioni ci renderebbero la vita più facile. Infatti, al posto di scrivere
 
 \begin{lstlisting}
-SELECT distinct Esame.Nome, Data, Docenti.Codice
+SELECT distinct Esami.Nome, Data, Docenti.Codice
 FROM Docenti, Esami
-WHERE Docenti.Codice = Esami.Codice = 1
+WHERE Docenti.Codice = Esami.Codice AND Docenti.Codice = 1
 \end{lstlisting}
 
 potremmo semplicemente scrivere
@@ -2111,10 +2110,10 @@ potremmo semplicemente scrivere
 \begin{lstlisting}
 SELECT distinct e.Nome as NomeEsame, Data, d.Codice as CodiceDocente
 FROM Docenti d, Esami e
-WHERE d.Codice = e.Codice = 1
+WHERE d.Codice = e.Codice AND d.Codice = 1
 \end{lstlisting}
 
-Entrabbe le query restituirebbero comunque la relazione
+Entrambe le query restituirebbero comunque la relazione
 
 \begin{center}
 \begin{tabular}{|l|l|l|}
@@ -2124,7 +2123,7 @@ Chimica & 02/03/2002 & 1 \\ \hline
 \end{tabular}
 \end{center}
 
-Questa è comoda quando abbiamo due o più relazioni nella query, ma è necessaria se abbiamo una query su un prodotto cartesiano / join eseguito sulla stessa relazione. Se ad esempio abbiamo le relazioni
+Queste sono comode quando abbiamo due o più relazioni nella query, ma è necessaria se abbiamo una query su un prodotto cartesiano / join eseguito sulla stessa relazione. Se ad esempio abbiamo le relazioni
 
 
 \begin{minipage}[c]{0.45\textwidth}
@@ -2146,7 +2145,7 @@ Luigi & Mario  \\ \hline
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{Età} & \textbf{Reddito} \\ \hline
+\textbf{Nome} & \textbf{Eta} & \textbf{Reddito} \\ \hline
 Giuseppe & 45 & 1000 \\
 Antonio & 21 & 1500 \\
 Luigi & 30 & 1200 \\
@@ -2156,7 +2155,7 @@ Mario & 1 & 0 \\ \hline
 \end{center}
 \end{minipage}
 
-E voglimo creare una nuova relazione con tutti i figli che guadagnano più del padre, in cui salviamo anche il reddito del figlio e quello del padre, dovremmo scrivere una query di questo tipo:
+E vogliamo creare una nuova relazione con tutti i figli che guadagnano più del padre, in cui salviamo anche il reddito del figlio e quello del padre, dovremmo scrivere una query di questo tipo:
 
 \begin{lstlisting}
 SELECT Figlio, f.Reddito as Reddito, p.Reddito as RedditoPadre
@@ -2184,11 +2183,11 @@ WHERE Nome = Padre AND Reddito > 1000
 Potremmo però anche scriverla in quest'altro modo, utilizzando proprio un join esplicito:
 \begin{lstlisting}
 SELECT Figlio, Padre, Reddito as RedditoPadre
-FROM Paternita join Persone on Nome = Padre 
+FROM Paternita join Persone ON Nome = Padre 
 WHERE Reddito > 1000
 \end{lstlisting}
 
-Entrabbe le query restituirebbero la relazione
+Entrambe le query restituirebbero la relazione
 
 \begin{center}
 \begin{tabular}{|l|l|l|}
@@ -2199,16 +2198,16 @@ Mario & Luigi & 1200 \\ \hline
 \end{tabular}
 \end{center}
 
-La logica è molto semplice: nel \code{FROM} scriviamo tutte le condizioni riguardanti il join tra le due relazioni, separate tutte dalla parola chiave \code{on} (dunque se avessimo avuto altre condizioni avremmo dovuto scrivere \code{FROM r1 x r2 on C1 on C2...}), e se abbiamo altre condizioni che non riguardano il join le aggiungiamo come delle normali condizioni affianco la parola chiave \code{WHERE}.  \\
+La logica è molto semplice: nel \code{FROM} scriviamo tutte le condizioni riguardanti il join tra le due relazioni, separate tutte dalla parola chiave \code{ON} (dunque se avessimo avuto altre condizioni avremmo dovuto scrivere \code{FROM r1 x r2 ON C1 ON C2...}), e se abbiamo altre condizioni che non riguardano il join le aggiungiamo come delle normali condizioni affianco la parola chiave \code{WHERE}.  \\
 \NB Il join esplicito non è sempre implementato: soprattutto in sistemi più vecchi è possibile che questo non sia presente.
 
 Infine, in SQL (ma non in algebra relazionale), a seguito di una query è possibile \textbf{riordinare le tuple} seguendo il valore di una delle colonne, aggiungendo, alla fine della query, la scritta \codeb{ORDER BY} + il nome del campo desiderato. Ad esempio, la query
 
 \begin{lstlisting}
-SELECT Nome, Reddito 
+SELECT Nome, Eta, Reddito 
 FROM Persone
-WHERE Età > 10
-ORDER BY Età
+WHERE Eta > 10
+ORDER BY Eta
 \end{lstlisting}
 
 restituirebbe la relazione
@@ -2216,18 +2215,18 @@ restituirebbe la relazione
 \begin{center}
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{Età} & \textbf{Reddito} \\ \hline
+\textbf{Nome} & \textbf{Eta} & \textbf{Reddito} \\ \hline
 Antonio & 21 & 1500 \\
 Luigi & 30 & 1200 \\
 Giuseppe & 45 & 1000 \\ \hline
 \end{tabular}
 \end{center}
 
-Notiamo che le tuple sono state ordinate in modo crescente, dalla tupla con l'età più piccola a quella con l'età più grande. Se volessimo il contrario, dovremmo aggiungere affianco Età la parola chiave \codeb{DESC}.
+Notiamo che le tuple sono state ordinate in modo crescente, dalla tupla con l'età più piccola a quella con l'età più grande. Se volessimo il contrario, dovremmo aggiungere affianco Eta la parola chiave \codeb{DESC}.
 
 \subsection{Problemi particolari nell'algebra relazionale}
 
-Fino ad ora abbiamo studiato query con condizioni facili da rispondere, del tipo "Nomi di tutte le persone con \textbf{età > 50"}, oppure "Clienti che hanno effettuato \textbf{almeno} un ordine da 50 o più pezzi". Queste sono facili perché per ognuna di queste condizioni basta prendere in sequenza ogni tupla della relazione iniziale (o di un eventuale join, ad esempio tra Clienti e Ordini), e verificare la condizione richiesta. Arriviamo ora a studiare però query più complesse, che non chiedono più se ci sono persone che hanno effettuato almeno un ordine da 50 o più pezzi, ma piuttosto se esistono clienti che hanno effettuato \underline{\textbf{sempre}} ordini da 50 o più pezzi. \\
+Fino ad ora abbiamo studiato query con condizioni facili da rispondere, del tipo "Nomi di tutte le persone con \textbf{età > 50}", oppure "Clienti che hanno effettuato \textbf{almeno} un ordine da 50 o più pezzi". Queste sono facili perché per ognuna di queste condizioni basta prendere in sequenza ogni tupla della relazione iniziale (o di un eventuale join, ad esempio tra Clienti e Ordini), e verificare la condizione richiesta. Arriviamo ora a studiare però query più complesse, che non chiedono più se ci sono persone che hanno effettuato almeno un ordine da 50 o più pezzi, ma piuttosto se esistono clienti che hanno effettuato \underline{\textbf{sempre}} ordini da 50 o più pezzi. \\
 Per capire come risolvere queste situazioni, vediamo un esempio concreto prendendo le tabelle Clienti e Ordini:
 
 \begin{minipage}[c]{0.45\textwidth}
@@ -2236,7 +2235,7 @@ Per capire come risolvere queste situazioni, vediamo un esempio concreto prenden
 
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Nome} & \textbf{CodiceCliente} & \textbf{Città} \\ \hline
+\textbf{Nome} & \textbf{CodiceCliente} & \textbf{Citta} \\ \hline
 Giuseppe & C1 & Roma \\
 Giuseppe & C2 & Milano \\
 Antonio & C3 & Roma  \\ \hline
@@ -2259,7 +2258,7 @@ C2 & A5 & 300 \\ \hline
 \end{center}
 \end{minipage}
 
-In questo caso scansionare le tuple una a una e inserire i clienti che rispettano la condizione non basta più: infatti, guardando solo la prima tupla dovremmo aggiungere Giuseppe nella soluzione, ma guardando poi la seconda notiamo che questi non soddisfa interamente la condizione. Come traduciamo però questo in algebra relazionale? Possiamo risolvere il problema usando la \textbf{doppia negazione}. Infatti, l'insieme dei clienti che hanno sempre effettuato ordini da almeno 50 pezzi è pari all'insieme dei clienti - l'insieme dei clienti che almeno una volta hanno effettuato un ordine da meno 50 pezzi. Dunque la query $\bm{\pi_{\textbf{Nome}}(\pi_{\textbf{Nome}, \textbf{CodiceCliente}}(\textbf{Cliente} \bowtie \textbf{Ordine}) - \pi_{\textbf{Nome}, \textbf{CodiceCliente}}(\sigma_{\textbf{NPezzi}<50}(\textbf{Cliente} \bowtie \textbf{Ordine})))}$ contiene tutti i clienti che hanno fatto sempre ordini da almeno 50 pezzi. Dunque con questa query troviamo la relazione
+In questo caso scansionare le tuple una a una e inserire i clienti che rispettano la condizione non basta più: infatti, guardando solo la prima tupla dovremmo aggiungere Giuseppe nella soluzione, ma guardando poi la seconda notiamo che questi non soddisfa interamente la condizione. Come traduciamo però questo in algebra relazionale? Possiamo risolvere il problema usando la \textbf{doppia negazione}. Infatti, l'insieme dei clienti che hanno sempre effettuato ordini da almeno 50 pezzi è pari all'insieme dei clienti - l'insieme dei clienti che almeno una volta hanno effettuato un ordine da meno di 50 pezzi. Dunque la query $\bm{\pi_{\textbf{Nome}}(\pi_{\textbf{Nome}, \textbf{CodiceCliente}}(\textbf{Cliente} \bowtie \textbf{Ordine}) - \pi_{\textbf{Nome}, \textbf{CodiceCliente}}(\sigma_{\textbf{NPezzi}<50}(\textbf{Cliente} \bowtie \textbf{Ordine})))}$ contiene tutti i clienti che hanno fatto sempre ordini da almeno 50 pezzi. Dunque con questa query troviamo la relazione
 
 \begin{center}
 \begin{tabular}{|l|}
@@ -2272,14 +2271,14 @@ Giuseppe \\ \hline
 C'è però un piccolo particolare: scrivendo la query in questo modo stiamo eliminando anche tutti i clienti che non hanno mai effettuato ordini. Ciò può essere corretto o meno in base alla query: in questo caso non è esplicitato se questi clienti dovrebbero essere considerati nella soluzione o meno, dunque è sempre preferibile non inserirli. Ma nel caso fosse stato specificato avremmo semplicemente dovuto scrivere $\pi_{\text{Nome}}(\pi_{\text{Nome}, \text{CodiceCliente}}(\text{Cliente}) - \pi_{\text{Nome}, \text{CodiceCliente}}(\sigma_{\text{NPezzi}<50}(\text{Cliente} \bowtie \text{Ordine})))$ (in questa nostra situazione con questa seconda query oltre a Giuseppe avremmo avuto in relazione anche Antonio). 
 \NB Abbiamo qui prima proiettato sia il Nome che il CodiceCliente e poi solo il nome perché questo da solo non è un identificativo sufficiente. Infatti, proiettando fin da subito solo sul nome entrambi i Giuseppe sarebbero stati eliminati, nonostante Giuseppe con codice C2 rispettasse la condizione.
 
-Se avessimo avuto come query quella di trovare tutti i clienti che non hanno ad esempio \underline{\textbf{mai}} effettuato ordini con più di 200 pezzi il ragionamento non cambiava di una virgola: sfruttando la doppia negazione bisognava trovare tutti i clienti che hanno mai fatto un ordine con più di 200 pezzi e eliminarli dalla lista dei clienti che hanno effetuato ordini (o solo dei clienti, se si vogliono anche considerare i clienti con 0 ordini), così da avere infine solo i clienti che rispettano la nostra condizione.
+Se avessimo avuto come query quella di trovare tutti i clienti che non hanno ad esempio \underline{\textbf{mai}} effettuato ordini con più di 200 pezzi il ragionamento non cambiava di una virgola: sfruttando la doppia negazione bisognava trovare tutti i clienti che hanno mai fatto un ordine con più di 200 pezzi e eliminarli dalla lista dei clienti che hanno effettuato ordini (o solo dei clienti, se si vogliono anche considerare i clienti con 0 ordini), così da avere infine solo i clienti che rispettano la nostra condizione.
 
-Vediamo ora invece un 'altra situazione. Ipotizziamo di avere la seguente relazione:
+Vediamo ora invece un'altra situazione. Ipotizziamo di avere la seguente relazione:
 
 \begin{center}
             Impiegati 
 
-\begin{tabular}{|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|}
 \hline
 \textbf{Nome} & \textbf{C\#} & \textbf{Stip} & \textbf{Capo\#}\\ \hline
 Rossi & C1 & 100 & C3 \\
@@ -2291,7 +2290,7 @@ Tosi & C6 & 100 & C1 \\ \hline
 \end{tabular}
 \end{center}
 
-La query ci chiede di trovare il nome e il codice di ogni impiegato che guadagna quanto o di più del proprio capo. Notiamo subito una cosa particolare: le informazioni dei capi sono sempre nella relazione impiegato. Dunque stiamo effettuando una query che ci richiede di fare un $\theta$ join tra una relazione e sé stessa. Per poterlo fare, però, è necessaria prima di tutto una ridenominazione: ImpiegatiC $= \rho_{\text{Nome, C\#, Stip, Capo\#} \rightarrow CNome, CC\#, CStip, CCapo\#}$(Impiegati) (non è per forza necessaria, potremmo esplicitare i nomi degli attributi scrivendo ogni volta Impiegati.Nome o ImpiegatiC.Nome, ma con la ridenominazione rendiamo sicuramente questa query più chiara). Possiamo ora studiare la relazione Impiegati$\bowtie_{\text{Capo\#} = \text{CC\#}}$ImpiegatiC, che si traduce nella tabella
+La query ci chiede di trovare il nome e il codice di ogni impiegato che guadagna quanto o di più del proprio capo. Notiamo subito una cosa particolare: le informazioni dei capi sono sempre nella relazione impiegato. Dunque stiamo effettuando una query che ci richiede di fare un $\theta$ join tra una relazione e sé stessa. Per poterlo fare, però, è necessaria prima di tutto una ridenominazione: ImpiegatiC $= \rho_{\text{Nome, C\#, Stip, Capo\#} \rightarrow \text{CNome, CC\#, CStip, CCapo\#}}$(Impiegati) (non è per forza necessaria, potremmo esplicitare i nomi degli attributi scrivendo ogni volta Impiegati.Nome o ImpiegatiC.Nome, ma con la ridenominazione rendiamo sicuramente questa query più chiara). Possiamo ora studiare la relazione Impiegati$\bowtie_{\text{Capo\#} = \text{CC\#}}$ImpiegatiC, che si traduce nella tabella
 
 \begin{center}
             Impiegati$\bowtie_{\text{Capo\#} = \text{CC\#}}$ImpiegatiC
@@ -2307,7 +2306,7 @@ Tosi & C6 & 100 & C1 & Rossi & C1 & 100 & C3\\ \hline
 \end{tabular}
 \end{center}
 
-Notiamo che in questa tupla non è presente dalla parte della relazione Impiegati le informazioni riguardanti Bianchi. Questo accade perché semplicemente Bianchi non ha un capo, dunque Capo\# = CC\# per lui non è mai vero, perché non esiste nessun impiegato che ha come $C\#$ il valore NULL.  \\
+Notiamo che in questa tabella non sono presenti dalla parte della relazione Impiegati le informazioni riguardanti Bianchi. Questo accade perché semplicemente Bianchi non ha un capo, dunque Capo\# = CC\# per lui non è mai vero, perché non esiste nessun impiegato che ha come $C\#$ il valore NULL.  \\
 A questo punto non ci resta che confrontare il valore Stip con il valore CStip e prendere le tuple tali che Stip $\geq$ CStip, e infine proiettare. Troviamo quindi la relazione $\pi_{\text{Nome}, \text{C\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#} \land \text{Stip} \geq \text{CStip}}\text{ImpiegatiC})$, che si traduce nella relazione
 
 \begin{center}
@@ -2322,10 +2321,10 @@ Tosi & C6  \\ \hline
 \end{tabular}
 \end{center}
 
-E se invece volessimo ora il nome e il codice di tutti i capi che guadagnano di più di tutti i loro impiegati? In questo caso torna fondamentale la doppia negazione. Possiamo sfruttare la query appena studiata per trovare tutti i capi che guadagnano quanto o meno dei loro impiegati, per poi prendere la relazione con tutti i capi e fare una differenza proprio con questa query. Se chiamiamo la query precedente $r$, troviamo che la soluzione a questo problema è la query $\pi_{\text{CNome}, \text{CC\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#}}\text{ImpiegatiC}) - \pi_{\text{Cnome}, \text{CC\#}}(r)$, che si traduce nella relazione
+E se invece volessimo ora il nome e il codice di tutti i capi che guadagnano di più di tutti i loro impiegati? In questo caso torna fondamentale la doppia negazione. Possiamo sfruttare la query appena studiata per trovare tutti i capi che guadagnano quanto o meno dei loro impiegati, per poi prendere la relazione con tutti i capi e fare una differenza proprio con questa query. Se chiamiamo $r$ la relazione $\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#} \land \text{Stip} \geq \text{CStip}}\text{ImpiegatiC}$ (ossia la query precedente prima della proiezione), troviamo che la soluzione a questo problema è la query $\pi_{\text{CNome}, \text{CC\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#}}\text{ImpiegatiC}) - \pi_{\text{CNome}, \text{CC\#}}(r)$, che si traduce nella relazione
 
 \begin{center}
-            $\pi_{\text{CNome}, \text{CC\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#}}\text{ImpiegatiC}) - \pi_{\text{Cnome}, \text{CC\#}}(r)$
+            $\pi_{\text{CNome}, \text{CC\#}}(\text{Impiegati}\bowtie_{\text{Capo\#} = \text{CC\#}}\text{ImpiegatiC}) - \pi_{\text{CNome}, \text{CC\#}}(r)$
 
 \begin{tabular}{|l|l|}
 \hline
@@ -2342,8 +2341,8 @@ Vediamo infine un'altra query interessante. Ci troviamo in un database con le se
     \item PROGETTO(\underline{Id}, Titolo, Data)
     \item TEAM(\underline{ProgId}, \underline{DipenId}, Ruolo)
 \end{itemize}
-con l'attributo Ruolo che può assumere tre valori: "Project Leader", "Programmer" o "Designer". Ci viene chiesto di trovare il titolo del progetto \underline{\textbf{più vecchio}} di ogni dipendente a cui egli ha partecipato come Project Leader, salvando come informazioni nella relazione il Nome, il Cognome, la DataN del dipendente e il Titolo del progetto. La parte di interessante di questa query è la ricerca del progetto \textit{più vecchio}. Anche qui ci troviamo nello stesso vicolo cieco già visto quando ci siamo trovati davanti la parola \textit{sempre}: come possiamo essere sicuri che un progetto sia il più vecchio fra tutti? Prima di vedere come risolvere questo problema, troviamoci una relazione con all'interno diverse tuple con i progetti e i project leader di ogni progetto. \\
-Innanzitutto prendiamo tutti i project leader dalla relazione Team con i rispettivi progetti a cui erano a capo: ProjectLeader = $\pi_{\text{ProgId}, \text{DipenId}} (\sigma_{\text{Ruolo} = \text{"Project Leader"}}(\text{Team}))$. Creiamo ora una relazione con tutti i progetti associati al loro rispettivo project leader: \mbox{ProgettoPL = $\pi_{\text{ProgId}, \text{Data}, \text{DipenID}}(\text{Progetto} \bowtie_{\text{Id} = \text{ProgId}} \text{ProjectLeader})$}. Siamo così arrivati a una tabella di questo tipo:
+con l'attributo Ruolo che può assumere tre valori: "Project Leader", "Programmer" o "Designer". Ci viene chiesto di trovare il titolo del progetto \underline{\textbf{più vecchio}} di ogni dipendente a cui egli ha partecipato come Project Leader, salvando come informazioni nella relazione il Nome, il Cognome, la DataN del dipendente e il Titolo del progetto. La parte interessante di questa query è la ricerca del progetto \textit{più vecchio}. Anche qui ci troviamo nello stesso vicolo cieco già visto quando ci siamo trovati davanti la parola \textit{sempre}: come possiamo essere sicuri che un progetto sia il più vecchio fra tutti? Prima di vedere come risolvere questo problema, troviamoci una relazione con all'interno diverse tuple con i progetti e i project leader di ogni progetto. \\
+Innanzitutto prendiamo tutti i project leader dalla relazione Team con i rispettivi progetti di cui erano a capo: ProjectLeader = $\pi_{\text{ProgId}, \text{DipenId}} (\sigma_{\text{Ruolo} = \text{"Project Leader"}}(\text{Team}))$. Creiamo ora una relazione con tutti i progetti associati al loro rispettivo project leader: \mbox{ProgettoPL = $\pi_{\text{ProgId}, \text{Data}, \text{DipenId}}(\text{Progetto} \bowtie_{\text{Id} = \text{ProgId}} \text{ProjectLeader})$}. Siamo così arrivati a una tabella di questo tipo:
 
 \begin{center}
 ProgettoPL
@@ -2360,7 +2359,7 @@ P6 & 09/09/1990 & D3 \\ \hline
 \end{tabular}
 \end{center}
 
-Per trovare il minimo di ogni dipendente, prendiamo questa tabella e efettuiamo una ridenominazione: ProgettoPL2 = $\rho_{\text{ProgId}, \text{Data}, \text{DipenId} \rightarrow \text{ProgId2}, \text{Data2}, \text{DipenId2}}(\text{ProgettoPL})$. A questo punto possiamo effettuare un $\theta$ join, ponendo come condizione che DipenId sia uguale a DipenId2, così da avere una nuova tabella con tutte coppie di progetti con lo stesso project leader. Troviamo quindi la tabella
+Per trovare il minimo di ogni dipendente, prendiamo questa tabella e effettuiamo una ridenominazione: ProgettoPL2 = $\rho_{\text{ProgId}, \text{Data}, \text{DipenId} \rightarrow \text{ProgId2}, \text{Data2}, \text{DipenId2}}(\text{ProgettoPL})$. A questo punto possiamo effettuare un $\theta$ join, ponendo come condizione che DipenId sia uguale a DipenId2, così da avere una nuova tabella con tutte le coppie di progetti con lo stesso project leader. Troviamo quindi la tabella
 
 \begin{center}
 ProgettoPL $\bowtie_{\text{DipenId} = \text{DipenId2}}$ ProgettoPL2 \nopagebreak
@@ -2401,7 +2400,7 @@ P6 & 09/09/1990 & D3 & P3 & 11/04/2010 & D3 \\\hline
 \end{tabular}
 \end{center}
 
-A questo punto notiamo una cosa: tutte le date che si trovano nella colonna Data2 sicuramente non possono corrispondere al progetto più vecchio del project leader a cui si riferiscono. Infatti, si riferiscono a progetti avvenuti sicuramente dopo rispetto a altri seguiti sempre dallo stesso project manager. Dunque, per ottenere i progetti più vecchi, non ci basta che prendere la tabella iniziale e eliminare tutte le tuple con i progetti che sono presenti nella parte destra di questa nostra tabella. Se chiamiamo la tabella qui sopra $r$, arriviamo alla query \mbox{Min = $\text{ProgettoPL} - \pi_{\text{ProgId2}, \text{Data2}, \text{DipenId2}}(r)$}, ossia alla tabella
+A questo punto notiamo una cosa: tutte le date che si trovano nella colonna Data2 sicuramente non possono corrispondere al progetto più vecchio del project leader a cui si riferiscono. Infatti, si riferiscono a progetti avvenuti sicuramente dopo rispetto a altri seguiti sempre dallo stesso project leader. Dunque, per ottenere i progetti più vecchi, non ci resta che prendere la tabella iniziale e eliminare tutte le tuple con i progetti che sono presenti nella parte destra di questa nostra tabella. Se chiamiamo la tabella qui sopra $r$, arriviamo alla query \mbox{Min = $\text{ProgettoPL} - \pi_{\text{ProgId2}, \text{Data2}, \text{DipenId2}}(r)$}, ossia alla tabella
 
 \begin{center}
 Min \nopagebreak
@@ -2431,14 +2430,14 @@ Gli \textbf{operatori aggregati} sono operatori che lavorano non sulle singole t
 
 L'operatore \codeb{COUNT} è un operatore aggregato che conta tutte le tuple che rispettano una certa condizione. Ad esempio, se vogliamo contare il numero di figli di Paolo scriveremmo
 \begin{lstlisting}
-SELECT count(*) as NumFigliDiFranco
+SELECT count(*) as NumFigliDiPaolo
 FROM Paternita
-WHERE Padre = "Paolo"
+WHERE Padre = 'Paolo'
 \end{lstlisting}
 
 Possiamo anche aggiungere alla funzione count il nome di un attributo, scrivendo \code{count(attributo)}, contando così il numero di tuple in cui quell'attributo non è nullo. Se scriviamo poi anche \code{count(distinct attributo)}, non solo contiamo le tuple dove l'attributo non è nullo, ma evitiamo di contare anche tutti i duplicati.
 
-Esistono poi altri operatori aggregati come \codeb{SUM,AVG,MAX} e \codeb{MIN} che ci permettono, rispettivamente, di calcolare la somma, la media, il massimo e il minimo di un insieme di valori. Ovviamente queste operazioni hanno senso solo su attributi numerici (non possiamo fare la media di tante stringhe, ovviamente), e in questi operatori tutte le tuple con valore \code{NULL} sono sempre evitate.
+Esistono poi altri operatori aggregati come \codeb{SUM, AVG, MAX} e \codeb{MIN} che ci permettono, rispettivamente, di calcolare la somma, la media, il massimo e il minimo di un insieme di valori. Ovviamente queste operazioni hanno senso solo su attributi numerici (non possiamo fare la media di tante stringhe, ovviamente), e in questi operatori tutte le tuple con valore \code{NULL} sono sempre evitate.
 
 Vediamo ora una query errata con gli operatori aggregati:
 \begin{lstlisting}
@@ -2446,12 +2445,12 @@ SELECT Nome, MAX(Reddito)
 FROM Persone
 \end{lstlisting}
 
-Quale nome dovremmo affiancare al valore \code{MAX(Reddito)} nella relazione risultante? Nessuno dei nomi presenti nella relazione Persone è un nome corretto da affiancare al valore \code{MAX(Reddito)}, dunque ci ritroveremmo con una relazione con tante righe con tutti i nomi affiancati dal \code{MAX(Reddito)}, che non ha senso. In questo caso, diciamo che la \textbf{target list} (ossia l'insieme degli attributi di una query) è errata. Infatti questa deve essere \textit{omogenea}, dunque o sono presenti solo operatori aggregati oppure non ne deve essere presente nemmeno uno. In questo caso, per rendere la query sensata, avremmo dovuto aggiungere la clausola \code{WHERE Reddito = MAX(Reddito)}, trovando così una relazione con tante tuple quanti sono le persone con reddito massimo.
+Quale nome dovremmo affiancare al valore \code{MAX(Reddito)} nella relazione risultante? Nessuno dei nomi presenti nella relazione Persone è un nome corretto da affiancare al valore \code{MAX(Reddito)}, dunque ci ritroveremmo con una relazione con tante righe con tutti i nomi affiancati dal \code{MAX(Reddito)}, che non ha senso. In questo caso, diciamo che la \textbf{target list} (ossia l'insieme degli attributi di una query) è errata. Infatti questa deve essere \textit{omogenea}, dunque o sono presenti solo operatori aggregati oppure non ne deve essere presente nemmeno uno. In questo caso, per rendere la query sensata, avremmo dovuto usare una sottoquery (che vedremo con le interrogazioni nidificate), cioè \code{WHERE Reddito = (SELECT MAX(Reddito) FROM Persone)}, trovando così una relazione con tante tuple quante sono le persone con reddito massimo.
 
-Un'altro operatore aggregato importante è il \codeb{GROUP BY}. Scrivendo \code{GROUP BY ListaAttributi} possiamo raggruppare tutte le tuple di una relazione che hanno valori uguali per tutti gli attributi presenti nella lista di attributi. Questo operatore ci permette anche di avere target list non omogenee che funzionano lo stesso. Ad esempio, la query
+Un'altra clausola importante è il \codeb{GROUP BY}. Scrivendo \code{GROUP BY ListaAttributi} possiamo raggruppare tutte le tuple di una relazione che hanno valori uguali per tutti gli attributi presenti nella lista di attributi. Questa clausola ci permette anche di avere target list non omogenee che funzionano lo stesso. Ad esempio, la query
 
 \begin{lstlisting}
-SELECT Padre, count(*) as NumFigliDiFranco
+SELECT Padre, count(*) as NumFigli
 FROM Paternita
 GROUP BY Padre
 \end{lstlisting}
@@ -2475,7 +2474,7 @@ troveremmo la tabella
 
 \begin{center} 
 \begin{tabular}{|l|l|}\hline
-\textbf{Padre} & \textbf{NumFigliDiFranco}   \\ \hline
+\textbf{Padre} & \textbf{NumFigli}   \\ \hline
 Paolo & 2 \\
 Fabrizio & 1 \\
 Diego & 2 \\ \hline
@@ -2485,19 +2484,19 @@ Diego & 2 \\ \hline
 Dunque il GROUP BY ci permette di creare target list non omogenee, con operatori aggregati e non insieme. La condizione fondamentale, però, è che tutto ciò che nel SELECT non è un operatore aggregato \textbf{vada nel GROUP BY}. Ad esempio, la query 
 \begin{lstlisting}
 SELECT Padre, AVG(f.Reddito), p.Reddito 
-FROM Persone f join Paternita on Figlio = Nome join Persone p on Padre = p.Nome
+FROM Persone f join Paternita ON Figlio = Nome join Persone p ON Padre = p.Nome
 GROUP BY Padre
 \end{lstlisting}
 
-è errata, perché non abbiamo messo \code{p.Reddito} nel GROUP BY. Se avessimo un padre con più redditi il SELECT su \code{p.Reddito}  non avrebbe più senso (torniamo al problema del Nome visto priam con la query riguardo il MAX(Reddito)).
+è errata, perché non abbiamo messo \code{p.Reddito} nel GROUP BY. Se avessimo un padre con più redditi il SELECT su \code{p.Reddito}  non avrebbe più senso (torniamo al problema del Nome visto prima con la query riguardo il MAX(Reddito)).
 
-Possiamo poi aggiungere delle condizioni ai raggruppamenti. Ad esempio, se volessimo solo i padri i cui figli hanno un reddito medio $\geq 25$, possiamo aggiungere questa condizione scrivendo \codeb{HAVING AVG(F.Reddito) >= 25}. Non possiamo scrivere questa condizione con il \code{WHERE} sia perché questo opera sulle singole tuple, dunque aggiungergli una condizione con un operatore aggregato in mezzo non ha senso.
+Possiamo poi aggiungere delle condizioni ai raggruppamenti. Ad esempio, se volessimo solo i padri i cui figli hanno un reddito medio $\geq 25$, possiamo aggiungere questa condizione scrivendo \codeb{HAVING AVG(f.Reddito) >= 25}. Non possiamo scrivere questa condizione con il \code{WHERE} perché questo opera sulle singole tuple, dunque aggiungergli una condizione con un operatore aggregato in mezzo non ha senso.
 
 \subsubsection*{Operatori insiemistici}
 
-Vediamo ora tutti gli operatori insiemistici in SQL che già abbiamo accennato in algebra relazionale. Ricordiamo che queste operazioni sono effettuabili sono tra tabelle \textit{union compatibili}.
+Vediamo ora tutti gli operatori insiemistici in SQL che già abbiamo accennato in algebra relazionale. Ricordiamo che queste operazioni sono effettuabili solo tra tabelle \textit{union compatibili}.
 
-Per effettuare un unione aggiungiamo la parola chiave \codeb{UNION} tra due query. Ad esempio, la query
+Per effettuare un'unione aggiungiamo la parola chiave \codeb{UNION} tra due query. Ad esempio, la query
 
 \begin{lstlisting}
 SELECT Padre, Figlio
@@ -2507,8 +2506,8 @@ SELECT Madre, Figlio
 FROM maternita
 \end{lstlisting}
 
-restituirà una relazione con tutti i padri e i rispettivi figli e tutte le madri e i rispettivi figli. Notiamo però un problema: che nome diamo al primo attributo? Madre o Padre? Per convenzione viene sempre data la priorità ai nomi degli attributi del primo operando, dunque avremo come risutlato una relazione con attributi Padre e Figlio. In questo caso, dato che Padre Figlio non ha molto senso per la tabella risultante, dovremmo effettuare una rinominazione sulla prima relazione, scrivendo \code{SELECT Padre as Genitore, Figlio} al posto del semplice \code{SELECT Padre, Figlio}.  \\
-\NB L'ordine degli attributi è importante: non aveva senso scrivere \code{SELECT Figlio Padre as Genitore} e poi \code{SELECT Madre Figlio}, perché avremmo avuto una relazione con tutte le madri nella colonna dei genitori e tutti i figli nella colonna dei padri.
+restituirà una relazione con tutti i padri e i rispettivi figli e tutte le madri e i rispettivi figli. Notiamo però un problema: che nome diamo al primo attributo? Madre o Padre? Per convenzione viene sempre data la priorità ai nomi degli attributi del primo operando, dunque avremo come risultato una relazione con attributi Padre e Figlio. In questo caso, dato che Padre Figlio non ha molto senso per la tabella risultante, dovremmo effettuare una ridenominazione sulla prima relazione, scrivendo \code{SELECT Padre as Genitore, Figlio} al posto del semplice \code{SELECT Padre, Figlio}.  \\
+\NB L'ordine degli attributi è importante: non aveva senso scrivere \code{SELECT Figlio, Padre as Genitore} e poi \code{SELECT Madre, Figlio}, perché avremmo avuto una relazione con tutte le madri nella colonna dei figli e tutti i figli nella colonna dei genitori.
 
 Per effettuare una differenza invece aggiungiamo la parola chiave \codeb{EXCEPT} tra due query. Anche qui, come per l'unione, i nomi degli attributi della relazione finale saranno quelli ereditati dalla prima relazione. Ricordiamo che, come nell'algebra relazionale, le differenze in SQL NON sono commutative. Ad esempio, la query 
 
@@ -2520,18 +2519,18 @@ SELECT Cognome
 FROM Impiegato
 \end{lstlisting}
 
-restituisce tutti i nomi di impegati che non sono cognomi di qualche impiegato.
+restituisce tutti i nomi di impiegati che non sono cognomi di qualche impiegato.
 
-Infine, per effettuareun intersezione aggiungiamo la parola chiave \codeb{INTERSECT} tra due query. 
+Infine, per effettuare un'intersezione aggiungiamo la parola chiave \codeb{INTERSECT} tra due query. 
 
 \subsubsection*{Interrogazioni nidificate}
 
-È possibile anche effettuare una \textbf{query in una query}. Per capire come fuzionano vediamo un esempio. Ipotizziamo di voler trovare il nome e il reddito del padre di Franco. Possiamo scrivere
+È possibile anche effettuare una \textbf{query in una query}. Per capire come funzionano vediamo un esempio. Ipotizziamo di voler trovare il nome e il reddito del padre di Franco. Possiamo scrivere
 
 \begin{lstlisting}
 SELECT Nome, Reddito
 FROM Persone, Paternita
-WHERE Nome = Padre and Figlio = "Franco"
+WHERE Nome = Padre and Figlio = 'Franco'
 \end{lstlisting}
 
 ma possiamo anche scriverla in modo equivalente attraverso le \textbf{interrogazioni nidificate}, in questo modo:
@@ -2541,7 +2540,7 @@ SELECT Nome, Reddito
 FROM Persone
 WHERE Nome = (SELECT Padre
               FROM Paternita
-              WHERE Figlio = "Franco")
+              WHERE Figlio = 'Franco')
 \end{lstlisting}    
 
 In questo caso abbiamo scritto Nome = query\_interna. Questo funziona perché figlio nella relazione Paternita è chiave, dunque sappiamo che da quella query uscirà al più un valore. Se invece avessimo come risultato una relazione con più di una tupla, non avremmo dovuto scrivere \code{=} ma avremmo dovuto utilizzare l'operatore di appartenenza \codeb{= ANY} o \codeb{IN} (che si traducono entrambi in "appartiene a"). Se invece volessimo tutti i Nomi che NON appartengono alla relazione restituita dalla query interna dovremmo scrivere \codeb{<> ALL} o \codeb{NOT IN} (che si traducono in "non appartiene a").
@@ -2550,7 +2549,7 @@ In questo caso abbiamo scritto Nome = query\_interna. Questo funziona perché fi
 \label{prop-regole-interr-nd}
 \begin{itemize}
     \item Le query più interne NON possono contenere al proprio interno degli operatori insiemistici
-    \item Non si può fare riferimento a variabili definite in blocchi più interni (con ad esempio nomi temporanei definiti con l'operatore \code{as}), ma si può fare riferimetno a variabili definite in blocchi più esterni
+    \item Non si può fare riferimento a variabili definite in blocchi più interni (con ad esempio nomi temporanei definiti con l'operatore \code{as}), ma si può fare riferimento a variabili definite in blocchi più esterni
 \end{itemize}
 \end{Proprieta} 
 
@@ -2559,7 +2558,7 @@ Le interrogazioni nidificate ci permettono di risolvere anche query che prima no
 \begin{lstlisting}
 SELECT *
 FROM Persone
-WHERE Reddito = SELECT (MAX(Reddito) FROM Persone) 
+WHERE Reddito = (SELECT MAX(Reddito) FROM Persone) 
 \end{lstlisting}
 
 \begin{Proprieta}[Tipi di query annidate]
@@ -2572,7 +2571,7 @@ Distinguiamo due tipi di query annidate:
 \end{Proprieta}
 
 \begin{Proposizione}[]
-\label{propos-nidiifcazione}
+\label{propos-nidificazione}
 Non è possibile sfruttare la nidificazione con \textbf{having}.
 \end{Proposizione}
 
@@ -2599,7 +2598,7 @@ CREATE VIEW Budget(Dip,TotStipendi) as
 e facendo poi la query
 
 \begin{lstlisting}
-SELECT Dipartimento
+SELECT Dip
 FROM Budget
 WHERE TotStipendi = (SELECT MAX(TotStipendi)
                      FROM Budget)
@@ -2622,7 +2621,7 @@ GROUP BY Dipartimento
 
 \begin{lstlisting}
 CREATE VIEW DipartUffici(NomeDip, NumeroUffici) as
-    SELECT Dipart, COUNT(DISTINCT UFFICIO)
+    SELECT Dipartimento, COUNT(DISTINCT Ufficio)
     FROM Impiegato
     GROUP BY Dipartimento
 \end{lstlisting}
@@ -2663,7 +2662,7 @@ FROM Padre
 WHERE Eta > 50
 \end{lstlisting}
 
-Ad esempio, con questa query stiamo inserendo nella tabella Persone tutti i padri con un età $\geq 50$ anni. Dato che abbiamo selezionato \code{Nome} e \code{Eta} nella query, nella tabella Persone dovremo avere questi due attributi con questo ordine e, nel caso, possiamo avere solo attributi con default o che ammettono il valore \code{NULL}.
+Ad esempio, con questa query stiamo inserendo nella tabella Persone tutti i padri con un'età $> 50$ anni. Dato che abbiamo selezionato \code{Nome} e \code{Eta} nella query, nella tabella Persone dovremo avere questi due attributi con questo ordine e, nel caso, possiamo avere solo attributi con default o che ammettono il valore \code{NULL}.
 
 \subsection*{\codeb{DELETE}}
 
@@ -2674,22 +2673,22 @@ DELETE FROM Tabella
 WHERE Condizione
 \end{lstlisting}
 
-Nel caso si vogliano eliminare tutte le tuple di una relazione, basta scrivere semplicemente \code{DELETE FROM Tabella}, senza alcuna condizione (che per SQL equivale a dire \code{WHERE TRUE}), come già accennato in precedenza. Ovviamente, se una tupla è presente come foreign key in un'altra relazione ed è specificato una politica \code{CASCADE}, la sua eliminazione può modificare o eliminare delle tuple in altre relazioni.
+Nel caso si vogliano eliminare tutte le tuple di una relazione, basta scrivere semplicemente \code{DELETE FROM Tabella}, senza alcuna condizione (che per SQL equivale a dire \code{WHERE TRUE}), come già accennato in precedenza. Ovviamente, se una tupla è presente come foreign key in un'altra relazione ed è specificata una politica \code{CASCADE}, la sua eliminazione può modificare o eliminare delle tuple in altre relazioni.
 
 \subsection*{\codeb{UPDATE}}
 
-Per aggiornare una serie di tuple di una tabella che rispondono a una certa condizione modificandone un'attributo con un nuovo valore basta scrivere
+Per aggiornare una serie di tuple di una tabella che rispondono a una certa condizione modificandone un attributo con un nuovo valore basta scrivere
 \begin{lstlisting}
 UPDATE Tabella
 SET Attributo = Espressione
 WHERE Condizione
 \end{lstlisting}
 
-L'espressione definita può essere un valore predefinito, come un numero o una stringa, ma può essere anhce una sottoquery. Ad esempio, è totalmente lecito scrivere
+L'espressione definita può essere un valore predefinito, come un numero o una stringa, ma può essere anche una sottoquery. Ad esempio, è totalmente lecito scrivere
 
 \begin{lstlisting}
 UPDATE Impiegato
-SET Stipendio = AVG(SELECT AVG(Stipendio) FROM Impiegato)
+SET Stipendio = (SELECT AVG(Stipendio) FROM Impiegato)
 WHERE Stipendio < 1000
 \end{lstlisting}
 
@@ -2719,8 +2718,8 @@ Esistono diversi tipi di privilegi:
 \end{itemize}
 \end{Proprieta}
 
-Per concedere uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{GRANT}, scrivendo ad esempio \mbox{\code{GRANT Privilegi on Risorsa to Utente}}. Inoltre, se si vuole che l'utente a cui garantiamo i privilegi possa a sua volta concedere questi stessi privilegi a qualcun'altro, dobbiamo aggiungere la scritta \codeb{WITH GRANT OPTION}. \\
-Per revocare invece uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{REVOKE}, scrivendo ad esempio \code{REVOKE Privilegi on Risorsa from Utente}. Oltre a ciò, se all'utente sono stati dati anche i permessi per poterli concedere lui stesso a altri utenti, bisogna anche specificare \codeb{RESTRICT} se si vuole annullare la revoca nel caso l'utente a cui stiamo revocando i permessi li abbia concessi a qualcun'altro, o specificare \codeb{CASCADE} se si vuole revocare i permessi anche a tutti gli utenti che li hanno ricevuti da colui che li sta perdendo.
+Per concedere uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{GRANT}, scrivendo ad esempio \mbox{\code{GRANT Privilegi ON Risorsa to Utente}}. Inoltre, se si vuole che l'utente a cui garantiamo i privilegi possa a sua volta concedere questi stessi privilegi a qualcun altro, dobbiamo aggiungere la scritta \codeb{WITH GRANT OPTION}. \\
+Per revocare invece uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{REVOKE}, scrivendo ad esempio \code{REVOKE Privilegi ON Risorsa from Utente}. Oltre a ciò, se all'utente sono stati dati anche i permessi per poterli concedere lui stesso a altri utenti, bisogna anche specificare \codeb{RESTRICT} se si vuole annullare la revoca nel caso l'utente a cui stiamo revocando i permessi li abbia concessi a qualcun altro, o specificare \codeb{CASCADE} se si vuole revocare i permessi anche a tutti gli utenti che li hanno ricevuti da colui che li sta perdendo.
 
 \section{DTL}
 
@@ -2732,19 +2731,19 @@ Una \textbf{transazione} è una sequenza di operazioni che deve rispettare una s
 \begin{itemize}
     \item \textbf{Atomicità}: le operazioni devono essere eseguite SEMPRE tutte insieme. Se una transazione viene annullata a metà, tutte le operazioni eseguite al suo interno devono essere annullate
     \item \textbf{Consistenza}: al termine di ogni istruzione non deve essere violato alcun vincolo di integrità
-    \item \textbf{Isolata}: le transazioni devono essere indipendenti fra loro
+    \item \textbf{Isolamento}: le transazioni devono essere indipendenti fra loro
     \item \textbf{Durabilità}: una transazione completata correttamente deve riportare risultati durabili nel tempo 
 \end{itemize}
 \end{Definizione}
 
-Per effettuare una transizione in SQL esistono tre istruzioni fondamentali:
+Per effettuare una transazione in SQL esistono tre istruzioni fondamentali:
 \begin{itemize}
-    \item \codeb{BEGIN TRANSACTION}, che specifica l'inizio della transizione (in questa fase le operazioni non vengono ancora eseguite sulla base di dati)
-    \item \codeb{COMMIT WORK}, che conclude la transizione (tutte le operazioni a partire da \code{BEGIN TRANSACTION})
-    \item \codeb{ROLLBACK WORK}, che rinuncia completamente alla transizione e riporta la base di dati allo stato precedente alla transizione
+    \item \codeb{BEGIN TRANSACTION}, che specifica l'inizio della transazione (in questa fase le operazioni non vengono ancora eseguite sulla base di dati)
+    \item \codeb{COMMIT WORK}, che conclude la transazione (rendendo definitive tutte le operazioni a partire da \code{BEGIN TRANSACTION})
+    \item \codeb{ROLLBACK WORK}, che rinuncia completamente alla transazione e riporta la base di dati allo stato precedente alla transazione
 \end{itemize}
 
-Ad esempio una transizione classica viene effettuata quando si passa un tot di soldi da un saldo a un altro, scrivendo in questo modo:
+Ad esempio una transazione classica viene effettuata quando si passa un tot di soldi da un saldo a un altro, scrivendo in questo modo:
 
 \begin{lstlisting}
 BEGIN TRANSACTION
@@ -2752,21 +2751,21 @@ UPDATE ContoCorrente
     SET Saldo = Saldo - 10
     WHERE NumeroConto = 10000
 UPDATE ContoCorrente
-    SET SALDO = SALDO + 10
-    WHERE NumeroConto =  55555
+    SET Saldo = Saldo + 10
+    WHERE NumeroConto = 55555
 COMMIT WORK
 \end{lstlisting}
 
 
 \section{DBMS attivi}
 
-\NB La sintassi delle operazioni sui DBMS Attivi varia da DBMS a DBMS. Daremo quindi dei comandi generali che poi andranno approofnditi a seconda del DBMS utilizzato.
+\NB La sintassi delle operazioni sui DBMS Attivi varia da DBMS a DBMS. Daremo quindi dei comandi generali che poi andranno approfonditi a seconda del DBMS utilizzato.
 
 Tutti i DBMS che abbiamo visto fino ad ora sono detti database \textbf{passivi}. Questo perché reagiscono SOLO a richieste effettuate dagli utenti. Spesso, però, si ha necessità di far reagire il DBMS in modo automatico ad alcuni eventi, e per questo motivo nascono i \textbf{DBMS attivi}.
 
 \begin{Definizione}[DBMS attivo]
 \label{def-DBMS attivo}
-Un DBMS viene detto \textbf{attivo} quando consente la definizione e gestione di \textbf{trigger}. Questi trigger vengono attiviati in modo automatico al verificarsi di eventi specifici sulla base di dati e dopo aver verificato eventuali condizioni, e nell'attivarsi eseguono delle operazioni sulla base di dati. \\
+Un DBMS viene detto \textbf{attivo} quando consente la definizione e gestione di \textbf{trigger}. Questi trigger vengono attivati in modo automatico al verificarsi di eventi specifici sulla base di dati e dopo aver verificato eventuali condizioni, e nell'attivarsi eseguono delle operazioni sulla base di dati. \\
 Il paradigma che adottiamo per gestire i trigger è il paradigma \textbf{ECA} (Evento-Condizione-Azione). 
 \end{Definizione}
 
@@ -2794,14 +2793,14 @@ Comandi SQL da eseguire
 Ci sono tante cose da analizzare qui:
 \begin{itemize}
     \item \codeb{BEFORE/AFTER} ci permettono di eseguire operazioni SQL sia prima sia dopo un evento
-    \item \codeb{REFERENCING} ci permette di dare dei nomi a vecchie/nuove righe/tabelle per facilitare la scrittura delle condizioni. Nel caso questo non venga effettuato, si può scrivere \codeb{new.} o \code{old.} per riferirsi a righe/tabelle vecchie/nuove.
-    \item \codeb{FOR EACH ROW/STATEMENT} è particolare: bisogna utilizzare \code{FOR EACH ROW} se si ha un trigger che modifica il valore delle singole tuple che vengono modificate, mentre bisogna usare \code{FOR EACH STATEMENT} se c'è un azione che modifica globalmente tutte le tuple.
+    \item \codeb{REFERENCING} ci permette di dare dei nomi a vecchie/nuove righe/tabelle per facilitare la scrittura delle condizioni. Nel caso questo non venga effettuato, si può scrivere \codeb{NEW.} o \codeb{OLD.} per riferirsi a righe/tabelle nuove/vecchie.
+    \item \codeb{FOR EACH ROW/STATEMENT} è particolare: bisogna utilizzare \code{FOR EACH ROW} se si ha un trigger che modifica il valore delle singole tuple che vengono modificate, mentre bisogna usare \code{FOR EACH STATEMENT} se c'è un'azione che modifica globalmente tutte le tuple.
     \NB Con il \code{FOR EACH STATEMENT} si potrà dare un nome usando \code{REFERENCING} solo alle tabelle vecchie/nuove, e non alle singole righe.
 \end{itemize}
 
-È possibile porre delle condizioni sia sulle righe/tabelle vecchie sia su quelle nuove grazie alle cosiddette \textbf{tabelle di transizione}, che congelano i dati prima che l'evento venga eseguito e li salva in una nuova tabella. Ovviamente tutto ciò ha senso se il trigger si attiva dopo che l'evento che lo ha scatenato viene eseguito: se il trigger si attiva prima dell'evento non esiste nessuna tabella con all'interno i dati post-evento, dato che l'evento deve ancora avvenire.
+È possibile porre delle condizioni sia sulle righe/tabelle vecchie sia su quelle nuove grazie alle cosiddette \textbf{tabelle di transizione}, che congelano i dati prima che l'evento venga eseguito e li salvano in una nuova tabella. Ovviamente tutto ciò ha senso se il trigger si attiva dopo che l'evento che lo ha scatenato viene eseguito: se il trigger si attiva prima dell'evento non esiste nessuna tabella con all'interno i dati post-evento, dato che l'evento deve ancora avvenire.
 
-\subsection{Relazione tra trigger e vicoli d'integrità}
+\subsection{Relazione tra trigger e vincoli d'integrità}
 
 Possiamo vedere i trigger come dei vincoli più generali: i vincoli ci permettono di fare dei controlli su delle operazioni, mentre i trigger ci permettono non solo di fare dei controlli, ma anche di effettuare delle operazioni in risposta a queste operazioni. Questa flessibilità in più può essere sia un vantaggio che uno svantaggio: è un vantaggio perché ci permette di muoverci come vogliamo in base alla situazione creata, ma è uno svantaggio perché ogni volta che creiamo un trigger dobbiamo definire come il DBMS deve muoversi quando registra un evento e rispetta delle condizioni. 
 
@@ -2849,32 +2848,33 @@ Warehouse \nopagebreak
 \end{tabular}
 \end{center}
 
-dove Part è l'identificativo dell'articolo, QtyAvbl sono i pezzi disponibili, QtyLimit sono il numero minimo di pezzi da avere in magazzino e QtyReord è il numero di pezzi da riordinare se QtyAvbl scende sotto il limite imposto da QtyLimit. Vogliamo quindi un trigger che si attiva ogni volta che QtyAvbl scende sotto QtyLimit e che effettui un riordine di un numero di pezzi pari a QtyReord. \\
+dove Part è l'identificativo dell'articolo, QtyAvbl sono i pezzi disponibili, QtyLimit è il numero minimo di pezzi da avere in magazzino e QtyReord è il numero di pezzi da riordinare se QtyAvbl scende sotto il limite imposto da QtyLimit. Vogliamo quindi un trigger che si attiva ogni volta che QtyAvbl scende sotto QtyLimit e che effettui un riordine di un numero di pezzi pari a QtyReord. \\
 Creiamo quindi il seguente trigger:
 
 \begin{lstlisting}
 CREATE TRIGGER Reorder
 AFTER UPDATE OF QtyAvbl ON Warehouse
 FOR EACH ROW
-WHEN(new.QtyAvbl < new.QtyLimit)
+WHEN(NEW.QtyAvbl < NEW.QtyLimit)
 DECLARE X Number
 BEGIN
 SELECT COUNT(*) INTO X
 FROM PendingOrders
-WHERE Part = new.Part;
+WHERE Part = NEW.Part;
 IF X = 0
 THEN
     INSERT INTO PendingOrders
-    VALUES(new.Part, new.QtyReord, sysDate)
-END
+    VALUES(NEW.Part, NEW.QtyReord, sysDate)
+END IF;
+END;
 \end{lstlisting}
 
-Notiamo intanto due cose:
+Notiamo intanto quattro cose:
 \begin{itemize}
     \item \codeb{DECLARE} dichiara una nuova variabile temporanea
-    \item \codeb{BEGIN-END} racchiudono tutte i comandi SQL da eseguire quando il trigger viene attivato
+    \item \codeb{BEGIN-END} racchiudono tutti i comandi SQL da eseguire quando il trigger viene attivato
     \item \codeb{;} è necessario per separare le diverse query/istruzioni che il trigger attiva
-    \item \codeb{IF - THEN} serve per eseguire un istruzione solo se la condizione nell'if è rispettata
+    \item \codeb{IF - THEN - END IF} servono per eseguire un'istruzione solo quando la condizione nell'if è rispettata
 \end{itemize}
 
 Riprendendo ora la tabella Warehouse, ipotizziamo di effettuare la seguente transazione:
@@ -2884,7 +2884,7 @@ SET QtyAvbl = QtyAvbl - 70
 WHERE Part = 1
 \end{lstlisting}
 
-Dato che non abbiamo nessun trigger BEFORE, effettuaimo subito l'operazione e otteniamo come risultato la tabella
+Dato che non abbiamo nessun trigger BEFORE, effettuiamo subito l'operazione e otteniamo come risultato la tabella
 
 \begin{center}
 Warehouse \nopagebreak
@@ -2903,14 +2903,152 @@ A questo punto parte il nostro trigger, che verifica ogni riga della nostra tabe
 \begin{lstlisting}
 UPDATE Warehouse
 SET QtyAvbl = QtyAvbl - 70
-WHERE Part = 2
+WHERE Part = 1
 \end{lstlisting}
 
-il nostro trigger si attiverà lo stesso, la condizione sarà verificata, ma dato che avremo X = 1 non verrà inserito nessu nuovo ordine. In questo modo evitiamo di effettuare più di un ordine di restock.
+il nostro trigger si attiverà lo stesso, la condizione sarà verificata, ma dato che avremo X = 1 non verrà inserito nessun nuovo ordine. In questo modo evitiamo di effettuare più di un ordine di restock.
 
-\chapter{Capire se una base di dati è ben strutturata}
+\chapter{Dipendenze funzionali}
 
+\section{Cosa sono le dipendenze funzionali?}
 
+Abbiamo visto fino ad ora due tipi di vincoli:
+\begin{itemize}
+    \item Vincoli \textbf{statici}, definiti tramite \code{CHECK} o \code{CONSTRAINT}
+    \item Vincoli \textbf{dinamici} (solo per le basi di dati attive), definiti tramite \code{TRIGGER}
+\end{itemize}
+
+Aggiungiamo ora un terzo tipo di vincolo estremamente importante: le \textbf{dipendenze funzionali}.
+
+\begin{Definizione}[Dipendenza funzionale]
+\label{def-dipendenze-funzionali}
+Dato uno schema $R$, una \textbf{dipendenza funzionale} su $R$ è una coppia ordinata di sottoinsiemi non vuoti $X$ e $Y$ di attributi di $R$ che stabilisce un particolare legame tra $X$ e $Y$. Per indicare tale vincolo, scriviamo $\bm{X} \longrightarrow \bm{Y}$. $X$ prende il nome di \textbf{determinante}, mentre $Y$ prende il nome di \textbf{dipendente}. \\
+Indichiamo con $\bm{F}$ l'insieme delle dipendenze funzionali su uno schema, scrivendo quindi $F = \{X \longrightarrow Y, A \longrightarrow B, \ldots\}$.
+\end{Definizione}
+
+Questi vincoli non sono matematici ma sono più dettati dal buon senso: ad esempio, in una tabella che registra diverse automobili con modello e casa di produzione segnate, ha senso creare una dipendenza funzionale che implichi che \textit{le macchine dello stesso modello sono sempre prodotte dalla stessa casa automobilistica}, dato che non esistono due case automobilistiche differenti che producano automobili con lo stesso modello. \\
+Ovviamente questi vincoli variano in base alle nostre specifiche: se abbiamo una tabella che gestisce dei voli, possiamo porre come vincolo che un volo con un certo codice parta sempre alla stessa ora solo se questo, per i nostri voli, è sempre vero, altrimenti non ha proprio senso inserire questa dipendenza funzionale. 
+
+\begin{Osservazione}[]
+\label{oss-dipendenze-funzionali}
+Se si ha $X \longrightarrow Y$, non è detto che si abbia anche $Y \longrightarrow X$.
+\end{Osservazione}
+
+Banalmente, se tutti i voli con lo stesso codice partono alla stessa ora, non è detto che tutti i voli che partono alla stessa ora abbiano lo stesso codice.
+
+Finalmente, grazie al concetto di dipendenza funzionale, ci è possibile dare una definizione formale del concetto di chiave. 
+\begin{Definizione}[Chiave]
+\label{def-chiave-finale}
+Una \textbf{chiave} è definita come un attributo o un insieme di attributi $K$ che, direttamente o attraverso dipendenze derivate (che vedremo in seguito cosa sono), determina tutti gli altri attributi. In poche parole, se due tuple hanno uguali valori su $K$ allora anche i valori su tutti gli altri attributi devono essere uguali. 
+\end{Definizione}
+
+Una chiave per essere tale non deve avere \textbf{nessun sottoinsieme di $\bm{K}$} in grado di determinare gli altri attributi. Se questa condizione non è verificata, parliamo di \textbf{superchiave}.
+
+\section{Implementazione in SQL}
+
+L'implementazione delle dipendenze funzionali in SQL avviene tramite \textbf{TRIGGER}. Ad esempio, per implementare il vincolo riguardo i voli che abbiamo visto poco fa possiamo creare il seguente trigger:
+\begin{lstlisting}
+CREATE TRIGGER Check_Ora
+BEFORE INSERT OR UPDATE ON Voli
+FOR EACH ROW
+BEGIN
+IF EXISTS(SELECT 1 FROM Voli WHERE CodiceVolo = NEW.CodiceVolo AND Ora <> NEW.Ora)
+THEN
+    RAISE APPLICATION ERROR 'Errore: Il volo % deve avere sempre lo stesso orario', NEW.CodiceVolo
+END IF;
+END;
+\end{lstlisting}
+
+Anche qui analizziamo alcune cose che non abbiamo mai incontrato:
+\begin{itemize}
+    \item \codeb{EXISTS(SELECT 1 FROM ...)} restituisce TRUE se la sottoquery trova almeno una riga che rispetta la condizione definita (il valore 1 è solo un segnaposto: a \code{EXISTS} non interessa cosa viene selezionato, ma solo se esiste almeno una riga)
+    \item \codeb{RAISE APPLICATION ERROR} alza un errore e manda in output un messaggio per far capire di che errore si tratta
+    \item \codeb{\%} serve come segnaposto per la variabile definita dopo la virgola, ossia \code{NEW.CodiceVolo}
+\end{itemize}
+
+In realtà, se le nostre tabelle sono ben progettate (ossia sono in Terza Forma Normale (3NF), che vedremo in seguito), quasi tutte le dipendenze funzionali sono soddisfatte senza dover creare dei trigger appositi.
+
+\section{Soddisfare una dipendenza funzionale}
+
+\begin{Definizione}[Soddisfare una dipendenza funzionale]
+\label{def-soddisfare-dipendenza}
+Una relazione $r$ (ossia un'istanza di $R$) con schema $R$ \textbf{soddisfa} la dipendenza funzionale $X \longrightarrow Y$ se:
+\begin{enumerate}
+    \item La dipendenza funzionale $X \longrightarrow Y$ è \textbf{applicabile} a $R$, ossia sia $X$ che $Y$ sono effettivamente dei sottoinsiemi di $R$
+    \item Prese due ennuple $t_1,t_2$ tali che $t_1[X] = t_2[X]$, ossia che hanno stesso valore su $X$ (diciamo quindi che \textit{concordano} su $X$), allora anche $t_1[Y] = t_2[Y]$.
+\end{enumerate}
+\end{Definizione}
+
+\begin{Osservazione}[]
+\label{oss-soddisfare-dipendenza}
+\begin{itemize}
+    \item Le istanze \textbf{vuote} soddisfano tutte le dipendenze
+    \item Le istanze \textbf{con una sola tupla} soddisfano tutte le dipendenze
+\end{itemize}
+\end{Osservazione}
+
+\begin{Definizione}[Istanze legali]
+\label{def-istanza-legale}
+Un'istanza di uno schema $R$ è detta \textbf{legale} se soddisfa tutte le dipendenze funzionali definite su $R$.
+\end{Definizione}
+
+Vediamo ora un esempio per capire meglio questi concetti. \\
+\NB Useremo d'ora in avanti una notazione \textit{astratta}, ossia utilizzeremo uno schema e delle istanze con delle lettere generiche di cui non ci interessa conoscere il significato.
+
+Prendiamo un'istanza $r$ dello schema $R$:
+
+\begin{center}
+$r$ \nopagebreak
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{A} & \textbf{B} & \textbf{C} & \textbf{D}\\ \hline
+$a_1$ & $b_1$ & $c_1$ & $d_1$ \\
+$a_3$ & $b_1$ & $c_1$ & $d_1$ \\
+$a_2$ & $b_1$ & $c_1$ & $d_1$ \\
+$a_2$ & $b_1$ & $c_2$ & $d_1$ \\ \hline
+\end{tabular}
+\end{center}
+
+Questa relazione rispetta ad esempio la dipendenza funzionale $A \longrightarrow B$ e la dipendenza $B \longrightarrow D$, ma non rispetta la dipendenza $A \longrightarrow C$. Infatti, la terza tupla ha come valori di $A$ e di $C$ rispettivamente $a_2$ e $c_1$, mentre la quarta ha $a_2 $ e $c_2$, dunque troviamo che $t_1[A] = t_2[A]$ ma $t_1[C] \neq t_2[C]$. Definiamo quindi $F = \{A \longrightarrow B, B \longrightarrow D\}$
+
+\begin{Osservazione}[]
+\label{oss-soddisfare-dipendenza-2}
+Nel caso in cui abbiamo $X \cup Y = R$, presa una relazione $r$ ci basta trovare due tuple $t_1,t_2$ tali che $t_1[X] = t_2[X]$ per dimostrare che tale istanza non è legale.  
+\end{Osservazione}
+
+Questo è vero perché, dato che $X \cup Y = R$, se $t_1[X] = t_2[X]$ è impossibile avere anche $t_1[Y] = t_2[Y]$, dato che altrimenti avremmo due tuple completamente identiche, il che non è ammesso.
+
+Prendiamo ora un'altra istanza $s$ dello schema $R$ visto prima:
+
+\begin{center}
+$s$ \nopagebreak
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{A} & \textbf{B} & \textbf{C} & \textbf{D}\\ \hline
+$a_1$ & $b_1$ & $c_1$ & $d_1$ \\
+$a_3$ & $b_1$ & $c_1$ & $d_1$ \\
+$a_2$ & $b_1$ & $c_1$ & $d_1$ \\
+$a_4$ & $b_1$ & $c_1$ & $d_1$ \\ \hline
+\end{tabular}
+\end{center}
+
+Questa nuova istanza rispetta non solo tutte le dipendenze funzionali in $F$, ma anche la dipendenza funzionale $A \longrightarrow C$ ad esempio, non rispettata da $r$. Questo significa che $A \longrightarrow C$ dovrebbe essere in $F$? Assolutamente no: questo è semplicemente un caso. È infatti possibile che in futuro venga aggiunta una nuova tupla, come ad esempio $(a_1, b_1, c_2, d_1)$ che romperebbe completamente questa dipendenza fittizia che abbiamo ipotizzato. 
+
+Ora, guardando bene $F$ notiamo una cosa interessante: nonostante $A \longrightarrow D$ non sia presente in $F$, questa dipendenza è rispettata da tutte le istanze possibili dello schema $R$, a causa delle altre due dipendenze $A \longrightarrow B$ e $B \longrightarrow D$ (notiamo quindi come la dipendenza funzionale sia una relazione \textbf{transitiva}). Questo, però, non modifica in alcun modo $F$: $A \longrightarrow D$ rimane fuori. Per questo motivo nasce un nuovo insieme di dipendenze funzionali, l'insieme $\bm{F^+}$.
+
+\begin{Definizione}[$\bm{F^+}$]
+\label{def-F+}
+Preso uno schema $R$, $\bm{F^+}$ è l'insieme di dipendenze funzionali che ogni istanza legale di $R$ rispetta. 
+\end{Definizione}
+
+\begin{Proposizione}[Corollario]
+\label{corol-F+}
+$\bm{F \subseteq F^+}$
+\end{Proposizione}
+
+Nell'esempio di prima avremo quindi $F^+ = \{A \longrightarrow B, B \longrightarrow D, A \longrightarrow D\}$. Ricordiamo sempre che ad esempio $C \longrightarrow D$ non è presente in $F^+$ nonostante sia rispettata sia da $r$ che da $s$ perché è semplicemente un caso che questo sia accaduto. È possibilissimo che un domani venga aggiunta in $r$ o in $s$ una riga che rompa questa dipendenza, mantenendo allo stesso tempo l'istanza completamente legale.
 
 
 
