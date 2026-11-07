@@ -42,11 +42,11 @@ Abbiamo visto come convertire qualsiasi numero in binario/esadecimale in decimal
 \begin{itemize}
     \item \textbf{Decimale} $\longrightarrow$ \textbf{Binario}: vi sono due metodi:
     \begin{enumerate}[label=\arabic*°]
-        \item Metodo: prendere la più grande potenza di 2 più piccola del numero da voler convertire, e sottrarla, e continuare così finché non si arriva a 0. Ad esempio, $68 = 64 - 4$, dunque $68_{10} = 1000100_2$.
+        \item Metodo: prendere la più grande potenza di 2 minore o uguale al numero da voler convertire, e sottrarla, e continuare così finché non si arriva a 0. Ad esempio, $68 = 64 + 4$, dunque $68_{10} = 1000100_2$.
         \item Metodo: dividere il numero per 2 e posizionare il resto appena ottenuto a sinistra della rappresentazione binaria. Ad esempio, $68/2 = 34 + 0 \longrightarrow 34/2 =  17 + 0 \longrightarrow 17/2 = 8 + 1 \longrightarrow 8/2 = 4 + 0 \longrightarrow 4/2 = 2 + 0 \longrightarrow 2/2 = 1 + 0 \longrightarrow 1/2 = 0 + 1$, dunque $68_{10} = 1000100_2$.
     \end{enumerate}
     \item \textbf{Decimale} $\longrightarrow$ \textbf{Esadecimale}: dividere  il numero per 16 e posizionare il resto appena ottenuto a sinistra della rappresentazione esadecimale. Ad esempio, $68/16 = 4 + 4 \longrightarrow 4/16 = 0 + 4$, dunque $68_{10} = 44_{16}$.
-    \item \textbf{Esadecimale} $\longrightarrow$ \textbf{Binario}: passare da esadecimale a binario è molto semplice. Bisogna prendere ogni cifre dell'esadecimale e convertirla singolarmente in binario su 4 bit. Ad esempio, $F3A_{16} = 111100111010_2$, dato che $F = 1111$, $3 = 0011$ e $A = 1010$. Questo metodo è valido per passare da una qualsiasi base potenza di 2 al binario: basta convertire ogni cifra in un numero di bit pari all'esponente di tale potenza. Con l'esadecimale ne prendiamo 4 ($16 = 2^4$), con la base 8 invece ne usiamo solo 3 ($8 = 2^3$).
+    \item \textbf{Esadecimale} $\longrightarrow$ \textbf{Binario}: passare da esadecimale a binario è molto semplice. Bisogna prendere ogni cifra dell'esadecimale e convertirla singolarmente in binario su 4 bit. Ad esempio, $F3A_{16} = 111100111010_2$, dato che $F = 1111$, $3 = 0011$ e $A = 1010$. Questo metodo è valido per passare da una qualsiasi base potenza di 2 al binario: basta convertire ogni cifra in un numero di bit pari all'esponente di tale potenza. Con l'esadecimale ne prendiamo 4 ($16 = 2^4$), con la base 8 invece ne usiamo solo 3 ($8 = 2^3$).
     \item \textbf{Binario} $\longrightarrow$ \textbf{Esadecimale}: anche passare da binario a esadecimale è molto semplice. Bisogna partire da destra e dividere il numero in gruppi da 4 bit. Si trasformano poi tutti i gruppi nella corrispondente cifra esadecimale e si riscrivono nello stesso ordine. Ad esempio, $100100_2 = 24_{16}$, dato che $0100_2 = 4_{16}$ e $10_2 = 2_{16}$. Questo metodo è valido per passare dal binario a una qualsiasi base potenza di 2: basta dividere il numero in gruppi di lunghezza pari all'esponente di tale potenza. Per l'esadecimale i gruppi sono lunghi 4 ($16 = 2^4$), per la base 32 sono invece lunghi 5 ($32 = 2^5$).
 \end{itemize}
 
@@ -57,17 +57,17 @@ Conoscendo solo alcune potenze di 2, è possibile approssimare i valori di molte
 
 \begin{Definizione}[Definizioni sistema binario]
 \label{def-definizioni-sistema-binario}
-Nel sistema binario, chiamiamo \textbf{bit} le cifre dei numeri. Un \textbf{nibble}, poi, sono 4 bit mentre un \textbf{byte} sono 8 bit. Esistono poi il \textbf{most significant bit} e \textbf{least significant bit}, che rispettivamente il bit più a sinistra e più a destra, e il \textbf{most significant byte} e \textbf{least significant byte}, che sono rispettivamente il byte più a sinistra e più a destra.  
+Nel sistema binario, chiamiamo \textbf{bit} le cifre dei numeri. Un \textbf{nibble}, poi, sono 4 bit mentre un \textbf{byte} sono 8 bit. Esistono poi il \textbf{most significant bit} e \textbf{least significant bit}, che sono rispettivamente il bit più a sinistra e più a destra, e il \textbf{most significant byte} e \textbf{least significant byte}, che sono rispettivamente il byte più a sinistra e più a destra.  
 \end{Definizione}
 
-Ad esempio, nel numero $1010101010$, il primo 1 è il MSB, mentre l'ultimo 0 è il LSB. Allo stesso modo, nel numero CEB48E8 (rappresentato in esadecimale, dove ogni cifra rappresenta un nibble), il byte CE è il MSB, mentre il byte E8 è il LSB.
+Ad esempio, nel numero $1010101010$, il primo 1 è il MSB, mentre l'ultimo 0 è il LSB. Allo stesso modo, nel numero CEB48AE8 (rappresentato in esadecimale, dove ogni cifra rappresenta un nibble), il byte CE è il MSB, mentre il byte E8 è il LSB.
 
 \subsection{Numeri col segno}
 
-In qualsiasi sistema numerico, per rappresentare un numero negativo basta mettere il simbolo $-$ prima del numero. Questo, però, per i computer non è possibile: lavorando solo con dei bit, non si può anteporre ad un numero il simbolo $-$. Infatti, il computer non ha idea di cosa sia quel simbolo, conosce solo 0 e 1. Dunque bisogna trovare un'altra soluzione per rappresentare i numeri col segno. Vi sono due modi possibili:
+In qualsiasi sistema numerico, per rappresentare un numero negativo basta mettere il simbolo $-$ prima del numero. Questo, però, per i computer non è possibile: lavorando solo con dei bit, non si può anteporre ad un numero il simbolo $-$. Infatti, il computer non ha idea di cosa sia quel simbolo, conosce solo 0 e 1. Dunque bisogna trovare un'altra soluzione per rappresentare i numeri col segno. Vediamo i due modi più comuni:
 \begin{itemize}
     \item \textbf{Segno e Ampiezza}
-    \item \textbf{Completamento a 2}
+    \item \textbf{Complemento a 2}
 \end{itemize}
 
 \begin{Proprieta}[Segno e Ampiezza]
@@ -86,7 +86,7 @@ Il problema più grande di questa tecnica è l'addizione: semplicemente, questa 
 & & 1 & 1 & 1 & 0 & + &\\
 & & 0 & 1 & 1 & 0 & = &\\
 \hline
-& 1 & 0 & 1 & 0 & 0& = & 19_{10} \neq 0
+& 1 & 0 & 1 & 0 & 0& = & 20_{10} \neq 0
 \end{array}
 \]
 Inoltre, un altro problema è che vi sono due rappresentazioni dello 0: infatti, 0 = 1000 = 0000. 
@@ -95,7 +95,7 @@ Per questi motivi nasce un'altra tecnica, quella del \textbf{complemento a 2}.
 
 \begin{Proprieta}[Complemento a 2]
 \label{prop-complemento a 2}
-\textbf{Complemento a 2} è un'altra tecnica usata per rappresentare i numeri col sengo. Il \textbf{bit più significativo} ha lo stesso valore visto con i numeri senza segno, ma con il \textbf{segno negativo}. La formula per convertire un numero in decimale è la segunete:
+\textbf{Complemento a 2} è un'altra tecnica usata per rappresentare i numeri col segno. Il \textbf{bit più significativo} ha lo stesso valore visto con i numeri senza segno, ma con il \textbf{segno negativo}. La formula per convertire un numero in decimale è la seguente:
 \[
 \bm{A = a_{N-1}(-2^{N-1}) + \sum_{i = 0}^{N-2} a_i2^i}
 \]
@@ -114,20 +114,20 @@ Con questa implementazione si risolvono entrambi i problemi del Segno e Ampiezza
 \end{array}
 \]
 
-dove l'uno inziale non si conta dato che stiamo parlando di numeri a 4 bit.
+dove l'uno iniziale non si conta dato che stiamo parlando di numeri a 4 bit.
 
 \begin{Proprieta}[Convertire un numero nell'opposto tramite il Complemento a 2]
 \label{prop-trasformare-complemento-2}
 Preso un numero in binario possiamo facilmente trasformarlo nell'opposto tramite il Complemento a 2. Infatti, basta \textbf{invertire i bit} e \textbf{aggiungere 1}. Preso ad esempio $6_{10} = 0110_{2}$, troviamo che $-6_{10} = 1001_2 + 1 = 1010 = -6_{10}$.
 \end{Proprieta}
 
-Questa proprietà funziona per un motivo molto semplice: sappiamo che $6 + \bar{6} = 0110 + 1001 = 1111$, dunque aggiungendo un 1 troviamo che $6 + \bar{6} + 1 = 1111 + 1 = 10000$, e dato che il primo zero si elude, troviamo che $6 + \bar{6} + 1 = 0$, ossia $-6 = \bar{6} + 1 \longrightarrow \bm{-1001 = 0110 + 1}$.  
+Questa proprietà funziona per un motivo molto semplice: sappiamo che $6 + \bar{6} = 0110 + 1001 = 1111$, dunque aggiungendo un 1 troviamo che $6 + \bar{6} + 1 = 1111 + 1 = 10000$, e dato che il primo uno si elude, troviamo che $6 + \bar{6} + 1 = 0$, ossia $-6 = \bar{6} + 1 \longrightarrow \bm{-0110 = 1001 + 1}$.  
 
 \section{Operazioni elementari}
 
 \subsection{Addizioni e sottrazioni}
 
-Le addizioni in binario e in esadecimale funzionano esattamente uguale a come funzionano in decimale. Ad esempio,
+Le addizioni in binario e in esadecimale funzionano esattamente come in decimale. Ad esempio,
 
 \noindent
 \begin{minipage}{0.48\textwidth}
@@ -183,7 +183,7 @@ Anche per la sottrazione il metodo rimane lo stesso. Ad esempio,
 
 \begin{Osservazione}[Overflow]
 \label{oss-overflow}
-Un problema classico nelle addizioni tra numeri binari in un sistema digitale è l'\textbf{overflow}: i computer lavorano su un numero fisso di bit, e con un addizione è possibile sforare questo numero. 
+Un problema classico nelle addizioni tra numeri binari in un sistema digitale è l'\textbf{overflow}: i computer lavorano su un numero fisso di bit, e con un'addizione è possibile sforare questo numero. 
 \end{Osservazione}
 
 Ad esempio, se lavoriamo con numeri a 4 bit, la somma $1001 + 1000 = 10001$ sfora, creando diversi problemi. Infatti, con N bit abbiamo un range di numeri rappresentabili, da $0$ a $2^N-1$ (questo se parliamo di numeri senza segno).\\
@@ -194,17 +194,17 @@ Vi sono due modi per risolvere questo problema:
 \end{itemize}
 
 \begin{Proprieta}[Sign-Extension]
-\label{prop-sign-extention}
-La \textbf{sign-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero (in Complemento a 2) così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{duplicare il bit più significativo a sinistra raddoppiando il numero di bit del numero} (raddoppiamo il numero di bit così da esser coperti sia sulle addizioni ma anche sulle moltiplicazioni, che vedremo tra poco).
+\label{prop-sign-extension}
+La \textbf{sign-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero (in Complemento a 2) così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{ripetere il bit più significativo a sinistra fino ad arrivare al numero di bit desiderato} (noi raddoppieremo il numero di bit, così da esser coperti sia sulle addizioni che sulle moltiplicazioni, che vedremo tra poco).
 \end{Proprieta}
 
-Ad esempio, $3_{10} = 0011 = 00000011$, e $-5_{10} = 1011 = 11111011$. Questo con gli 0 ovviamente funziona, ma anche con gli 1: infatti, $-5 = 1011 = -8 + 2 + 1 = - 16 + 8 + 2 + 1 = -32 + 16 + 8 + 2 +1 = -64 + 32 + 16 + 8 +1 = 11111011$. 
+Ad esempio, $3_{10} = 0011 = 00000011$, e $-5_{10} = 1011 = 11111011$. Questo con gli 0 ovviamente funziona, ma anche con gli 1: infatti, $-5 = 1011 = -8 + 2 + 1 = - 16 + 8 + 2 + 1 = -32 + 16 + 8 + 2 +1 = -64 + 32 + 16 + 8 + 2 + 1 = 11111011$. 
 
 \begin{Proprieta}[Zero-Extension]
 \label{zero-extension}
-La \textbf{zero-extension} è un'operazione usata dai coputer per aumentare il numero di bit di un numero così da poter completare somme su di esso che superino il limtie di bit prestabilito. La regola è semplice: \textbf{raddoppiare la lunghezza del numero aggiungendo tutti 0 a sinistra}.
+La \textbf{zero-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{raddoppiare la lunghezza del numero aggiungendo tutti 0 a sinistra}.
 \end{Proprieta}
-Ad esempio, $3_{10} = 0011 = 00000011$ (come nella Sign-Extension). La Zero Extension però \textbf{non funziona con i numeri col segno}. Infatti, $-5_{10} = 1011 \neq 00001011 = 11_{10}$. 
+Ad esempio, $3_{10} = 0011 = 00000011$ (come nella Sign-Extension). La Zero-Extension però \textbf{non funziona con i numeri col segno}. Infatti, $-5_{10} = 1011 \neq 00001011 = 11_{10}$. 
 
 \subsection{Moltiplicazioni}
 
@@ -228,11 +228,11 @@ Anche le moltiplicazioni in binario e in esadecimale funzionano come in decimale
 \begin{minipage}{0.48\textwidth}
 \[
 \begin{array}{rccccc}
-& & 3 & B & 7 & - \\
+& & 3 & B & 7 & \times \\
 & & 2 & C & 4 & = \\
 \hline
 & & E & D & C & + \\
-& 2 & C & 9 & & + \\
+2 & C & 9 & 4 & & + \\
 7 & 6 & E & & & + \\
 \hline
 A & 4 & 6 & 1 & C
@@ -244,25 +244,25 @@ A & 4 & 6 & 1 & C
 
 \begin{Definizione}[Shift]
 \label{def-shift}
-Uno \textbf{shift} è un'operazione sui bit che \textbf{sposta tutte le posizioni dei bit} di una sequenza binaria o a destra o a sinsitra di un determinato numero di posizioni.
+Uno \textbf{shift} è un'operazione sui bit che \textbf{sposta tutte le posizioni dei bit} di una sequenza binaria o a destra o a sinistra di un determinato numero di posizioni.
 \end{Definizione} 
 
 Esistono due tipi di shift:
 \begin{itemize}
-    \item \textbf{shift aritmetico}, dove nello shift a destra si ripete il bit più significativo sequendo la logica della sign-extension;
-    \item \textbf{shift logico}, dove si inseriscono degli 0 a sinistra della sequenza sequendo la logica della zero-extension.
+    \item \textbf{shift aritmetico}, dove nello shift a destra si ripete il bit più significativo seguendo la logica della sign-extension;
+    \item \textbf{shift logico}, dove si inseriscono degli 0 a sinistra della sequenza seguendo la logica della zero-extension.
 \end{itemize}
 
-Lo shift a sinsitra invece è sempre uguale: sia nell'aritmetico che nel logico vengono inseriti degli 0 a sinistra della sequenza.
+Lo shift a sinistra invece è sempre uguale: sia nell'aritmetico che nel logico vengono inseriti degli 0 a destra della sequenza.
 
-Ad esempio, $-7_{10} = 1001 \bm{>>} 2 = 0010 = 2_{10}$ è uno \textbf{shift logico} (si è infatti perso il segno, cosa che capita quando si usa la zero-extension), mentre $-8_{10} = 111000 \bm{>>>} 3 = 111111 = -1_{10}$ è uno \textbf{shift aritmetico}. Notiamo che, in entrambi i casi, il nuovo numero si può ottenere prendendo l'originale e dividendolo per $2^N$, dove $N$ è il valore dello shift. Questa è una proprietà degli shift di destra. Allo stesso modo, per gli shift di sinistra, basta moltiplicare il valore per $2^N$. Ad esempio, $-8_{10} = 111000 << 2 = 100000 = -32 = -8 \cdot 2^2$.  
+Ad esempio, $-7_{10} = 1001 \bm{>>} 2 = 0010 = 2_{10}$ è uno \textbf{shift logico} (si è infatti perso il segno, cosa che capita quando si usa la zero-extension), mentre $-8_{10} = 111000 \bm{>>>} 3 = 111111 = -1_{10}$ è uno \textbf{shift aritmetico}. Notiamo che, nello shift aritmetico, il nuovo numero si può ottenere prendendo l'originale e dividendolo per $2^N$ (arrotondando verso il basso), dove $N$ è il valore dello shift. Nello shift logico questo vale solo se leggiamo il numero senza segno: $1001_2 = 9$ e $9 / 2^2 = 2.25$, cioè $2$. Questa è una proprietà degli shift di destra. Allo stesso modo, per gli shift di sinistra, basta moltiplicare il valore per $2^N$. Ad esempio, $-8_{10} = 111000 << 2 = 100000 = -32 = -8 \cdot 2^2$.  
 
 \begin{Proposizione}[Calcolare numero decimale dopo uno shift]
-\label{propos-caloclare-decimale-post-shift}
-Preso un numero $A_{10}$, effettuando uno shift a \textbf{sinistra} di $N$ posizioni, troviamo che $\bm{A_{10} << N = A_{10} \cdot 2^n}$. Se invece si effettua uno shift a \textbf{destra}, troviamo che $\bm{A >> N = A / 2^N}$.  
+\label{propos-calcolare-decimale-post-shift}
+Preso un numero $A_{10}$, effettuando uno shift a \textbf{sinistra} di $N$ posizioni, troviamo che $\bm{A_{10} << N = A_{10} \cdot 2^N}$. Se invece si effettua uno shift \textbf{aritmetico} a \textbf{destra}, troviamo che $\bm{A >>> N = A / 2^N}$.  
 \end{Proposizione}
 
-Se uno shift a destra restituisce in decimale un numero con la virgola, questo verrà approssimato sempre verso il basso. Ad esempio, Preso $-13_{10} = 11110011_2$, se effettuiamo uno shift di 2 verso destra troviamo che $11110011 >> 2 = 11111100 = -4$, quando invece $-13/4 = -3.25$.
+Se uno shift a destra restituisce in decimale un numero con la virgola, questo verrà approssimato sempre verso il basso. Ad esempio, preso $-13_{10} = 11110011_2$, se effettuiamo uno shift aritmetico di 2 verso destra troviamo che $11110011 >>> 2 = 11111100 = -4$, quando invece $-13/4 = -3.25$.
 
 
 \section{Numeri con la virgola}
@@ -277,7 +277,7 @@ Siamo riusciti a rappresentare numeri interi senza segno e con il segno, ma dobb
 
 \begin{Proprieta}[Rappresentazione a virgola fissa]
 \label{prop-rappr-virgola-fissa}
-La rappresentazione a \textbf{virgola fissa} è una tecnica usata dai computer per rappresentare i numeri con la virgola. Si divide il numero in due sezioni: una rappresenta la parte intera, mentre l'altra rappresena la \textbf{parte decimale}. Il numero di bit per la parte intera e quello per la parte decimale deve essere deciso a priori. Ad ogni cifra della parte frazionaria corrisponde una \textbf{potenza di due negativa}, partendo da $2^{-1}$.
+La rappresentazione a \textbf{virgola fissa} è una tecnica usata dai computer per rappresentare i numeri con la virgola. Si divide il numero in due sezioni: una rappresenta la parte intera, mentre l'altra rappresenta la \textbf{parte decimale}. Il numero di bit per la parte intera e quello per la parte decimale deve essere deciso a priori. Ad ogni cifra della parte frazionaria corrisponde una \textbf{potenza di due negativa}, partendo da $2^{-1}$.
 \end{Proprieta}
 
 \Esempio \nopagebreak
@@ -297,7 +297,7 @@ Dobbiamo ora combinare la rappresentazione a virgola fissa con il segno e ampiez
     \item Con il \textbf{complemento a 2} bisogna utilizzare l'algoritmo visto nella Proprietà \ref{prop-trasformare-complemento-2}. 
 \end{itemize}
 
-Ad esempio, il numero $-7.5$ diventa con il segno e ampiezza $\bm{11111000}$, mentre con il complemento a 2 bisogna prima calcolare $7.5$, che è $0111000$, poi invertire i bit e sommare 1, trovando quindi come valore $\bm{10001000}$. Questo valore ha senso dato che $1 \cdot -2^3 + 1 \cdot 2^{-1} = -8 + 0.5 = -7.5$.
+Ad esempio, il numero $-7.5$ diventa con il segno e ampiezza $\bm{11111000}$, mentre con il complemento a 2 bisogna prima calcolare $7.5$, che è $01111000$, poi invertire i bit e sommare 1, trovando quindi come valore $\bm{10001000}$. Questo valore ha senso dato che $1 \cdot -2^3 + 1 \cdot 2^{-1} = -8 + 0.5 = -7.5$.
 
 \begin{Proposizione}[]
 \label{propos-numeri-decimali}
@@ -307,7 +307,7 @@ Riprendendo l'esempio di $-7.5$, $10001000$ con 8 bit di parte intera diventa $-
 
 \subsection{Rappresentazione a virgola mobile}
 
-Per studiare la rappresentazione a virgola mobile è necessario consocere la \textbf{notazione scientifica}.
+Per studiare la rappresentazione a virgola mobile è necessario conoscere la \textbf{notazione scientifica}.
 
 \begin{Definizione}[Notazione scientifica]
 \label{def-notazione-scientifica}
@@ -331,7 +331,7 @@ Per usare questa rappresentazione bisogna:
 
 Vi sono però altre due importanti considerazioni da fare:
 \begin{itemize}
-    \item l'1 inziale della mantissa è \textbf{sottointeso}. Questo perché è sempre presente in tutti i numeri dato che $M \geq 1$.
+    \item l'1 iniziale della mantissa è \textbf{sottinteso}. Questo perché è sempre presente in tutti i numeri dato che $M \geq 1$.
     \item l'esponente è \textbf{polarizzato}, ossia non si usa l'esponente base ma gli si aggiunge un certo \textbf{bias}, che nel caso dei numeri a 32 bit vale 127. Questo lo si fa per poter rappresentare anche gli esponenti negativi.
 \end{itemize}
 
@@ -375,8 +375,8 @@ $\bm{-\infty}$ & 1 & 11111111 & 00000000000000000000000 \\
 \end{center}
 
 Dunque lo 0 si rappresenta con il codice esadecimale 0x00000000 o il codice 0x80000000 (vi sono anche qui, come nel Segno e Ampiezza, due rappresentazioni per esso). \\
-Quando invece vogliamo rappresentare un operazione indefinita, come $\infty - \infty$ o $0/0$. \\
-Nella tabella sono anche rappresentati un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché voglio rappresentare numeri ancora più piccoli di $2^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \cdot 2^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
+Quando invece vogliamo rappresentare un'operazione indefinita, come $\infty - \infty$ o $0/0$, usiamo il \textbf{NaN} (Not a Number). \\
+Nella tabella è anche rappresentato un altro genere di numeri: i numeri \textbf{denormalizzati} (o subnormali). Questi numeri sono numeri la cui mantissa non inizia con 1, perché si vogliono rappresentare numeri ancora più piccoli di $2^{-126}$ (che sarebbe il minimo consentito dai numeri normalizzati dato che l'esponente 00000000 è riservato allo 0). Infatti, si è pensato che dividendo il valore della mantissa per $2$ si potesse diminuire ancora di più. Ad esempio, $0.1 \cdot 2^{-126}$ ha sempre come esponente $-126$, ma ha come mantissa $0.1$ e non $1$. In questo caso, però, si deve quindi togliere l'1 sottinteso di cui avevamo parlato precedentemente, e si perde anche precisione: infatti i bit rimanenti per la mantissa vera e propria diminuiscono sempre di più a favore di numeri più piccoli. In questo modo, però, è possibile arrivare fino a $2^{-149}$ con soli 32 bit.
 
 \begin{Proprieta}[Livello di precisione]
 \label{prop-livello-di-precisione}
@@ -392,7 +392,7 @@ Per la Half-Precision vengono usati 5 bit per l'esponente e 10 per la mantissa, 
 
 \subsection{Arrotondare numeri a virgola mobile}
 
-Abbiamo già affrontato il problema dell'overflow, ossia quando un numero sfora il numero di bit consenti (esiste poi anche l'\textbf{underflow}, ossia quando un numero è così piccolo da non poterlo rappresentare). Questo problema è risolvibile in parte grazie alla sign-extension o alla zero-extension, ma ci sono numeri che da un sistema binario non sono rappresentabili. Ad esempio, $1/3$ non è rappresentabile: si avrebbe bisogno di un numero di bit infinito. È per questo che in informatica spesso bisogna \textbf{arrotondare}.
+Abbiamo già affrontato il problema dell'overflow, ossia quando un numero sfora il numero di bit consentiti (esiste poi anche l'\textbf{underflow}, ossia quando un numero è così piccolo da non poterlo rappresentare). Questo problema è risolvibile in parte grazie alla sign-extension o alla zero-extension, ma ci sono numeri che da un sistema binario non sono rappresentabili. Ad esempio, $1/3$ non è rappresentabile: si avrebbe bisogno di un numero di bit infinito. È per questo che in informatica spesso bisogna \textbf{arrotondare}.
 
 \begin{Proprieta}[Arrotondare]
 \label{prop-arrotondare}
@@ -438,8 +438,8 @@ La mantissa del primo numero è quindi $1.1$, mentre per il secondo è $1.101$. 
 
 \[
 \begin{array}{rccccc}
-& & 0. & 1 & 1 & + \\
-& 1 & 1 & 0 & 1 & = \\
+& 0. & 1 & 1 & 0 & + \\
+& 1. & 1 & 0 & 1 & = \\
 \hline
 1 & 0. & 0 & 1 & 1 &
 \end{array}
@@ -458,7 +458,7 @@ Per prima cosa estraiamo l'esponente e i bit frazionari:
 C0200000_{16} &= 1|10000000|01000000000000000000000
 \end{align*}
 
-La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\cdot 2^2)$. Dato che però il secondo numero è negativo, dobbiamo fare un complemento a 2 per renderlo positivo. Prendiamo dunque la mantissa ($0.101$), cambiamo tutti i bit ($1.010$), e aggiungiamo $0.001$ ($1.011$). Ora possiamo sommare le mantisse:
+La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli esponenti sono rispettivamente $129$ e $128$, ossia $2$ e $1$, e dato che $2-1 = 1$, dobbiamo fare uno shift verso destra della mantissa del secondo numero di 1. Dunque $1.01 >> 1 =  0.101 \ (\cdot 2^2)$. Dato che però il secondo numero è negativo, ne facciamo il complemento a 2, così da rappresentarlo come negativo e trasformare la sottrazione in una somma. Prendiamo dunque la mantissa ($0.101$), cambiamo tutti i bit ($1.010$), e aggiungiamo $0.001$ ($1.011$). Ora possiamo sommare le mantisse:
 
 \[
 \begin{array}{rcccc}
@@ -469,7 +469,7 @@ La mantissa del primo numero è $1.1$, mentre quella del secondo è $1.01$. Gli 
 \end{array}
 \]
 
-Dalla mantissa eliminiamo il primo bit perché va in overflow. Dato che il nuovo primo bit è $0$, il numero è positivo, dunque non dobbiamo rieffettuare il complemento a due. Possiamo quindi normalizzare la mantissa: $0.111 \cdot 2^2 = 1.11 \cdot 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
+Dalla mantissa eliminiamo il primo bit perché va in overflow. Dato che la somma ha prodotto questo riporto, il risultato è positivo (se non ci fosse stato riporto, il risultato sarebbe stato negativo e avremmo dovuto rifare il complemento a 2). Possiamo quindi normalizzare la mantissa: $0.111 \cdot 2^2 = 1.11 \cdot 2^1$. Non dobbiamo arrotondare nulla, quindi possiamo riscrivere tutto nel formato a virgola mobile:
 \[
 0|10000000|11000000000000000000000 = 0x40600000
 \]
@@ -503,7 +503,7 @@ La mantissa del primo numero è 1.1, mentre quella del secondo è 1.01. Gli espo
 & & 1. & 0 & 1 & = \\
 \hline
 & & 1 & 1 & 0 & + \\
-& 0 & 0 & 0 & & \\
+& 0 & 0 & 0 & & + \\
 1 & 1 & 0 & & & = \\
 \hline
 1. & 1 & 1 & 1 & 0
@@ -538,7 +538,7 @@ Useremo spesso le \textbf{tabelle di verità} per comprendere come funzionano qu
 \includegraphics[width=1\textwidth, valign=t]{NOT Logico.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Il \codeb{NOT} \textbf{gate} si rappresenta tramite un trinagolo con un pallino finale (questo pallino lo vedremo con qualsiasi funzione che utilizza l'operatore \code{NOT} per negare qualcosa). In questo caso abbiamo $\bm{Y = \bar{A}}$ (indichiamo con una barretta l'inverso di una variabile, dunque se $A$ è 0 $\bar{A} = 1$ e viceversa), che si rappresenta così tramite la tabella di verità:
+Il \codeb{NOT} \textbf{gate} si rappresenta tramite un triangolo con un pallino finale (questo pallino lo vedremo con qualsiasi funzione che utilizza l'operatore \code{NOT} per negare qualcosa). In questo caso abbiamo $\bm{Y = \bar{A}}$ (indichiamo con una barretta l'inverso di una variabile, dunque se $A$ è 0 $\bar{A} = 1$ e viceversa), che si rappresenta così tramite la tabella di verità:
 
 \[
 \begin{array}{c|c}
@@ -557,7 +557,7 @@ Dunque il \code{NOT} gate \textbf{inverte il valore in input}.
 \includegraphics[width=1\textwidth, valign=t]{Buffer.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Il \textbf{buffer} si rappresenta tramite un trinagolo. In questo caso abbiamo $\bm{Y = A}$, che si rappresenta così tramite la tabella di verità:
+Il \textbf{buffer} si rappresenta tramite un triangolo. In questo caso abbiamo $\bm{Y = A}$, che si rappresenta così tramite la tabella di verità:
 
 \[
 \begin{array}{c|c}
@@ -568,7 +568,7 @@ A & Y \\
 \end{array}
 \]
 
-Dunque il buffer \textbf{lascia invariato il valore in input}
+Dunque il buffer \textbf{lascia invariato il valore in input}.
 \end{minipage}
 
 \subsection{Funzioni logiche a più input}
@@ -654,7 +654,7 @@ A & B & Y \\
 \end{array}
 \]
 
-Dunque il \code{NOR} ritorna vero se \textbf{entrambi i valori sono falso} (il contrario dell'\code{OR}).
+Dunque il \code{NOR} ritorna vero se \textbf{entrambi i valori sono falsi} (il contrario dell'\code{OR}).
 \end{minipage}
 
 \begin{minipage}[c]{0.35\textwidth}
@@ -675,7 +675,7 @@ A & B & Y \\
 \end{array}
 \]
 
-Dunque il \code{XOR} ritorna vero se \textbf{i due valori sono diversi}.
+Dunque lo \code{XOR} ritorna vero se \textbf{i due valori sono diversi}.
 \end{minipage}
 
 \begin{minipage}[c]{0.35\textwidth}
@@ -696,7 +696,7 @@ A & B & Y \\
 \end{array}
 \]
 
-Dunque il \code{XNOR} ritorna vero se \textbf{i due valori sono uguali} (il contrario dello \code{XOR}).
+Dunque lo \code{XNOR} ritorna vero se \textbf{i due valori sono uguali} (il contrario dello \code{XOR}).
 \end{minipage}
 
 \begin{Proprieta}[Proprietà dispari dello \code{XOR}]
@@ -713,8 +713,8 @@ Possiamo quindi dire che ogni 1 aggiunto allo \code{XOR} \textbf{inverte} il ris
 
 \Dimostrazione \nopagebreak
 
-Dimostreremo questa proprietà solo con 3 variabili, ma vale con una qualsiasi somma di $n$ variabili. \\
-Prese $A,B,C$, essendo lo XOR associativo sappiamo che $A \oplus B \oplus C = (A \oplus B) + C$. Poniamo $Y = A \oplus B$. Dunque
+Dimostreremo questa proprietà solo con 3 variabili, ma vale con uno \code{XOR} di $n$ variabili qualsiasi. \\
+Prese $A,B,C$, essendo lo XOR associativo sappiamo che $A \oplus B \oplus C = (A \oplus B) \oplus C$. Poniamo $Y = A \oplus B$. Dunque
 \[
 Y \oplus C =
 \begin{cases}
@@ -730,9 +730,9 @@ Dunque se $C = 0$, allora avremo che $A \oplus B \oplus C = A \oplus B$ che vale
 \begin{Definizione}[Circuito logico]
 \label{def-circuito-logico}
 Un \textbf{circuito logico} è un circuito elettrico digitale dotato di una serie di input e output che elaborano segnali binari.  \\
-\NB \textbf{Analizzare} una funzione booleana $f$ significa creare un circuito logico che rappresenti tale funzione.
+\NB \textbf{Sintetizzare} una funzione booleana $f$ significa creare un circuito logico che rappresenti tale funzione, mentre \textbf{analizzare} un circuito significa ricavarne la funzione booleana.
 \end{Definizione}
-Il comportamento logico è descritto dalla \textbf{specifica funzionale}, che descrive cosa fa il circuito. Inoltre, è a volte presente una \textbf{specifica temporale}, che ne ritarda le operazioni per poter decidere quando far restituire l'output.
+Il comportamento logico è descritto dalla \textbf{specifica funzionale}, che descrive cosa fa il circuito. Inoltre, è a volte presente una \textbf{specifica temporale}, che ne descrive i ritardi, cioè quanto tempo passa tra la variazione degli input e la risposta dell'output.
 
 Un circuito logico è formato da due elementi fondamentali:
 \begin{itemize}
@@ -743,10 +743,10 @@ Un circuito logico è formato da due elementi fondamentali:
 Esistono due tipi di circuiti logici:
 \begin{itemize}
     \item \textbf{Circuiti combinatori}, che non hanno memoria e il cui output è determinato solo dai valori di input correnti
-    \item \textbf{Circuiti sequenziali}, che invece hanno memoria e il cui output dunque è determinato non solo dai valori correnti ma anche quelli passati
+    \item \textbf{Circuiti sequenziali}, che invece hanno memoria e il cui output dunque è determinato non solo dai valori correnti ma anche da quelli passati
 \end{itemize}
 
-Un esempio classico di circuiti sequenziali è la macchinetta delle bevande: se si vuole prendere la bevanda indicata con il numero 34, bisognerà schiacciare prima il 3 e poi il quattro. Ma noi non schiacciamo i tasti in contemporanea, ma in modo sequenziale. Dunque abbiamo bisogno di un circuito che si ricordi che abbiamo premuto prima il 3 e poi il 4, e non che dimentichi tutto ogni volta.
+Un esempio classico di circuiti sequenziali è la macchinetta delle bevande: se si vuole prendere la bevanda indicata con il numero 34, bisognerà schiacciare prima il 3 e poi il 4. Ma noi non schiacciamo i tasti in contemporanea, ma in modo sequenziale. Dunque abbiamo bisogno di un circuito che si ricordi che abbiamo premuto prima il 3 e poi il 4, e non che dimentichi tutto ogni volta.
 
 \begin{Proprieta}[Regole dei circuiti combinatori]
 \label{prop-regole-circuiti-combinatori}
@@ -771,11 +771,11 @@ Questo ad esempio non è un circuito combinatorio corretto. Infatti, il nodo $\b
 \includegraphics[width=1\textwidth, valign=t]{Circuito CL esempio.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Questo invece è uno dei circuiti combinatori dell'architettura degli elaboratori: si chiama \textbf{Full Adder} e serve per eseguire delle somme di bit. In questo caso prendiamo i due bit da sommare $A$ e $B$ e il riporto proveniente da un'eventuale somma precedente $C_{in}$. L'output è $S = A \oplus B \oplus C_{in}$, che sarebbe la somma tra bit, e $C_{out}$, l'evenutale riporto generato.\\
+Questo invece è uno dei circuiti combinatori dell'architettura degli elaboratori: si chiama \textbf{Full Adder} e serve per eseguire delle somme di bit. In questo caso prendiamo i due bit da sommare $A$ e $B$ e il riporto proveniente da un'eventuale somma precedente $C_{in}$. L'output è $S = A \oplus B \oplus C_{in}$, che sarebbe la somma tra bit, e $C_{out}$, l'eventuale riporto generato.\\
 \NB Il blocco CL centrale indica un circuito logico. Si potrebbe pensare che in questo caso avremmo potuto mettere uno \code{XOR} a 3 input, ma questo non funziona: infatti, uno \code{XOR} rilascia solo un output, mentre noi in questo caso abbiamo un circuito che rilascia due output. Dunque creiamo questo blocco CL che rappresenta un circuito logico di cui i dettagli implementativi non ci interessano.
 \end{minipage}
 
-\begin{Definizione}[Alte impedenza]
+\begin{Definizione}[Alta impedenza]
 \label{def-alta-impedenza}
 Un nodo si trova nello stato di \textbf{alta impedenza} quando si stacca elettricamente dal circuito e non influisce più in alcun circuito logico. Per indicare questo stato di alta impedenza usiamo la lettera \textbf{Z}.
 \end{Definizione}
@@ -790,7 +790,7 @@ Nei circuiti logici per far passare un nodo a uno stato di alta impedenza si usa
 
 Questi tristate buffer sono fondamentali per creare dei circuiti dove non ci sono tante linee di dati, ma ce n'è una sola che collega tutti i diversi componenti. Facciamo un esempio per capire quanto sono importanti.
 
-Abbiamo un circuito diviso in 4 componenti: processore, video, ethernet e memoria. Vogliamo collegare queste quattro componenti in modo che tutte possano comunicare con tutte le altre, ma solo una alla volta. Senza un bus condiviso dovremmo creare dei collegamenti tra tutte le possibili coppie di componenti, arrivando a 6 linee totali. Con il bus condiviso invece ne possiamo usare una sola, risparmiando moltissime risorse, ed è possibile anche gestire in modo più efficiente la linea. Infatti, dato che vogliamo che solo una componente alla volta possa parlare, possiamo mettere sulla linea di scrittura di ogni componente un tristate buffer. In questo modo, se un componente vuole parlare con un altro, tutti gli altri componenti verranno mandati in alta impedenza, così da non poter più mandare dati sul bus, rimanendo solo in ascolto. 
+Abbiamo un circuito diviso in 4 componenti: processore, video, ethernet e memoria. Vogliamo collegare questi quattro componenti in modo che tutti possano comunicare con tutti gli altri, ma solo uno alla volta. Senza un bus condiviso dovremmo creare dei collegamenti tra tutte le possibili coppie di componenti, arrivando a 6 linee totali. Con il bus condiviso invece ne possiamo usare una sola, risparmiando moltissime risorse, ed è possibile anche gestire in modo più efficiente la linea. Infatti, dato che vogliamo che solo un componente alla volta possa parlare, possiamo mettere sulla linea di scrittura di ogni componente un tristate buffer. In questo modo, se un componente vuole parlare con un altro, tutti gli altri componenti verranno mandati in alta impedenza, così da non poter più mandare dati sul bus, rimanendo solo in ascolto. 
 
 \section{Equazioni booleane}
 
@@ -828,7 +828,7 @@ A & B \\
 \end{array}
 \]
 
-Ognuna di queste righe ha un proprio \textbf{mintermine}, che è \textbf{vero solo e soltato per quella riga}. Abbiamo quindi
+Ognuna di queste righe ha un proprio \textbf{mintermine}, che è \textbf{vero solo e soltanto per quella riga}. Abbiamo quindi
 
 \[
 \begin{array}{cc|c}
@@ -848,7 +848,7 @@ Adesso, ogni equazione booleana $Y$ ha per ogni riga un risultato prestabilito. 
 
 Oltre alla somma di mintermini, ogni equazione booleana può essere riscritta anche come \textbf{prodotto di maxtermini}. Vediamo anche qui un esempio con due variabili.
 
-Riprendiamo le variabili $A$ e $B$. Ogni riga della tabella che rappresenta le loro possibili combinazioni di valori ha un proprio \textbf{maxtermine}, che è \textbf{falso solo se soltato per quella riga} (dato che i maxtermini danno come output 1 con tre combinazioni su quattro essendo degli \code{OR}, prendiamo per ogni riga il maxtermine falso e non vero). Abbiamo quindi
+Riprendiamo le variabili $A$ e $B$. Ogni riga della tabella che rappresenta le loro possibili combinazioni di valori ha un proprio \textbf{maxtermine}, che è \textbf{falso solo e soltanto per quella riga} (dato che i maxtermini danno come output 1 con tre combinazioni su quattro essendo degli \code{OR}, prendiamo per ogni riga il maxtermine falso e non vero). Abbiamo quindi
 
 \[
 \begin{array}{cc|c}
@@ -861,7 +861,7 @@ A & B & \textbf{Maxtermine} \\
 \end{array}
 \]
 
-Dunque ogni equazione booleana $Y$ sappiamo già che ha per ogni riga un risultato prestabilito ($Y$ con $A = 1$ e $B = 0$ vale sempre o $1$ o $0$, qualsiasi funzione sia è già scritto). Ad esempio, $Y = AB$ vale 0 per ogni riga tranne che per l'ultima. Dunque possiamo riscrivere $Y$ come \textbf{prodotto di tutti i maxtermini delle righe dove} $\bm{Y = 0}$- Dunque \mbox{$Y = AB = (A + B) (A + \bar{B}) (\bar{A} + B) = M_0 M_1 M_2 = \prod(0,1,2)$}. Questa forma prende il nome di \textbf{forma canonica della POS}.
+Dunque ogni equazione booleana $Y$ sappiamo già che ha per ogni riga un risultato prestabilito ($Y$ con $A = 1$ e $B = 0$ vale sempre o $1$ o $0$, qualsiasi funzione sia è già scritto). Ad esempio, $Y = AB$ vale 0 per ogni riga tranne che per l'ultima. Dunque possiamo riscrivere $Y$ come \textbf{prodotto di tutti i maxtermini delle righe dove} $\bm{Y = 0}$. Dunque \mbox{$Y = AB = (A + B) (A + \bar{B}) (\bar{A} + B) = M_0 M_1 M_2 = \prod(0,1,2)$}. Questa forma prende il nome di \textbf{forma canonica della POS}.
 
 \subsection{Assiomi e teoremi}
 
@@ -870,10 +870,10 @@ Per semplificare l'algebra booleana vi è una serie di assiomi e teoremi che bis
 \begin{Definizione}[Dualità dell'algebra booleana]
 \label{def-dualità-algebra-booleana}
 Nell'algebra booleana vi è una \textbf{dualità} tra le operazioni \code{AND} e \code{OR} e i valori 1 e 0: infatti, è possibile trasformare qualsiasi operazione con questi operatori e questi valori semplicemente scambiando gli \code{AND} con gli \code{OR} e gli 1 con gli 0 e viceversa. \\
-\NB Questa dualità si applica SOLO alle \textbf{identità}, e non a tutte le equazioni booleane. Ci saranno quindi molto utili nei teoremi e negli assiomi che vedremo tra poco
+\NB Questa dualità si applica SOLO alle \textbf{identità}, e non a tutte le equazioni booleane. Ci sarà quindi molto utile nei teoremi e negli assiomi che vedremo tra poco.
 \end{Definizione}
 
-Ad esempio, presa l'idenità $A + 1 = 1$ ($A$ \code{OR} $1 = 1$), se applichiamo le regole di dualità otteniamo l'idenità $A \cdot 0 = 0$ ($A$ \code{AND} $0 = 0$), che è anch'essa vera.  
+Ad esempio, presa l'identità $A + 1 = 1$ ($A$ \code{OR} $1 = 1$), se applichiamo le regole di dualità otteniamo l'identità $A \cdot 0 = 0$ ($A$ \code{AND} $0 = 0$), che è anch'essa vera.  
 
 \begin{Proprieta}[Assiomi]
 \label{prop-assiomi}
@@ -947,10 +947,10 @@ Per dimostrare questi teoremi abbiamo due metodi:
 
 \Dimostrazione \nopagebreak
 
-Dimostriamo solo i due teoremi assorbimento (ricordiamo che il duale NON va dimostrato, perché dimostrando il teorema stiamo dimostrando anche il suo duale).
+Dimostriamo solo i due teoremi di assorbimento (ricordiamo che il duale NON va dimostrato, perché dimostrando il teorema stiamo dimostrando anche il suo duale).
 
 \begin{itemize}
-    \item 1° Teorema assorbimento: $B \cdot (B + C) = B$ \\
+    \item 1° Teorema di assorbimento: $B \cdot (B + C) = B$ \\
     Dimostriamolo per induzione perfetta:
     \begin{center}
     \begin{tabular}{cc|cc}
@@ -963,7 +963,7 @@ Dimostriamo solo i due teoremi assorbimento (ricordiamo che il duale NON va dimo
     \end{tabular}
     \end{center}
     Dato che $B$ e $B \cdot (B + C)$ per ogni input restituiscono lo stesso output, possiamo concludere che $B \cdot (B + C) = B$. $\blacksquare$ 
-    \item 2° Teorema assorbimento: $(B \cdot C) + (B \cdot \bar{C}) = B$ \\
+    \item 2° Teorema di assorbimento: $(B \cdot C) + (B \cdot \bar{C}) = B$ \\
     Dimostriamolo usando altri assiomi e teoremi:
     \begin{align*}
     (B \cdot C) + (B \cdot \bar{C}) &=  B \cdot (C + \bar{C}) &\text{P. Distributiva al contrario}\\
@@ -980,8 +980,8 @@ Dimostriamo solo i due teoremi assorbimento (ricordiamo che il duale NON va dimo
 \textbf{Semplificare} un'equazione (o minimizzare un'equazione) significa \textbf{ridurre} un'equazione al minor numero di implicanti, dove ogni implicante deve avere il minor numero di literal.
 \end{Definizione}
 
-Per semplificare un'equazione sono molto utili in particolare la Proprietà distributiva e i due teoremi assorbimento. Sarà molto utile anche vedere queste proprietà/teoremi al contrario: ad esempio, a volte ci capiterà di  semplificare passando da $(B + C) (B + D)$ a $B + CD$ piuttosto che il contrario. \\
-Altre tecniche di semplificazioni utili sono l'\textbf{espansione} e la \textbf{duplicazione}. L'espansione è praticamente il fenomeno inverso dei due teoremi assorbimento. Ad esempio, a volte sarà utile passare da $P$ a $P \cdot (P + A)$, oppure da $P$ a $PA + P \bar{A}$. La duplicazione è invece banalmente il riscrivere un literal $A$ come $A + A$. Sembrano dei procedimenti inutili, ma possono esserci equazioni molto grandi semplificabili tramite queste tecniche. 
+Per semplificare un'equazione sono molto utili in particolare la Proprietà distributiva e i due teoremi di assorbimento. Sarà molto utile anche vedere queste proprietà/teoremi al contrario: ad esempio, a volte ci capiterà di  semplificare passando da $(B + C) (B + D)$ a $B + CD$ piuttosto che il contrario. \\
+Altre tecniche di semplificazione utili sono l'\textbf{espansione} e la \textbf{duplicazione}. L'espansione è praticamente il fenomeno inverso dei due teoremi di assorbimento. Ad esempio, a volte sarà utile passare da $P$ a $P \cdot (P + A)$, oppure da $P$ a $PA + P \bar{A}$. La duplicazione è invece banalmente il riscrivere un literal $A$ come $A + A$. Sembrano dei procedimenti inutili, ma possono esserci equazioni molto grandi semplificabili tramite queste tecniche. 
 
 È importante capire che esistono diversi modi per semplificare un'equazione: alcuni più veloci, altri più lenti. Il nostro obiettivo è quello di cercare la strada più veloce, così da ridurre il numero di passaggi e quindi di errori.
 
@@ -992,7 +992,7 @@ Semplificare l'equazione $\bm{A(AB + ABC)}$. \nopagebreak
 Banalmente
 \begin{align*}
 A(AB + ABC) &=  A(AB(1+C)) &\text{P. Distributiva al contrario}\\
- &= A(AB(1))\cdot 1 &\text{Duale del teorema 2} \\
+ &= A(AB \cdot 1) &\text{Duale del teorema 2} \\
  &= A \cdot AB &\text{Teorema 1} \\
  &= AA \cdot B &\text{P. Associativa} \\
  &= \bm{AB} & \text{Teorema 3} 
@@ -1002,7 +1002,7 @@ A(AB + ABC) &=  A(AB(1+C)) &\text{P. Distributiva al contrario}\\
 
 Semplificare l'equazione $\bm{(A + BC)(A + DE)}$. \nopagebreak
 
-Questa equazione utilizzando il duale della Proprietà Distributiva al contrario si semplfiica subito: infatti, se poniamo $X = BC$ e $Y = DE$, troviamo proprio $(A + X)(A + Y) = A + XY = \bm{A + BCDE}$.
+Questa equazione utilizzando il duale della Proprietà Distributiva al contrario si semplifica subito: infatti, se poniamo $X = BC$ e $Y = DE$, troviamo proprio $(A + X)(A + Y) = A + XY = \bm{A + BCDE}$.
 
 \begin{Proposizione}[Obiettivo della semplificazione]
 \label{propos-obiettivo-semplificazione}
@@ -1015,10 +1015,10 @@ Trasformare nella forma \textbf{POS} l'equazione $\bm{AB + C'DE + F}$. \nopagebr
 
 \NB $C'$ equivale a scrivere $\bar{C}$.
 
-Notiamo come anche in questo esempio non ci basti che eseguire tante volte il duale della Proprietà Distributiva al contrario. Infatti, 
+Notiamo come anche in questo esempio non ci resti che eseguire tante volte il duale della Proprietà Distributiva al contrario. Infatti, 
 \begin{align*}
 AB + C'DE + F &= (AB + C')(AB + DE) + F \\
- &= (A + C')(B + C')(A + DE)(B + E) + F \\
+ &= (A + C')(B + C')(A + DE)(B + DE) + F \\
  &= F + (A + C')(B + C')(A + D)(A + E)(B + D)(B + E) \\
  &= (F + (A + C')(B + C')(A + D))(F + (A + E)(B + D)(B + E)) \\
  &= (F + A + C')(F + (B + C')(A + D))(F + A + E)(F + (B + D)(B + E)) \\
@@ -1062,7 +1062,7 @@ Il \textbf{bubble pushing} è una tecnica utilizzata nei circuiti per passare da
 \includegraphics[width=1\textwidth, valign=t]{Bubble pushing.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Grazie al teorema di DeMorgan, riusciamo dimostrare che i due circuiti qui a sinistra sono identici. I pallini in corrispondenza dell'input del \code{OR} indicano un valore \code{NOT}. Se ad esempio avevamo un \code{NAND} che collegava $A$ e $B$, lo avremmo ora trasformato in un \code{OR} che collega $\bar{A}$ e $\bar{B}$. Lo stesso ragionamento varrebbe anche con un \code{NOR} che diventerebbe un \code{AND}.
+Grazie al teorema di DeMorgan, riusciamo a dimostrare che i due circuiti qui a sinistra sono identici. I pallini in corrispondenza dell'input dell'\code{OR} indicano un valore \code{NOT}. Se ad esempio avevamo un \code{NAND} che collegava $A$ e $B$, lo avremmo ora trasformato in un \code{OR} che collega $\bar{A}$ e $\bar{B}$. Lo stesso ragionamento varrebbe anche con un \code{NOR} che diventerebbe un \code{AND}.
 \end{minipage}
 
 Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando questa tecnica.
@@ -1077,7 +1077,7 @@ Dunque possiamo trasformare ogni circuito logico in un altro equivalente usando 
 
 Ad esempio, questi due circuiti rappresentano la stessa identica equazione booleana: \mbox{$\bm{Y = \overline{\overline{AB} \cdot \overline{CD}} = AB + CD}$} (sappiamo che è la stessa equazione grazie proprio al teorema di DeMorgan).
 
-Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{porte logiche universali}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte. \\
+Questo ci permette sicuramente di semplificare alcuni circuiti, ma ci permette soprattutto di creare circuiti solo tramite \codeb{NAND} e \codeb{NOR}, che prendono il nome di \textbf{porte logiche universali}. Questo è molto importante perché a livello fisico è molto più conveniente creare circuiti solo tramite \code{NAND} e \code{NOR}, eliminando tutte le altre porte. \\
 \NB Al contrario delle porte \code{AND} e \code{OR}, le porte \code{NAND} e \code{NOR} NON sono associative.
 
 \begin{minipage}[c]{0.35\textwidth}
@@ -1085,19 +1085,19 @@ Questo ci permettere sicuramente di semplificare alcuni circuiti, ma ci permette
 \includegraphics[width=1\textwidth, valign=t]{NAND e NOR fanno tutto.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} (\mbox{$\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$}). L'\code{OR} infine è rappresnetato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} (\mbox{$\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$}). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
+Il \code{NOT} è rappresentato tramite un \code{NAND} dove i due valori di entrata sono entrambi \code{A} ($\overline{AA} = \bar{A}$). L'\code{AND} è rappresentato da un \code{NAND} che ha come valori di entrata il risultato di un altro \code{NAND} dove i valori di entrata sono \code{A} e \code{B} (\mbox{$\overline{\overline{AB} \cdot \overline{AB}} = AB + AB = AB$}). L'\code{OR} infine è rappresentato da un \code{NAND} che ha come valori di entrata i risultati di due altri \code{NAND} che hanno come input uno solo \code{A} e l'altro solo \code{B} (\mbox{$\overline{\overline{AA} \overline{BB}} = AA + BB = A + B$}). Lo \code{XOR} e lo \code{XNOR} non li studiamo ma anch'essi sono rappresentabili tramite \code{NOR} e \code{NAND}.
 \end{minipage}
 
 In particolare, grazie a questa tecnica possiamo rappresentare una SOP come una serie di \code{NAND}, e una POS come una serie di \code{NOR}  (negando due volte la funzione e usando DeMorgan). Ad esempio, se abbiamo $Y = AB + BC$, possiamo riscriverla con una serie di \code{NAND} semplicemente scrivendo $Y = \bar{\bar{Y}} = \overline{\overline{AB + BC}} = \overline{\overline{AB} \cdot \overline{BC}}$.
 
-Nascono quindi le \textbf{reti a due livelli}, dove il primo livello è rappresentato da tanti \code{ANDs} e il secondo da un \code{OR} (o viceversa). In questo modo, è possibile rappresentare qualsiasi SOP come circuiti logici nel modo più chiaro possibile. Tramite il bubble pushing è poi possibile trasformare queste funzioni in funzioni composte solo da tanti \code{NAND} e da un altro \code{NAND} finale (o da due \code{NOR}, se si parte con tanti \code{ORs} e si finisce con un \code{AND}). 
+Nascono quindi le \textbf{reti a due livelli}, dove il primo livello è rappresentato da tanti \code{AND} e il secondo da un \code{OR} (o viceversa). In questo modo, è possibile rappresentare qualsiasi SOP come circuiti logici nel modo più chiaro possibile. Tramite il bubble pushing è poi possibile trasformare queste funzioni in funzioni composte solo da tanti \code{NAND} e da un altro \code{NAND} finale (o solo da tanti \code{NOR} e da un altro \code{NOR} finale, se si parte con tanti \code{OR} e si finisce con un \code{AND}). 
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering
 \includegraphics[width=1\textwidth, valign=t]{Funzione a due livelli esempio.png}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.60\textwidth}
-Questa a sinistra è ad esempio una funzione a due livelli che rappresenta l'equazione \mbox{$Y = \bar{A}\bar{B}\bar{C} + A \bar{B} \bar{C} + A \bar{B}C$}. Notiamo come in questi schemi è importante mettere gli input in alto (o a sinistra), e gli output in basso (o a destra), con le porte logiche che vanno da sinistra a destra con linee dritte possibilimente, perché più facili da leggere. 
+Questa a sinistra è ad esempio una funzione a due livelli che rappresenta l'equazione \mbox{$Y = \bar{A}\bar{B}\bar{C} + A \bar{B} \bar{C} + A \bar{B}C$}. Notiamo come in questi schemi è importante mettere gli input in alto (o a sinistra), e gli output in basso (o a destra), con le porte logiche che vanno da sinistra a destra con linee dritte possibilmente, perché più facili da leggere. 
 \end{minipage}
 
 \subsection{Circuiti a più uscite}
@@ -1106,14 +1106,14 @@ Abbiamo per ora visto, fatta eccezione per il Full Adder, solo circuiti con un o
 
 \begin{Definizione}[Priority Circuit]
 \label{def-priority-circuit}
-Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra). Questi tipi di circuiti che restituiscono un solo output TRUE per ogni combinazione di input sono detti circuiti \textbf{one-hot}.
+Nel \textbf{priority circuit} il numero di ingressi è pari al numero di uscite e l'output assegnato corrisponde all'\textbf{input TRUE più significativo} (ossia l'input più a sinistra). I circuiti che restituiscono esattamente un output TRUE per ogni combinazione di input sono detti circuiti \textbf{one-hot}: il priority circuit ci si avvicina molto, dato che ha al più un output TRUE (nessuno solo quando tutti gli input sono FALSE).
 \end{Definizione}
 
-Preso quindi un priority circuit con 4 input $A_3, A_2, A_1$ e $A_0$, questo avrà 4 output $Y_3, Y_2, Y_1$ e $Y_0$, e come già accennato per ogni combinazione di input si accenderà sempre l'output corrispondente all'input TRUE più a sinistra. Quindi, se ad esempio è acceso l'input $A_3$ (ossia vale 1), sicuramente sarà acceso l'output $Y_3$. Se invece è acceso $A_2$, se $A_3$ non è acceso allora si accenderà $Y_2$. Se è acceso $A_1$, se $A_3$ e $A_2$ non sono accesi allora si accenderà $Y_1$, e infine se $A_0$ è l'unico acceso allora si accenderà $Y_0$. Abbiamo quindi un circuito con le uscite \textbf{mutualmente esclusive}: con una determinata combinazione di input \textbf{un solo output sarà acceso}.
+Preso quindi un priority circuit con 4 input $A_3, A_2, A_1$ e $A_0$, questo avrà 4 output $Y_3, Y_2, Y_1$ e $Y_0$, e come già accennato per ogni combinazione di input con almeno un 1 si accenderà l'output corrispondente all'input TRUE più a sinistra. Quindi, se ad esempio è acceso l'input $A_3$ (ossia vale 1), sicuramente sarà acceso l'output $Y_3$. Se invece è acceso $A_2$, se $A_3$ non è acceso allora si accenderà $Y_2$. Se è acceso $A_1$, se $A_3$ e $A_2$ non sono accesi allora si accenderà $Y_1$, e infine se $A_0$ è l'unico acceso allora si accenderà $Y_0$. Abbiamo quindi un circuito con le uscite \textbf{mutualmente esclusive}: con una determinata combinazione di input \textbf{al più un output sarà acceso}.
 
 \begin{Definizione}[Don't Care]
 \label{def-dont-care}
-Quando l'output di un'equazione \textbf{non è influenzato da uno dei valori in input}, si può segnare quel valore come \textbf{X} per indicare che non è importante. Questa rappresentazione prende il nome di rappresentazione \textbf{Don't Care}.
+Quando l'output di un'equazione \textbf{non è influenzato da uno dei valori in input}, si può segnare quel valore come \textbf{X} per indicare che non è importante. Questa rappresentazione prende il nome di rappresentazione \textbf{Don't Care}. Useremo la X anche come valore di \textbf{output}: in quel caso indica una combinazione di input per cui il valore dell'output non ci interessa (o che non si verifica mai), e che possiamo quindi scegliere liberamente tra 0 e 1.
 \end{Definizione}
 \begin{minipage}[c]{0.50\textwidth}
 \centering
@@ -1130,7 +1130,7 @@ $A_3$ & $A_2$ & $A_1$ & $A_0$ & $Y_3$ & $Y_2$ & $Y_1$ & $Y_0$ \\
 \end{center}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.45\textwidth}
-Dunque la tabella di verità priority circuit a 4 ingressi può essere rappresentata in modo compatto tramite la Don't Care in questo modo.
+Dunque la tabella di verità del priority circuit a 4 ingressi può essere rappresentata in modo compatto tramite la Don't Care in questo modo.
 \end{minipage}
 
 
@@ -1174,7 +1174,7 @@ Questa è la mappa di Karnaugh corrispondente alla funzione $Y$ che vogliamo rap
 
 \vspace{0.5cm}
 
-Una volta che abbiamo creato la mappa di Karnaugh per la nostra funzione $Y$, dobbiamo cerchiare tutti gli 1 presenti nella mappa. Possiamo cerchiare più 1 insieme se questi sono vicini e se ne cerchiamo un numero uguale a una potenza di 2 ($1, 2, 4, \ldots$), e dobbiamo fare i cerchi più grandi possibili. Inoltre, se sono presenti dei valori don't care (X), è possibile cerchiarli, ma solo se questi aiutano a creare cerchi più grandi. In questo caso cerchieremo quindi semplicemente i due 1 sulla prima colonna. Notiamo che nell'implicante creato da queste due celle cerchiate, l'unico valore che cambia è $C$ (abbiamo infatti i mintermini $\bar{A} \bar{B} \bar{C}$ e $\bar{A} \bar{B} C$). Per questo motivo, è possibile eliminare la $C$ da questi due implicanti (infatti $\bar{A} \bar{B} \bar{C} + \bar{A} \bar{B} C = \bar{A} \bar{B})$. Dunque otteniamo che $\bm{Y = \bar{A} \bar{B}}$.
+Una volta che abbiamo creato la mappa di Karnaugh per la nostra funzione $Y$, dobbiamo cerchiare tutti gli 1 presenti nella mappa. Possiamo cerchiare più 1 insieme se questi sono vicini e formano un \textbf{rettangolo} (o un quadrato) con un numero di celle uguale a una potenza di 2 ($1, 2, 4, \ldots$), e dobbiamo fare i cerchi più grandi possibili. Inoltre, se sono presenti dei valori don't care (X), è possibile cerchiarli, ma solo se questi aiutano a creare cerchi più grandi. In questo caso cerchieremo quindi semplicemente i due 1 sulla prima colonna. Notiamo che nell'implicante creato da queste due celle cerchiate, l'unico valore che cambia è $C$ (abbiamo infatti i mintermini $\bar{A} \bar{B} \bar{C}$ e $\bar{A} \bar{B} C$). Per questo motivo, è possibile eliminare la $C$ da questi due implicanti (infatti $\bar{A} \bar{B} \bar{C} + \bar{A} \bar{B} C = \bar{A} \bar{B})$. Dunque otteniamo che $\bm{Y = \bar{A} \bar{B}}$.
 
 \begin{Definizione}[Implicante primo]
 \label{def-implicante-primo}
@@ -1225,7 +1225,7 @@ A & B & C & D & Y \\
 \end{minipage}
 
 \begin{minipage}[c]{0.60\textwidth}
-Proviamo ora a raggruppare gli 1 e le X. Possiamo prendere i quattro 1 e le quattro X in basso per formare un cerchio da 8, poi possiamo prendere anche i due 1 e le sei X tutte a destra per formare un altro cercio da 8, e possiamo anche prendere i quattro 1 su tutti gli angoli (ricoridamo che l'angolo in alto a sinistra è come se toccasse l'angolo in alto a destra e in basso a sinistra, e ciò vale per tutti gli angoli). Arriviamo quindi a una mappa del genere.
+Proviamo ora a raggruppare gli 1 e le X. Possiamo prendere i quattro 1 e le quattro X in basso per formare un cerchio da 8, poi possiamo prendere anche i due 1 e le sei X tutte a destra per formare un altro cerchio da 8, e possiamo anche prendere i tre 1 e la X sui quattro angoli (ricordiamo che l'angolo in alto a sinistra è come se toccasse l'angolo in alto a destra e in basso a sinistra, e ciò vale per tutti gli angoli). Arriviamo quindi a una mappa del genere.
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -1239,28 +1239,28 @@ Per il cerchio tutto in basso notiamo che l'unico termine che non cambia è $C$,
 Le mappe di Karnaugh possono essere usate anche per trovare la \textbf{POS minima} di una funzione booleana, sfruttando le regole della dualità. Dobbiamo in questo caso prendere gli 0 al posto degli 1, e quando dobbiamo prendere una variabile che non cambia, se questa vale 0 prendiamo la stessa variabile, altrimenti se vale 1 ne prendiamo il complemento. Riprendiamo l'esempio di prima per capire come fare.
 
 \begin{minipage}[c]{0.60\textwidth}
-Dalla tabellla della verità troviamo la seguente mappa di Karnaugh. Dobbiamo quindi raggruppare non gli 1 ma gli 0. Possiamo quindi prendere lo 0 e le tre X per formare un cerchio da 4, e possiamo poi prendere lo 0 a sinistra e la X affianco per formare un cerchio da due.
+Dalla tabella di verità troviamo la seguente mappa di Karnaugh. Dobbiamo quindi raggruppare non gli 1 ma gli 0. Possiamo quindi prendere lo 0 e le tre X per formare un cerchio da 4, e possiamo poi prendere lo 0 a sinistra e la X affianco per formare un cerchio da due.
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
 \includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh duale.png}
 \end{minipage}
 
-Per il cerchio da 4 notiamo che i termini che non cambiano sono $\bar{B}$ e $C$, mentre per il cerchio da 2 sono $A,C$ e $\bar{D}$ (ricordiamo che per la dualità quando abbiamo $A = 1$ dobbiamo prendere $\bar{A}$ e quando abbiamo $A = 0$ dobbiamo prendere $A$). Dunque troviamo che $\bm{Y = (\bar{B} + C)(A + C + \bar{D})}$. Questa è la \textbf{POS minima} della nostra funzione $Y$ (nota che questa funzione algebrica non è equivalente a quella trovata prima come SOP minima: questo è casuato dai valori Don't Care, che possono creare funzioni algebriche differenti a partire dalla stessa mappa di Karnaugh).
+Per il cerchio da 4 notiamo che i termini che non cambiano sono $\bar{B}$ e $C$, mentre per il cerchio da 2 sono $A,C$ e $\bar{D}$ (ricordiamo che per la dualità quando abbiamo $A = 1$ dobbiamo prendere $\bar{A}$ e quando abbiamo $A = 0$ dobbiamo prendere $A$). Dunque troviamo che $\bm{Y = (\bar{B} + C)(A + C + \bar{D})}$. Questa è la \textbf{POS minima} della nostra funzione $Y$ (nota che questa funzione algebrica non è equivalente a quella trovata prima come SOP minima: questo è causato dai valori Don't Care, che possono creare funzioni algebriche differenti a partire dalla stessa mappa di Karnaugh).
 
 \subsection{Usare le mappe di Karnaugh per visualizzare i teoremi}
 
-Le mappe di Karnaugh sono molto importanti per capire visiamente i teoremi dell'algebra di Boole. Vedremo in questo caso un teorema che noi non abbiamo visto tra i teoremi da studiare, ossia il \textit{teorema del consenso}, che dice che $BC + \bar{B}D + CD = BC + \bar{B}D$. Non è importante conoscerlo, ma lo useremo come base per vedere come le mappe di Karnaugh ci aiutano a dimostrare queste identità.
+Le mappe di Karnaugh sono molto importanti per capire visivamente i teoremi dell'algebra di Boole. Vedremo in questo caso un teorema che noi non abbiamo visto tra i teoremi da studiare, ossia il \textit{teorema del consenso}, che dice che $BC + \bar{B}D + CD = BC + \bar{B}D$. Non è importante conoscerlo, ma lo useremo come base per vedere come le mappe di Karnaugh ci aiutano a dimostrare queste identità.
 
 \begin{minipage}[c]{0.6\textwidth}
-Notiamo come, presa la mappa di Karnaugh per le variabili $B,C$ e $D$, per scrivere l'espressione $BC + \bar{B}D + CD$ dobbiamo prendere due 1 al centro due volte. Quei cerchio in più serve proprio per rappresentare $CD$, ma noi sappiamo che è superfluo: infatti, i due 1 che prende erano già presi da altri cerchi, dunque possiamo toglierlo, trovando proprio l'espressione $BC + \bar{B}D$. Ecco dimostrato intuitivamente come $BC + \bar{B}D + CD = BC + \bar{B}D$.
+Notiamo come, presa la mappa di Karnaugh per le variabili $B,C$ e $D$, per scrivere l'espressione $BC + \bar{B}D + CD$ dobbiamo prendere due 1 al centro due volte. Quel cerchio in più serve proprio per rappresentare $CD$, ma noi sappiamo che è superfluo: infatti, i due 1 che prende erano già presi da altri cerchi, dunque possiamo toglierlo, trovando proprio l'espressione $BC + \bar{B}D$. Ecco dimostrato intuitivamente come $BC + \bar{B}D + CD = BC + \bar{B}D$.
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
 \includegraphics[width=1\textwidth, valign=t]{Mappa Karnaugh Teorema.png}
 \end{minipage}
 
-Oltre che aiutarci a capire il teorema visiamente, le mappe di Karnaugh ci aiutano anche a intuirne la dimostrazione algebrica. Infatti, abbiamo visto come $CD$ nella mappa di Karnaugh sia rappresentato da quei due 1, che rappresentano rispettivamente il mintermine $\bar{B}CD$ e il mintermine $BCD$. Capiamo quindi che se scriviamo $CD$ come $\bar{B}CD + BCD$ ci verrà più veloce la dimostrazione. Infatti, 
+Oltre ad aiutarci a capire il teorema visivamente, le mappe di Karnaugh ci aiutano anche a intuirne la dimostrazione algebrica. Infatti, abbiamo visto come $CD$ nella mappa di Karnaugh sia rappresentato da quei due 1, che rappresentano rispettivamente il mintermine $\bar{B}CD$ e il mintermine $BCD$. Capiamo quindi che se scriviamo $CD$ come $\bar{B}CD + BCD$ ci verrà più veloce la dimostrazione. Infatti, 
 \begin{align*}
 BC + \bar{B}D + CD &= BC + \bar{B}D + \bar{B}CD + BCD \\
  &= BC (D + 1) + \bar{B}D(1 + C) \\
@@ -1278,15 +1278,15 @@ L'\textbf{algoritmo Quine-McCluskey} (QMC, anche detto metodo degli implicanti p
 
 \section{Circuiti a più livelli}
 
-Abbiamo parlato brevemente in precedenza delle \textbf{reti a due livelli}, ossia circuiti formati da tanti \code{ANDs} e da un \code{OR} finale o viceversa. Questi circuiti rappresentano le funzioni booleana in forma rispettivamente \textbf{POS} e in forma \textbf{SOP}, e sono molto veloci, ma spesso richiedono una quantità esagerata di hardware. Per questo motivo nascono i \textbf{circuiti a più livelli}.
+Abbiamo parlato brevemente in precedenza delle \textbf{reti a due livelli}, ossia circuiti formati da tanti \code{AND} e da un \code{OR} finale o viceversa. Questi circuiti rappresentano le funzioni booleane in forma rispettivamente \textbf{SOP} e in forma \textbf{POS}, e sono molto veloci, ma spesso richiedono una quantità esagerata di hardware. Per questo motivo nascono i \textbf{circuiti a più livelli}.
 
 \begin{Definizione}[Circuiti a più livelli]
 \label{def-circuiti-più-livelli}
-I \textbf{circuiti a più livelli} (o reti a più livelli) sono dei circuiti combinatori rappresentati non più da soli due livelli di \code{ANDs} e \code{OR} o di \code{ORs} e di \code{AND}, ma da più livelli con diverse porte logiche.
+I \textbf{circuiti a più livelli} (o reti a più livelli) sono dei circuiti combinatori rappresentati non più da soli due livelli di \code{AND} e \code{OR} o di \code{OR} e di \code{AND}, ma da più livelli con diverse porte logiche.
 \end{Definizione}
 
 Prima di vedere alcuni circuiti a più livelli, capiamo perché sono così fondamentali con un esempio. \\
-Ipotizziamo di voler rappresentare tramite un circuito uno \code{XOR} a 3 ingressi. Avremo quindi la seguente tabella della verità con la corrispondente mappa di Karnaugh:
+Ipotizziamo di voler rappresentare tramite un circuito uno \code{XOR} a 3 ingressi. Avremo quindi la seguente tabella di verità con la corrispondente mappa di Karnaugh:
 
 \begin{minipage}[c]{0.55\textwidth}
 \centering
@@ -1314,7 +1314,7 @@ A & B & C & Y \\
 \end{tabular}
 \end{minipage}
 
-Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, dunque non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ciò ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini cambiano di un solo bit, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{ANDs} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{ORs} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equviale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}. Se invece volessimo rappresentarlo tramite un circuito a più livelli, potremmo trasformare questo \code{XOR} a 3 in due \code{XOR} a 2, e potremmo poi trasformare ogni \code{XOR} a 2 in un circuito a due livelli. Infatti, uno \code{XOR} a 2 può essere rappresentato da 2 \code{AND} e un \code{OR} (o viceversa), dunque avremmo un totale di \textbf{6} porte distribuite su 4 livelli, un netto miglioramento rispetto alle 11 viste prima. Si guadagna quindi a livelli hardware ma si perde a livello di velocità, dato che appunto dobbiamo passare su più livelli. Questa differenza, che non sembra nemmeno così importante con uno \code{XOR} a 3 ingressi, diventa evidente in uno \code{XOR} a 8 ingressi, dove servono $2^8/2 = 2^7 = 128$ \code{AND} e un \code{OR} a 128 ingressi per poterla tradurre in una rete a due livelli (che significa 127 \code{OR} a 2 ingressi), mentre in una rete a più livelli bastano 7 \code{XOR} a due ingressi, che si traducono in 14 porte \code{AND} e 7 \code{OR}. Dunque passiamo da 128+127 = 255 porte a sole 21.
+Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, dunque non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ciò ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini cambiano di un solo bit, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{AND} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{OR} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equivale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}. Se invece volessimo rappresentarlo tramite un circuito a più livelli, potremmo trasformare questo \code{XOR} a 3 in due \code{XOR} a 2, e potremmo poi trasformare ogni \code{XOR} a 2 in un circuito a due livelli. Infatti, uno \code{XOR} a 2 può essere rappresentato da 2 \code{AND} e un \code{OR} (o viceversa), dunque avremmo un totale di \textbf{6} porte distribuite su 4 livelli, un netto miglioramento rispetto alle 11 viste prima. Si guadagna quindi a livello hardware ma si perde a livello di velocità, dato che appunto dobbiamo passare su più livelli. Questa differenza, che non sembra nemmeno così importante con uno \code{XOR} a 3 ingressi, diventa evidente in uno \code{XOR} a 8 ingressi, dove servono $2^8/2 = 2^7 = 128$ \code{AND} a 8 ingressi e un \code{OR} a 128 ingressi per poterla tradurre in una rete a due livelli (che significano $128 \cdot 7 = 896$ \code{AND} e 127 \code{OR} a 2 ingressi), mentre in una rete a più livelli bastano 7 \code{XOR} a due ingressi, che si traducono in 14 porte \code{AND} e 7 \code{OR}. Dunque passiamo da $896 + 127 = 1023$ porte a sole 21.
 
 \subsection{Multiplexer}
 
@@ -1342,7 +1342,7 @@ S D_1}$.
 \end{minipage}
 
 \begin{minipage}[c]{0.60\textwidth}
-Un MUX a 4 ingressi, oltre alla sua forma canonica con 4 variabili e 2 selettori nello stesso MUX, può essere riprodotto anche usando 3 MUX a 2 ingressi. Dato che dobbiamo usare solo 2 selettori ($\log_2 4 = 2$), utilizziamo il selettore $S_0$ per i primi due MUX e $S_1$ solo per il terzo. Infatti, dato che stiamo cercando di mandare in output uno solo dei 4 valori in input, ci bastano questi due selettori per poterli scegliere tutti senza problemi. Se ad esempio vogliamo $Y = D_2$, basta posse $S_0 = 0$ e $S_1 = 1$.
+Un MUX a 4 ingressi, oltre alla sua forma canonica con 4 ingressi e 2 selettori nello stesso MUX, può essere riprodotto anche usando 3 MUX a 2 ingressi. Dato che dobbiamo usare solo 2 selettori ($\log_2 4 = 2$), utilizziamo il selettore $S_0$ per i primi due MUX e $S_1$ solo per il terzo. Infatti, dato che stiamo cercando di mandare in output uno solo dei 4 valori in input, ci bastano questi due selettori per poterli scegliere tutti senza problemi. Se ad esempio vogliamo $Y = D_2$, basta porre $S_0 = 0$ e $S_1 = 1$.
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -1353,7 +1353,7 @@ Troviamo quindi che $\bm{Y = \bar{S_0} \bar{S_1} D_0 + S_0 \bar{S_1} D_1 + \bar{
 
 \subsubsection*{Tristate Buffer al posto del multiplexer}
 
-Grazie allo stato di alta impedenza, è possibile riprodurre lo stesso identico comportamento dei multiplexer utilizzando semplicemente dei tristate buffers. Ad esempio, un MUX a 4 input può essere riprodotto in questi due modi usando tristate buffers:
+Grazie allo stato di alta impedenza, è possibile riprodurre lo stesso identico comportamento dei multiplexer utilizzando semplicemente dei tristate buffer. Ad esempio, un MUX a 4 input può essere riprodotto in questi due modi usando tristate buffer:
 
 \begin{minipage}[c]{0.45\textwidth}
 \centering
@@ -1387,7 +1387,7 @@ se poniamo i diversi input del nostro multiplexer tutti a 0 tranne che per l'ult
 \includegraphics[width=0.4\textwidth]{MUX a 4 AND.png}
 \end{figure}
 
-dove la freccia verso il basso indica un input fisso di $0$ (prende il nome di \textit{massa}), mentre la barretta indica un input fisso di $1$. Abbiamo quindi rappresentato la funzione $Y = AB$, ossia la porta logica \code{AND}, tramite un MUX a 4 ingressi. Notiamo però che possiamo migliorare questa rappresentazione utilizzando un MUX a soli due ingressi. Infatti, modificando la tabella della verità in questo modo
+dove la freccia verso il basso indica un input fisso di $0$ (prende il nome di \textit{massa}), mentre la barretta indica un input fisso di $1$. Abbiamo quindi rappresentato la funzione $Y = AB$, ossia la porta logica \code{AND}, tramite un MUX a 4 ingressi. Notiamo però che possiamo migliorare questa rappresentazione utilizzando un MUX a soli due ingressi. Infatti, modificando la tabella di verità in questo modo
 \[
 \begin{array}{c|c}
 A & Y \\
@@ -1420,7 +1420,7 @@ A_2 & A_1 & A_0 & D \\
 \end{array}
 \]
 
-Possiamo rappresentarla usando un MUX 8 ingressi, ma è più comodo rappresentarla con 7 MUX a 2 ingressi, in questo modo:
+Possiamo rappresentarla usando un MUX a 8 ingressi, ma è più comodo rappresentarla con 7 MUX a 2 ingressi, in questo modo:
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.4\textwidth]{7 MUX.png}
@@ -1441,19 +1441,19 @@ Data una funzione booleana $f$ a $n$ variabili, vale sempre l'uguaglianza
 \]
 \end{Proposizione}
 
-Questo teorema è la dimostrazione formale di ciò che abbiamo visto la pagina scorsa, ossia del perché riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, e espande questo concetto a MUX a un qualsiasi numero di ingressi $n$ formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione a $n$ ingressi, possiamo realizzarla usando un MUX che prende in input 2 funzioni a $n-1$ ingressi, dunque una funzione a 4 ingressi diventa un MUX con 2 funzioni a 2 ingressi che a loro volta diventano due MUX con due funzioni a 1 ingresso, con un totale quindi di 3 MUX a 2 ingressi. 
+Questo teorema è la dimostrazione formale di ciò che abbiamo visto in precedenza, ossia del perché riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, ed espande questo concetto a MUX a un qualsiasi numero di ingressi $n$ formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione di $n$ variabili, possiamo realizzarla usando un MUX a 2 ingressi che prende in input 2 funzioni di $n-1$ variabili. Un MUX a 4 ingressi, ad esempio, realizza una funzione di 2 variabili (i due selettori): questa diventa un MUX con 2 funzioni di 1 variabile, che a loro volta diventano due MUX i cui ingressi sono direttamente i valori $D_i$, con un totale quindi di 3 MUX a 2 ingressi. 
 
 \subsection{Decoder}
 
 \begin{Definizione}[Decoder]
 \label{def-decoder}
-Un \textbf{decoder} è un circuito combinatorio con $n$ input e $2^n$ output e che restituisce un solo output TRUE per ogni combinazione di input, ossia è un circuito \textbf{one-hot}, come il priority circuit.  
+Un \textbf{decoder} è un circuito combinatorio con $n$ input e $2^n$ output e che restituisce un solo output TRUE per ogni combinazione di input, ossia è un circuito \textbf{one-hot}.  
 \end{Definizione}
 
-\NB Per far uscire solo un output TRUE tra tutti gli output il decoder utilizza una tecnica chiamata \textbf{mascheramento}. In sostanza, applicando un operazione \code{AND} a tutti gli output il sistema si assicura di azzerare tutti i bit non desiderati a 0 così da isolare l'output voluto.
+\NB Per far uscire solo un output TRUE tra tutti gli output il decoder utilizza una tecnica chiamata \textbf{mascheramento}: ogni uscita è un \code{AND} degli ingressi (diretti o negati), cioè un mintermine, che vale 1 solo per la propria combinazione di input e azzera così tutte le altre uscite.
 
 \begin{minipage}[c]{0.6\textwidth}
-Un decoder si raffigura semplicemente con un rettangolo verticale con la scritta "Decoder" in alto, con gli $n$ ingressi a sinistra (in questo caso $2$), e gli $2^n$ output a destra (in questo caso $4$). \\
+Un decoder si raffigura semplicemente con un rettangolo verticale con la scritta "Decoder" in alto, con gli $n$ ingressi a sinistra (in questo caso $2$), e i $2^n$ output a destra (in questo caso $4$). \\
 \end{minipage}\hfill
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -1479,7 +1479,7 @@ Vediamo ora però com'è fatto al suo interno un decoder. Abbiamo già visto com
 
 Con i decoder possiamo scrivere qualsiasi funzione booleana a $n$ variabili nella forma SOP. Infatti, basta collegare in un \code{OR} tutti i mintermini che formano tale funzione. Vediamo ad esempio come rappresentare un full adder a 3 ingressi tramite un decoder. Ricordiamo che un full adder è un circuito combinatorio utilizzato per eseguire somme di bit.
 
-Abbiamo quindi due output da rappresentare: $S$ per la somma e $R$ per il riporto, con la seguente tabella della verità (avremo in questa tabella 0 per $S$ se la somma dei tre bit $n$ è $n\%2 = 0$ e 1 altrimenti, e 0 per $R$ se il riporto della somma dei tre bit è 0 e 1 altrimenti):
+Abbiamo quindi due output da rappresentare: $S$ per la somma e $R$ per il riporto, con la seguente tabella di verità (avremo in questa tabella 0 per $S$ se la somma dei tre bit $n$ è $n\%2 = 0$ e 1 altrimenti, e 0 per $R$ se il riporto della somma dei tre bit è 0 e 1 altrimenti):
 
 \[
 \begin{array}{ccc|cc|c}
@@ -1506,25 +1506,25 @@ Dunque troviamo che $S = \sum m(1,2,4,7)$ e $R = \sum m(3,5,6,7)$, che si traduc
 
 Passiamo ora allo studio di dispositivi più complessi, i cui collegamenti interni non sono sempre stabiliti a priori ma possono in alcuni casi essere \textbf{configurabili dall'utente}. Questi dispositivi prendono il nome di \textbf{dispositivi logici programmabili}. Vedremo due tipologie:
 \begin{itemize}
-    \item \textbf{PLAs} 
-    \item \textbf{FPGAs} (l'evoluzione dei PLAs)
+    \item \textbf{PLA} 
+    \item \textbf{FPGA} (l'evoluzione dei PLA)
 \end{itemize}
 
 \subsection{PLA}
 
 \begin{Definizione}[PLA]
 \label{def-PLA}
-I \textbf{PLA} (Programmable Logic Arrays) sono dispositivi logici programmabili che utilizzano un array di \code{AND} seguito da un array di \code{OR} per formare dei circuiti combinatori con connessioni interne fisse.
+I \textbf{PLA} (Programmable Logic Arrays) sono dispositivi logici programmabili che utilizzano un array di \code{AND} seguito da un array di \code{OR} per formare dei circuiti combinatori con una struttura interna fissa (un array di \code{AND} seguito da un array di \code{OR}), di cui si programmano solo i collegamenti.
 \end{Definizione}
 
-Un PLA ha $M$ input, $P$ output e $N$ implicanti rappresentabili (dunque non rappresentiamo tutti gli $2^M$ implicanti possibili, ma solo una certa porzione). Vediamo ad esempio una PLA che ha 3 input $A,B$ e $C$ e ha come output $X = \bar{A} \bar{B} C + A B \bar{C}$ e $Y = A\bar{B}$:
+Un PLA ha $M$ input, $P$ output e $N$ implicanti rappresentabili (dunque non rappresentiamo tutti i $2^M$ \textbf{mintermini} possibili, ma solo una certa porzione). Vediamo ad esempio un PLA che ha 3 input $A,B$ e $C$ e ha come output $X = \bar{A} \bar{B} C + A B \bar{C}$ e $Y = A\bar{B}$:
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.65\textwidth]{PLA Esempio.png}
 \end{figure}
 
-Esiste un altro modo più semplice per rappresentare una PLA che prende il nome di \textbf{dot notation}:
+Esiste un altro modo più semplice per rappresentare un PLA che prende il nome di \textbf{dot notation}:
 
 \begin{figure}[H]
 \centering
@@ -1533,7 +1533,7 @@ Esiste un altro modo più semplice per rappresentare una PLA che prende il nome 
 
 \begin{Osservazione}[]
 \label{oss-PLA}
-Nelle PLAs non conviene sempre \textbf{minimizzare} le SOP.
+Nei PLA non conviene sempre \textbf{minimizzare} le SOP.
 \end{Osservazione}
 
 Capiamo con un esempio perché. Prendiamo due funzioni a 3 input $X$ e $Y$, con $X = \sum m(3,5,6)$ e $Y = \sum m(3,5,6,7)$ e studiamone le rispettive mappe di Karnaugh:
@@ -1566,7 +1566,7 @@ Capiamo con un esempio perché. Prendiamo due funzioni a 3 input $X$ e $Y$, con 
 \end{tabular}
 \end{minipage}
 
-Notiamo che possiamo minimizzare $Y$ da $\bar{A} BC + AB \bar{C} + ABC + A \bar{B} C$ a $BC + AC + AB$, lasciando invece $X$ invariato come $\bar{A} BC + AB \bar{C} + A \bar{B} C$. Minimizzando $Y$, però, stiamo creando 3 nuovi invarianti da rappresentare, quando prima invece ne avevamo già 3 in comune con $X$. In questo modo, al posto di rappresentare $X$ e $Y$ con un totale di 4 invarianti li staremmo rappresentando con un totale di 6 invarianti, peggiorando di fatto la situazione.
+Notiamo che possiamo minimizzare $Y$ da $\bar{A} BC + AB \bar{C} + ABC + A \bar{B} C$ a $BC + AC + AB$, lasciando invece $X$ invariato come $\bar{A} BC + AB \bar{C} + A \bar{B} C$. Minimizzando $Y$, però, stiamo creando 3 nuovi implicanti da rappresentare, quando prima invece ne avevamo già 3 in comune con $X$. In questo modo, al posto di rappresentare $X$ e $Y$ con un totale di 4 implicanti li staremmo rappresentando con un totale di 6 implicanti, peggiorando di fatto la situazione.
 
 \subsection{FPGA}
 
@@ -1579,10 +1579,10 @@ I LE (ossia gli elementi logici) sono composti da:
 \begin{itemize}
     \item un \textbf{LUT}, che si occupa della logica combinatoria
     \item un \textbf{flip-flop}, che si occupa della logica sequenziale (che vedremo più avanti quando parleremo nel concreto di circuiti sequenziali)
-    \item un \textbf{MUX}, che collega i LUT alle flip-flops
+    \item un \textbf{MUX}, che collega i LUT ai flip-flop
 \end{itemize}
 
-Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta una funzione. Ad esempio, se vogliamo rappresentare la funzione $X = \bar{A} \bar{B} C + AB \bar{C}$, il LUT che useremo avrà una tabella della verità di questo tipo:
+Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta una funzione. Ad esempio, se vogliamo rappresentare la funzione $X = \bar{A} \bar{B} C + AB \bar{C}$, il LUT che useremo avrà una tabella di verità di questo tipo:
 
 \[
 \begin{array}{cccc|c}
@@ -1599,7 +1599,7 @@ Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta un
 \end{array}
 \]
 
-dove Data 4 indica il quarto ingresso non utilizzato, che può avere come valore fisso o un Don't Care o uno 0.
+dove Data 4 indica il quarto ingresso non utilizzato, che può essere un Don't Care oppure fissato a 0.
 
 \chapter{Circuiti sequenziali}
 
@@ -1610,14 +1610,14 @@ Abbiamo parlato fino ad ora di circuiti combinatori, che non avevano memoria. È
 Sappiamo già che i circuiti sequenziali sono dei circuiti logici che si differenziano dai circuiti combinatori per due motivi principali:
 \begin{itemize}
     \item hanno \textbf{memoria}
-    \item dipendono dall'\textbf{input di un utente}
+    \item il loro output dipende anche dagli \textbf{input passati}, e non solo da quelli correnti
 \end{itemize}
 
 Prima di poter parlare concretamente di circuiti sequenziali è importante però dare delle definizioni importanti:
 \begin{itemize}
     \item lo \textbf{stato} di un circuito sequenziale sono tutte le informazioni riguardo tale circuito necessarie per spiegarne il comportamento presente e futuro
-    \item i \textbf{latches} e i \textbf{flip-flops} sono degli elementi di stato che salvano un bit di stato
-    \item i circuiti \textbf{sequenziali sincroni} sono circuiti combinatori seguiti da un banco di flip flops
+    \item i \textbf{latch} e i \textbf{flip-flop} sono degli elementi di stato che salvano un bit di stato
+    \item i circuiti \textbf{sequenziali sincroni} sono circuiti combinatori seguiti da un banco di flip-flop
 \end{itemize}
 
 \section{Elementi di stato}
@@ -1640,7 +1640,7 @@ Vedremo quattro elementi di stato:
 
 \begin{Definizione}[Circuito bistabile]
 \label{def-circuito-bistabile}
-Un \textbf{circuito bistabile} è un circuito \textit{stabile} con, nella forma base, due output e nessun input.
+Un \textbf{circuito bistabile} è un circuito con \textbf{due stati stabili} ($Q = 0$ oppure $Q = 1$) che, nella forma base, ha due output e nessun input.
 \end{Definizione}
 
 \begin{figure}[H]
@@ -1649,14 +1649,14 @@ Un \textbf{circuito bistabile} è un circuito \textit{stabile} con, nella forma 
 \caption{Due rappresentazioni interne di un circuito bistabile}
 \end{figure}
 
-Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, se in qualche modo riuscissimo a modificare il valore di $Q$ e metterlo a $0$ ad esempio, questo rimarebbe sempre a $0$ non cambierebbe mai, e stessa cosa se lo mettessimo a $1$. Un circuito che invece non è stabile è ad esempio il circuito \textbf{astabile}:
+Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, se in qualche modo riuscissimo a modificare il valore di $Q$ e metterlo a $0$ ad esempio, questo rimarrebbe sempre a $0$ e non cambierebbe mai, e stessa cosa se lo mettessimo a $1$. Un circuito che invece non è stabile è ad esempio il circuito \textbf{astabile}:
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.4\textwidth]{Astabile.png}
 \end{figure}
 
-Qui il valore di $Q$ cambia ad ogni \textbf{ciclo}: se inizia con $0$, alla fine del primo ciclo avrà come valore $1$, e solo alla fine del secondo ciclo avrà di nuovo come valore $0$.
+Qui il valore all'interno del circuito cambia ad ogni \textbf{ciclo}: se inizia con $0$, alla fine del primo ciclo avrà come valore $1$, e solo alla fine del secondo ciclo avrà di nuovo come valore $0$.
 
 Tornando al circuito bistabile, c'è però un grosso problema: non è possibile modificare il valore salvato all'interno. Per questo motivo introduciamo dei nuovi circuiti chiamati \textbf{SR Latch}.
 
@@ -1731,7 +1731,7 @@ Rappresentiamo un D Latch tramite un rettangolo con a sinistra l'input $D$, in a
 \includegraphics[width=0.6\textwidth, valign=t]{D Latch rappresentazione.png}
 \end{minipage}
 
-Dei D latch studiamo anche la \textbf{forma d'onda}: in poche parole, la forma d'onda di un D latch è una rappresentazione grafica del latch, tramite delle linee che rappresentano i valori dei vari input/out. Una linea in alto a una variabile indica che il valore di quella variabile in quell'istante di tempo è 1, in basso indica che è 0, e se è sia in alto che in basso indica che il valore non si conosce.
+Dei D latch studiamo anche la \textbf{forma d'onda}: in poche parole, la forma d'onda di un D latch è una rappresentazione grafica del latch, tramite delle linee che rappresentano i valori dei vari input/output. Una linea in alto a una variabile indica che il valore di quella variabile in quell'istante di tempo è 1, in basso indica che è 0, e se è sia in alto che in basso indica che il valore non si conosce.
 
 \begin{figure}[H]
 \centering
@@ -1740,7 +1740,7 @@ Dei D latch studiamo anche la \textbf{forma d'onda}: in poche parole, la forma d
 \label{fig-forma-d-onda-d-latch}
 \end{figure}
 
-Inizialmente, quando $CLK = 0$, il valore $Q$ è un valore sconosciuto. Quando poi $CLK$ diventa $1$, con un po di ritardo (ricordiamo che questi circuiti nella realtà non possono essere istantanei, ma hanno tutti un minimo di delay) $Q$ assume un valore definito, pari a $D$, ossia in questo caso 0. Quando $D$ diventa pari a $1$, anche $Q$ cambia, ma non appena $CLK$ torna a essere $0$, $Q$ entra nella fase di \textit{hold}, rappresentata in figura dal quadrato rosso, nella quale non modifica più il proprio valore, anche se $D$ dovesse cambiare. Solo quando $CLK$ tornerà a valere 1 allora $Q$ cambierà nuovamente il proprio valore, che diventerà pari a $D$ ossia $0$.
+Inizialmente, quando $CLK = 0$, il valore $Q$ è un valore sconosciuto. Quando poi $CLK$ diventa $1$, con un po' di ritardo (ricordiamo che questi circuiti nella realtà non possono essere istantanei, ma hanno tutti un minimo di delay) $Q$ assume un valore definito, pari a $D$, ossia in questo caso 0. Quando $D$ diventa pari a $1$, anche $Q$ cambia, ma non appena $CLK$ torna a essere $0$, $Q$ entra nella fase di \textit{hold}, rappresentata in figura dal quadrato rosso, nella quale non modifica più il proprio valore, anche se $D$ dovesse cambiare. Solo quando $CLK$ tornerà a valere 1 allora $Q$ cambierà nuovamente il proprio valore, che diventerà pari a $D$ ossia $0$.
 
 \subsection{D Flip-Flop}
 
@@ -1756,8 +1756,8 @@ Un \textbf{D Flip-Flop} è un D Latch che modifica il valore di $Q$ solo quando 
 \label{fig-rappresentazione-flip-flop-interna}
 \end{figure}
 
-\NB $N$ è un nome intermedio che diamo a $Q$ all'interno del circuito per comodità, ma rimane sempre $Q$. \\
-Il primo Flip-Flop viene detto \textit{master} (o L1), mentre il secondo \textit{slave} (o L2). Per capire perché funziona, guardiamone al volo la tabella di verità:
+\NB $N$ è il nome che diamo all'uscita del primo D Latch (il master), per non confonderla con l'uscita $Q$ del Flip-Flop. \\
+Il primo D Latch viene detto \textit{master} (o L1), mentre il secondo \textit{slave} (o L2). Per capire perché funziona, guardiamone al volo la tabella di verità:
 
 
 \[
@@ -1780,7 +1780,7 @@ Rappresentiamo un D Flip-Flop come un D Latch ma con un triangolo in alto al pos
 \includegraphics[width=0.6\textwidth, valign=t]{D Flip Flop.png}
 \end{minipage}
 
-Anche dei D FLip-Flop studiamo le forme d'onda. Vediamo un esempio come abbiamo fatto con i D Latch:
+Anche dei D Flip-Flop studiamo le forme d'onda. Vediamo un esempio come abbiamo fatto con i D Latch:
 
 \begin{figure}[H]
 \centering
@@ -1799,7 +1799,7 @@ Un \textbf{registro} è un gruppo di D Flip-Flop collegati in parallelo e sincro
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{Registro Flip Flop.png}
-\caption{Un registro, a sinistra rappersentato con 4 Flip-Flop in parallelo, a destra come un unico blocco}
+\caption{Un registro, a sinistra rappresentato con 4 Flip-Flop in parallelo, a destra come un unico blocco}
 \label{fig-registro-flip-flop}
 \end{figure}
 
@@ -1809,7 +1809,7 @@ Esistono infine anche i D Flip-Flop \textbf{con enable} (e reset), che  non sono
     \item Il reset \textbf{asincrono} invece azzera \textbf{subito} $Q$, portandolo a 0 ignorando completamente il $CLK$.
 \end{itemize}
 
-Per quanto riguarda l'implementazione, l'input $EN$ è molto semplice: basta mettere in \code{AND} questo input e il $CLK$. In questo modo, se $E = 0$ avremo sempre $CLK \ \code{AND} \ E = 0$, mentre se $E = 1$ avremo $CLK \ \code{AND} \ E = CLK$, trovadonci quindi nella situazione di un Flip-Flop normale. Oltre all'\code{AND}, esiste un altro modo per implementare l'enable, più consigliato perché non va a toccare il $CL$: un MUX. Banalmente, basta usare $EN$ come bit di selezione, e avere in input $Q_{\text{prev}}$ quando $EN = 0$ e $D$ quando $EN = 1$. Troviamo quindi il seguente circuito:
+Per quanto riguarda l'implementazione, l'input $EN$ è molto semplice: basta mettere in \code{AND} questo input e il $CLK$. In questo modo, se $E = 0$ avremo sempre $CLK \ \code{AND} \ E = 0$, mentre se $E = 1$ avremo $CLK \ \code{AND} \ E = CLK$, trovandoci quindi nella situazione di un Flip-Flop normale. Oltre all'\code{AND}, esiste un altro modo per implementare l'enable, più consigliato perché non va a toccare il $CLK$: un MUX. Banalmente, basta usare $EN$ come bit di selezione, e avere in input $Q_{\text{prev}}$ quando $EN = 0$ e $D$ quando $EN = 1$. Troviamo quindi il seguente circuito:
 
 \begin{figure}[H]
 \centering
@@ -1827,7 +1827,7 @@ Per quanto riguarda l'input $RESET$ abbiamo sempre due casi. Per un reset sincro
 \label{fig-flip-flop-reset-sincrono}
 \end{figure}
 
-Il caso del reset asincorno, invece, non lo vediamo.
+Il caso del reset asincrono, invece, non lo vediamo.
 
 \begin{minipage}[c]{0.50\textwidth}
 Rappresentiamo un Flip-Flop con enable e reset come un Flip-Flop con la scritta EN e RESET (o anche solo R) in basso e senza evidenziare la variabile $\bar{Q}$ (per rappresentare un Flip-Flop con solo enable o solo reset basta scrivere solo uno dei due nomi).
@@ -1846,7 +1846,7 @@ I Flip-Flop con enable sono fondamentali e molto utilizzati per i registri. Infa
 
 rappresenta un registro con enable e reset (\NB le linee più spesse rappresentano Flip-Flop in parallelo).
 
-Oltre ai D Flip-Flop con reset esistono anche i Flip-Flop con \textbf{set}. Questo lavora all'opposto del reset, dunque quando $SET = 1$ non abbiamo $Q = 0$ ma $Q = 1$. In un Flip-Flop si può usare un reset o un set, non fa differenza perché entrambi hanno lo stesso obiettivo, ossia portare $Q$ a uno stato noto. 
+Oltre ai D Flip-Flop con reset esistono anche i Flip-Flop con \textbf{set}. Questo lavora all'opposto del reset, dunque quando $SET = 1$ non abbiamo $Q = 0$ ma $Q = 1$. In un Flip-Flop si può usare un reset o un set: entrambi servono a portare $Q$ a uno stato noto, ma il reset lo porta a 0 e il set a 1, quindi si sceglie quello che porta allo stato iniziale desiderato. 
 
 \subsection{Altri Flip-Flop}
 
@@ -1884,7 +1884,7 @@ Un \textbf{JK Flip-Flop} è un D Flip-Flop che ha, oltre al $CLK$, altri due inp
     \item Se $J = 0$ e $K = 0$ allora $Q = Q_{\text{prev}}$
     \item Se $J = 0$ e $K = 1$ allora $Q = 0$
     \item Se $J = 1$ e $K = 0$ allora $Q = 1$
-    \item Se $J = 1$ e $K = 1$ allora $Q = \bar{Q_{\text{prev}}}$
+    \item Se $J = 1$ e $K = 1$ allora $Q = \bar{Q}_{\text{prev}}$
 \end{itemize}
 \end{Definizione}
 
@@ -1896,14 +1896,14 @@ Un \textbf{JK Flip-Flop} è un D Flip-Flop che ha, oltre al $CLK$, altri due inp
 \end{figure}
 
 \begin{minipage}[c]{0.55\textwidth}
-Rappresentiamo un JK Flip-Flop come un D-Flip-Flop ma con in ingresso $J$ e $K$.
+Rappresentiamo un JK Flip-Flop come un D Flip-Flop ma con in ingresso $J$ e $K$.
 \end{minipage}\hfill
 \begin{minipage}[c]{0.40\textwidth}
 \centering
 \includegraphics[width=1\textwidth, valign=t]{JK FlipFlop rappresentazione.png}
 \end{minipage}
 
-Comunque, quando parleremo di Flip-Flop senza specificare ci riferiremo sempre a un D-Flip-Flop.
+Comunque, quando parleremo di Flip-Flop senza specificare ci riferiremo sempre a un D Flip-Flop.
 
 \section{Progettazione logica sequenziale sincrona}
 
@@ -1925,14 +1925,14 @@ La \textbf{progettazione logica sequenziale sincrona} è una metodologia di cost
 Esistono due tipi di circuiti sequenziali sincroni:
 \begin{itemize}
     \item \textbf{FSM} 
-    \item \textbf{Pipelines}
+    \item \textbf{Pipeline}
 \end{itemize}
 
 \subsection{FSM}
 
 \begin{Definizione}[FSM]
-\label{det-FSM}
-Una \textbf{FSM} (Finite State Machines, o Macchina a Stati Finiti) è un circuito sequenziale sincrono con due circuiti combionatori:
+\label{def-FSM}
+Una \textbf{FSM} (Finite State Machine, o Macchina a Stati Finiti) è un circuito sequenziale sincrono con due circuiti combinatori:
 \begin{itemize}
     \item Il primo circuito combinatorio si occupa di generare il \textbf{prossimo stato} del registro, e prende il nome di \textbf{Next State Logic}
     \item Il secondo circuito combinatorio si occupa di generare gli \textbf{output} del circuito sequenziale, e prende il nome di \textbf{Output Logic}
@@ -1949,7 +1949,7 @@ Per capire bene questi circuiti sequenziali sincroni la cosa migliore è fare qu
 
 \subsubsection*{Moore FSM}
 
-Ipotizziamo quindi di voler rappresentare un semaforo all'incrocio tra due strade: $A$ e $B$. Prendiamo quindi in input $T_A$ e $T_B$, che valgono $1$ se c'è traffico nella loro strada e $0$ se non c'è, e mandiamo in output $L_A$ e $L_B$, che rappresentano la luce del semaforo sulla rispettiva strada (vedremo dopo come rappresentare i vari colori in binario). Vogliamo che, se c'è traffico sulla strada con la luce attuale rossa e non c'è traffico sulla strada con la luce attuale verde, i semafori si invertano, passando prima dal verde al giallo e poi dal giallo al rosso e dal rosso al verde. Ipotizziamo poi di avere un $RESET$ che ci riporti allo stato noto $L_A = \text{Verde}$ e $L_B = \text{Rosso}$. 
+Ipotizziamo quindi di voler rappresentare un semaforo all'incrocio tra due strade: $A$ e $B$. Prendiamo quindi in input $T_A$ e $T_B$, che valgono $1$ se c'è traffico nella loro strada e $0$ se non c'è, e mandiamo in output $L_A$ e $L_B$, che rappresentano la luce del semaforo sulla rispettiva strada (vedremo dopo come rappresentare i vari colori in binario). Vogliamo che, quando non c'è più traffico sulla strada con la luce attuale verde, i semafori si invertano, passando prima dal verde al giallo e poi dal giallo al rosso e dal rosso al verde. Ipotizziamo poi di avere un $RESET$ che ci riporti allo stato noto $L_A = \text{Verde}$ e $L_B = \text{Rosso}$. 
 
 Creiamo per questo esempio una Moore FSM. Per farla, utilizziamo dei cerchi, che rappresentano i vari stati del circuito, e degli archi, che indicano le transizioni da uno stato a un altro. In questo caso avremo una FSM di questo tipo:
 
@@ -1962,7 +1962,7 @@ Creiamo per questo esempio una Moore FSM. Per farla, utilizziamo dei cerchi, che
 \includegraphics[width=1\textwidth, valign=t]{Semafori FSM 2.png}
 \end{minipage}
 
-\NB Abbiamo due rappresentazioni del tutto equivalenti qui, ma per comodità useremo spesso la 1°, con $T_A$ e $T_B$ scritti in modo esplcito.
+\NB Abbiamo due rappresentazioni del tutto equivalenti qui, ma per comodità useremo spesso la 1°, con $T_A$ e $T_B$ scritti in modo esplicito.
 
 Vediamo ora la \textbf{tabella di transizione degli stati}, ossia la tabella che, preso uno stato di partenza e degli input, ci dice quale sarà il prossimo stato (stiamo quindi scrivendo in tabella la logica del circuito combinatorio next state).
 
@@ -2044,11 +2044,11 @@ Per questo esempio scegliamo di usare la codifica binaria. Riscriviamo dunque la
   \end{tabular}
 \end{table}
 
-\NB Abbiamo usato in questo caso $Q_i$ e $D_i$ al posto di $S_i$ e $S_i'$ per maggiore chiarezza, ma è possibile scriverlo in entrambi i modi.
+\NB Abbiamo usato in questo caso $Q_i$ e $D_i$ al posto di $S_i$ e $S_i'$, ma è possibile scriverlo un po' come si vuole. Ad esempio, avremmo anche potuto scrivere $Q_i$ e $Q_i'$, ma l'importante è che lo schema rimanga chiaro.
 
 Troviamo quindi che \mbox{$D_1 = \bar{Q_1} Q_0 + Q_1 \bar{Q_0} \bar{T_B} + Q_1 \bar{Q_0} T_B = \bar{Q_1} Q_0 + Q_1 \bar{Q_0} = Q_1 \oplus Q_0 $}, e che \mbox{$D_0 = \bar{Q_1} \bar{Q_0} \bar{T_A} + Q_1 \bar{Q_0} \bar{T_B}$}.
 
-Vediamo ora invece la \textbf{tabella degli ouput}:
+Vediamo ora invece la \textbf{tabella degli output}:
 
 \begin{table}[H]
   \centering
@@ -2128,13 +2128,13 @@ Ipotizzando ora di avere un $CLK$ con un periodo di $5$ secondi, vediamo come si
 \includegraphics[width=1\textwidth]{Diagramma semafori.png}
 \end{figure}
 
-Notiamo come $S$ cambi solo in corrispondenza di un $RESET = 1$ o di una salita del $CLK$, mentre $S'$ cambia subito in base agli input. Questo ha super senso: infatti $S'$ è l'output del Next State Logic, ossia di un circuito combinatorio, mentre $S$ è l'output del registro, ossia di tanti D Flip-Flop. $L_A$ e $L_B$, invece, cambiano appena $S$ cambia, in modo istantaneo senza aspettare il $CLK$, dato che anche loro fanno parte di un circuito combinatorio, ossia l'Output Logic.
+Notiamo come $S$ cambi solo in corrispondenza di un $RESET = 1$ o di una salita del $CLK$, mentre $S'$ cambia subito in base agli input. Questo ha perfettamente senso: infatti $S'$ è l'output del Next State Logic, ossia di un circuito combinatorio, mentre $S$ è l'output del registro, ossia di tanti D Flip-Flop. $L_A$ e $L_B$, invece, cambiano appena $S$ cambia, in modo istantaneo senza aspettare il $CLK$, dato che anche loro fanno parte di un circuito combinatorio, ossia l'Output Logic.
 
 \subsubsection*{Mealy FSM}
 
 Vediamo ora un altro esempio. Ipotizziamo di avere una sequenza lunghissima di $1$ e $0$, e di voler restituire in output $1$ se gli ultimi due numeri letti sono, nell'ordine, $01$, e restituire $0$ se invece non lo sono. 
 
-Creiamo per questo esempio una Mealy FSM. Per farla, utilizziamo sempre dei cerchi per i vari stati e degli archi per le varie transizioni. La differenza maggiore con un Moore FSM è che qui ogni stato non ha un output prestabilito, dato che questo dipende anche dagli input. Dunque, su ogni arco, dobbiamo scrivere non solo gli input che ci portano a percorrere quell'arco ma anche l'output che ne fuoriesce. Tutto ciò si traduce quindi in questo schema:
+Creiamo per questo esempio una Mealy FSM. Per farla, utilizziamo sempre dei cerchi per i vari stati e degli archi per le varie transizioni. La differenza maggiore con una Moore FSM è che qui ogni stato non ha un output prestabilito, dato che questo dipende anche dagli input. Dunque, su ogni arco, dobbiamo scrivere non solo gli input che ci portano a percorrere quell'arco ma anche l'output che ne fuoriesce. Tutto ciò si traduce quindi in questo schema:
 
 \begin{minipage}[c]{0.45\textwidth}
 \centering
@@ -2171,7 +2171,7 @@ Dunque troviamo $S' = \bar{S} \bar{X} + S \bar{X} = \bar{X}$ e $Y = SX$, che si 
 \includegraphics[width=0.6\textwidth]{Schema Mealy.png}
 \end{figure}
 
-Questo stesso esempio avremmo potuto risolverlo con un Moore FSM, in questo modo:
+Questo stesso esempio avremmo potuto risolverlo con una Moore FSM, in questo modo:
 
 \begin{figure}[H]
 \centering
@@ -2180,7 +2180,7 @@ Questo stesso esempio avremmo potuto risolverlo con un Moore FSM, in questo modo
 
 \begin{Proposizione}[]
 \label{propos-moore-mealy}
-Un circuito sequenziale sincrono può sempre essere rappresentato con una FSM Moore o Mealy, ma quella Mealy avrà sempre \textbf{meno stati}.
+Un circuito sequenziale sincrono può sempre essere rappresentato con una FSM Moore o Mealy, ma quella Mealy avrà sempre un numero di stati \textbf{minore o uguale}.
 \end{Proposizione}
 
 Ipotizzando di avere sempre un $CLK$ con un periodo di 5 secondi, vediamo come si muovono i due circuiti Moore e Mealy:
@@ -2190,8 +2190,201 @@ Ipotizzando di avere sempre un $CLK$ con un periodo di 5 secondi, vediamo come s
 \includegraphics[width=1\textwidth]{Tempo Lumaca.png}
 \end{figure}
 
-Notiamo una cosa importante: in Moore, $Y$ cambia solo quando abbiamo una salita nel $CLK$, mentre in Mealy cambia subito, non appena l'input passa da $0$ a $1$. Per questo motivo, a volte si potrebbe preferire usare uno o l'altro: se magari si vuole un sistema più controllato, Moore è la scelta corretta, mentre se si vuole precisione quasi istantanea meglio Mealy.
+Notiamo una cosa importante: in Moore, $Y$ cambia solo quando abbiamo una salita nel $CLK$, mentre in Mealy cambia subito, non appena l'input passa da $0$ a $1$. Per questo motivo, a volte si potrebbe preferire usare uno o l'altro: se magari si vuole un sistema più controllato, Moore è la scelta corretta, mentre se si vuole precisione quasi istantanea meglio Mealy. \\
+\NB È comunque sempre possibile avere anche in un circuito Mealy delle uscite registrate (ossia uscite che passano per un Flip-Flop e quindi cambiano solo in corrispondenza della salita del $CLK$) tramite l'utilizzo di un ulteriore Flip-Flop.
 
+\subsubsection*{Passare da Moore a Mealy e da Mealy a Moore}
+
+Vediamo ora un concetto molto importante già anticipato dalla Proposizione \ref{propos-moore-mealy}, ossia che, presa una macchina di Moore, è sempre possibile passare a una macchina di Mealy, e viceversa.
+
+\begin{minipage}[c]{0.60\textwidth}
+Per passare da Moore a Mealy basta spostare gli output dagli stati alle transizioni, mentre per passare da Mealy a Moore il procedimento è l'opposto: si spostano gli output dalle transizioni agli stati, sdoppiando uno stato quando le sue transizioni entranti hanno output diversi. 
+Abbiamo qui anche una dimostrazione visiva della Proposizione \ref{propos-moore-mealy}: infatti notiamo come, passando da Moore a Mealy, sia possibile accorpare due stati in uno solo.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Moore to Mealy.png}
+\end{minipage}
+
+\subsubsection*{Esempio di FSM}
+
+Prima di vedere un altro esempio di FSM, diamo una definizione che ci tornerà utile tra poco.
+
+\begin{Definizione}[Stati irraggiungibili]
+\label{def-stati-irraggiungibili}
+Uno stato di una FSM è detto \textbf{irraggiungibile} se questo non è raggiungibile attraverso nessuna sequenza di input.
+\end{Definizione}
+
+Ipotizziamo ora di voler progettare un circuito sequenziale con un ingresso $X$ e due uscite $Z_1$ e $Z_0$. Consideriamo $s$ la sequenza costituita dagli ultimi tre bit in input di $X$. L'uscita $Z_1$ deve valere $1$ se $s$, considerato come un valore in Ca2 (complemento a 2), è un valore negativo dispari, mentre l'uscita $Z_0$ deve valere $1$ se $s$, considerato come un valore in base 2, è un multiplo di 3. Consideriamo anche eventuali sovrapposizioni. Cerchiamo quindi di creare una macchina di Mealy (utilizzeremo quasi sempre Mealy se non è esplicitamente richiesto di usare Moore) che risolva questo problema. 
+
+Per prima cosa, dobbiamo capire quali sequenze di bit facciano valere $Z_1 = 1$ e quali $Z_0 = 1$. Concentriamoci prima su $Z_1$. Tutti i numeri negativi in complemento a 2 hanno il primo bit pari a $1$, dunque non ci resta che verificare quali numeri tra $100, 101, 110$ e $111$ siano dispari. Troviamo quindi che $Z_1 = 1 \iff s = 101$ o $s = 111$. Passando ora a $Z_0$, dato che i multipli di 3 minori di 8 sono solo $0,3,6$ troviamo che $Z_0 = 1 \iff s = 000$ o $s = 011$ o $s = 110$.
+
+Ora che abbiamo trovato quando $Z_1 = 1$ e quando $Z_0 = 1$, possiamo realizzare la corrispondente Mealy FSM (l'ordine degli output è ovviamente $Z_1, Z_0$):
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Esempio 1 Mealy.png}
+\end{figure}
+
+Abbiamo in totale 7 stati: 1 di reset, quando $s$ è vuota, 2 quando la sequenza ha solo un bit, e 4 quando la sequenza ha 2 bit. I primi 3 stati servono solo per arrivare agli ultimi 4, i quali ci forniranno tutti i valori fino a quando la sequenza non finirà. Utilizziamo per rappresentare questi stati una codifica binaria:
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Stato} & \textbf{Codifica} \\
+    \hline
+    $R$ & $001$ \\
+    $S_{x0}$ & $010$ \\
+    $S_{x1}$ & $011$ \\
+    $S_{00}$ & $100$ \\
+    $S_{01}$ & $101$ \\
+    $S_{10}$ & $110$ \\
+    $S_{11}$ & $111$ \\ \hline
+  \end{tabular}
+\end{table}
+
+Partiamo da $001$ e non da $000$ per un motivo molto semplice: in questo modo, gli ultimi 4 stati partono tutti con un 1, e i loro ultimi 2 bit equivalgono agli ultimi due bit della sequenza quando ci troviamo in quello stato. \\
+Vediamo ora la tabella degli stati e degli output:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{4}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{4}{|c|}{\textbf{Stato successivo}} & \multicolumn{2}{|c|}{\textbf{Output}} \\
+    \hline
+    \textbf{Stato} & $Q_2$ & $Q_1$ & $Q_0$ & $X$ & \textbf{Stato} & $Q_2'$ & $Q_1'$ & $Q_0'$ & $Z_1$ & $Z_0$ \\ \hline
+    $R$ & $0$ & $0$ & $1$ & $0$ & $S_{x0}$ & $0$ & $1$ & $0$ & $0$ & $0$ \\
+    $R$ & $0$ & $0$ & $1$ & $1$ & $S_{x1}$ & $0$ & $1$ & $1$ & $0$ & $0$ \\
+    $S_{x0}$ & $0$ & $1$ & $0$ & $0$ & $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $0$ \\
+    $S_{x0}$ & $0$ & $1$ & $0$ & $1$ & $S_{01}$ & $1$ & $0$ & $1$ & $0$ & $0$ \\
+    $S_{x1}$ & $0$ & $1$ & $1$ & $0$ & $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $0$ \\
+    $S_{x1}$ & $0$ & $1$ & $1$ & $1$ & $S_{11}$ & $1$ & $1$ & $1$ & $0$ & $0$ \\
+    $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $1$ \\
+    $S_{00}$ & $1$ & $0$ & $0$ & $1$ & $S_{01}$ & $1$ & $0$ & $1$ & $0$ & $0$ \\
+    $S_{01}$ & $1$ & $0$ & $1$ & $0$ & $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $0$ \\
+    $S_{01}$ & $1$ & $0$ & $1$ & $1$ & $S_{11}$ & $1$ & $1$ & $1$ & $0$ & $1$ \\
+    $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $0$ \\
+    $S_{10}$ & $1$ & $1$ & $0$ & $1$ & $S_{01}$ & $1$ & $0$ & $1$ & $1$ & $0$ \\
+    $S_{11}$ & $1$ & $1$ & $1$ & $0$ & $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $1$ \\
+    $S_{11}$ & $1$ & $1$ & $1$ & $1$ & $S_{11}$ & $1$ & $1$ & $1$ & $1$ & $0$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Dunque troviamo:
+\begin{itemize}
+    \item $Q_0' = X$ (stiamo scorrendo il primo bit)
+    \item $Q_1' = Q_0$ (stiamo scorrendo il secondo bit)
+    \item $Q_2' = Q_2 + Q_1$ (stiamo scorrendo il terzo bit, ma controlliamo anche $Q_2$ perché se $Q_2 = 1$ allora anche $Q_2' = 1$, dato che $Q_2 = 1$ ci dice che siamo fuori dalla fase iniziale )
+    \item $Z_1 = Q_2 Q_1 \bar{Q_0}X + Q_2 Q_1 Q_0 X = Q_2 Q_1 X$ ($101$ o $111$ e $Q_2 = 1$ che ci dice che siamo fuori dalla fase iniziale)
+    \item $Z_0 = Q_2 \bar{Q_1} \bar{Q_0} \bar{X} + Q_2 \bar{Q_1} Q_0 X + Q_2 Q_1 Q_0 \bar{X}$ ($000$ o $011$ o $110$  e $Q_2 = 1$ che ci dice che siamo fuori dalla fase iniziale)
+\end{itemize}
+
+Il circuito risultante sarà quindi il seguente:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Circuito Esempio Mealy.png}
+\end{figure}
+
+Riprendiamo ora questo esempio e modifichiamolo leggermente. Vogliamo ora trascurare i primi due output, ossia quelli che restituiscono sempre 0 perché $s$ non è ancora formata da 3 bit. 
+
+Al posto di rifare tutto il circuito di Mealy da capo, notiamo che ci basta prendere il circuito precedente ed eliminargli i primi 3 stati, in questo modo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Mealy Esempio due.png}
+\end{figure}
+
+Abbiamo quindi reso gli stati $R, S_{x0}$ e $S_{x1}$ \textbf{irraggiungibili}. A questo punto anche le codifiche e la tabella degli stati e degli output possiamo riprenderle da quelle già fatte, eliminando di fatto un bit per la codifica portandola a una codifica a soli due bit:
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{3}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{3}{|c|}{\textbf{Stato successivo}} & \multicolumn{2}{|c|}{\textbf{Output}} \\
+    \hline
+    \textbf{Stato} &  $Q_1$ & $Q_0$ & $X$ & \textbf{Stato} & $Q_1'$ & $Q_0'$ & $Z_1$ & $Z_0$ \\ \hline
+    $S_{00}$ & $0$ & $0$ & $0$ & $S_{00}$ & $0$ & $0$ & $0$ & $1$ \\
+    $S_{00}$ & $0$ & $0$ & $1$ & $S_{01}$ & $0$ & $1$ & $0$ & $0$ \\
+    $S_{01}$ & $0$ & $1$ & $0$ & $S_{10}$ & $1$ & $0$ & $0$ & $0$ \\
+    $S_{01}$ & $0$ & $1$ & $1$ & $S_{11}$ & $1$ & $1$ & $0$ & $1$ \\
+    $S_{10}$ & $1$ & $0$ & $0$ & $S_{00}$ & $0$ & $0$ & $0$ & $0$ \\
+    $S_{10}$ & $1$ & $0$ & $1$ & $S_{01}$ & $0$ & $1$ & $1$ & $0$ \\
+    $S_{11}$ & $1$ & $1$ & $0$ & $S_{10}$ & $1$ & $0$ & $0$ & $1$ \\
+    $S_{11}$ & $1$ & $1$ & $1$ & $S_{11}$ & $1$ & $1$ & $1$ & $0$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Anche i valori dei bit di stato e gli output sono identici a prima, ma senza $Q_2$:
+
+\begin{itemize}
+    \item $Q_0' = X$
+    \item $Q_1' = Q_0$
+    \item $Z_1 = Q_1 \bar{Q_0}X + Q_1 Q_0 X = Q_1 X$ ($101$ o $111$)
+    \item $Z_0 = \bar{Q_1} \bar{Q_0} \bar{X} + \bar{Q_1} Q_0 X + Q_1 Q_0 \bar{X}$ ($000$ o $011$ o $110$)
+\end{itemize}
+
+Troviamo quindi il seguente circuito:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Circuito Mealy Esempio 2.png}
+\end{figure}
+
+Consideriamo ora il caso in cui i primi due output non sono trascurati ma le sovrapposizioni non sono ammesse. Ciò significa che i simboli che hanno completato una sequenza non possono essere riutilizzati come inizio della sequenza successiva. In pratica, ogni volta che viene riconosciuta una sequenza (cioè l'uscita diventa $Z_1 = 1$ oppure $Z_0 = 1$), la macchina deve ripartire da zero, tornando allo stato iniziale $R$, come se non avesse letto nulla.
+
+Possiamo anche qui riprendere il primo schema Mealy e mandare tutte le transizioni che hanno un $1$ tra gli output allo stato $R$, in questo modo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Mealy Esempio 3.png}
+\end{figure}
+
+Anche per la tabella degli stati e degli output possiamo prendere quella già fatta all'inizio, modificando lo stato successivo di ogni riga che ha un output pari a 1 con il valore $001$, che si riferisce proprio allo stato $R$: \nopagebreak
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{4}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{4}{|c|}{\textbf{Stato successivo}} & \multicolumn{2}{|c|}{\textbf{Output}} \\
+    \hline
+    \textbf{Stato} & $Q_2$ & $Q_1$ & $Q_0$ & $X$ & \textbf{Stato} & $Q_2'$ & $Q_1'$ & $Q_0'$ & $Z_1$ & $Z_0$ \\ \hline
+    $R$ & $0$ & $0$ & $1$ & $0$ & $S_{x0}$ & $0$ & $1$ & $0$ & $0$ & $0$ \\
+    $R$ & $0$ & $0$ & $1$ & $1$ & $S_{x1}$ & $0$ & $1$ & $1$ & $0$ & $0$ \\
+    $S_{x0}$ & $0$ & $1$ & $0$ & $0$ & $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $0$ \\
+    $S_{x0}$ & $0$ & $1$ & $0$ & $1$ & $S_{01}$ & $1$ & $0$ & $1$ & $0$ & $0$ \\
+    $S_{x1}$ & $0$ & $1$ & $1$ & $0$ & $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $0$ \\
+    $S_{x1}$ & $0$ & $1$ & $1$ & $1$ & $S_{11}$ & $1$ & $1$ & $1$ & $0$ & $0$ \\
+    $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $R$ & $0$ & $0$ & $1$ & $0$ & $1$ \\
+    $S_{00}$ & $1$ & $0$ & $0$ & $1$ & $S_{01}$ & $1$ & $0$ & $1$ & $0$ & $0$ \\
+    $S_{01}$ & $1$ & $0$ & $1$ & $0$ & $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $0$ \\
+    $S_{01}$ & $1$ & $0$ & $1$ & $1$ & $R$ & $0$ & $0$ & $1$ & $0$ & $1$ \\
+    $S_{10}$ & $1$ & $1$ & $0$ & $0$ & $S_{00}$ & $1$ & $0$ & $0$ & $0$ & $0$ \\
+    $S_{10}$ & $1$ & $1$ & $0$ & $1$ & $R$ & $0$ & $0$ & $1$ & $1$ & $0$ \\
+    $S_{11}$ & $1$ & $1$ & $1$ & $0$ & $R$ & $0$ & $0$ & $1$ & $0$ & $1$ \\
+    $S_{11}$ & $1$ & $1$ & $1$ & $1$ & $R$ & $0$ & $0$ & $1$ & $1$ & $0$ \\
+    \hline
+  \end{tabular}
+\end{table}
+
+I valori dei bit di stato cambiano leggermente, mentre gli output rimangono ovviamente identici:
+\begin{itemize}
+    \item $Q_0' = X + \bar{Q_1} \bar{Q_0} + Q_2 Q_1 Q_0$
+    \item $Q_1' = \bar{Q_2} Q_0 + \bar{Q_1} Q_0 \bar{X}$ 
+    \item $Q_2' = \bar{Q_2} Q_1 + \bar{Q_1} \bar{Q_0} X + Q_2 \bar{Q_1} Q_0 \bar{X} + Q_1 \bar{Q_0} \bar{X}$
+    \item $Z_1 = Q_2 Q_1 X$ 
+    \item $Z_0 = Q_2 \bar{Q_1} \bar{Q_0} \bar{X} + Q_2 \bar{Q_1} Q_0 X + Q_2 Q_1 Q_0 \bar{X}$ 
+\end{itemize} 
+
+Troviamo quindi il seguente circuito:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Circuito esempio 3.png}
+\end{figure}
 
 
 
