@@ -57,10 +57,10 @@ Conoscendo solo alcune potenze di 2, è possibile approssimare i valori di molte
 
 \begin{Definizione}[Definizioni sistema binario]
 \label{def-definizioni-sistema-binario}
-Nel sistema binario, chiamiamo \textbf{bit} le cifre dei numeri. Un \textbf{nibble}, poi, sono 4 bit mentre un \textbf{byte} sono 8 bit. Esistono poi il \textbf{most significant bit} e \textbf{least significant bit}, che sono rispettivamente il bit più a sinistra e più a destra, e il \textbf{most significant byte} e \textbf{least significant byte}, che sono rispettivamente il byte più a sinistra e più a destra.  
+Nel sistema binario, chiamiamo \textbf{bit} le cifre dei numeri. Un \textbf{nibble}, poi, sono 4 bit mentre un \textbf{byte} sono 8 bit. Esistono poi il \textbf{most significant bit} (msb) e \textbf{least significant bit} (lsb), che sono rispettivamente il bit più a sinistra e più a destra, e il \textbf{most significant byte} (MSB) e \textbf{least significant byte} (LSB), che sono rispettivamente il byte più a sinistra e più a destra.  
 \end{Definizione}
 
-Ad esempio, nel numero $1010101010$, il primo 1 è il MSB, mentre l'ultimo 0 è il LSB. Allo stesso modo, nel numero CEB48AE8 (rappresentato in esadecimale, dove ogni cifra rappresenta un nibble), il byte CE è il MSB, mentre il byte E8 è il LSB.
+Ad esempio, nel numero $1010101010$, il primo 1 è il msb, mentre l'ultimo 0 è il lsb. Allo stesso modo, nel numero CEB48AE8 (rappresentato in esadecimale, dove ogni cifra rappresenta un nibble), il byte CE è il MSB, mentre il byte E8 è il LSB.
 
 \subsection{Numeri col segno}
 
@@ -187,7 +187,7 @@ Un problema classico nelle addizioni tra numeri binari in un sistema digitale è
 \end{Osservazione}
 
 Ad esempio, se lavoriamo con numeri a 4 bit, la somma $1001 + 1000 = 10001$ sfora, creando diversi problemi. Infatti, con N bit abbiamo un range di numeri rappresentabili, da $0$ a $2^N-1$ (questo se parliamo di numeri senza segno).\\
-Vi sono due modi per risolvere questo problema:
+Ci sono due modi per risolvere questo problema, a seconda che il numero sia con o senza il segno:
 \begin{itemize}
     \item \textbf{Sign-Extension}
     \item \textbf{Zero-Extension}
@@ -198,11 +198,12 @@ Vi sono due modi per risolvere questo problema:
 La \textbf{sign-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero (in Complemento a 2) così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{ripetere il bit più significativo a sinistra fino ad arrivare al numero di bit desiderato} (noi raddoppieremo il numero di bit, così da esser coperti sia sulle addizioni che sulle moltiplicazioni, che vedremo tra poco).
 \end{Proprieta}
 
-Ad esempio, $3_{10} = 0011 = 00000011$, e $-5_{10} = 1011 = 11111011$. Questo con gli 0 ovviamente funziona, ma anche con gli 1: infatti, $-5 = 1011 = -8 + 2 + 1 = - 16 + 8 + 2 + 1 = -32 + 16 + 8 + 2 +1 = -64 + 32 + 16 + 8 + 2 + 1 = 11111011$. 
+Ad esempio, $3_{10} = 0011 = 00000011$, e $-5_{10} = 1011 = 11111011$. Questo con gli 0 ovviamente funziona, ma anche con gli 1: infatti,  $-5 = 1011 = -8 + 2 + 1 = -16 + 8 + 2 + 1 = -32 + 16 + 8 + 2 + 1 = -64 + 32 + 16 + 8 + 2 + 1 = -128 + 64 + 32 + 16 + 8 + 2 + 1 = 11111011$.
+
 
 \begin{Proprieta}[Zero-Extension]
 \label{zero-extension}
-La \textbf{zero-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{raddoppiare la lunghezza del numero aggiungendo tutti 0 a sinistra}.
+La \textbf{zero-extension} è un'operazione usata dai computer per aumentare il numero di bit di un numero così da poter completare somme su di esso che superino il limite di bit prestabilito. La regola è semplice: \textbf{aggiungere degli 0 a sinistra fino ad arrivare al numero di bit desiderato} (anche qui raddoppieremo il numero di bit).
 \end{Proprieta}
 Ad esempio, $3_{10} = 0011 = 00000011$ (come nella Sign-Extension). La Zero-Extension però \textbf{non funziona con i numeri col segno}. Infatti, $-5_{10} = 1011 \neq 00001011 = 11_{10}$. 
 
@@ -219,7 +220,7 @@ Anche le moltiplicazioni in binario e in esadecimale funzionano come in decimale
 \hline
 & & 0 & 1 & 1 & + \\
 & 0 & 0 & 0 & & + \\
-0 & 0 & 0 & & & + \\
+0 & 0 & 0 & & & = \\
 \hline
 0 & 0 & 0 & 1 & 1
 \end{array}
@@ -233,7 +234,7 @@ Anche le moltiplicazioni in binario e in esadecimale funzionano come in decimale
 \hline
 & & E & D & C & + \\
 2 & C & 9 & 4 & & + \\
-7 & 6 & E & & & + \\
+7 & 6 & E & & & = \\
 \hline
 A & 4 & 6 & 1 & C
 \end{array}
@@ -284,7 +285,7 @@ La rappresentazione a \textbf{virgola fissa} è una tecnica usata dai computer p
 
 Rappresentare $\bm{6.75}$ utilizzando \textbf{4 bit interi e 4 bit frazionari} (ossia per la parte decimale). \nopagebreak
 
-Sappiamo già che $6_{10} = 0110_2$. Per la parte decimale, abbiamo 4 cifre  che ci permettono di calcolare tutti i valori da 0 a 1 con salti di $1/16$. $0.75$ diventa quindi $1100$, dato che $1100 = 1 \cdot 2^{-1} + 1 \cdot 2^{-2} = 0.5 + 0.25 =  0.75$. Dunque troviamo che $\bm{6.75 = 01101100}$.
+Sappiamo già che $6_{10} = 0110_2$. Per la parte decimale, abbiamo 4 cifre  che ci permettono di calcolare tutti i valori da 0 a $15/16$ con salti di $1/16$. $0.75$ diventa quindi $1100$, dato che $1100 = 1 \cdot 2^{-1} + 1 \cdot 2^{-2} = 0.5 + 0.25 =  0.75$. Dunque troviamo che $\bm{6.75 = 01101100}$.
 
 In generale, per convertire da decimale a binario un numero con la virgola si possono usare entrambi i metodi già visti in precedenza, con una differenza per il 2° metodo: infatti, non dovremo più dividere per 2, ma dovremo moltiplicare la parte decimale per 2, e se questo numero è minore di uno allora segniamo 0, altrimenti segniamo 1 e sottraiamo 1 al valore ottenuto. Nell'esempio di prima, $0.75 \cdot 2 = 1.5 \geq 1$, dunque segniamo 1 e sottraiamo 1 ottenendo $0.5$. Ora, dato che $0.5 \cdot 2 = 1$, segniamo 1 e sottraiamo 1, ottenendo 0, dunque tutte le cifre rimanenti sono 0, e otteniamo quindi il valore $1100$.
 
@@ -1314,7 +1315,7 @@ A & B & C & Y \\
 \end{tabular}
 \end{minipage}
 
-Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, dunque non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ciò ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini cambiano di un solo bit, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{AND} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{OR} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equivale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}. Se invece volessimo rappresentarlo tramite un circuito a più livelli, potremmo trasformare questo \code{XOR} a 3 in due \code{XOR} a 2, e potremmo poi trasformare ogni \code{XOR} a 2 in un circuito a due livelli. Infatti, uno \code{XOR} a 2 può essere rappresentato da 2 \code{AND} e un \code{OR} (o viceversa), dunque avremmo un totale di \textbf{6} porte distribuite su 4 livelli, un netto miglioramento rispetto alle 11 viste prima. Si guadagna quindi a livello hardware ma si perde a livello di velocità, dato che appunto dobbiamo passare su più livelli. Questa differenza, che non sembra nemmeno così importante con uno \code{XOR} a 3 ingressi, diventa evidente in uno \code{XOR} a 8 ingressi, dove servono $2^8/2 = 2^7 = 128$ \code{AND} a 8 ingressi e un \code{OR} a 128 ingressi per poterla tradurre in una rete a due livelli (che significano $128 \cdot 7 = 896$ \code{AND} e 127 \code{OR} a 2 ingressi), mentre in una rete a più livelli bastano 7 \code{XOR} a due ingressi, che si traducono in 14 porte \code{AND} e 7 \code{OR}. Dunque passiamo da $896 + 127 = 1023$ porte a sole 21.
+Se volessimo rappresentarla tramite SOP o POS minima avremmo 4 min/maxtermini in entrambi i casi. Questo perché nella mappa di Karnaugh i valori sono alternati, dunque non c'è nemmeno un 1 vicino a un 1 o uno 0 vicino a uno 0 (ciò ha perfettamente senso, dato che nella mappa di Karnaugh i valori vicini cambiano di un solo bit, e sappiamo che nello XOR un cambio di bit indica un cambio nel risultato, che passa da 1 a 0 o da 0 a 1). Dunque se volessimo rappresentare tale circuito con una rete a due livelli avremmo bisogno di 4 \code{AND} a tre ingressi e di un \code{OR} a 4 ingressi (o di 4 \code{OR} e di 1 \code{AND}, è indifferente). Ma dato che un \code{AND} a 3 ingressi equivale a due \code{AND} a due ingressi, e dato che un \code{OR} a 4 ingressi equivale a tre \code{OR} a due ingressi, troviamo che il numero totale di porte logiche ammonta a \textbf{11}. Se invece volessimo rappresentarlo tramite un circuito a più livelli, potremmo trasformare questo \code{XOR} a 3 in due \code{XOR} a 2, e potremmo poi trasformare ogni \code{XOR} a 2 in un circuito a due livelli. Infatti, uno \code{XOR} a 2 può essere rappresentato da 2 \code{AND} e un \code{OR} (o viceversa), dunque avremmo un totale di \textbf{6} porte distribuite su 4 livelli, un netto miglioramento rispetto alle 11 viste prima. Si guadagna quindi a livello hardware ma si perde a livello di velocità, dato che appunto dobbiamo passare su più livelli. Questa differenza, che non sembra nemmeno così importante con uno \code{XOR} a 3 ingressi, diventa evidente in uno \code{XOR} a 8 ingressi, dove servono $2^8/2 = 2^7 = 128$ \code{AND} a 8 ingressi e un \code{OR} a 128 ingressi per poterlo tradurre in una rete a due livelli (che significano $128 \cdot 7 = 896$ \code{AND} e 127 \code{OR} a 2 ingressi), mentre in una rete a più livelli bastano 7 \code{XOR} a due ingressi, che si traducono in 14 porte \code{AND} e 7 \code{OR}. Dunque passiamo da $896 + 127 = 1023$ porte a sole 21.
 
 \subsection{Multiplexer}
 
@@ -1441,7 +1442,7 @@ Data una funzione booleana $f$ a $n$ variabili, vale sempre l'uguaglianza
 \]
 \end{Proposizione}
 
-Questo teorema è la dimostrazione formale di ciò che abbiamo visto in precedenza, ossia del perché riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, ed espande questo concetto a MUX a un qualsiasi numero di ingressi $n$ formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione di $n$ variabili, possiamo realizzarla usando un MUX a 2 ingressi che prende in input 2 funzioni di $n-1$ variabili. Un MUX a 4 ingressi, ad esempio, realizza una funzione di 2 variabili (i due selettori): questa diventa un MUX con 2 funzioni di 1 variabile, che a loro volta diventano due MUX i cui ingressi sono direttamente i valori $D_i$, con un totale quindi di 3 MUX a 2 ingressi. 
+Questo teorema è la dimostrazione formale di ciò che abbiamo visto in precedenza, ossia del perché riusciamo a trasformare un MUX a 4 ingressi in 3 MUX a 2 ingressi, ed espande questo concetto a MUX con un qualsiasi numero di ingressi, formalizzandolo tramite le funzioni booleane. Infatti, presa una funzione di $n$ variabili, possiamo realizzarla usando un MUX a 2 ingressi che prende in input 2 funzioni di $n-1$ variabili. Un MUX a 4 ingressi, ad esempio, realizza una funzione di 2 variabili (i due selettori): questa diventa un MUX con 2 funzioni di 1 variabile, che a loro volta diventano due MUX i cui ingressi sono direttamente i valori $D_i$, con un totale quindi di 3 MUX a 2 ingressi. 
 
 \subsection{Decoder}
 
@@ -1450,7 +1451,7 @@ Questo teorema è la dimostrazione formale di ciò che abbiamo visto in preceden
 Un \textbf{decoder} è un circuito combinatorio con $n$ input e $2^n$ output e che restituisce un solo output TRUE per ogni combinazione di input, ossia è un circuito \textbf{one-hot}.  
 \end{Definizione}
 
-\NB Per far uscire solo un output TRUE tra tutti gli output il decoder utilizza una tecnica chiamata \textbf{mascheramento}: ogni uscita è un \code{AND} degli ingressi (diretti o negati), cioè un mintermine, che vale 1 solo per la propria combinazione di input e azzera così tutte le altre uscite.
+\NB Per far uscire solo un output TRUE tra tutti gli output il decoder utilizza una tecnica chiamata \textbf{mascheramento}: ogni uscita è un \code{AND} degli ingressi (diretti o negati), cioè un mintermine, che vale 1 solo per la propria combinazione di input così che, per ogni combinazione, tutte le altre uscite valgano 0.
 
 \begin{minipage}[c]{0.6\textwidth}
 Un decoder si raffigura semplicemente con un rettangolo verticale con la scritta "Decoder" in alto, con gli $n$ ingressi a sinistra (in questo caso $2$), e i $2^n$ output a destra (in questo caso $4$). \\
@@ -1460,7 +1461,7 @@ Un decoder si raffigura semplicemente con un rettangolo verticale con la scritta
 \includegraphics[width=1\textwidth, valign=t]{Decoder.png}
 \end{minipage}
 
-Possiamo vedere un decoder come una delle due componenti di un MUX. Infatti, un MUX con $n$ input e $\log_2 n$ selettori non è che composto da un decoder a $\log_2 n$ input con $n$ output che sono collegati da una serie di \code{AND} e un \code{OR} finale. Vediamo con i circuiti come si presenta questa idea:
+Possiamo vedere un decoder come una delle due componenti di un MUX.Infatti, un MUX con $n$ input e $\log_2 n$ selettori non è altro che un decoder a $\log_2 n$ input con $n$ output, collegati a una serie di \code{AND} e a un \code{OR} finale. Vediamo con i circuiti come si presenta questa idea:
 
 \begin{figure}[H]
 \centering
@@ -1514,7 +1515,7 @@ Passiamo ora allo studio di dispositivi più complessi, i cui collegamenti inter
 
 \begin{Definizione}[PLA]
 \label{def-PLA}
-I \textbf{PLA} (Programmable Logic Arrays) sono dispositivi logici programmabili che utilizzano un array di \code{AND} seguito da un array di \code{OR} per formare dei circuiti combinatori con una struttura interna fissa (un array di \code{AND} seguito da un array di \code{OR}), di cui si programmano solo i collegamenti.
+I \textbf{PLA} (Programmable Logic Arrays) sono dispositivi logici programmabili che utilizzano un array di \code{AND} seguito da un array di \code{OR} per formare dei circuiti combinatori: questa struttura interna è fissa, mentre si programmano i collegamenti all’interno dei due array.
 \end{Definizione}
 
 Un PLA ha $M$ input, $P$ output e $N$ implicanti rappresentabili (dunque non rappresentiamo tutti i $2^M$ \textbf{mintermini} possibili, ma solo una certa porzione). Vediamo ad esempio un PLA che ha 3 input $A,B$ e $C$ e ha come output $X = \bar{A} \bar{B} C + A B \bar{C}$ e $Y = A\bar{B}$:
@@ -1599,7 +1600,7 @@ Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta un
 \end{array}
 \]
 
-dove Data 4 indica il quarto ingresso non utilizzato, che può essere un Don't Care oppure fissato a 0.
+dove Data 4 indica il quarto ingresso non utilizzato: per la funzione è un Don't Care, ma dato che nel circuito deve comunque avere un valore, viene fissato a 0.
 
 \chapter{Circuiti sequenziali}
 
@@ -1633,7 +1634,7 @@ Vedremo quattro elementi di stato:
     \item \textbf{Circuiti bistabili}
     \item \textbf{SR Latch}
     \item \textbf{D Latch}
-    \item \textbf{D Flip-flop}
+    \item \textbf{D Flip-Flop}
 \end{itemize}
 
 \subsection{Circuiti bistabili}
@@ -1656,7 +1657,8 @@ Questo circuito è stabile perché il valore di $Q$ non può cambiare. Infatti, 
 \includegraphics[width=0.4\textwidth]{Astabile.png}
 \end{figure}
 
-Qui il valore all'interno del circuito cambia ad ogni \textbf{ciclo}: se inizia con $0$, alla fine del primo ciclo avrà come valore $1$, e solo alla fine del secondo ciclo avrà di nuovo come valore $0$.
+Qui il valore di ciascun nodo (ad esempio $X$) cambia ad ogni \textbf{ciclo}: se inizia con $0$, alla fine del primo ciclo avrà come valore $1$, e solo alla fine del secondo ciclo avrà di nuovo come valore $0$.
+
 
 Tornando al circuito bistabile, c'è però un grosso problema: non è possibile modificare il valore salvato all'interno. Per questo motivo introduciamo dei nuovi circuiti chiamati \textbf{SR Latch}.
 
@@ -1731,7 +1733,7 @@ Rappresentiamo un D Latch tramite un rettangolo con a sinistra l'input $D$, in a
 \includegraphics[width=0.6\textwidth, valign=t]{D Latch rappresentazione.png}
 \end{minipage}
 
-Dei D latch studiamo anche la \textbf{forma d'onda}: in poche parole, la forma d'onda di un D latch è una rappresentazione grafica del latch, tramite delle linee che rappresentano i valori dei vari input/output. Una linea in alto a una variabile indica che il valore di quella variabile in quell'istante di tempo è 1, in basso indica che è 0, e se è sia in alto che in basso indica che il valore non si conosce.
+Dei D Latch studiamo anche la \textbf{forma d'onda}: in poche parole, la forma d'onda di un D Latch è una rappresentazione grafica del latch, tramite delle linee che rappresentano i valori dei vari input/output. Una linea in alto a una variabile indica che il valore di quella variabile in quell'istante di tempo è 1, in basso indica che è 0, e se è sia in alto che in basso indica che il valore non si conosce.
 
 \begin{figure}[H]
 \centering
@@ -2092,7 +2094,8 @@ Dunque troviamo questa come tabella degli output finale:
     \multicolumn{2}{|c|}{\textbf{Stato corrente}} &
     \multicolumn{6}{c|}{\textbf{Output}} \\
     \hline
-    $\bm{Q_1}$ & $\bm{Q_0}$ & $\bm{L_{A_2}}$ &$\bm{L_{A_1}}$ & $L_{A_0}$ & $L_{B_2}$ & $\bm{L_{B_1}}$ & $L_{B_0}$ \\
+    $\bm{Q_1}$ & $\bm{Q_0}$ & $\bm{L_{A_2}}$ & $\bm{L_{A_1}}$ & $\bm{L_{A_0}}$ & $\bm{L_{B_2}}$ & $\bm{L_{B_1}}$ & $\bm{L_{B_0}}$ \\
+
     \hline
     $0$ & $0$ & $0$ & $0$ & $1$ & $1$ & $0$ & $0$ \\
     $0$ & $1$ & $0$ & $1$ & $0$ & $1$ & $0$ & $0$ \\
