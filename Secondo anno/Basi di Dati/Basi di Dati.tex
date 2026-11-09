@@ -55,7 +55,7 @@ Proprio per questo motivo nascono le \textbf{basi di dati}.
 
 \begin{Definizione}[Basi di Dati]
 \label{def-basi-di-dati}
-Una \textbf{Base di Dati} (o Database, \textbf{DB}) è un \textbf{insieme di file connessi tra loro}. Gli insiemi di dati sono organizzati in delle \textit{strutture di dati} che rendono più facile la creazione, l'accesso e l'aggiornamento di tali insiemi e ottimizzano la gestione delle risorse fisiche.
+Una \textbf{Base di Dati} (o Database, \textbf{DB}) è un \textbf{insieme di file connessi tra loro}. Gli insiemi di dati sono organizzati in \textit{strutture di dati} che rendono più facile la creazione, l'accesso e l'aggiornamento di tali insiemi e ottimizzano la gestione delle risorse fisiche.
 \end{Definizione}
 
 \begin{Definizione}[Dati]
@@ -171,7 +171,7 @@ I Big Data sono associati solitamente ai sistemi NoSQL, al Machine Learning, e a
 Un \textbf{Data Lake} è un \textbf{ambiente di data storage} a basso costo creato per gestire enormi quantità di dati non elaborati e di qualsiasi formato, inclusi dati strutturati, semi-strutturati e non strutturati.
 \end{Definizione}
 
-Quasi tutti i Data Lake utilizzano lo storage a oggetti basato su cloud, come Google Cloud Storage. Questi sono nati per gestire il flusso di nuovi big data, molti non strutturati, creati da app e servizi connessi a Internet. A differenza dei DB e DW tradizionali, questi non richiedono uno schema di dati definito e possono anche memorizzare diversi tipi di dati in più formati tutti nello stesso posto. Questo li rende più ideali per i data scientist, grazie al loro schema \textit{on-read}: i dati vengono strutturati solo quando vanno letti, al contrario dello schema \textit{on-write} delle DW dove i dati sono strutturati fin da subito.
+Quasi tutti i Data Lake utilizzano lo storage a oggetti basato su cloud, come Google Cloud Storage. Questi sono nati per gestire il flusso di nuovi big data, molti non strutturati, creati da app e servizi connessi a Internet. A differenza dei DB e DW tradizionali, questi non richiedono uno schema di dati definito e possono anche memorizzare diversi tipi di dati in più formati tutti nello stesso posto. Questo li rende più adatti per i data scientist, grazie al loro schema \textit{on-read}: i dati vengono strutturati solo quando vanno letti, al contrario dello schema \textit{on-write} delle DW dove i dati sono strutturati fin da subito.
 
 \section{Modelli di DBMS}
 
@@ -599,7 +599,7 @@ Un'associazione R(X,Y) è \textbf{univoca rispetto a X} se per ogni elemento x d
     \item R(X,Y) è \textbf{(1:1)} se è \textit{univoca su X} e \textit{univoca su Y}.
 \end{itemize}
 
-Ad esempio, l'associazione Frequenta(Studenti, Corsi) ha \textbf{cardinalità} (N:M). Infatti, uno studente può frequentare più corsi e un corso può essere frequentato da più studenti, mentre l'associazione NatoA(Persone,Citta) ha cardinalità (N:1), dato che una persona può nascere in una sola città, ma in una città possono nascere più persone.
+Ad esempio, l'associazione Frequenta(Studenti, Corsi) ha \textbf{cardinalità} (N:M). Infatti, uno studente può frequentare più corsi e un corso può essere frequentato da più studenti, mentre l'associazione NatoA(Persone, Citta) ha cardinalità (N:1), dato che una persona può nascere in una sola città, ma in una città possono nascere più persone.
 
 \begin{Proprieta}[Vincolo di totalità]
 \label{prop-vincolo-totalita}
@@ -801,7 +801,7 @@ Esistono poi gli \textbf{identificatori} delle entità, che permettono di identi
 \caption{Identificatore esterno}
 \end{figure}
 
-In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Universita e Studente. Studente in questo caso è un'\textbf{entità debole}, dato che la sua identificazione dipende da un'associazione con un'entità esterna.
+In questo caso la matricola non è sufficiente per identificare in modo univoco uno studente: infatti, questo valore lo identifica solo in un'università, e non in generale nel mondo. Dunque è necessario unire questo identificatore esterno all'associazione Iscrizione tra Università e Studente. Studente in questo caso è un'\textbf{entità debole}, dato che la sua identificazione dipende da un'associazione con un'entità esterna.
 
 \begin{Osservazione}[Osservazioni sugli identificatori]
 \label{oss-osservazioni-identificatori}
@@ -923,7 +923,7 @@ Questo schema può sembrare enorme, ma vediamo passo passo come è stato possibi
 
 Partiamo con le informazioni generali: vogliamo creare una base di dati per una società che eroga corsi, e vogliamo i dati dei partecipanti e dei docenti. Già qui è facile trovare 3 entità principali: Corso, Docente e Partecipante. 
 
-Riguardo i partecipanti sappiamo che sono identificati dal codice e che hanno vari attributi (codice fiscale, cognome, età, sesso, città di nascita e votazione in decimi). Di loro vogliamo conoscere gli attuali datori di lavoro  e quelli precedenti, con tanto di date di inizio e fine rapporto. Vogliamo poi sapere le edizioni dei corsi che stanno o hanno frequentato. Abbiamo quindi una serie di attributi per questi partecipanti, e troviamo due nuove entità: Datore e Edizione corso. A questo punto lo schema avrebbe più o meno questo aspetto:
+Riguardo i partecipanti sappiamo che sono identificati dal codice e che hanno vari attributi (codice fiscale, cognome, età, sesso, città di nascita e votazione in decimi). Di loro vogliamo conoscere gli attuali datori di lavoro  e quelli precedenti, con tanto di date di inizio e fine rapporto. Vogliamo poi sapere le edizioni dei corsi che stanno o hanno frequentato. Abbiamo quindi una serie di attributi per questi partecipanti, e troviamo due nuove entità: Datore e Edizione Corso. A questo punto lo schema avrebbe più o meno questo aspetto:
 
 \begin{figure}[H]
 \centering
@@ -938,7 +938,7 @@ Vediamo alcune cardinalità di questo schema parziale:
     Un corso può avere più edizioni o nessuna, dato che un corso appena aggiunto non ha edizioni. Ma un'edizione di un corso si riferisce a uno e un solo corso sempre.
     \item Datore --- \textbf{(0,N)} Impiego corrente \textbf{(0,1)} --- Partecipante \\
     Un partecipante può avere nel proprio impiego 0 datori (se è un libero professionista) o un datore (se è un dipendente). E un datore può avere 0 dipendenti che attualmente lavorano per lui e svolgono corsi o più di 1. Nel caso ne avesse 0, questo datore potrebbe esser comunque salvato nel database nel caso un suo dipendente passato sia un partecipante.
-    \item Edizione corso --- \textbf{(0,N)} Docenza corrente \textbf{(0,1)} --- Docente \\
+    \item Edizione Corso --- \textbf{(0,N)} Docenza corrente \textbf{(0,1)} --- Docente \\
     Un'edizione di un corso può avere 0 docenti correnti (se non le sono ancora stati assegnati), o più di 1 (quando un corso è insegnato da più docenti). Ma un docente può insegnare nello stesso momento 0 o al massimo 1 corso.
 \end{itemize}
 
@@ -1027,7 +1027,7 @@ Torino & Piemonte & 841.600 \\
 \end{tabular}
 \end{minipage}\hfill
 \begin{minipage}[c]{0.40\textwidth}
-Ad esempio, la base di dati qui a sinistra ha 3 attributi, e il proprio schema è Info\_Citta(Citta, Regione, popolazione).
+Ad esempio, la relazione qui a sinistra ha 3 attributi, e il proprio schema è Info\_Citta(Citta, Regione, popolazione).
 \end{minipage}
 
 Nei modelli relazionali più recenti, le componenti di una relazione sono indicate dai nomi degli attributi e non dalla posizione. Scriviamo \code{t[}$A_i$\code{]} per indicare il valore dell'attributo di nome $A_i$, e non alla posizione $A_i$. Nell'esempio precedente per la seconda tupla avremmo che $t[\text{Regione}] = \text{Lombardia}$.
@@ -1254,7 +1254,7 @@ Per passare dal modello concettuale a quello logico dobbiamo quindi ora ristrutt
 
 \subsubsection*{Analisi delle ridondanze}
 
-L'unica ridondanza evidente in questo schema è l'attributo N. Part. presente nell'entità Edizione Corso. Infatti, questo potrebbe essere ricavato contando le occorrenze dell'associazione Partecipazione Corrente. Tuttavia, possiamo assumere che questa informazione sia utilizzata spesso nella base di dati, il che renderebbe il conteggio molto inefficiente. Dunque lasciamo tutto com'è senza effettuare modifiche per ora, facendo attenzione in futuro a aggiornare questa informazione tramite \textit{vincoli dinamici} (ossia dovremo fare in modo che questa informazione si aggiorni da sola ogni volta che un partecipante si iscrive a un'edizione di un corso).
+L'unica ridondanza evidente in questo schema è l'attributo N. Part. presente nell'entità Edizione Corso. Infatti, questo potrebbe essere ricavato contando le occorrenze dell'associazione Partecipazione Corrente. Tuttavia, possiamo assumere che questa informazione sia utilizzata spesso nella base di dati, il che renderebbe il conteggio molto inefficiente. Dunque lasciamo tutto com'è senza effettuare modifiche per ora, facendo attenzione in futuro ad aggiornare questa informazione tramite \textit{vincoli dinamici} (ossia dovremo fare in modo che questa informazione si aggiorni da sola ogni volta che un partecipante si iscrive a un'edizione di un corso).
 
 \subsubsection*{Eliminazione delle generalizzazioni}
 
@@ -1429,7 +1429,7 @@ Abbiamo già visto come inserire dei vincoli a un campo, ad esempio scrivendo \c
 E se invece un dipartimento non viene eliminato ma modificato? Esiste l'operazione \codeb{ON UPDATE CASCADE}, che aggiorna a cascata tutte le reference a quel dipartimento in Impiegato. \\
 Dunque, se vogliamo che una volta eliminato un dipartimento mettiamo a NULL le references in Impiegato, e una volta modificato invece a cascata modifichiamo tutto in Impiegato, dobbiamo scrivere \code{FOREIGN KEY (Dipart) REFERENCES Dipartimento(Codice) ON DELETE SET NULL ON UPDATE CASCADE}.
 
-Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore o uguale a 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere \codeb{CHECK(DataInizio <= DataFine)} in una riga a parte. Inoltre, essendo \code{CHECK} un tipo particolare di CONSTRAINT, possiamo usare proprio la parola chiave \codeb{CONSTRAINT} che non solo definisce ma \textbf{nomina} il vincolo così che in futuro possa essere modificato o eliminato. Ad esempio, possiamo scrivere \mbox{\code{CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio >= 0)}} per creare un nuovo CONSTRAINT su Stipendio chiamato \code{CHK\_StipendioNonNegativo} che controlli che ogni Stipendio sia $\geq 0$. Per modificare/eliminare poi un vincolo si usano le parole chiave \codeb{ALTER TABLE}. Per eliminare un vincolo usiamo poi la parola chiave \codeb{DROP}. Ad esempio, se vogliamo eliminare il vincolo \code{CHK\_StipendioNonNegativo} dovremo scrivere \mbox{\code{ALTER TABLE Impiegato DROP CONSTRAINT CHK\_StipendioNonNegativo}}. Se volessimo invece modificare il vincolo, dovremmo prima eliminarlo con \codeb{DROP} e poi ricrearlo con la parola chiave \codeb{ADD}. Ad esempio, se volessimo imporre che lo stipendio non sia più solo non negativo ma sempre positivo, scriveremmo \code{ALTER TABLE Impiegato DROP CONSTRAINT CHK\_StipendioNonNegativo} e poi \code{ALTER TABLE Impiegato ADD CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio > 0)}.
+Per aggiungere poi dei veri vincoli, oltre a NOT NULL o UNIQUE, dobbiamo usare la parola chiave \codeb{CHECK}. Ad esempio, se vogliamo imporre che lo Stipendio sia sempre maggiore o uguale a 0, dobbiamo scrivere \code{Stipendio NUMERIC(9) DEFAULT 0 CHECK(Stipendio >= 0)}, oppure possiamo aggiungere la sola condizione in una riga a parte scrivendo semplicemente \mbox{\code{CHECK(Stipendio >= 0)}}. Questa seconda scelta è obbligatoria se abbiamo un vincolo che coinvolge più attributi. Ad esempio, se abbiamo due attributi \code{DataInizio} e \code{DataFine} e vogliamo porre \mbox{\code{DataInizio <= DataFine}}, dobbiamo scrivere \codeb{CHECK(DataInizio <= DataFine)} in una riga a parte. Inoltre, essendo \code{CHECK} un tipo particolare di CONSTRAINT, possiamo usare proprio la parola chiave \codeb{CONSTRAINT} che non solo definisce ma \textbf{nomina} il vincolo così che in futuro possa essere modificato o eliminato. Ad esempio, possiamo scrivere \mbox{\code{CONSTRAINT CHK\_StipendioNonNegativo CHECK (Stipendio >= 0)}} per creare un nuovo CONSTRAINT su Stipendio chiamato \code{CHK\_StipendioNonNegativo} che controlli che ogni Stipendio sia $\geq 0$. Per modificare/eliminare poi un vincolo si usano le parole chiave \codeb{ALTER TABLE}. Per eliminare un vincolo usiamo poi la parola chiave \codeb{DROP}. Ad esempio, se vogliamo eliminare il vincolo \code{CHK\_StipendioNonNegativo} dovremo scrivere \mbox{\code{ALTER TABLE Impiegato DROP CONSTRAINT CHK\_StipendioNonNegativo}}. Se volessimo invece modificare il vincolo, dovremmo prima eliminarlo con \codeb{DROP} e poi ricrearlo con la parola chiave \codeb{ADD}. Ad esempio, se volessimo imporre che lo stipendio non sia più solo non negativo ma sempre positivo, scriveremmo \code{ALTER TABLE Impiegato DROP CONSTRAINT CHK\_StipendioPositivo} e poi \code{ALTER TABLE Impiegato ADD CONSTRAINT CHK\_StipendiPositivo CHECK (Stipendio > 0)}.
 
 \subsection*{Indici}
 
@@ -1517,7 +1517,7 @@ Seguendo le regole dell'insiemistica, in una proiezione \textbf{NON prendiamo du
 La \textbf{selezione} è un operatore che permette di tagliare alcune righe di una relazione, selezionando così delle \textbf{specifiche righe di una relazione}. Per indicare una selezione scriviamo $\bm{\sigma_C(r)}$, che indica una selezione che prende dalla relazione $r$ tutte le righe che soddisfano la condizione $C$, scritta tramite operatori booleani.
 \end{Definizione}
 
-Ad esempio, $C$ può essere $A < B \land \neg A$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti, oppure può essere $\neg (A = B)$ per indicare che il valore dell'attributo $A$ non deve essere uguale a quello dell'attributo $B$.
+Ad esempio, $C$ può essere $A < B \land \neg (A = 10)$, dove $A$ e $B$ sono attributi con lo stesso dominio o valori costanti, oppure può essere $\neg (A = B)$ per indicare che il valore dell'attributo $A$ non deve essere uguale a quello dell'attributo $B$.
 
 Se prendiamo quindi la relazione $r$
 
@@ -1780,11 +1780,11 @@ Se ad esempio abbiamo una relazione Studenti con attributi Nome, Cognome e Eta, 
 \begin{lstlisting}
 SELECT Nome, Cognome 
 FROM Studenti
-WHERE (Eta > 18 and Eta < 60) or (Eta > 90)
+WHERE (Eta > 18 AND Eta < 60) or (Eta > 90)
 \end{lstlisting}
 
 effettuando una vera e propria \textbf{query}. \\
-La parola chiave \codeb{FROM} ci indica da quali relazioni prendere i dati (si possono prendere anche più tabelle insieme), in questo caso quindi da Studenti. Se si avessero più relazioni gli attributi andrebbero specificati scrivendo nome\_relazione.nome\_attributo. In questo caso, è comodo usare anche delle \textbf{abbreviazioni} (scrivendo ad esempio \code{FROM Studenti s} e utilizzando poi la lettera \code{s} per indicare gli studenti, o scrivendo \code{SELECT s.nome as nome} per utilizzare la parola \code{nome} per indicare l'attributo nome di studenti). Ipotizziamo di avere anche un'altra relazione Esami con attributi Codice, MatricolaStudente, Voto e Data. Se volessimo effettuare una query su queste due tabelle che restituisce una relazione con il nome dello studente e il rispettivo voto, scriveremmo:
+La parola chiave \codeb{FROM} ci indica da quali relazioni prendere i dati (si possono prendere anche più tabelle insieme), in questo caso quindi da Studenti. Se si avessero più relazioni gli attributi andrebbero specificati scrivendo nome\_relazione.nome\_attributo. In questo caso, è comodo usare anche delle \textbf{abbreviazioni} (scrivendo ad esempio \code{FROM Studenti s} e utilizzando poi la lettera \code{s} per indicare gli studenti, o scrivendo \code{SELECT s.nome AS nome} per utilizzare la parola \code{nome} per indicare l'attributo nome di studenti). Ipotizziamo di avere anche un'altra relazione Esami con attributi Codice, MatricolaStudente, Voto e Data. Se volessimo effettuare una query su queste due tabelle che restituisce una relazione con il nome dello studente e il rispettivo voto, scriveremmo:
 
 \begin{lstlisting}
 SELECT Studenti.Nome, Esami.Voto 
@@ -1796,7 +1796,7 @@ WHERE Studenti.Matricola = Esami.MatricolaStudente
 
 Inoltre, in SQL (ma non in algebra relazionale) è possibile effettuare anche un \code{SELECT} prendendo tutti gli attributi usando l'\textbf{*}, scrivendo ad esempio \code{SELECT Studenti.*}. 
 
-È possibile anche effettuare delle operazioni su tutta una colonna scrivendo ad esempio \codeb{SELECT Studenti.Eta / 2 as EtaDimezzata}. In questo caso creiamo quindi una nuova relazione che ha come colonna l'età di ogni studente ma divisa già per due, che prende il nome di EtaDimezzata. 
+È possibile anche effettuare delle operazioni su tutta una colonna scrivendo ad esempio \codeb{SELECT Studenti.Eta / 2 AS EtaDimezzata}. In questo caso creiamo quindi una nuova relazione che ha come colonna l'età di ogni studente ma divisa già per due, che prende il nome di EtaDimezzata. 
 
 Tra le condizioni che possiamo effettuare esistono anche le \textbf{condizioni like}, che permettono di effettuare controlli sulle stringhe. Ad esempio, se vogliamo tutti i nomi che hanno come primo carattere una "A" e come terzo carattere una "d", scriveremmo \codeb{WHERE Nome like 'A\_d\%'}, dove usiamo l'\_ per indicare che la "d" deve essere la terza lettera (se doveva essere la quinta avremmo usato 3 \_ al posto di uno).
 
@@ -2065,7 +2065,7 @@ FROM Operatore, Ordine
 WHERE CodiceOperatore = Codice
 \end{lstlisting}
 
-In realtà, sia un prodotto cartesiano che un qualsiasi join in SQL si scrivono sempre allo stesso modo, ossia scrivendo le due (o più) relazioni interessate affianco la parola chiave \code{FROM} separate da una virgola. Sarà poi il DBMS a decidere quale operazione eseguire per rendere il tutto il più efficiente possibile. 
+In realtà, sia un prodotto cartesiano che un qualsiasi join in SQL si scrivono sempre allo stesso modo, ossia scrivendo le due (o più) relazioni interessate accanto alla parola chiave \code{FROM} separate da una virgola. Sarà poi il DBMS a decidere quale operazione eseguire per rendere il tutto il più efficiente possibile. 
 
 Torna qui importante un costrutto che avevamo già accennato quando abbiamo iniziato a tradurre l'algebra relazionale in SQL, ossia le \textbf{abbreviazioni}. Queste sono fondamentali solitamente quando abbiamo più tabelle con i campi con lo stesso nome e vogliamo essere più chiari nella decisione di quali campi scegliere nella selezione. Se ad esempio abbiamo le relazioni
 
@@ -2108,7 +2108,7 @@ WHERE Docenti.Codice = Esami.Codice AND Docenti.Codice = 1
 potremmo semplicemente scrivere
 
 \begin{lstlisting}
-SELECT distinct e.Nome as NomeEsame, Data, d.Codice as CodiceDocente
+SELECT distinct e.Nome AS NomeEsame, Data, d.Codice AS CodiceDocente
 FROM Docenti d, Esami e
 WHERE d.Codice = e.Codice AND d.Codice = 1
 \end{lstlisting}
@@ -2123,7 +2123,7 @@ Chimica & 02/03/2002 & 1 \\ \hline
 \end{tabular}
 \end{center}
 
-Queste sono comode quando abbiamo due o più relazioni nella query, ma è necessaria se abbiamo una query su un prodotto cartesiano / join eseguito sulla stessa relazione. Se ad esempio abbiamo le relazioni
+Queste sono comode quando abbiamo due o più relazioni nella query, ma sono necessarie se abbiamo una query su un prodotto cartesiano / join eseguito sulla stessa relazione. Se ad esempio abbiamo le relazioni
 
 
 \begin{minipage}[c]{0.45\textwidth}
@@ -2158,7 +2158,7 @@ Mario & 1 & 0 \\ \hline
 E vogliamo creare una nuova relazione con tutti i figli che guadagnano più del padre, in cui salviamo anche il reddito del figlio e quello del padre, dovremmo scrivere una query di questo tipo:
 
 \begin{lstlisting}
-SELECT Figlio, f.Reddito as Reddito, p.Reddito as RedditoPadre
+SELECT Figlio, f.Reddito AS Reddito, p.Reddito AS RedditoPadre
 FROM Persone p, Paternita, Persone f
 WHERE p.Reddito < f.Reddito AND p.Nome = Padre AND f.Nome = Figlio
 \end{lstlisting}
@@ -2175,15 +2175,15 @@ Antonio & 1500 & 1000 \\ \hline
 
 Abbiamo detto che SQL da solo decide quando effettuare un join e quando effettuare un prodotto cartesiano senza che noi facciamo nulla, ma in realtà è possibile anche effettuare un \textbf{join esplicito}. Per capire meglio come vediamo un esempio. Ipotizziamo di voler creare una relazione con Figlio, Padre e Reddito Padre. Normalmente noi scriveremmo la query
 \begin{lstlisting}
-SELECT Figlio, Padre, Reddito as RedditoPadre
+SELECT Figlio, Padre, Reddito AS RedditoPadre
 FROM Paternita, Persone
 WHERE Nome = Padre AND Reddito > 1000
 \end{lstlisting}
 
 Potremmo però anche scriverla in quest'altro modo, utilizzando proprio un join esplicito:
 \begin{lstlisting}
-SELECT Figlio, Padre, Reddito as RedditoPadre
-FROM Paternita join Persone ON Nome = Padre 
+SELECT Figlio, Padre, Reddito AS RedditoPadre
+FROM Paternita JOIN Persone ON Nome = Padre 
 WHERE Reddito > 1000
 \end{lstlisting}
 
@@ -2222,7 +2222,7 @@ Giuseppe & 45 & 1000 \\ \hline
 \end{tabular}
 \end{center}
 
-Notiamo che le tuple sono state ordinate in modo crescente, dalla tupla con l'età più piccola a quella con l'età più grande. Se volessimo il contrario, dovremmo aggiungere affianco Eta la parola chiave \codeb{DESC}.
+Notiamo che le tuple sono state ordinate in modo crescente, dalla tupla con l'età più piccola a quella con l'età più grande. Se volessimo il contrario, dovremmo aggiungere accanto a Eta la parola chiave \codeb{DESC}.
 
 \subsection{Problemi particolari nell'algebra relazionale}
 
@@ -2400,7 +2400,7 @@ P6 & 09/09/1990 & D3 & P3 & 11/04/2010 & D3 \\\hline
 \end{tabular}
 \end{center}
 
-A questo punto notiamo una cosa: tutte le date che si trovano nella colonna Data2 sicuramente non possono corrispondere al progetto più vecchio del project leader a cui si riferiscono. Infatti, si riferiscono a progetti avvenuti sicuramente dopo rispetto a altri seguiti sempre dallo stesso project leader. Dunque, per ottenere i progetti più vecchi, non ci resta che prendere la tabella iniziale e eliminare tutte le tuple con i progetti che sono presenti nella parte destra di questa nostra tabella. Se chiamiamo la tabella qui sopra $r$, arriviamo alla query \mbox{Min = $\text{ProgettoPL} - \pi_{\text{ProgId2}, \text{Data2}, \text{DipenId2}}(r)$}, ossia alla tabella
+A questo punto notiamo una cosa: tutte le date che si trovano nella colonna Data2 sicuramente non possono corrispondere al progetto più vecchio del project leader a cui si riferiscono. Infatti, si riferiscono a progetti avvenuti sicuramente dopo altri seguiti sempre dallo stesso project leader. Dunque, per ottenere i progetti più vecchi, non ci resta che prendere la tabella iniziale e eliminare tutte le tuple con i progetti che sono presenti nella parte destra di questa nostra tabella. Se chiamiamo la tabella qui sopra $r$, arriviamo alla query \mbox{Min = $\text{ProgettoPL} - \pi_{\text{ProgId2}, \text{Data2}, \text{DipenId2}}(r)$}, ossia alla tabella
 
 \begin{center}
 Min \nopagebreak
@@ -2430,7 +2430,7 @@ Gli \textbf{operatori aggregati} sono operatori che lavorano non sulle singole t
 
 L'operatore \codeb{COUNT} è un operatore aggregato che conta tutte le tuple che rispettano una certa condizione. Ad esempio, se vogliamo contare il numero di figli di Paolo scriveremmo
 \begin{lstlisting}
-SELECT count(*) as NumFigliDiPaolo
+SELECT count(*) AS NumFigliDiPaolo
 FROM Paternita
 WHERE Padre = 'Paolo'
 \end{lstlisting}
@@ -2445,12 +2445,12 @@ SELECT Nome, MAX(Reddito)
 FROM Persone
 \end{lstlisting}
 
-Quale nome dovremmo affiancare al valore \code{MAX(Reddito)} nella relazione risultante? Nessuno dei nomi presenti nella relazione Persone è un nome corretto da affiancare al valore \code{MAX(Reddito)}, dunque ci ritroveremmo con una relazione con tante righe con tutti i nomi affiancati dal \code{MAX(Reddito)}, che non ha senso. In questo caso, diciamo che la \textbf{target list} (ossia l'insieme degli attributi di una query) è errata. Infatti questa deve essere \textit{omogenea}, dunque o sono presenti solo operatori aggregati oppure non ne deve essere presente nemmeno uno. In questo caso, per rendere la query sensata, avremmo dovuto usare una sottoquery (che vedremo con le interrogazioni nidificate), cioè \code{WHERE Reddito = (SELECT MAX(Reddito) FROM Persone)}, trovando così una relazione con tante tuple quante sono le persone con reddito massimo.
+Quale nome dovremmo affiancare al valore \code{MAX(Reddito)} nella relazione risultante? Nessuno dei nomi presenti nella relazione Persone è un nome corretto da affiancare al valore \code{MAX(Reddito)}, dunque ci ritroveremmo con una relazione con tante righe con tutti i nomi affiancati dal \code{MAX(Reddito)}, che non ha senso. In questo caso, diciamo che la \textbf{target list} (ossia l'insieme degli attributi di una query) è errata. Infatti questa deve essere \textit{omogenea}, dunque o sono presenti solo operatori aggregati oppure non ne deve essere presente nemmeno uno.
 
 Un'altra clausola importante è il \codeb{GROUP BY}. Scrivendo \code{GROUP BY ListaAttributi} possiamo raggruppare tutte le tuple di una relazione che hanno valori uguali per tutti gli attributi presenti nella lista di attributi. Questa clausola ci permette anche di avere target list non omogenee che funzionano lo stesso. Ad esempio, la query
 
 \begin{lstlisting}
-SELECT Padre, count(*) as NumFigli
+SELECT Padre, count(*) AS NumFigli
 FROM Paternita
 GROUP BY Padre
 \end{lstlisting}
@@ -2484,7 +2484,7 @@ Diego & 2 \\ \hline
 Dunque il GROUP BY ci permette di creare target list non omogenee, con operatori aggregati e non insieme. La condizione fondamentale, però, è che tutto ciò che nel SELECT non è un operatore aggregato \textbf{vada nel GROUP BY}. Ad esempio, la query 
 \begin{lstlisting}
 SELECT Padre, AVG(f.Reddito), p.Reddito 
-FROM Persone f join Paternita ON Figlio = Nome join Persone p ON Padre = p.Nome
+FROM Persone f JOIN Paternita ON Figlio = Nome JOIN Persone p ON Padre = p.Nome
 GROUP BY Padre
 \end{lstlisting}
 
@@ -2506,8 +2506,8 @@ SELECT Madre, Figlio
 FROM maternita
 \end{lstlisting}
 
-restituirà una relazione con tutti i padri e i rispettivi figli e tutte le madri e i rispettivi figli. Notiamo però un problema: che nome diamo al primo attributo? Madre o Padre? Per convenzione viene sempre data la priorità ai nomi degli attributi del primo operando, dunque avremo come risultato una relazione con attributi Padre e Figlio. In questo caso, dato che Padre Figlio non ha molto senso per la tabella risultante, dovremmo effettuare una ridenominazione sulla prima relazione, scrivendo \code{SELECT Padre as Genitore, Figlio} al posto del semplice \code{SELECT Padre, Figlio}.  \\
-\NB L'ordine degli attributi è importante: non aveva senso scrivere \code{SELECT Figlio, Padre as Genitore} e poi \code{SELECT Madre, Figlio}, perché avremmo avuto una relazione con tutte le madri nella colonna dei figli e tutti i figli nella colonna dei genitori.
+restituirà una relazione con tutti i padri e i rispettivi figli e tutte le madri e i rispettivi figli. Notiamo però un problema: che nome diamo al primo attributo? Madre o Padre? Per convenzione viene sempre data la priorità ai nomi degli attributi del primo operando, dunque avremo come risultato una relazione con attributi Padre e Figlio. In questo caso, dato che Padre Figlio non ha molto senso per la tabella risultante, dovremmo effettuare una ridenominazione sulla prima relazione, scrivendo \code{SELECT Padre AS Genitore, Figlio} al posto del semplice \code{SELECT Padre, Figlio}.  \\
+\NB L'ordine degli attributi è importante: non aveva senso scrivere \code{SELECT Figlio, Padre AS Genitore} e poi \code{SELECT Madre, Figlio}, perché avremmo avuto una relazione con tutte le madri nella colonna dei figli e tutti i figli nella colonna dei genitori.
 
 Per effettuare una differenza invece aggiungiamo la parola chiave \codeb{EXCEPT} tra due query. Anche qui, come per l'unione, i nomi degli attributi della relazione finale saranno quelli ereditati dalla prima relazione. Ricordiamo che, come nell'algebra relazionale, le differenze in SQL NON sono commutative. Ad esempio, la query 
 
@@ -2530,7 +2530,7 @@ Infine, per effettuare un'intersezione aggiungiamo la parola chiave \codeb{INTER
 \begin{lstlisting}
 SELECT Nome, Reddito
 FROM Persone, Paternita
-WHERE Nome = Padre and Figlio = 'Franco'
+WHERE Nome = Padre AND Figlio = 'Franco'
 \end{lstlisting}
 
 ma possiamo anche scriverla in modo equivalente attraverso le \textbf{interrogazioni nidificate}, in questo modo:
@@ -2589,7 +2589,7 @@ HAVING SUM(Stipendio) >= ALL (SELECT SUM(Stipendio)
 è errata, ed andrebbe risolta creando una \textbf{nuova view}, che si fa in questo modo:
 
 \begin{lstlisting}
-CREATE VIEW Budget(Dip,TotStipendi) as 
+CREATE VIEW Budget(Dip,TotStipendi) AS 
     SELECT Dipartimento, SUM(Stipendio)
     FROM Impiegato
     GROUP BY Dipartimento
@@ -2718,8 +2718,8 @@ Esistono diversi tipi di privilegi:
 \end{itemize}
 \end{Proprieta}
 
-Per concedere uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{GRANT}, scrivendo ad esempio \mbox{\code{GRANT Privilegi ON Risorsa to Utente}}. Inoltre, se si vuole che l'utente a cui garantiamo i privilegi possa a sua volta concedere questi stessi privilegi a qualcun altro, dobbiamo aggiungere la scritta \codeb{WITH GRANT OPTION}. \\
-Per revocare invece uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{REVOKE}, scrivendo ad esempio \code{REVOKE Privilegi ON Risorsa from Utente}. Oltre a ciò, se all'utente sono stati dati anche i permessi per poterli concedere lui stesso a altri utenti, bisogna anche specificare \codeb{RESTRICT} se si vuole annullare la revoca nel caso l'utente a cui stiamo revocando i permessi li abbia concessi a qualcun altro, o specificare \codeb{CASCADE} se si vuole revocare i permessi anche a tutti gli utenti che li hanno ricevuti da colui che li sta perdendo.
+Per concedere uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{GRANT}, scrivendo ad esempio \mbox{\code{GRANT Privilegi ON Risorsa TO Utente}}. Inoltre, se si vuole che l'utente a cui garantiamo i privilegi possa a sua volta concedere questi stessi privilegi a qualcun altro, dobbiamo aggiungere la scritta \codeb{WITH GRANT OPTION}. \\
+Per revocare invece uno o più privilegi a un utente su una risorsa bisogna usare la parola chiave \codeb{REVOKE}, scrivendo ad esempio \code{REVOKE Privilegi ON Risorsa FROM Utente}. Oltre a ciò, se all'utente sono stati dati anche i permessi per poterli concedere lui stesso ad altri utenti, bisogna anche specificare \codeb{RESTRICT} se si vuole annullare la revoca nel caso l'utente a cui stiamo revocando i permessi li abbia concessi a qualcun altro, o specificare \codeb{CASCADE} se si vuole revocare i permessi anche a tutti gli utenti che li hanno ricevuti da colui che li sta perdendo.
 
 \section{DTL}
 

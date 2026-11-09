@@ -248,7 +248,7 @@ for (int i = 0; i < 1000; i++){
 }
 \end{lstlisting}
 
-Per la località temporale, le variabili \code{sum} e \code{i} sono salvate nei registri o nella L1 cache, così da non dover riaccedere alla DRAM. Allo stesso modo, per la località spaziale, è molto probabile che anche i valori \code{array[1], array[2]...} saranno richiesti in un breve futuro, dunque la CPU salva quanti più di questi valori possibile riempiendo una linea di L1 cache, di 64 byte. Dato che ogni \code{int} in C occupa 4 byte, si salveranno in totale 16 valori dell'array, da \code{array[0]} a \code{array[15]}. In questo modo accediamo una sola volta alla DRAM al posto di 16.
+Per la località temporale, le variabili \code{sum} e \code{i} sono salvate nei registri o nella L1 cache, così da non dover riaccedere alla DRAM. Allo stesso modo, per la località spaziale, è molto probabile che anche i valori \code{array[1], array[2]...} saranno richiesti in un breve futuro, dunque la CPU salva il maggior numero possibile di questi valori riempiendo una linea di L1 cache, di 64 byte. Dato che ogni \code{int} in C occupa 4 byte, si salveranno in totale 16 valori dell'array, da \code{array[0]} a \code{array[15]}. In questo modo accediamo una sola volta alla DRAM al posto di 16.
 
 \subsubsection*{RAM}
 
@@ -333,7 +333,7 @@ Questo riduce notevolmente il cache thrashing (dato che vi è spazio per più di
 
 Vi sono due tipi di memoria secondaria:
 \begin{itemize}
-    \item \textbf{HDD} (Hard Disk Drive), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, ruoti, e legga/scriva sulla superficie del disco. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
+    \item \textbf{HDD} (Hard Disk Drive), ossia il disco meccanico. Questo è molto lento perché è necessario che un braccio meccanico fisico si muova sopra la traccia, che il disco ruoti, e che venga letto/scritto qualcosa sulla superficie del disco. Il sistema operativo in questo caso deve fare il massimo per limitare i movimenti meccanici del disco.
     \item \textbf{SSD} (Solid State Drive), che invece non ha parti meccaniche. I dati qui sono strutturati in \textbf{pagine} che vengono riunite in \textbf{blocchi} di, ad esempio, 128 pagine. Si può leggere tranquillamente ogni singola pagina, ma per riscriverla bisogna cancellare l'intero blocco a cui appartiene, il che rende tutto molto più lento dato che bisognerà poi ricopiare l'intero blocco. Ogni blocco, poi, può supportare solo un numero limitato di cancellazioni prima che si degradi. Il sistema operativo deve in questo caso mandare dei comandi TRIM per aiutare il controller dell'SSD a gestire i blocchi vuoti.
 \end{itemize}
 
@@ -561,7 +561,7 @@ Per questo si cerca di limitare la frequenza delle system calls tramite un proce
 Durante l'esecuzione di un programma possono sbucare degli eventi improvvisi che richiedano immediata attenzione. Un utente che clicca un tasto sulla tastiera, un programma che prova a dividere per 0, o un'applicazione che richiede di leggere informazioni sul disco sono eventi di questo tipo. Questi eventi si dividono in tre tipi:
 \begin{enumerate}
     \item \textbf{Traps}, provenienti da un software, intenzionali e sincrone, ossia generate dall'istruzione che la CPU stava effettuando (come la richiesta di una lettura sul disco)
-    \item \textbf{Eccezioni}, errori della CPU, non intenzionali e sincrone (come una divisione per 0)
+    \item \textbf{Eccezioni}, condizioni anomale rilevate dalla CPU durante l'esecuzione di un'istruzione (non sempre errori veri e propri, come nel caso di un page fault), non intenzionali e sincrone (come una divisione per 0)
     \item \textbf{Interruzioni}, provenienti dall'hardware, non intenzionali e non sincrone (come un utente che clicca un pulsante della tastiera)
 \end{enumerate}
 
@@ -620,7 +620,7 @@ Il \textbf{timer} è uno dei supporti hardware più importanti. Questo permette 
 
 Per isolare i processi è necessaria una protezione a livello hardware. Il metodo più semplice è lo schema \textbf{base e limiti}. In questo schema vi sono due registri fondamentali:
 \begin{itemize}
-    \item \textbf{Registro base}, che contiene l'indirizzo fisico dove inizia il processo
+    \item \textbf{Registro base}, che contiene l'indirizzo fisico da cui inizia in memoria lo spazio d'indirizzamento del processo
     \item \textbf{Registro dei limiti}, che contiene il limite massimo dell'intervallo di memoria allocato
 \end{itemize}
 Dunque la CPU, per controllare che un indirizzo di memoria sia nel range corretto, deve controllare che l'indirizzo virtuale sia $\geq 0$ e che rientri nei limiti. 
@@ -743,7 +743,7 @@ Il \codeb{bool} è l'unico tipo booleano presente in C. Questo può assumere sol
 
 \begin{Proprieta}[Type casting]
 \label{prop-type-casting}
-In C è supportato sia il casting \textbf{implicito} che quello \textbf{esplicito}. Il casting implicito è automatico: avviene nelle espressioni, dove un valore viene convertito nel tipo più ampio (ad esempio da \code{short} a \code{int} o da \code{int} a \code{double}), ma anche nelle assegnazioni, dove può succedere il contrario con perdita di informazione (ad esempio \code{int i = 3.7} salva 3). Il casting esplicito invece va scritto dal programmatore e si può fare tra i tipi scalari (numeri e puntatori, ma non ad esempio tra \code{struct}). Se si passa da un tipo più preciso a uno meno, il risultato verrà troncato.
+In C è supportato sia il casting \textbf{implicito} che quello \textbf{esplicito}. Il casting implicito è automatico: avviene nelle espressioni, dove un valore viene convertito nel tipo più ampio (ad esempio da \code{short} a \code{int} o da \code{int} a \code{double}), ma anche nelle assegnazioni, dove può succedere il contrario con perdita di informazione (ad esempio \code{int i = 3.7} salva 3). Il casting esplicito invece va scritto dal programmatore e si può fare tra i tipi scalari (numeri e puntatori, ma non ad esempio tra \code{struct}). Se si passa da un tipo più preciso a uno meno, è possibile che perdere delle informazioni.
 \end{Proprieta}
 
 Ad esempio, se poniamo \code{int i = 300} e poi \code{double j = i}, stiamo effettuando un casting implicito da \code{int} a \code{double}. Invece se scriviamo \code{double pi = 3.14} e poi \code{int ipi = (int) pi}, stiamo effettuando un casting esplicito da \code{double} a \code{int}, che troncherà il valore di \code{pi} a 3.
@@ -871,7 +871,7 @@ Se abbiamo una stringa \code{str1} lunga 10 inizializzata, e una stringa \code{s
 Per misurare la lunghezza di una stringa ci sono due possibilità:
 \begin{itemize}
     \item con l'operatore \codeb{sizeof}, che restituisce la dimensione in byte dell'intero array (null terminator compreso), indipendentemente da quanti caratteri contenga davvero la stringa
-    \item con la funzione \codeb{strlen}, che invece lo esclude
+    \item con la funzione \codeb{strlen}, che invece conta solo i caratteri che prendono il null terminator (escluso)
 \end{itemize}
 È importante capire che su una stringa non inizializzata \code{strlen} non funziona, dato che ha bisogno del null terminator per capire la lunghezza della stringa. Invece \code{sizeof} restituisce sempre la dimensione dell'array, anche se questo non è inizializzato (su un \code{char *}, però, restituisce la dimensione del puntatore).
 \end{Proprieta}
@@ -1191,7 +1191,7 @@ La compilazione di un file \code{.c} si divide in 4 fasi precise:
     \item \textbf{Linker}
 \end{enumerate}
 
-Ogni file \code{.c} in uno stesso progetto è compilato come una \textbf{translation unit} indipendente. Ognuno di questi è pre-processato e compilato in modo indipendente dagli altri, e non possono quindi leggere il codice interno degli altri \code{.c}. In questo modo, se dobbiamo modificare solo un file \code{.c}, non è necessario pre-processare e compilare di nuovo tutti i file ma solo quel singolo \code{.c}.
+Ogni file \code{.c} in uno stesso progetto è compilato come una \textbf{translation unit} indipendente. Ognuno di questi è pre-processato e compilato in modo indipendente dagli altri, e non può quindi leggere il codice interno degli altri \code{.c}. In questo modo, se dobbiamo modificare solo un file \code{.c}, non è necessario pre-processare e compilare di nuovo tutti i file ma solo quel singolo \code{.c}.
 
 \subsubsection*{Pre-processore}
 
@@ -1254,7 +1254,7 @@ Per generare codice assembly dal file \code{hello.c} usiamo il comando \code{gcc
     \item \codeb{je / jne / jl}, che esegue un salto se due valori sono uguali / diversi / se il primo è minore
     \item \codeb{call label}, che salva l'indirizzo di ritorno sullo stack e salta all'esecuzione di un'altra funzione specificata in \code{label}
     \item \codeb{ret}, che prende l'indirizzo di ritorno dallo stack e riprende il flusso di esecuzione dopo la fine di una funzione
-    \item \codeb{lea dst}, che calcola un indirizzo di memoria e memorizza l'indirizzo in \code{dst}
+    \item \codeb{lea dst [indirizzo]}, che calcola l'indirizzo di memoria tra parentesi quadre e lo memorizza in \code{dst}
 \end{itemize}
 
 Ad esempio, una semplice funzione come questa
@@ -1313,7 +1313,7 @@ Il \textbf{linker} (\codeb{ld}) combina tutti i file \code{.o} in un unico esegu
 \end{Definizione}
 Il linker crea una symbol table globale e associa ogni chiamata o utilizzo di un simbolo al punto esatto in cui quel simbolo è implementato. Dunque, se creiamo una funzione \code{add\_numbers} nel file \code{utils.o} e chiamiamo questa funzione nel file \code{main.o} sarà il linker a collegare i due file, risolvendo tutti i riferimenti lasciati in sospeso nelle fasi precedenti. Se poi esiste un simbolo referenziato ma mai definito, avviene un \textit{linker error}. Ricordiamo che una variabile può essere dichiarata ma non definita tramite la keyword \code{extern}.
 
-Il linker inoltre risolve il problema lasciato in sospeso dall'assemblatore, ossia la \textbf{rilocazione}. Abbiamo visto come nei file \code{.o} esista una relocation table che contiene delle istruzioni su come aggiustare gli indirizzi di memoria. Questa esiste perché nella fase gestita dall'assemblatore non si sa ancora come e dove verranno collocate in memoria le diverse funzioni o variabili. Il linker quindi prende questi segnaposti temporanei lasciati dall'assemblatore e li sostituisce con i veri indirizzi di memoria ora conosciuti.
+Il linker inoltre risolve il problema lasciato in sospeso dall'assemblatore, ossia la \textbf{rilocazione}. Abbiamo visto come nei file \code{.o} esista una relocation table che contiene delle istruzioni su come aggiustare gli indirizzi di memoria. Questa esiste perché nella fase gestita dall'assemblatore non si sa ancora come e dove verranno collocate in memoria le diverse funzioni o variabili. Il linker quindi prende questi segnaposto temporanei lasciati dall'assemblatore e li sostituisce con i veri indirizzi di memoria ora conosciuti.
 
 Nei file eseguibili ELF creati dal linker esistono le \textbf{sezioni} e i \textbf{segmenti}. È importante capire la differenza tra questi due concetti:
 \begin{itemize}
@@ -1496,7 +1496,7 @@ Non tutte le risorse sono copiate con una \code{fork()}. Tra quelle non copiate 
 
 \begin{Definizione}[Segnale]
 \label{def-segnale}
-Un \textbf{segnale} è un'interruzione software mandata a un processo. Un processo può catturare quasi tutti i segnali che gli vengono inviati (tranne \code{SIGKILL} e \code{SIGSTOP}) ed eseguire codice apposito per gestire questi segnali.
+Un \textbf{segnale} è un'interruzione software mandata a un processo. Un processo può catturare tutti i segnali che gli vengono inviati (tranne \code{SIGKILL} e \code{SIGSTOP}) ed eseguire codice apposito per gestire questi segnali.
 \end{Definizione}
 
 
@@ -1519,7 +1519,7 @@ Oltre alla funzione \code{wait()} esiste anche la funzione \codeb{waitpid()}, ch
 \end{itemize}
 
 Se tra gli argomenti di \code{waitpid()} aggiungiamo anche l'opzione \codeb{WNOHANG}, questa non si bloccherà e ritornerà subito 0 se nessun figlio ha ancora terminato (utile per il polling), oppure -1 se il processo chiamante non ha alcun figlio. \\
-È possibile aggiungere tra gli argomenti una variabile \codeb{status} che fa da contenitore: alla fine del \code{waitpid()}, questa avrà al suo interno un valore con delle informazioni riguardo alla chiamata di \code{wait()}. Esistono poi delle macro da usare per studiare queste informazioni:
+È possibile aggiungere tra gli argomenti una variabile \codeb{status} che fa da contenitore: alla fine del \code{waitpid()} (o della \code{wait()}), questa conterrà al suo interno informazioni su come il figlio è terminato o ha cambiato stato. Esistono poi delle macro da usare per studiare queste informazioni:
 \begin{itemize}
     \item \code{WIFEXITED(status)}, che ritorna True se il figlio è terminato normalmente con una chiamata \code{exit()}
     \item \code{WEXITSTATUS(status)}, che ritorna l'exit code (da 0 a 255) se il figlio è terminato con \code{exit()}
@@ -1532,7 +1532,7 @@ Se tra gli argomenti di \code{waitpid()} aggiungiamo anche l'opzione \codeb{WNOH
 
 \begin{Definizione}[\codeb{exec()}]
 \label{def-exec}
-La syscall \codeb{exec()} rimpiazza l'immagine in memoria del processo corrente con quella di un nuovo programma. È fondamentale per creare un processo di nuovo programma partendo dal duplicato di un processo di un altro programma. Rimpiazza totalmente il codice, i dati, lo stack e l'heap. La tabella dei descrittori dei file invece rimane identica, e questo permette di ridirigere i programmi I/O nella shell usando sempre lo stesso codice.
+La syscall \codeb{exec()} rimpiazza l'immagine in memoria del processo corrente con quella di un nuovo programma. È fondamentale per creare un processo di nuovo programma partendo dal duplicato di un processo di un altro programma. Rimpiazza totalmente il codice, i dati, lo stack e l'heap. La tabella dei descrittori dei file invece rimane identica, e questo permette di ridirigere l'I/O dei programmi nella shell usando sempre lo stesso codice.
 \end{Definizione}
 
 È necessario separare le funzioni \code{fork()} e \code{exec()} perché tra le due chiamate un processo figlio può fare diverse cose, tra cui ad esempio cambiare alcune variabili d'ambiente (ossia coppie chiave-valore globali gestite dal sistema operativo che definiscono il contesto di configurazione e il comportamento dei programmi in esecuzione), ridirezionare l'output da un file a un altro o cambiare la cartella di lavoro.
@@ -1594,7 +1594,7 @@ Per gestire la priorità di un processo lo scheduler del sistema operativo usa u
 
 \begin{Definizione}[\codeb{pipe()}]
 \label{def-pipe}
-La funzione \codeb{pipe()} crea un \textbf{canale di comunicazione unidirezionale} tra due processi, fondamentale per scambiare dati tra un processo padre e un processo figlio. Si compone di un array di dimensione 2, dove al valore 0 corrisponde l'estremità da cui si leggono i dati usando la funzione \code{read()}, mentre al valore 1 corrisponde l'estremità da cui si scrivono i dati usando la funzione \code{write()}.
+La funzione \codeb{pipe()} crea un \textbf{canale di comunicazione unidirezionale} tra due processi, fondamentale per scambiare dati tra un processo padre e un processo figlio. Si compone di un array di dimensione 2, dove al valore 0 corrisponde l'estremità da cui si leggono i dati usando la funzione \code{read()}, mentre al valore 1 corrisponde l'estremità su cui si scrivono i dati usando la funzione \code{write()}.
 \end{Definizione}
 
 \begin{Definizione}[\codeb{dup2()}]
@@ -1737,7 +1737,7 @@ Per capire come funziona tutto ciò, vediamo un esempio. Ipotizziamo di avere du
 
 Ogni policy in C viene implementata in modo differente:
 \begin{itemize}
-    \item La policy \textbf{FIFO}, come già accennato, è una semplice coda, ossia una \textbf{lista puntata semplice}
+    \item La policy \textbf{FIFO}, come già accennato, è una semplice coda, implementata tramite una \textbf{lista puntata semplice}
     \item Le policy \textbf{SJF/PSJF} sono code con priorità, ossia una \textbf{lista puntata semplice ordinata} o un \textbf{heap binario}
     \item La policy \textbf{RR} è una \textbf{lista puntata circolare}
 \end{itemize}
@@ -1987,7 +1987,7 @@ Per risolvere alcuni di questi problemi del base and bounds, si è pensato di di
 Gli indirizzi di memoria virtuale si presentano ora in questo modo:\\
 2 bit per il \textbf{segmento} (00 per il code, 01 per l'heap e 11 per lo stack), e il resto dei bit per l'\textbf{offset}, ossia quanto dobbiamo spostarci dal base del segmento interessato per trovare l'indirizzo fisico che realmente vogliamo. Ad esempio, se abbiamo VA = $01000000001100$ (dove VA significa virtual address, ossia l'indirizzo di memoria), allora stiamo puntando a un indirizzo fisico nell'heap segment (01, calcolato dal computer facendo uno shift a destra di 12) con offset $000000001100 = 12_{10}$ (calcolato dal computer facendo una maschera, facendo un \code{AND} con $0x0FFF$), dunque dobbiamo prendere il base register dell'heap segment di tale processo e aggiungere 12 per trovare l'indirizzo fisico richiesto (ricordiamo che tutto ciò è eseguito dall'MMU a livello hardware, che controlla anche che questo valore di 12 + base rientri nel bound di quello specifico segmento, in questo caso dell'heap segment). 
 
-Lo stack è un caso particolare. Infatti, abbiamo già visto come questo \textit{si muova verso il basso}, dunque il ruolo dell'offset è differente per lui. Avremo un valore base che indica la cima della pila, e dunque l'indirizzo più alto raggiungibile, e un offset che quindi non va aggiunto al valore base, perché altrimenti andremmo oltre la cima dello stack, ma va usato per calcolarsi il \textbf{negative offset}. In sostanza, preso un offset di 24, una dimensione massima del segmento di 32, un bound di 20 e un base di 30, per trovare l'indirizzo fisico dobbiamo calcolare il negative offset, che è pari all'offset - la dimensione massima del segmento, e poi dobbiamo sommare questo valore al base, che quindi diminuirà, scendendo verso il basso. L'MMU controlla poi che il valore assoluto del negative offset non superi il bound, altrimenti andiamo fuori dallo stack. Nel nostro esempio avremo quindi un negative offset pari a 24 - 32 = -8 (e $8 \leq 20$, quindi l'accesso è valido), per cui il nostro indirizzo di memoria fisico si troverà al byte 30-8 = 22.
+Lo stack è un caso particolare. Infatti, abbiamo già visto come questo \textit{si muova verso il basso}, dunque il ruolo dell'offset è differente per lui. Avremo un valore base che indica la cima della pila, e dunque l'indirizzo più alto raggiungibile, e un offset che quindi non va aggiunto al valore base, perché altrimenti andremmo oltre l'indirizzo più alto assegnato allo stack, ma va usato per calcolarsi il \textbf{negative offset}. In sostanza, preso un offset di 24, una dimensione massima del segmento di 32, un bound di 20 e un base di 30, per trovare l'indirizzo fisico dobbiamo calcolare il negative offset, che è pari all'offset - la dimensione massima del segmento, e poi dobbiamo sommare questo valore al base, che quindi diminuirà, scendendo verso il basso. L'MMU controlla poi che il valore assoluto del negative offset non superi il bound, altrimenti andiamo fuori dallo stack. Nel nostro esempio avremo quindi un negative offset pari a 16 - 24 = -8 ($8 \leq 20$, quindi l'accesso è valido), per cui il nostro indirizzo di memoria fisico si troverà al byte 30-8 = 22.
 
 Anche l'heap si comporta in modo particolare, ma non per quanto riguarda la traduzione da VA a PA (physical address), ma per quanto riguarda la richiesta di memoria aggiuntiva. Se ad esempio un programma esegue una \code{malloc()} ma l'heap è pieno, questa non restituisce un errore, ma chiama prima la syscall \textbf{sbrk()}, che prende un valore in input pari alla memoria in più richiesta e cerca se c'è memoria fisica contigua grande abbastanza per ospitare l'heap più la nuova memoria richiesta. Prima di spostare l'intero blocco, però, l'OS controlla sempre se c'è memoria fisica vuota vicina all'heap grande quanto la richiesta di \code{sbrk()}, e solo se non trova questa memoria vicina va a cercarla altrove. Se poi non dovesse trovare mai questa memoria, restituirebbe un errore, e questa che sembra una situazione molto difficile in realtà con la segmentazione è più frequente di quello che si potrebbe pensare. Infatti, se da una parte abbiamo eliminato la frammentazione interna, rimuovendo lo spreco di memoria che vi era prima tra heap e stack, dall'altra diventa ancora più grave la \textbf{frammentazione esterna} (già presente con il base and bounds): in poche parole, con la segmentazione si vengono a formare velocemente tanti piccoli blocchi di memoria contigua che occupano da soli poca memoria, ma che insieme formano uno spreco di RAM considerevole. Questi blocchi, essendo troppo piccoli per qualsiasi segment di qualsiasi processo importante, rimangono lì inutilizzati, sprecando memoria. \\ 
 Vediamo visivamente perché questo è un problema. Supponiamo di richiedere al sistema operativo 25 KB di memoria contigua libera, e di avere 4 processi A, B, C e D che già occupano memoria sulla RAM, che si trova in questa situazione:
@@ -2099,7 +2099,7 @@ Questo nuovo sistema, che sembra perfetto tralasciando un po' di spreco riguarda
 
 \subsubsection*{TLB}
 
-Per quanto riguarda il doppio tempo di accesso, viene introdotto un nuovo dispositivo hardware che prende il nome di \textbf{TLB} (Translation Lookaside Buffer), che non è altro che una piccola cache all'interno dell'MMU che contiene un insieme delle \textbf{PTE usate recentemente}. Può contenere tipicamente dalle 32 alle 1024 entrate, a cui si accede di solito in pochissimo tempo, qualche nanosecondo. Essendo una cache hardware (gestita dall'MMU), il programma non sa mai che questa esiste: per lui prendere un indirizzo fisico da questa o dalla page table è la stessa identica cosa. \\
+Per quanto riguarda il doppio tempo di accesso, viene introdotto un nuovo dispositivo hardware che prende il nome di \textbf{TLB} (Translation Lookaside Buffer), che non è altro che una piccola cache all'interno dell'MMU che contiene un insieme delle \textbf{PTE usate recentemente}. Può contenere tipicamente dalle 32 alle 1024 entrate, a cui si accede di solito in pochissimo tempo, qualche nanosecondo. Essendo una cache hardware interna all'MMU, il programma non sa mai che questa esiste: per lui prendere un indirizzo fisico da questa o dalla page table è la stessa identica cosa. \\
 Ogni entrata del TLB ha, oltre alla VPN e alla sua PTE corrispettiva, un \textbf{ASID} (Address Space ID), ossia un identificatore che indica a quale processo appartiene tale PTE. Senza di lui, ad ogni context switch bisognerebbe cancellare l'intero TLB e riempirlo da capo con il nuovo processo, provocando tanti miss inutili. 
 
 Ogni volta che viene effettuato un memory access da un programma l'MMU controllerà quindi sempre prima il TLB, e se l'entrata richiesta è lì allora non deve passare dalla page table per poter trovare l'indirizzo fisico. Per calcolare il tempo medio di accesso alla memoria, ossia l'\textbf{EMAT} (che ricorda molto l'AMAT, visto quando abbiamo parlato di cache), dobbiamo introdurre l'\textbf{hit-rate}, ossia la probabilità che l'entrata richiesta da un processo sia effettivamente nel TLB. Troviamo quindi questa formula:
@@ -2117,13 +2117,13 @@ for (int i = 0; i <1000; i++){
 Salvando la VPN della pagina dello stack dove si trova la variabile \code{sum} e la variabile \code{i}, e salvando le VPN delle pagine dove si trova l'array \code{A} (per 1000 interi serviranno circa 1 o 2 pagine) nel TLB, dopo i primi 3 o 4 miss quando ancora le variabili non sono salvate avremo sempre degli hit per 996 o 997 iterazioni, arrivando a un hit rate > 99\%. \\
 La \textbf{TLB coverage} è poi un altro valore importante che corrisponde alla quantità di spazio di indirizzamento virtuale mappabile dal TLB. Banalmente, $\text{TLB coverage} = \text{entrate del TLB} \times \text{grandezza della pagina}$. Se ad esempio abbiamo una pagina di 4 KB e 1024 entrate sul TLB, avremo una TLB coverage di $4 \times 1024 = 4096$ KB, ossia 4 MB. 
 
-La TLB può essere gestita sia a livello hardware (cosa che fanno architetture tipo x86 o ARM, ossia le architetture più moderne), sia a livello software (cosa che fanno architetture tipo MIPS R2000). Vediamo le differenze:
+Il TLB può essere gestita sia a livello hardware (cosa che fanno architetture tipo x86 o ARM, ossia le architetture più moderne), sia a livello software (cosa che fanno architetture tipo MIPS R2000). Vediamo le differenze:
 \begin{itemize}
     \item Se è gestita a livello \textbf{hardware}, l'MMU si sposta sulla page table del processo in esecuzione e cerca la PTE come se il TLB non fosse esistito, rendendo il processo veloce (dato che il sistema operativo non viene mai coinvolto), ma a patto che l'hardware conosca l'esatto formato della page table che usa il sistema operativo (altrimenti non riuscirebbe a trovare la PTE corretta)
     \item Se è gestita a livello \textbf{software}, l'hardware lancia un'eccezione (una trap) alla CPU, che passa a kernel mode e scorre la page table tramite codice software, rendendo il processo più lento (dato che entra in azione il sistema operativo), ma più flessibile, perché può lavorare con qualsiasi formato di page table esistente (questo perché la page table viene letta tramite software)
 \end{itemize}
 
-Un fenomeno da tenere bene a mente quando si lavora con il TLB è il \textbf{TLB thrashing}. In poche parole, se si hanno diverse pagine che lavorano in circolo, senza averne nessuna prediletta rispetto alle altre, avremo un continuo circolo di indirizzi che vengono scritti per poi essere eliminati prima ancora di essere letti dall'MMU, cosa che non porta alcun vantaggio. Ipotizziamo ad esempio di avere un TLB con spazio per 64 PTE, e di avere un ciclo che gira sempre tra le stesse 100 pagine. Una volta arrivata alla 65ª pagina, il TLB è pieno, dunque per far spazio a questa sul TLB bisogna eliminare la 1ª pagina, ma facendo così quando torneremo alla 1ª pagina non la avremo di nuovo sul TLB, e per rimetterla dovremo eliminare un'altra pagina. Continuando così, notiamo che ogni volta che il TLB potrebbe rivelarsi utile la pagina da noi richiesta è già stata tolta per fare spazio a un'altra. \\
+Un fenomeno da tenere bene a mente quando si lavora con il TLB è il \textbf{TLB thrashing}. In poche parole, se si hanno diverse pagine che lavorano in circolo, senza averne nessuna prediletta rispetto alle altre, avremo un continuo circolo di indirizzi che vengono scritti per poi essere eliminati prima ancora di essere letti dall'MMU, cosa che non porta alcun vantaggio. Ipotizziamo ad esempio di avere un TLB con spazio per 64 PTE, e di avere un ciclo che gira sempre tra le stesse 100 pagine. Una volta arrivata alla 65° pagina, il TLB è pieno, dunque per far spazio a questa sul TLB bisogna eliminare la 1° pagina, ma facendo così quando torneremo alla 1° pagina non la avremo di nuovo sul TLB, e per rimetterla dovremo eliminare un'altra pagina. Continuando così, notiamo che ogni volta che il TLB potrebbe rivelarsi utile la pagina da noi richiesta è già stata tolta per fare spazio a un'altra. \\
 Un modo per risolvere il TLB thrashing è quello di usare delle \textbf{pagine più grandi} (\textbf{huge pages}, da 1 GB o da 2 MB nelle architetture x86-64, dove le pagine da 2 MB prendono il nome di large pages), così da aumentare la TLB coverage. In questo modo riusciamo a coprire più RAM ed evitare che una pagina venga sovrascritta prima che torni a essere richiesta. Per usare le huge pages, spesso piuttosto che modificare tutta la virtualizzazione della memoria cambiando dimensione delle pagine si preferisce adottare un altro sistema, ossia quello delle \textbf{THP} (transparent huge pages). In poche parole, il kernel in automatico, se vede più pagine diverse che lavorano, cerca un blocco di memoria contiguo dove riscriverle tutte insieme per salvarle come un'unica pagina da mettere nel TLB, usandone così solo un'entrata.
 
 \subsubsection*{Page table a più livelli}
@@ -2164,7 +2164,7 @@ Un page fault è un'eccezione sollevata dall'MMU quando un accesso in memoria ri
     \item Una pagina mai allocata, che ha quindi un present bit = 0 e che, se non accessibile dal processo che la chiama, può sfociare in un SIGSEGV, uccidendo il processo chiamante
     \item Un tipo di accesso non permesso su una pagina, come ad esempio una scrittura su una pagina riguardante il codice che ha protezione R-X, e che sfocia in un SIGSEGV che uccide il programma
     \item Un'azione write su una pagina \textit{Copy-on-Write}: brevemente, quando un processo esegue una \code{fork}, padre e figlio puntano allo stesso frame fisico. Questa pagina, che logicamente dovrebbe essere scrivibile, viene contrassegnata dall'OS come read-only nella page table: quando un processo prova a scriverci, la MMU genera un page-fault. L'OS gestisce l'eccezione allocando un nuovo frame, copiandovi i dati e rendendolo writable per il processo che ha scritto. Il vecchio frame del padre tornerà writable solo se il padre rimarrà l'unico processo a puntare a quel frame fisico.
-    \item \textit{Minor page fault}, ossia un page fault che si risolve senza leggere dalla memoria secondaria (ad esempio perché la pagina si trova già sulla RAM, ma non nella page table di questo processo). Ciò si verifica spesso quando parliamo di spazi di memoria condivisi tra più processi o quando si fa un primo accesso alla memoria anonima: in poche parole, quando con una \code{malloc} allochiamo un oggetto dinamico, il sistema operativo non assegna subito dei frame fisici, dunque al nostro primo accesso su tale memoria la MMU genererà un page fault e il SO prenderà un frame vuoto in RAM e lo mapperà alla PTE corrispondente. In entrambi i casi, però, tutto ciò avviene senza dover effettuare alcuna operazione I/O sulla memoria secondaria, dunque le operazioni non sono lente come nei major page fault, che richiedono in media $100 \mu s$ (su una SSD), ma richiedono $1-10 \mu s$.
+    \item \textit{Minor page fault}, ossia un page fault che si risolve senza leggere dalla memoria secondaria (ad esempio perché la pagina si trova già sulla RAM, ma non nella page table di questo processo). Ciò si verifica spesso quando parliamo di spazi di memoria condivisi tra più processi o quando si fa un primo accesso alla memoria anonima: in poche parole, quando con una \code{malloc} allochiamo un oggetto dinamico, il sistema operativo non assegna subito dei frame fisici, dunque al nostro primo accesso su tale memoria la MMU genererà un page fault e il SO prenderà un frame vuoto in RAM e lo mapperà alla PTE corrispondente. In entrambi i casi, però, tutto ciò avviene senza dover effettuare alcuna operazione I/O sulla memoria secondaria, dunque le operazioni non sono lente come nei major page fault, che richiedono in media $100 \mu s$ (su una SSD), ma richiedono solo $1-10 \mu s$.
     \item \textit{Major page fault}, ossia un page-in.
 \end{itemize}
 
@@ -2216,7 +2216,7 @@ Sono importanti perché ci permettono di lavorare su un singolo processo in para
 Si potrebbe pensare di utilizzare la syscall \code{fork()} per creare diversi processi figli piuttosto che dividerne uno solo in tanti thread. Questo era ciò che si faceva in passato, ma crea un limite non indifferente: infatti, più thread lavorano nello stesso ambiente (stesso code, heap, global data, spazio d'indirizzamento e page table, con invece ognuno un proprio stack, PC e registri), mentre più processi lavorano in ambienti totalmente indipendenti tra loro che per comunicare necessitano di IPC (Inter-Process Communication, come pipes o sockets). Inoltre, un context switch tra due thread è molto più veloce rispetto a uno tra due processi, dato che molti ambienti non devono essere modificati. \\
 Un problema che però si verifica con l'utilizzo dei thread è quando vi è un crash: se creiamo tanti processi figli, se uno crasha il crash rimane isolato, gli altri processi non sono toccati. Invece, con diversi thread, il crash di uno comporta il crash dell'intero processo.
 
-Ogni thread ha poi, oltre al proprio stack, PC e ai propri registri, anche un proprio \textbf{TCB}, dove sono salvati tutti questi dati. Questo è anche usato come identificatore dallo scheduler per poter selezionare i singoli thread di un singolo processo sulla CPU. Vi è anche salvata un'altra informazione, ossia lo \textbf{stato} del thread. Anche qui esistono i tre stati visti con i processi: READY, RUNNING, BLOCKED. 
+Ogni thread ha poi, oltre al proprio stack, al PC e ai propri registri, anche un proprio \textbf{TCB}, dove sono salvati tutti questi dati. Questo è anche usato come identificatore dallo scheduler per poter selezionare i singoli thread di un singolo processo sulla CPU. Vi è anche salvata un'altra informazione, ossia lo \textbf{stato} del thread. Anche qui esistono i tre stati visti con i processi: READY, RUNNING, BLOCKED. 
 
 \subsection{\codeb{pthread} API}
 
@@ -2565,11 +2565,11 @@ void mutex_unlock(mutex_t *m){
 \NB Nella dichiarazione, \code{park(void)} è diverso da \code{park()}: con il \code{void} come argomento viene specificato che la funzione non prende argomenti in ingresso, e il compilatore dà errore se gliene vengono passati, mentre senza (prima dello standard C23) il compilatore non controlla gli argomenti delle chiamate, ma passarne a una funzione definita senza parametri è comunque un comportamento indefinito.
 
 Di tutto questo codice la parte più difficile da capire riguarda probabilmente la funzione \code{setpark()}. Questa serve per avvisare il sistema che il thread attuale \textit{sta per essere parcheggiato}. Ma a che serve avvisare che sto per parcheggiarmi, quando tra pochissimo lo farò direttamente? Serve per risolvere un caso limite molto fastidioso. Ipotizziamo di avere un thread $T_1$ in esecuzione sulla sezione critica e un altro thread $T_2$ che ha appena fatto \code{mutex\_lock} e sta per andare a parcheggiarsi perché il lock è occupato. Se $T_1$ finisce di lavorare e chiama \code{mutex\_unlock} mentre $T_2$ si trova proprio tra \code{guard\_release} e \code{park()} ma non si è ancora parcheggiato, la chiamata \code{unpark()} va a vuoto, perché $T_2$ ancora non ha chiamato \code{park()} per parcheggiarsi appunto. Dunque avremo in questo caso una sezione critica libera ma un thread che è in attesa che questa si liberi: un chiaro problema, che viene risolto da \code{setpark()}. Semplicemente, dice al sistema che lui si sta per parcheggiare, e che dunque se qualcuno lo vuole "svegliare" deve lasciare un messaggio, il quale verrà letto non appena viene eseguita la funzione \code{park()} e che farà svegliare subito il thread, senza che questo si parcheggi. \\
-Tutto ciò funziona grazie alla guard: questa fa si che mentre $T_2$ l'ha acquisita nessuno può fare nulla, ma deve piuttosto rimanere in attesa fino a quando non ritorna libera. In questo modo la chiamata di \code{setpark()} è sempre assicurata. Viene introdotto quindi con la guard un po' di spinning, ma le funzioni che la riguardano hanno così poche istruzioni da rendere questo spinning ininfluente.
+Tutto ciò funziona grazie alla guard: questa fa sì che mentre $T_2$ l'ha acquisita nessuno può fare nulla, ma deve piuttosto rimanere in attesa fino a quando non ritorna libera. In questo modo la chiamata di \code{setpark()} è sempre assicurata. Viene introdotto quindi con la guard un po' di spinning, ma le funzioni che la riguardano hanno così poche istruzioni da rendere questo spinning ininfluente.
 
 Esiste anche un altro modo di realizzare un lock che dorme, usato dai sistemi Linux: il \textbf{futex}. Più precisamente, il futex non è un lock, ma un meccanismo fornito dal kernel con cui costruirne uno. Il lock che abbiamo appena visto, infatti, anche quando nessuno è in attesa deve comunque acquisire e rilasciare la guard, e deve gestire da sé la coda e il problema della sveglia persa. L'idea del futex è gestire il lock in user space con istruzioni atomiche, così che nel caso senza contesa basti una sola CAS, ed entrare nel kernel (con una syscall costosa) solo quando qualcuno deve effettivamente addormentarsi o essere svegliato. Per fare ciò il kernel ci fornisce due funzioni: \codeb{futex\_wait(addr, expected)}, che addormenta il thread chiamante solo se \code{*addr == expected}, e \codeb{futex\_wake(addr, n)}, che sveglia fino a $n$ thread nella coda associata all'indirizzo \code{addr}. Il controllo di \code{futex\_wait} avviene atomicamente nel kernel, quindi nessuna sveglia può andare persa. Queste due funzioni, in realtà, in Linux sono unite in un'unica grande funzione, ossia \code{futex()}. Se vogliamo una \code{futex\_wait} tramite questa funzione dobbiamo scrivere \code{futex(addr, FUTEX\_WAIT, expected, NULL, NULL, 0)}, mentre se vogliamo una \code{futex\_wake} dobbiamo scrivere \code{futex(addr, FUTEX\_WAKE, n, NULL, NULL, 0)}. L'implementazione di un mutex\_lock tramite futex è la seguente:
 
-\NB In questo codice la CAS ha un comportamento diverso da quella vista prima: \code{CAS(p, expected, new)} restituisce il valore che ha letto in \code{*p} (quindi ha avuto successo se questo è uguale a \code{expected}), e non 1 o 0.
+\NB In questo codice la CAS ha un comportamento diverso da quella vista prima: \code{CAS(p, expected, new)} restituisce il valore che ha letto in \code{*p} (quindi ha avuto successo se questo è uguale a \code{expected}), e non 1 o 0 per indicare un fallimento come invece faceva la CAS vista prima.
 
 \begin{lstlisting}[style=C]
 void mutex_lock(int *flag){
@@ -2609,23 +2609,23 @@ Un'altra strategia ancora per implementare un lock che dorme è il cosiddetto \t
 \hline
 \textbf{Lock} & \textbf{Corretto} & \textbf{Equo} & \textbf{Performance senza contesa} & \textbf{Performance con contesa} \\
 \hline
-Disabilitare gli interrupt & Si con CPU con solo un core & N/A, dato che con un solo core nessun altro thread può andare in esecuzione & Ottima & N/A, dato che se c'è contesa siamo in una CPU multicore e il lock non funziona \\
+Disabilitare gli interrupt & \textit{Si} con CPU con solo un core & \textit{N/A}, dato che con un solo core nessun altro thread può andare in esecuzione senza interrupt & \textit{Ottima} & \textit{N/A}, dato che se c'è contesa siamo in una CPU multicore e il lock non funziona \\
 \hline
-Flag singolo & No & -- & -- & -- \\
+Flag singolo & \textit{No} & -- & -- & -- \\
 \hline
-Peterson & Solo con SC (consistenza sequenziale) & Si & Ottima & Pessima, per lo spinning \\
+Peterson & \textit{Solo con SC} (consistenza sequenziale) & \textit{Si} & \textit{Ottima} & \textit{Pessima}, per lo spinning \\
 \hline
-Spinlock TAS/CAS & Si & No & Ottima & Pessima, per lo spinning \\
+Spinlock TAS/CAS & \textit{Si} & \textit{No} & \textit{Ottima} & \textit{Pessima}, per lo spinning \\
 \hline
-Ticket lock FAA & Si & Si & Ottima & Pessima, per lo spinning \\
+Ticket lock FAA & \textit{Si} & \textit{Si} & \textit{Ottima} & \textit{Pessima}, per lo spinning \\
 \hline
-Yield lock & Si & No & Ottima & Non ottimale, per colpa dei continui context switch \\
+Yield lock & \textit{Si} & \textit{No} & \textit{Ottima} & \textit{Non ottimale}, per colpa dei continui context switch \\
 \hline
-Mutex con coda d'attesa & Si & Si & Non perfetta, per colpa della guard  & Ottima \\
+Mutex con coda d'attesa & \textit{Si} & \textit{Si} & \textit{Non perfetta}, per colpa della guard & \textit{Ottima} \\
 \hline
-Mutex con futex & Si & In parte & Ottima & Ottima \\
+Mutex con futex & \textit{Si} & \textit{In parte} & \textit{Ottima} & \textit{Ottima} \\
 \hline
-Two-phase lock & Si & In parte & Ottima & Ottima \\
+Two-phase lock & \textit{Si} & \textit{In parte} & \textit{Ottima} & \textit{Ottima} \\
 \hline
 \end{tabular}
 \caption{Confronto tra tutte le implementazioni di lock}
