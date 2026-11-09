@@ -1968,7 +1968,7 @@ Creiamo per questo esempio una Moore FSM. Per farla, utilizziamo dei cerchi, che
 
 Vediamo ora la \textbf{tabella di transizione degli stati}, ossia la tabella che, preso uno stato di partenza e degli input, ci dice quale sarà il prossimo stato (stiamo quindi scrivendo in tabella la logica del circuito combinatorio next state).
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \begin{tabular}{|c|c|c|c|}
     \hline
@@ -2152,7 +2152,7 @@ Anche qui abbiamo due rappresentazioni del tutto equivalenti: a sinistra della s
 
 Vediamo ora la tabella di transizione degli stati e degli output (le vediamo insieme, dato che sia gli input che gli stati sono importanti per l'output finale), codificando semplicemente $S_0$ a $0$ e $S_1$ a $1$:
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \begin{tabular}{|c|c|c|c|}
     \hline
@@ -2250,7 +2250,7 @@ Abbiamo in totale 7 stati: 1 di reset, quando $s$ è vuota, 2 quando la sequenza
 Partiamo da $001$ e non da $000$ per un motivo molto semplice: in questo modo, gli ultimi 4 stati partono tutti con un 1, e i loro ultimi 2 bit equivalgono agli ultimi due bit della sequenza quando ci troviamo in quello stato. \\
 Vediamo ora la tabella degli stati e degli output:
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
@@ -2302,7 +2302,7 @@ Al posto di rifare tutto il circuito di Mealy da capo, notiamo che ci basta pren
 
 Abbiamo quindi reso gli stati $R, S_{x0}$ e $S_{x1}$ \textbf{irraggiungibili}. A questo punto anche le codifiche e la tabella degli stati e degli output possiamo riprenderle da quelle già fatte, eliminando di fatto un bit per la codifica portandola a una codifica a soli due bit:
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
     \hline
@@ -2348,7 +2348,7 @@ Possiamo anche qui riprendere il primo schema Mealy e mandare tutte le transizio
 
 Anche per la tabella degli stati e degli output possiamo prendere quella già fatta all'inizio, modificando lo stato successivo di ogni riga che ha un output pari a 1 con il valore $001$, che si riferisce proprio allo stato $R$: \nopagebreak
 
-\begin{table}[h]
+\begin{table}[H]
   \centering
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
