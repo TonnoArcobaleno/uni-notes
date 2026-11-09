@@ -2936,14 +2936,6 @@ Se si ha $X \longrightarrow Y$, non è detto che si abbia anche $Y \longrightarr
 
 Banalmente, se tutti i voli con lo stesso codice partono alla stessa ora, non è detto che tutti i voli che partono alla stessa ora abbiano lo stesso codice.
 
-Finalmente, grazie al concetto di dipendenza funzionale, ci è possibile dare una definizione formale del concetto di chiave. 
-\begin{Definizione}[Chiave]
-\label{def-chiave-finale}
-Una \textbf{chiave} è definita come un attributo o un insieme di attributi $K$ che, direttamente o attraverso dipendenze derivate (che vedremo in seguito cosa sono), determina tutti gli altri attributi. In poche parole, se due tuple hanno uguali valori su $K$ allora anche i valori su tutti gli altri attributi devono essere uguali. 
-\end{Definizione}
-
-Una chiave per essere tale non deve avere \textbf{nessun sottoinsieme di $\bm{K}$} in grado di determinare gli altri attributi. Se questa condizione non è verificata, parliamo di \textbf{superchiave}.
-
 \section{Implementazione in SQL}
 
 L'implementazione delle dipendenze funzionali in SQL avviene tramite \textbf{TRIGGER}. Ad esempio, per implementare il vincolo riguardo i voli che abbiamo visto poco fa possiamo creare il seguente trigger:
@@ -3017,7 +3009,7 @@ Questa relazione rispetta ad esempio la dipendenza funzionale $A \longrightarrow
 Nel caso in cui abbiamo $X \cup Y = R$, presa una relazione $r$ ci basta trovare due tuple $t_1,t_2$ tali che $t_1[X] = t_2[X]$ per dimostrare che tale istanza non è legale.  
 \end{Osservazione}
 
-Questo è vero perché, dato che $X \cup Y = R$, se $t_1[X] = t_2[X]$ è impossibile avere anche $t_1[Y] = t_2[Y]$, dato che altrimenti avremmo due tuple completamente identiche, il che non è ammesso.
+Questo è vero perché, dato che $X \cup Y = R$, se $t_1[X] = t_2[X]$ è impossibile avere anche $t_1[Y] = t_2[Y]$, altrimenti avremmo due tuple completamente identiche, il che non è ammesso.
 
 Prendiamo ora un'altra istanza $s$ dello schema $R$ visto prima:
 
@@ -3049,6 +3041,104 @@ $\bm{F \subseteq F^+}$
 \end{Proposizione}
 
 Nell'esempio di prima avremo quindi $F^+ = \{A \longrightarrow B, B \longrightarrow D, A \longrightarrow D\}$. Ricordiamo sempre che ad esempio $C \longrightarrow D$ non è presente in $F^+$ nonostante sia rispettata sia da $r$ che da $s$ perché è semplicemente un caso che questo sia accaduto. È possibilissimo che un domani venga aggiunta in $r$ o in $s$ una riga che rompa questa dipendenza, mantenendo allo stesso tempo l'istanza completamente legale.
+
+\begin{Proposizione}[Dipendenza funzionale banale]
+\label{propos-dipendenza-funzionale-banale}
+Dato uno schema $R$ e due sottoinsiemi non vuoti $X,Y$ di $R$, $Y \subseteq X \implies X \longrightarrow Y$. Questo tipo di dipendenze prendono il nome di \textbf{dipendenze funzionali banali}.
+\end{Proposizione}
+
+Ad esempio $ABC \longrightarrow AB$ è una dipendenza funzionale banale.
+
+\section{Definizione di chiave}
+
+Finalmente, grazie al concetto di dipendenza funzionale, ci è possibile dare una definizione formale del concetto di chiave. 
+\begin{Definizione}[Chiave]
+\label{def-chiave-finale}
+Una \textbf{chiave} è definita come un attributo o un insieme di attributi $K$ sottoinsieme di uno schema $R$ che rispetta queste due proprietà:
+\begin{enumerate}
+    \item $\bm{K \longrightarrow R \in F^+}$
+    \item $\bm{\nexists K' \subset K}$ \textbf{t.c.} $\bm{K' \longrightarrow R \in F^+}$
+\end{enumerate}
+\end{Definizione}
+
+La prima proprietà ci dice quindi che con $K$ risuciamo a identificare univocamente una tupla in un'istanza di $R$, mentre la seconda proprietà ci dice che $K$ deve essere \textbf{minimale} (e non minimo, dato che possono esistere più chiavi possibili all'interno di uno stesso schema $R$). \\
+Una lista di attributi $K$ che rispetta solo la prima proprietà ma non la seconda prende il nome di \textbf{superchiave}.
+
+\NB In SQL sappiamo che dobbiamo scegliere una chiave tra quelle possibili, che prende il nome di \textbf{chiave primaria} e non può assumere il valore NULL. Le altre chiavi, però, non devono essere ignorate ma devono essere dichiarate \codeb{UNIQUE}.
+
+\section{Un altro insieme di dipendenze funzionali}
+
+Calcolare $F^+$ è tutto tranne che semplice: infatti, sappiamo che tutte le dipendenze funzionali che sono in $F$ sono anche in $F^+$, ma come facciamo a trovare tutte quelle che non lo sono? Per risolvere questo problema introduciamo un nuovo insieme di dipendenze funzionali, più semplice da calcolare, ossia $\bm{F^A}$.
+
+\begin{Definizione}[$\bm{F^A}$]
+\label{def-F-A}
+Chiamiamo $\bm{F^A}$ l'insieme delle dipendenze funzionali di uno schema $R$ tale che $\bm{F \subseteq F^A}$ e che rispetta i seguenti assiomi (che prendono il nome di \textbf{assiomi di Armstrong}):
+\begin{enumerate}
+    \item $Y \subseteq X \implies X \longrightarrow Y \in F^A$ (\textbf{assioma della riflessività}, che inserisce in $F^A$ tutte le dipendenze funzionali banali di $R$)
+    \item $X \longrightarrow Y \in F^A \implies XZ \longrightarrow YZ \in F^A \enspace \forall Z \subseteq R$ (\textbf{assioma dell'aumento})
+    \item $X \longrightarrow Y  \in F^A$ e $Y \longrightarrow Z \in F^A \implies X \longrightarrow Z \in F^A$ (\textbf{assioma della transitività}, che avevamo già accennato nel Corollario \ref{corol-F+}) 
+\end{enumerate} 
+Gli ultimi due assiomi sono detti \textbf{ricorsivi}. Infatti, in questi usiamo delle dipendenze che già sappiamo essere in $F^A$ per trovarne di nuove. 
+\end{Definizione}
+
+\begin{Proprieta}[Altri assiomi di Armstrong]
+\label{prop-altri-assiomi-Armstrong}
+Esistono altri 3 assiomi di Armstrong per trovare delle dipendenze funzionali in $F^A$:
+\begin{enumerate}[start = 4]
+    \item $X \longrightarrow Y \in F^A$ e $X \longrightarrow Z \in F^A \implies X \longrightarrow YZ \in F^A$ (\textbf{regola dell'unione})
+    \item $X \longrightarrow Y \in F^A$ e $Z \subseteq  Y \implies X \longrightarrow Z \in F^A$ (\textbf{regola della decomposizione})
+    \item $X \longrightarrow Y \in F^A$ e $WY \in Z \in F^A \implies WX \longrightarrow Z \in F^A$ (\textbf{regola della pseudotransitività})
+\end{enumerate}
+Queste regole ci rendono il calcolo di $F^A$ più semplici, ma non sono necessarie per definire $F^A$ stessa perché tutte e tre derivano dai tre assiomi visti prima.
+\end{Proprieta}
+
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}[start = 4]
+    \item Se $X \longrightarrow Y \in F^A$, per l'assioma dell'aumento abbiamo $X \longrightarrow XY \in F^A$, e allo stesso modo, se $X \longrightarrow Z \in F^A$, allora $XY \longrightarrow YZ \in F^A$. A questo punto, per l'assioma della transitività, troviamo che $X \longrightarrow YZ \in F^A$. $\blacksquare$
+    \item Se $Z \subseteq Y$, per l'assioma della riflessività, abbiamo che $Y \longrightarrow Z \in F^A$. Avendo anche $X \longrightarrow Y \in F^A$, troviamo per l'assioma della transitività che $X \longrightarrow Z \in F^A$. $\blacksquare$
+    \item Se $X \longrightarrow Y \in F^A$, per l'assioma dell'aumento abbiamo $WX \longrightarrow WY \in F^A$. Avendo anche $WY \longrightarrow Z \in F^A$, troviamo per l'assioma della transitività che $WX \longrightarrow Z \in F^A$. $\blacksquare$
+\end{enumerate}
+
+\begin{Osservazione}[]
+\label{oss-F-A}
+Preso uno schema $R$ e due sottoinsiemi non vuoti $X$ e $Y$ di $R$, dove $Y = A_1, \ldots, A_n$, $\bm{X \longrightarrow Y \in F^A \iff X \longrightarrow A_1 \in F^A, \ldots, X \longrightarrow A_n \in F^A}$.
+\end{Osservazione}
+
+\vspace{2cm}
+
+\Dimostrazione \nopagebreak
+
+\begin{itemize}
+    \item $X \longrightarrow Y \in F^A \implies X \longrightarrow A_1 \in F^A, \ldots, X \longrightarrow A_n \in F^A$ \\
+    Banalmente, per la regola della decomposizione, se $X \longrightarrow A_1, \ldots, A_n \in F^A$ allora \mbox{$X \longrightarrow A_i \in F^A \enspace \forall i \in \{1, \ldots, n\}$}. $\blacksquare$
+    \item $X \longrightarrow Y \in F^A \impliedby X \longrightarrow A_1 \in F^A, \ldots, X \longrightarrow A_n \in F^A$ \\
+    Banalmente, per la regola dell'unione, se $X \longrightarrow A_i \in F^A \enspace \forall i \in \{1, \ldots, n\}$, allora \mbox{$X \longrightarrow A_1, \ldots, A_n \in F_A$} (notiamo come la dimostrazione di questo secondo passaggio sia identica a quella del primo ma invertita). $\blacksquare$
+\end{itemize}
+
+\begin{Definizione}[Chiusura di un insieme di attributi]
+\label{def-chiusura-insieme-attributi}
+Preso uno schema $R$ e un sottoinsieme di attributi $X$ di $R$, la \textbf{chiusura} di $X$ rispetto a un insieme di dipendenze funzionali $F$ è definita nel seguente modo:
+\[
+\bm{X_F^+ = \{A \mid X} \longrightarrow \bm{A \in F^A\}}
+\]
+\NB Questa definizione serve per trovare tutti gli attributi determinati da $X$. Per fare ciò, dovremmo segnare $X \longrightarrow A \in F^+$, e non in $F^A$, ma dato che tra poco dimostreremo che $F^+ = F^A$, scriviamo in questa definizione e anche nel prossimo lemma di chiusura direttamente $F^A$. 
+\end{Definizione}
+
+\begin{Proposizione}[Lemma di chiusura]
+\label{lemma-di-chiusura}
+Preso uno schema $R$ e un insieme di dipendenze funzionali $F$ su $R$, \mbox{$\bm{X \longrightarrow Y \in F^A \iff Y \subseteq X^+}$}.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+Poniamo per entrambi i punti della dimostrazione $Y = A_1, \ldots, A_n$.
+\begin{itemize}
+    \item $X \longrightarrow Y \in F^A \implies Y \subseteq X^+$ \\
+    Banalmente, dato che $Y \subseteq X^+$, $\forall i \in \{1, \ldots, n\}$ si ha che $X \longrightarrow A_i \in F^A$. Dunque per la regola dell'unione troviamo che $X \longrightarrow Y \in F^A$. $\blacksquare$
+    \item $X \longrightarrow Y \in F^A \impliedby Y \subseteq X^+$ \\
+    Banalmente, dato che $X \longrightarrow Y \in F^A$, per la regola della decomposizione abbiamo che, $\forall i \in \{1, \ldots, n\} \enspace X \longrightarrow A_i \in F^A$, ossia $A_i \in X^+$, dunque $Y \in X^+$ (notiamo anche qui come la dimostrazione di questo secondo passaggio sia identica a quella del primo ma invertita). $\blacksquare$
+\end{itemize}
+
 
 
 
