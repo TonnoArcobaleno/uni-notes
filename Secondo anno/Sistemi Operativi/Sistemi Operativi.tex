@@ -688,7 +688,7 @@ In questo esempio, nella funzione \code{main} la variabile \code{x} diventa una 
 Esistono poi due importanti keyword riguardanti le variabili che non sono molto utilizzate ma che sono importanti da conoscere:
 \begin{itemize}
     \item \codeb{register}: consiglia al compilatore di salvare questa variabile nei registri della CPU
-    \item \codeb{volatile}: dice al compilatore che questa variabile potrebbe cambiare anche al di fuori del controllo del programma corrente
+    \item \codeb{volatile}: dice al compilatore di prendere la variabile non in cache ma in RAM
 \end{itemize}
 
 \subsection{I tipi in C}
@@ -2257,8 +2257,8 @@ Questo è un caso classico di \textbf{race condition}: il risultato dipende dall
 
 Chiamiamo \textbf{sezione critica} la porzione di codice che accede a una risorsa condivisa (in questo caso l'incremento di \code{counter}). Per evitare il problema, la sezione critica deve essere eseguita in \textit{mutua esclusione}, ossia solo un thread alla volta può eseguire la sezione. La mutua esclusione da sola però non basta, perché sarebbe soddisfatta anche impedendo a tutti i thread di entrare. È logico che, se nessun thread è nella sezione critica e qualcuno vuole entrarci, questo deve poterlo fare.
 
-Per ottenere tutto questo si introduce un costrutto astratto chiamato \textbf{lock}: una variabile, inizialmente libera, su cui si possono eseguire due operazioni, \codeb{lock} e \codeb{unlock}. Se un thread esegue \code{lock} su un lock libero, lo acquisisce ed entra nella sezione critica. Ogni altro thread che esegue \code{lock} su quel lock resta bloccato finché il primo non esegue \code{unlock}. Questo vale anche se il thread che detiene il lock viene tolto dalla CPU: gli altri dovranno comunque aspettare che torni in esecuzione e concluda la sezione critica. Per questo motivo le sezioni critiche devono essere il più brevi possibile. \\
-Con la \code{pthread} API il lock si implementa con una variabile condivisa di tipo \codeb{pthread\_mutex\_t} (mutex = MUTual EXclusion), inizializzata con \code{PTHREAD\_MUTEX\_INITIALIZER} oppure con \code{pthread\_mutex\_init}. Si chiama poi \codeb{pthread\_mutex\_lock(\&lock)} per entrare nella sezione critica e \codeb{pthread\_mutex\_unlock(\&lock)} per uscirne. Vedremo poi nella sezione successiva come sono implementate queste due funzioni nel dettaglio.
+Per ottenere tutto questo si introduce un costrutto astratto chiamato \textbf{lock}: una variabile, inizialmente libera, su cui si possono eseguire due operazioni, \codeb{lock} e \codeb{unlock}. Se un thread esegue \code{lock} su una lock libero, lo acquisisce ed entra nella sezione critica. Ogni altro thread che esegue \code{lock} su quel lock resta bloccato finché il primo non esegue \code{unlock}. Questo vale anche se il thread che detiene la lock viene tolto dalla CPU: gli altri dovranno comunque aspettare che torni in esecuzione e concluda la sezione critica. Per questo motivo le sezioni critiche devono essere il più brevi possibile. \\
+Con la \code{pthread} API la lock si implementa con una variabile condivisa di tipo \codeb{pthread\_mutex\_t} (mutex = MUTual EXclusion), inizializzata con \code{PTHREAD\_MUTEX\_INITIALIZER} oppure con \code{pthread\_mutex\_init}. Si chiama poi \codeb{pthread\_mutex\_lock(\&lock)} per entrare nella sezione critica e \codeb{pthread\_mutex\_unlock(\&lock)} per uscirne. Vedremo poi nella sezione successiva come sono implementate queste due funzioni nel dettaglio.
 
 Oltre alla race condition e al data race esistono altri problemi riguardanti il multithreading. Tra questi uno dei più subdoli e nascosti è quello dell'\textbf{ordine di esecuzione delle operazioni}. Ipotizziamo di avere il seguente codice:
 \begin{lstlisting}[style=C]
@@ -2301,12 +2301,12 @@ Ci sono tre parametri che dobbiamo tenere bene a mente:
 \begin{enumerate}
     \item \textbf{Correttezza}: se un thread sta lavorando su una sezione critica, nessun altro può entrarci; se la sezione è libera e qualcuno vuole entrarci deve poterlo fare.
     \item \textbf{Equità}: bisogna evitare che sempre lo stesso thread abbia l'accesso alla sezione critica. Bisogna implementare una policy FIFO: se ci sono $n$ thread che vogliono una sezione critica, un thread dovrà aspettare al più $n-1$ volte che un altro finisca, non di più.
-    \item \textbf{Performance}: quanto costa usare un lock quando questo è libero? E quanto quando invece è occupato?
+    \item \textbf{Performance}: quanto costa usare una lock quando questo è libero? E quanto quando invece è occupato?
 \end{enumerate}
 
 \subsection{Implementazioni software-only}
 
-L'implementazione più semplice di un lock consiste nel \textbf{disabilitare gli interrupt}: quando un thread chiama \code{lock}, le interruzioni vengono disabilitate, e vengono riabilitate solo quando il thread chiama \code{unlock}. In questo modo il timer interrupt che farebbe uscire il thread dalla CPU non può partire, il sistema operativo non riprende mai il controllo della CPU e lo scheduler non ha occasione di sostituire il thread con un altro: la sezione critica viene quindi eseguita senza interruzioni.
+L'implementazione più semplice di una lock consiste nel \textbf{disabilitare gli interrupt}: quando un thread chiama \code{lock}, le interruzioni vengono disabilitate, e vengono riabilitate solo quando il thread chiama \code{unlock}. In questo modo il timer interrupt che farebbe uscire il thread dalla CPU non può partire, il sistema operativo non riprende mai il controllo della CPU e lo scheduler non ha occasione di sostituire il thread con un altro: la sezione critica viene quindi eseguita senza interruzioni.
 
 Questa implementazione ha però molti problemi:
 \begin{itemize}
@@ -2317,7 +2317,7 @@ Questa implementazione ha però molti problemi:
 
 Quest'idea, che è attuabile solo per del codice kernel molto breve, non è una buona implementazione generale.
 
-Un'altra idea molto intuitiva sarebbe quella di usare una variabile \codeb{flag} per segnare se il lock è libero o meno: 0 se è libero, 1 se non lo è. Il problema qui si verifica a causa della non atomicità delle istruzioni. Infatti, se implementiamo il \code{lock} in questo modo, staremmo creando una funzione di questo tipo:
+Un'altra idea molto intuitiva sarebbe quella di usare una variabile \codeb{flag} per segnare se la lock è libero o meno: 0 se è libero, 1 se non lo è. Il problema qui si verifica a causa della non atomicità delle istruzioni. Infatti, se implementiamo il \code{lock} in questo modo, staremmo creando una funzione di questo tipo:
 \begin{lstlisting}[style=C]
 int flag = 0;
 void lock() {while (flag == 1); flag = 1;}
@@ -2386,7 +2386,7 @@ int TAS(int *p, int new_value){
 }
 \end{lstlisting}
 
-Una TAS è perfetta per verificare se un lock sia occupato o meno e, nel caso, occuparlo. Per fare ciò basta chiamare \code{TAS(\&flag, 1)} e verificare il valore restituito dalla TAS (ossia il vecchio valore di \code{flag}). Se è 0 allora abbiamo trovato che il lock era libero e lo abbiamo occupato, altrimenti lo abbiamo trovato occupato e ci tocca aspettare (non abbiamo modificato nulla, dato che abbiamo semplicemente sovrascritto 1 su 1). Tutto ciò viene implementato in questo modo:
+Una TAS è perfetta per verificare se una lock sia occupato o meno e, nel caso, occuparlo. Per fare ciò basta chiamare \code{TAS(\&flag, 1)} e verificare il valore restituito dalla TAS (ossia il vecchio valore di \code{flag}). Se è 0 allora abbiamo trovato che la lock era libero e lo abbiamo occupato, altrimenti lo abbiamo trovato occupato e ci tocca aspettare (non abbiamo modificato nulla, dato che abbiamo semplicemente sovrascritto 1 su 1). Tutto ciò viene implementato in questo modo:
 
 \begin{lstlisting}[style=C]
 #include <stdatomic.h> // Libreria per implementare le istruzioni atomiche
@@ -2462,7 +2462,7 @@ void cas_unlock(spinlock_t *l){
 }
 \end{lstlisting}
 
-Tramite una CAS noi possiamo inoltre \textbf{aggiornare una variabile condivisa} senza usare alcun lock:
+Tramite una CAS noi possiamo inoltre \textbf{aggiornare una variabile condivisa} senza usare alcuna lock:
 \begin{lstlisting}[style=C]
 int cas_increment(atomic_int *p){
     int old, new;
@@ -2474,7 +2474,7 @@ int cas_increment(atomic_int *p){
 }
 \end{lstlisting}
 
-Abbiamo quindi trovato un modo di eseguire una RMW senza usare un lock. Gli algoritmi lock-free basati sulla CAS, però, quando lavorano su puntatori (ad esempio in una pila) soffrono di un nuovo problema: l'\textbf{ABA problem} (per un semplice contatore come quello appena visto, invece, non è un problema). Per capire questo problema, ipotizziamo di avere una pila globale con 3 elementi: $A \longrightarrow B \longrightarrow C$. Adesso, con una CAS in un thread $T_1$ eseguiamo un \code{pop()}, ma prima che venga eseguito il controllo del \code{while}, $T_1$ è buttato fuori dalla CPU, e passa in esecuzione un altro thread $T_2$ che manda 3 CAS: con la prima esegue un \code{pop()}, con la seconda esegue un altro \code{pop()}, e con la terza un \code{push()}, reinserendo $A$ in cima. Prima che $T_1$ abbia effettuato il \code{pop()} la pila sarà quindi diventata $A \longrightarrow C$. Ma dato che lui aveva letto i valori \mbox{\code{old =}} $A$ e \mbox{\code{new =} $B$} prima di tutte queste istruzioni di $T_2$, quando eseguirà la CAS questa avrà successo (in cima c'è di nuovo $A$), e rimetterà in cima il valore errato $B$, già rimosso, e non $C$. 
+Abbiamo quindi trovato un modo di eseguire una RMW senza usare una lock. Gli algoritmi lock-free basati sulla CAS, però, quando lavorano su puntatori (ad esempio in una pila) soffrono di un nuovo problema: l'\textbf{ABA problem} (per un semplice contatore come quello appena visto, invece, non è un problema). Per capire questo problema, ipotizziamo di avere una pila globale con 3 elementi: $A \longrightarrow B \longrightarrow C$. Adesso, con una CAS in un thread $T_1$ eseguiamo un \code{pop()}, ma prima che venga eseguito il controllo del \code{while}, $T_1$ è buttato fuori dalla CPU, e passa in esecuzione un altro thread $T_2$ che manda 3 CAS: con la prima esegue un \code{pop()}, con la seconda esegue un altro \code{pop()}, e con la terza un \code{push()}, reinserendo $A$ in cima. Prima che $T_1$ abbia effettuato il \code{pop()} la pila sarà quindi diventata $A \longrightarrow C$. Ma dato che lui aveva letto i valori \mbox{\code{old =}} $A$ e \mbox{\code{new =} $B$} prima di tutte queste istruzioni di $T_2$, quando eseguirà la CAS questa avrà successo (in cima c'è di nuovo $A$), e rimetterà in cima il valore errato $B$, già rimosso, e non $C$. 
 
 Risolvere l'ABA problem però non è complesso: basta aggiungere alla chiamata della CAS un nuovo valore affianco all'indirizzo che ne specifica la versione, in modo da controllare ogni volta non solo \code{*p == expected}, ma anche che la versione della nostra struttura dati in questo caso sia rimasta identica.
 
@@ -2495,7 +2495,7 @@ int FAA(int *p, int d){
 }
 \end{lstlisting}
 
-Tramite la FAA nasce un nuovo tipo di lock, che prende il nome di \textbf{ticket lock}. L'idea è semplice: ogni thread che controlla se il lock è libero riceve un ticket, che parte da 0. Chi quindi richiede l'accesso alla sezione critica quando questa è libera riceve un ticket uguale al turno corrente (all'inizio entrambi valgono 0) e può entrare subito, mentre gli altri che arrivano dovranno aspettare il loro turno, che è deciso proprio dall'ordine di arrivo. Tutto ciò viene implementato in questo modo:
+Tramite la FAA nasce un nuovo tipo di lock, che prende il nome di \textbf{ticket lock}. L'idea è semplice: ogni thread che controlla se la lock è libero riceve un ticket, che parte da 0. Chi quindi richiede l'accesso alla sezione critica quando questa è libera riceve un ticket uguale al turno corrente (all'inizio entrambi valgono 0) e può entrare subito, mentre gli altri che arrivano dovranno aspettare il loro turno, che è deciso proprio dall'ordine di arrivo. Tutto ciò viene implementato in questo modo:
 \begin{lstlisting}[style=C]
 #include <stdatomic.h>
 
@@ -2564,10 +2564,10 @@ void mutex_unlock(mutex_t *m){
 
 \NB Nella dichiarazione, \code{park(void)} è diverso da \code{park()}: con il \code{void} come argomento viene specificato che la funzione non prende argomenti in ingresso, e il compilatore dà errore se gliene vengono passati, mentre senza (prima dello standard C23) il compilatore non controlla gli argomenti delle chiamate, ma passarne a una funzione definita senza parametri è comunque un comportamento indefinito.
 
-Di tutto questo codice la parte più difficile da capire riguarda probabilmente la funzione \code{setpark()}. Questa serve per avvisare il sistema che il thread attuale \textit{sta per essere parcheggiato}. Ma a che serve avvisare che sto per parcheggiarmi, quando tra pochissimo lo farò direttamente? Serve per risolvere un caso limite molto fastidioso. Ipotizziamo di avere un thread $T_1$ in esecuzione sulla sezione critica e un altro thread $T_2$ che ha appena fatto \code{mutex\_lock} e sta per andare a parcheggiarsi perché il lock è occupato. Se $T_1$ finisce di lavorare e chiama \code{mutex\_unlock} mentre $T_2$ si trova proprio tra \code{guard\_release} e \code{park()} ma non si è ancora parcheggiato, la chiamata \code{unpark()} va a vuoto, perché $T_2$ ancora non ha chiamato \code{park()} per parcheggiarsi appunto. Dunque avremo in questo caso una sezione critica libera ma un thread che è in attesa che questa si liberi: un chiaro problema, che viene risolto da \code{setpark()}. Semplicemente, dice al sistema che lui si sta per parcheggiare, e che dunque se qualcuno lo vuole "svegliare" deve lasciare un messaggio, il quale verrà letto non appena viene eseguita la funzione \code{park()} e che farà svegliare subito il thread, senza che questo si parcheggi. \\
+Di tutto questo codice la parte più difficile da capire riguarda probabilmente la funzione \code{setpark()}. Questa serve per avvisare il sistema che il thread attuale \textit{sta per essere parcheggiato}. Ma a che serve avvisare che sto per parcheggiarmi, quando tra pochissimo lo farò direttamente? Serve per risolvere un caso limite molto fastidioso. Ipotizziamo di avere un thread $T_1$ in esecuzione sulla sezione critica e un altro thread $T_2$ che ha appena fatto \code{mutex\_lock} e sta per andare a parcheggiarsi perché la lock è occupato. Se $T_1$ finisce di lavorare e chiama \code{mutex\_unlock} mentre $T_2$ si trova proprio tra \code{guard\_release} e \code{park()} ma non si è ancora parcheggiato, la chiamata \code{unpark()} va a vuoto, perché $T_2$ ancora non ha chiamato \code{park()} per parcheggiarsi appunto. Dunque avremo in questo caso una sezione critica libera ma un thread che è in attesa che questa si liberi: un chiaro problema, che viene risolto da \code{setpark()}. Semplicemente, dice al sistema che lui si sta per parcheggiare, e che dunque se qualcuno lo vuole "svegliare" deve lasciare un messaggio, il quale verrà letto non appena viene eseguita la funzione \code{park()} e che farà svegliare subito il thread, senza che questo si parcheggi. \\
 Tutto ciò funziona grazie alla guard: questa fa sì che mentre $T_2$ l'ha acquisita nessuno può fare nulla, ma deve piuttosto rimanere in attesa fino a quando non ritorna libera. In questo modo la chiamata di \code{setpark()} è sempre assicurata. Viene introdotto quindi con la guard un po' di spinning, ma le funzioni che la riguardano hanno così poche istruzioni da rendere questo spinning ininfluente.
 
-Esiste anche un altro modo di realizzare un lock che dorme, usato dai sistemi Linux: il \textbf{futex}. Più precisamente, il futex non è un lock, ma un meccanismo fornito dal kernel con cui costruirne uno. Il lock che abbiamo appena visto, infatti, anche quando nessuno è in attesa deve comunque acquisire e rilasciare la guard, e deve gestire da sé la coda e il problema della sveglia persa. L'idea del futex è gestire il lock in user space con istruzioni atomiche, così che nel caso senza contesa basti una sola CAS, ed entrare nel kernel (con una syscall costosa) solo quando qualcuno deve effettivamente addormentarsi o essere svegliato. Per fare ciò il kernel ci fornisce due funzioni: \codeb{futex\_wait(addr, expected)}, che addormenta il thread chiamante solo se \code{*addr == expected}, e \codeb{futex\_wake(addr, n)}, che sveglia fino a $n$ thread nella coda associata all'indirizzo \code{addr}. Il controllo di \code{futex\_wait} avviene atomicamente nel kernel, quindi nessuna sveglia può andare persa. Queste due funzioni, in realtà, in Linux sono unite in un'unica grande funzione, ossia \code{futex()}. Se vogliamo una \code{futex\_wait} tramite questa funzione dobbiamo scrivere \code{futex(addr, FUTEX\_WAIT, expected, NULL, NULL, 0)}, mentre se vogliamo una \code{futex\_wake} dobbiamo scrivere \code{futex(addr, FUTEX\_WAKE, n, NULL, NULL, 0)}. L'implementazione di un mutex\_lock tramite futex è la seguente:
+Esiste anche un altro modo di realizzare una lock che dorme, usato dai sistemi Linux: il \textbf{futex}. Più precisamente, il futex non è una lock, ma un meccanismo fornito dal kernel con cui costruirne uno. Il lock che abbiamo appena visto, infatti, anche quando nessuno è in attesa deve comunque acquisire e rilasciare la guard, e deve gestire da sé la coda e il problema della sveglia persa. L'idea del futex è gestire la lock in user space con istruzioni atomiche, così che nel caso senza contesa basti una sola CAS, ed entrare nel kernel (con una syscall costosa) solo quando qualcuno deve effettivamente addormentarsi o essere svegliato. Per fare ciò il kernel ci fornisce due funzioni: \codeb{futex\_wait(addr, expected)}, che addormenta il thread chiamante solo se \code{*addr == expected}, e \codeb{futex\_wake(addr, n)}, che sveglia fino a $n$ thread nella coda associata all'indirizzo \code{addr}. Il controllo di \code{futex\_wait} avviene atomicamente nel kernel, quindi nessuna sveglia può andare persa. Queste due funzioni, in realtà, in Linux sono unite in un'unica grande funzione, ossia \code{futex()}. Se vogliamo una \code{futex\_wait} tramite questa funzione dobbiamo scrivere \code{futex(addr, FUTEX\_WAIT, expected, NULL, NULL, 0)}, mentre se vogliamo una \code{futex\_wake} dobbiamo scrivere \code{futex(addr, FUTEX\_WAKE, n, NULL, NULL, 0)}. L'implementazione di un mutex\_lock tramite futex è la seguente:
 
 \NB In questo codice la CAS ha un comportamento diverso da quella vista prima: \code{CAS(p, expected, new)} restituisce il valore che ha letto in \code{*p} (quindi ha avuto successo se questo è uguale a \code{expected}), e non 1 o 0 per indicare un fallimento come invece faceva la CAS vista prima.
 
@@ -2599,7 +2599,7 @@ Abbiamo quindi 3 possibili stati in questa implementazione:
     \item \code{flag = 2} $\implies$ Sezione critica occupata e qualcuno in attesa
 \end{itemize}
 
-Un'altra strategia ancora per implementare un lock che dorme è il cosiddetto \textbf{two-phase lock}. Questo lock unisce spinning e sleeping insieme: quando un thread trova il lock occupato, piuttosto che eseguire spinning continuo come fanno le TAS o le CAS e piuttosto che andare subito a dormire come fanno i mutex, questo nel two-phase lock prova prima una fase di spinning a tempo limitato e, se questa non dovesse bastare per entrare nella sezione critica, si parcheggia finché non è il suo turno. Questo tempo limitato, che prende il nome di \textbf{spin budget}, spesso vale quanto un context switch (ossia pochi $\mu s$), così che, nel caso peggiore, si sprechi al più circa il doppio del tempo rispetto alla scelta migliore (che non si può conoscere in anticipo).
+Un'altra strategia ancora per implementare una lock che dorme è il cosiddetto \textbf{two-phase lock}. Questo lock unisce spinning e sleeping insieme: quando un thread trova la lock occupato, piuttosto che eseguire spinning continuo come fanno le TAS o le CAS e piuttosto che andare subito a dormire come fanno i mutex, questo nel two-phase lock prova prima una fase di spinning a tempo limitato e, se questa non dovesse bastare per entrare nella sezione critica, si parcheggia finché non è il suo turno. Questo tempo limitato, che prende il nome di \textbf{spin budget}, spesso vale quanto un context switch (ossia pochi $\mu s$), così che, nel caso peggiore, si sprechi al più circa il doppio del tempo rispetto alla scelta migliore (che non si può conoscere in anticipo).
 
 \subsection{Tabella riepilogativa}
 
@@ -2609,7 +2609,7 @@ Un'altra strategia ancora per implementare un lock che dorme è il cosiddetto \t
 \hline
 \textbf{Lock} & \textbf{Corretto} & \textbf{Equo} & \textbf{Performance senza contesa} & \textbf{Performance con contesa} \\
 \hline
-Disabilitare gli interrupt & \textit{Si} con CPU con solo un core & \textit{N/A}, dato che con un solo core nessun altro thread può andare in esecuzione senza interrupt & \textit{Ottima} & \textit{N/A}, dato che se c'è contesa siamo in una CPU multicore e il lock non funziona \\
+Disabilitare gli interrupt & \textit{Si} con CPU con solo un core & \textit{N/A}, dato che con un solo core nessun altro thread può andare in esecuzione senza interrupt & \textit{Ottima} & \textit{N/A}, dato che se c'è contesa siamo in una CPU multicore e la lock non funziona \\
 \hline
 Flag singolo & \textit{No} & -- & -- & -- \\
 \hline
@@ -2631,7 +2631,397 @@ Two-phase lock & \textit{Si} & \textit{In parte} & \textit{Ottima} & \textit{Ott
 \caption{Confronto tra tutte le implementazioni di lock}
 \end{table}
 
-Il mutex con futex e il two-phase lock non sono equi per un motivo molto semplice: il lock non viene passato direttamente al thread in attesa. Infatti, quando il thread in esecuzione sulla sezione critica rilascia il lock, \code{flag} torna a valere 0 e viene svegliato uno dei thread in attesa, ma se mentre questo si sveglia arriva un nuovo thread, questo può benissimo rubare il posto agli altri tramite una CAS, col pericolo di lasciare dei thread in starvation. Diciamo In Parte e non No per un motivo semplice: il kernel sveglia i thread più o meno nell'ordine in cui questi si sono addormentati. Dunque, dato che i sorpassi non avvengono così spesso, il pericolo di starvation per un thread con questi due lock è quasi nullo, ma sicuramente non possono essere definiti equi tanto quanto i lock che utilizzano una FIFO.
+Il mutex con futex e il two-phase lock non sono equi per un motivo molto semplice: la lock non viene passato direttamente al thread in attesa. Infatti, quando il thread in esecuzione sulla sezione critica rilascia la lock, \code{flag} torna a valere 0 e viene svegliato uno dei thread in attesa, ma se mentre questo si sveglia arriva un nuovo thread, questo può benissimo rubare il posto agli altri tramite una CAS, col pericolo di lasciare dei thread in starvation. Diciamo In Parte e non No per un motivo semplice: il kernel sveglia i thread più o meno nell'ordine in cui questi si sono addormentati. Dunque, dato che i sorpassi non avvengono così spesso, il pericolo di starvation per un thread con questi due lock è quasi nullo, ma sicuramente non possono essere definiti equi tanto quanto i lock che utilizzano una FIFO.
+
+\section{Condition variable}
+
+\subsection{Fare aspettare un thread}
+
+Abbiamo risolto con i lock il problema della mutua esclusione. Adesso, però, vogliamo poter dire a un thread "\textbf{aspetta fino a quando X non succede}". Abbiamo già visto questo problema quando un thread padre deve aspettare la fine di un thread figlio, e lo avevamo risolto usando la funzione \codeb{phtread\_join}, ma vogliamo ora una soluzione generale per ogni condizione X possibile da attendere.
+
+La soluzione inutitiva è quella di usare una variabile che vale 0 finché X non succede e 1 quando questo finalmente accade, e usare nel thread in attesa
+un loop che gira fino a quando la variabile non vale 1. Questa soluzione altro non è che spinning, dunque il problema rimane lo stesso: il thread in attesa brucia core di CPU senza fare nulla. Rimane anche il problema della data race, dato che la scrittura di un valore rimane divisa nelle solite tre fasi RMW. Inoltre, se la condizione X viene aspettata da più thread, e si vuole garantire la mutua esclusione, con questa implementazione ciò rimane impossibile. 
+
+Per risovlere questo problema introduciamo invece un nuovo costrutto, ossia la \textbf{condition variable}.
+
+\begin{Definizione}[Condition variable]
+\label{def-CV}
+Una \textbf{condition variable} (CV) è un costrutto che permette di addormentare un thread fino a quando una particolarre condizione non diventa vera, e permette a un altro thread di segnalare quando quella condizione è diventata true. 
+\end{Definizione}
+
+\begin{Proprieta}[Proprietà della CV]
+\label{prop-CV}
+\begin{itemize}
+    \item Una CV è sempre usata insieme a un \textbf{mutex} per proteggere i dati condivisi
+    \item Un thread addormentato rilascia il mutex e va a dormire tutto in un unico step atomico (così il messaggio da inviare quando si finisce di lavorare è sempre inviato)
+    \item Un thread risvegliato riacquisce il mutex prima ancora di ricominciare a eseguire codice
+    \item Una CV non ha memoria propria: la condizione è sempre espressa da variabili condivise 
+\end{itemize}
+\end{Proprieta}
+
+\subsection{Struttura interna}
+
+Una CV viene implementata tramite una delle variabili di stato (come \code{done == 1} o \code{count > 0}), gestite da un mutex, e da una queue di thread addormentati. Per gestirla esistono due funzioni fondamentali:
+\begin{itemize}
+    \item \codeb{wait(cv,m)}, che rilascia \textbf{atomicamente} \code{m} (la lock) e mette il chiamante a dormire e lo inserisce nell'insieme di CV (chiamato \textit{coda d'attesa}) in attesa di un messaggio che gli dica di svegliarsi. Se questo passaggio non avviene atomaticamente, è possibile che un thread rimanga a dormire per sempre (se infatti rilascio la lock ma non vado a dormire, quando qualcuno vorrà svegliarmi non potrà farlo e rimarrò a dormire potenzialmente per sempre). Per effettuare questa operazione in maniera atomica usiamo la funzione \code{pthread\_cond\_wait()}, che rilascia \code{m}, inserire il thread nell'insieme e manda a dormire il thread, tutto in un unico passaggio indivisibile.
+    \item \codeb{signal(cv)}, che sveglia un thread a caso nell'insieme e lo fa passare dallo stato BLOCKED allo stato READY. La lock rimane però in mano al signaler: il thread svegliato dovrà aspettare che questo la rilasci per poter operare. Per effettuare questa operazione usiamo la funzione \code{pthread\_cond\_signal()}.
+    \item \codeb{broadcast()}, che sveglia tutti i thread addormentati contemporaneamente. Tra questi, il primo schedulato dalla CPU otterrà la lock e potrà lavorare prima degli altri.
+\end{itemize}
+
+\begin{Proprieta}[Regole di una CV corretta]
+\label{prop-regole-CV}
+\begin{itemize}
+    \item Qualsiasi operazione di \code{wait} o \code{signal} va fatta solo con la lock \code{m} \textbf{acquisita}
+    \item Una volta svegliato controlla la condizione in un while
+    \item Qualsiasi signal va amandato solo dopo aver modificato il proprio stato (non ha senso fare signal se ho ancora \code{done = 0})
+\end{itemize}
+\end{Proprieta}
+
+\begin{lstlisting}[style=C]
+// Colui che chiama wait
+pthread_mutex_lock(&m); // Prendo la lock
+while(!condition){ // Solo se la mia condizione è soddisfatta vado avanti
+    pthread_cond_wait(&cv, &m); // Torno a dormire e perdo la lock atomicamente
+}
+perform_action(); // Faccio le mie operazioni
+pthread_mutex_unlock(&m); // Sblocco la lock
+\end{lstlisting}
+
+\begin{lstlisting}[style=C]
+// Colui che chiama signal
+pthread_mutex_lock(&m); // Prendo la lock
+perform_action(); // Faccio le mie operazioni e modifico la condizione
+pthread_cond_signal(&cv); // Signal
+pthread_mutex_unlock(&m); // Sblocco
+\end{lstlisting}
+
+\NB In questa implementazione signal e unlock non sono un'unica operazione atomica. Questo significa il thread che chiama signal può essere deschedulato con la lock ancora in mano. In questo caso, il thread che chiama wait richiede di nuovo la lock e si ritrova in un altro wait in attesa della lock (tutto ciò è implementato nella funzione \code{pthread\_cond\_wait()}).
+
+Con questa implementazione abbiamo la certezza che colui che chiama \code{wait()} non vada mai avanti fino a quando la condizione non diventi vera, indipendentemente dall'ordine di esecuzione dei due processi sullo scheduler.
+
+\subsection{Problema del produttore e consumatore}
+
+Vediamo ora un problema classico risolvibile con una CV, ossia il problema del produttore e del consumatore.
+
+Ipotizziamo di avere un produttore che genera degli itemi e li inserisce in un buffer, che per semplicità può valere contenere solo un oggetto. Il produttore può decidere di inserire un elemento nel buffer solo se questo è vuoto (vale 0), mentre il consumatore può decidere di prendere un elemento dal buffero solo se questo è pieno (vale 1).
+
+L'implementazione più semplice è utilizzando una CV, con un if:
+
+\begin{lstlisting}[style=C]
+pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cv = PTHREAD_COND_INITIALIZER;
+
+void *producer(void *arg){
+    for (int i = 0; i < loops; i++){
+        pthread_mutex_lock(&m);
+        if (count == 1){ // Se il buffer è pieno aspetto che venga svuotato
+            pthread_cond_wait(&cv, &m);
+        }
+        put(i); // Riempo il buffer
+        pthread_cond_signal(&cv);
+        pthread_mutex_unlock(&m)
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=C]
+void *consumer(void *arg){
+    for (int i = 0; i < loops; i++){
+        pthread_mutex_lock(&m);
+        if (count == 0){ // Se il buffer è vuoto aspetto che venga riempito
+            pthread_cond_wait(&cv, &m);
+        }
+        int val = get(); // Svuoto il buffer
+        pthread_cond_signal(&cv);
+        pthread_mutex_unlock(&m)
+    }
+}
+\end{lstlisting}
+
+Tutto ciò con un solo produttore e un solo consumatore funziona alla perfezione, anche con l'\textbf{if}. Si rompe, però, con l'introduzione di un secondo consumatore. Se infatti abbiamo due consumatori $C_1$ e $C_2$ e un produttore $P$, se $C_1$ va a dormire perché il buffer è vuoto, una volta che il buffer verrà riempito è possibile che $C_1$ venga svegliato ma che $C_2$ gli rubi l'elemento nel buffer. A questo punto $C_1$ sveglio prova a eseguire una \code{get()} su un buffer vuoto e restituisce un errore. Tutto ciò accade perché la condizione sul buffer viene eseguita una sola volta per colpa dell'if. Per questo motivo è \textbf{fondamentale usare un while e non un if}.
+
+Oltre all'if, vi è anche un altro problema in questo codice. È possibile, infatti, che tutti i consumatori e produttori, che si trovano sulla stessa CV, si ritrovino a dormire nello stesso momento, con nessuno che li svegli. Infatti, se $C_1$ e $C_2$ vanno a dormire subito, $P$ potrà svegliarne solo uno dei 2, e dato che per svegliare uno dei due consumatori $P$ deve riempire il buffer, una volta svegliato $C_1$ ad esempio $P$ andrà a dormire anche lui. A questo punto $C_1$ prenderà l'oggetto, farà una signal, ma a questo punto non è detto che sveglierà $P$, ma è possibile che svegli $C_2$. Se questo accade, $C_2$ andrà anche lui a dormire perché il buffer è vuoto e ci ritroveremo con tutti e 3 i processi addormentati. Tutto ciò accade per un motivo: \textbf{abbiamo un solo CV per tutti i processi}. Per risolvere questo problema quindi non ci basta che \textbf{aggiungere una seconda CV}: una per i produttori, e una per i processori. In questo modo un produttore sveglierà sempre un consumatore e viceversa, evitando problemi. Il codice finale sarà quindi il seguente:
+
+
+\begin{lstlisting}[style=C]
+pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cv_empty = PTHREAD_COND_INITIALIZER; // Consumatori
+pthread_cond_t cv_full = PTHREAD_COND_INITIALIZER; // Produttori
+
+void *producer(void *arg){
+    for (int i = 0; i < loops; i++){
+        pthread_mutex_lock(&m);
+        while (count == 1){ // Se il buffer è pieno aspetto che venga svuotato
+            pthread_cond_wait(&cv_full, &m);
+        }
+        put(i); // Riempo il buffer
+        pthread_cond_signal(&cv_empty);
+        pthread_mutex_unlock(&m)
+    }
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=C]
+void *consumer(void *arg){
+    for (int i = 0; i < loops; i++){
+        pthread_mutex_lock(&m);
+        if (count == 0){ // Se il buffer è vuoto aspetto che venga riempito
+            pthread_cond_wait(&cv_empty, &m);
+        }
+        int val = get(); // Svuoto il buffer
+        pthread_cond_signal(&cv_full);
+        pthread_mutex_unlock(&m)
+    }
+}
+\end{lstlisting}
+
+Tutto ciò si può anche generalizzare a un buffer con $N$ slot e non solo 1. L'idea di base non cambia, ma avremo semplicemente come condizione \code{count = N} e non \code{count = 1}, e avremo un buffer implementato come coda circolare per evitare starvation di item.
+
+\subsection{Due modi per implementare il signal}
+
+Esistono due modi per implementare un signal:
+\begin{itemize}
+    \item \textbf{Semantica Hoare} (1974), dove il thread che chiama \code{signal} consegna subito la lock all'thread appena svegliato
+    \item \textbf{Semantica Mesa} (1980), dove il thread che chiama \code{signal} si tiene la lock fino a quando non ha finito
+\end{itemize}
+
+I sistemi reali usano la \textit{semantica Mesa}, che è anche quella che abbiamo visto in precedenza anche noi. Questo perché con la semantica Hoare si introduce un context switch ad ogni \code{signal}, non proprio l'ideale. 
+
+\subsection{Quando il \codeb{signal} non è più sufficiente}
+
+Ci sono situazioni in cui il \code{signal} da solo non basta. Ad esempio, se abbiamo una CV con thread che attendono condizioni diverse. Potremmo avere due thread $A$ e $B$: $A$ aspetta 50 byte liberi, mentre $B$ 100. In questo caso solo $A$ va svegliato quando si hanno 50 byte liberi: se $B$ viene svegliato tornerà a dormire e il segnato andrà perso.
+
+Potremmo pensare di usare più CV per ogni condizione diversa, seguendo lo stesso ragionamento visto prima nel problema del produttore consumatore. La soluzione ottimale però è un'altra, ossia quella di usare la funzione \codeb{broadcast()}, che ricordiamo sveglia tutti i thread addormentati. In questo modo, utilizzando comunque solo una CV sono sicuro al 100\% di svegliare il thread che mi interessava realmente svegliare. In questo modo, però, rallentiamo leggeremente l'operazione perché, svegliando tutti, introduciamo una lock contention. In poche parole, tutti i thread svegli vogliono acquisire la lock, ma dato che solo uno alla volta potrà acquisirla, ci metteremo un po' prima di trovare il thread desiderato.
+
+\subsection{Thread Pool}
+
+Quando abbiamo diversi lavori (o task) da eseguire, piuttosto che eseguire un'operazione costosa e creare $N$ thread da 0, possiamo creare una sola volta $N$ thread "worker", che prendono i lavori da una coda tra loro condivisa, creando così un cosiddetta \textbf{thread pool}. L'implementazione è semplice:
+
+\begin{lstlisting}[style=C]
+typedef struct { void (*func)(void*); void *arg; } Task; // Creiamo una task da far eseguire a un worker
+
+Task queue[MAX_TASKS]; // Array circolare con le task da eseguire
+
+int head = 0, tail = 0, count = 0; // Aggiungiamo in coda e preleviamo dalla testa
+
+pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER; // Mutex (lock)
+pthread_cond_t cv = PTHREAD_COND_INITIALIZER; // CV
+
+void *worker(void *arg) {
+    while (1) {
+        pthread_mutex_lock(&m); // Prendo la lock
+        while (count == 0){ // Vado a dormire
+            pthread_cond_wait(&cv, &m);
+        }
+        Task t = queue[head]; // Prendo la task da fare 
+        head = (head + 1) % MAX_TASKS; // Modifico l'indice della testa: il prossimo worker deve prendere la task dopo
+        count--; 
+        pthread_mutex_unlock(&m); // Lascio la lock
+        t.func(t.arg); // Eseguiamo la funzione fuori dal lock: dobbiamo prima lasciarlo altrimenti ce lo teniamo per tutto il tempo della funzione
+    }
+}
+
+void submit(void (*f)(void*), void *a) {
+    pthread_mutex_lock(&m); // Prendo la lock
+    queue[tail] = (Task){f, a}; // Aggiungo una nuova task (assumendo count < MAX_TASKS)
+    tail = (tail + 1) % MAX_TASKS; // Modifico l'indice della coda
+    count++; // Aumento il numero di task da fare
+    pthread_cond_signal(&cv); // Sveglio un worker che ora può lavorare
+    pthread_mutex_unlock(&m); // Lascio la lock
+}
+\end{lstlisting}
+
+Se guardiamo bene notiamo una cosa molto interessante: questo thread pool altro non è che un problema produttore consumatore! Infatti, il produttore dà le task ai consumatori con la funzione \code{submit()}, e i worker (ossia i consumatori) se hanno task disponibili le eseguono, altrimenti dormono finché il produttore non gli dà nuove task da eseguire. 
+
+
+
+\section{Semaforo}
+
+\subsection{Unire lock e CV}
+
+Fino ad ora abbiamo visto due diversi oggetti utilizzabili per gestire i thread: i \textit{lock}, che ci garantiscono la mutua esclusione, e le \textit{CV}, che ci garantiscono l'ordine tra i thread. Introduciamo ora un nuovo costrutto, il \textbf{semaforo}, che ci permette di unire questi due costrutti in uno solo.
+
+La prima implementazione di semaforo consisteva in una scatola di ticket dalla quale ogni thread prende o ripone un ticket. Per prendere un ticket, però, la scatola non deve essere vuota, altrimenti il thread va a dormire finché un altro thread non ripone un ticket nella box. Usiamo quindi due operazioni:
+\begin{itemize}
+    \item \codeb{wait}, per provare a predere un ticket (Proberen)
+    \item \codeb{post}, per riporre un ticket e svegliare un thread (Verhogen)
+\end{itemize}
+
+\NB Tra parentesi ci sono i nomi delle funzioni date da Dijkstra nei primi semafori, che altri non è che l'ideatore di questo concetto di semaforo appunto.
+
+In base al numero di ticket \textbf{iniziali}, implementiamo cose diverse:
+\begin{itemize}
+    \item Con \textbf{1 ticket} implementiamo una \textbf{mutex}
+    \item Con \textbf{0 ticket} implementiamo una \textbf{CV}
+    \item Con \textbf{N ticket} implementiamo un \textbf{thread pool}
+\end{itemize}
+
+\subsection{Cos'è un semaforo?}
+
+\begin{Definizione}[Semaforo]
+\label{def-semaforo}
+Un \textbf{semaforo} è costrutto che unisce un intero $\geq 0$ e una coda di attesa.
+\end{Definizione}
+
+Abbiamo nell'implementazione base le due funzioni \code{wait} e \code{post} già accennate in precedenza, implementate in questo modo:
+
+\begin{lstlisting}[style=C]
+sem_wait(S): // Provo a prendere il ticket
+    while (S == 0):
+        sleep(); // Dormiamo finché qualcuno non ci sveglia
+    S = S - 1 // Diminuiamo S 
+\end{lstlisting}
+
+\begin{lstlisting}[style=C]
+sem_post(S): // Lascio un biglietto e sveglio qualcuno
+    S = S + 1 // Aumentiamo S
+    if queue not empty: // Se c'è qualcuno da svegliare lo sveglio
+        wake();
+\end{lstlisting}
+
+\NB Entrambe le operazioni sono atomiche.
+
+Dunque abbiamo sempre \mbox{$\bm{S = \textbf{init} + \#\textbf{post chiamate} - \#\textbf{wait completate} \geq 0}$}. La sveglia di un thread nella coda di attesa è implementata come una normale CV.
+
+Con la liberia standard abbiamo, oltre a \code{sem\_wait} e \code{sem\_post}, altre funzioni importanti:
+
+\begin{lstlisting}[style=C]
+#include <semaphore.h>
+
+sem_t s;
+int sem_init(sem_t *sem, int pshared, unsigned value); // pshared = 0: thread tutti dello stesso processo; value = valore iniziale di s
+
+int sem_getvalue(sem_t *sem, int *sval); // Mostra il valore di s. Solo per debugging
+int sem_destroy(sem_t *sem); // Distrugge il semaforo
+\end{lstlisting}
+
+\subsection{\codeb{S = 0}}
+
+Con \codeb{S = 0} implementiamo una \textbf{CV}, ordinando quindi i diversi thread come vogliamo dando un ticket al thread che vogliamo che parta prima rispetto a un altro. Ad esempio potremmo implementare un join in questo modo eseguendo \code{post()} sul thread figlio quando questo ha finito e chiamare \code{wait()} sul padre per attendere che il figlio termini le proprie operazioni. 
+
+La differenza tra questa implementazione e un CV è una sola ma molto importante: con \code{post} inseriamo il ticket in modo permanente nella scatola. In questo modo riusciamo a \textit{tenere traccia dello storico} dei \code{post}: se ci sono 10 thread che fanno \code{post} lo noto perchè ci sono 10 ticket nella scatola. Questo non accade con \code{signal} dato che queste non lasciano alcuna traccia se non vi è nessun thread da svegliare. 
+
+\subsection{Produttore e consumatore con i semafori}
+
+Possiamo risolvere il problema del produttore e consumatore utilizzando due semafori al posto di due CV. Avremo un semaforo \code{EMPTY}, inizializzato a N (numero di slot diponibili nel buffer), e un semaforo \code{FULL}, inizializzato a 0. Su \code{empty} aspetteranno quindi i produttori, mentre su \code{full} i consumatori. Con questa impleemntazione, in qualsiasi momento avremo sempre \code{empty + full = N}.
+
+\begin{lstlisting}[style=C]
+#define MAX 5 // Usiamo un buffer con 5 elementi
+int buffer[MAX], fill = 0, use = 0;
+sem_t empty, full, mutex;
+
+void init(void){
+    sem_init(&empty, 0, MAX); // Tutti gli slot per produrre sono disponibili
+    sem_init(&full, 0, 0); // Non consumare prendere nulla
+    sem_init(&mutex, 0, 1); // Lock implementata tramite semaforo (N iniziale = 1)
+}
+
+void put(int v){ 
+    buffer[fill] = v; // fill è l'indice che ci dice dove inserire i nuovi prodotti
+    fill = (fill + 1 ) % MAX;
+}
+
+int get(void){
+    int v = buffer[use]; // use è l'indice che ci dice dove consumare
+    use = (use + 1) % MAX;
+    return v;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=C]
+void *producer(void *arg){
+    for(int i = 0; i < 100; i++){
+        sem_wait(&empty); // Controlliamo se possiamo produrre
+        sem_wait(&mutex); // Entriamo nella sezione critica
+        put(i);
+        sem_post(&mutex); // Usciamo dalla sezione critica
+        sem_post(&full); // Lasciamo un nuovo item
+    }
+    return NULL;
+}
+
+void *consumer(void *arg){
+    for (int i = 0; i < 100; i++){
+        sem_wait(&full); // Controlliamo se possiamo consumare
+        sem_wait(&mutex); // Entriamo nella sezione critica
+        int v = get();
+        sem_post(&mutex); // Usciamo dalla sezione critica
+        sem_post(&empty); // Consumiamo un item
+    }
+    return NULL;
+}
+\end{lstlisting}
+
+\NB È importante l'ordine dei due wait: non possiamo assolutamente prendere prima la mutex e poi fare un \code{sem\_wait()} su \code{full} o \code{empty}, altrimenti è possibile che un thread prenda la mutex ma vada a dormire subito dopo, tenendosi la mutex con sé e bloccando tutto.
+
+\subsection{Filosofi a cena}
+
+Vediamo ora un problema risolvibile con i semafori, ossia il problema dei filosofi a cena.
+
+Ipotizziamo di avere $N$ filosofi a cena e $N$ coppie di bastoncini. Ogni filosofo, per mangiare, deve avere sia il bastoncino alla propria sinistra sia quello alla propria destra. Inoltre un filosofo, per mangiare, deve prima pensare, e nessun filosofo deve andare in starvation e dobbiamo evitare deadlock, ossia stalli, dove nessuno può mangiare perché nessuno può prendere due bastoncini contemporaneamente.
+
+Una prima idea potrebbe essere quella di far pensare ogni filosofo e poi, una volta finito, di fargli fare una wait sul bastoncino alla sua sinsitra e alla sua destra e, dopo aver mangiato, di fargli chiamare una post sui due bastoncini. Questa idea, che può sembrare funzionante, si rompe in un caso specifico: quando tutti i filosofi hanno preso il bastoncino alla loro sinistra (o alla loro destra). In questo caso sono tutti in attesa e arriviamo proprio in un deadlock.
+
+Questo problema di deadlock si risolve molto facilmente: se tutti i filosofi partono col prendere il bastoncino alla loro sinistra, basta imporre all'ultimo di prendere quello alla propria destra, o viceversa. Rompiamo così il ciclo: se tutti i filosofi prendono il bastoncino alla propria sinistra, il primo filosofo potrà prenderli entrambi perché l'ultimo punterà prima a quello a destra e dopo quello a sinsitra, eliminando quindi il deadlock. L'impelementazione è semplice:
+
+\begin{lstlisting}[style=C]
+#define N 5
+
+sem_t chops[N]; // Un semaforo per ogni bastoncino, inizializzati a 1 per riprodurre un classico mutex
+
+void *philosopher(void *arg){
+    int i = *(int *) arg; // i-esimo filosofo
+    while (1){ // I filosofi mangiano all'infinito
+        think();
+        if (i == N - 1){ // Se sono l'ultimo filosofo
+            sem_wait(&chop[(i+1) % N]); // Prendo il bastoncino prima a destra (chop[0])
+            sem_wait(&chop[i]); // Poi a sinistra
+        }
+        else{ // Se sono un filosofo normale
+            sem_wait(&chop[i]); // Prima a sinistra
+            sem_wait(&chop[(i+1) % N]) // Poi a destra
+        }
+        eat();
+        sem_post(&chop[i]); // Poso il bastoncino a sinistra
+        sem_post(&chop[(i+1) % N]) // Poso il bastoncino a destra
+    
+    }
+}
+\end{lstlisting}
+
+\subsection{Implementare il semaforo}
+
+Per implementare un semaforo personalmente possiamo usare i due concetti che già conosciamo: le mutex e le CV. Creiamo in questo modo un semaforo che prende il nome di \textbf{zemaphore}:
+
+\begin{lstlisting}[style=C]
+typedeef struct {int value; pthread_mutex_t lock; pthread_cond_t cond;} Zem_t;
+
+void Zem_wait(Zem_t *s){
+    // Lock
+    pthread_mutex_lock(&s -> lock);
+    // CV
+    while(s-> value == 0){
+        pthread_cond_wait(&s->cond; &s->lock);
+    }
+    s->value--;
+    // Unlock
+    pthread_mutex_unlock(&s->lock);
+}
+
+void Zem_post(Zem_t *s) {
+    // Lock
+    pthread_mutex_lock(&s->lock);
+    s->value++;
+    // CV
+    pthread_cond_signal(&s->cond);
+    // Unlock
+    pthread_mutex_unlock(&s->lock);
+}
+\end{lstlisting}
+
+
+
+
 
 
 \end{document}
