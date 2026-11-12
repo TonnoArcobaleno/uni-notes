@@ -3122,6 +3122,9 @@ Preso uno schema $R$ e un sottoinsieme di attributi $X$ di $R$, la \textbf{chius
 \[
 \bm{X_F^+ = \{A \mid X} \longrightarrow \bm{A \in F^A\}}
 \]
+
+È possibile anche scrivere $X^+$ e non $X_F^+$ quando $F$ nel contesto in cui ci si trova è scontata.
+
 \NB Questa definizione serve per trovare tutti gli attributi determinati da $X$. Per fare ciò, dovremmo segnare $X \longrightarrow A \in F^+$, e non in $F^A$, ma dato che tra poco dimostreremo che $F^+ = F^A$, scriviamo in questa definizione e anche nel prossimo lemma di chiusura direttamente $F^A$. 
 \end{Definizione}
 
@@ -3139,6 +3142,59 @@ Poniamo per entrambi i punti della dimostrazione $Y = A_1, \ldots, A_n$.
     Banalmente, dato che $X \longrightarrow Y \in F^A$, per la regola della decomposizione abbiamo che, $\forall i \in \{1, \ldots, n\} \enspace X \longrightarrow A_i \in F^A$, ossia $A_i \in X^+$, dunque $Y \in X^+$ (notiamo anche qui come la dimostrazione di questo secondo passaggio sia identica a quella del primo ma invertita). $\blacksquare$
 \end{itemize}
 
+\begin{Proposizione}[Teorema $\bm{F^+ = F^A}$]
+\label{propos-teorema-op}
+Preso uno schema $R$ e un insieme di dipendenze funzionali $F$ su $R$, \mbox{$\bm{F^+ = F^A}$}.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Dividiamo questa dimostrazione in due parti: nella prima dimostreremo che $F^A \subseteq F^+$, mentre nella seconda dimostreremo che $F^+ \subseteq F^A$.
+
+\begin{itemize}
+    \item $F^A \subseteq F^+$ \\
+    Sia $X \longrightarrow Y$ una dipendenza funzionale in $F^A$. Essendo questa in $F^A$, sappiamo per gli assiomi di Armstrong che questa dipendenza si può costruire da un'altra dipendenza in $F$ seguendo un numero $i$ di passi. Dimostriamo ora per induzione su $i$ che $F^A \subseteq F^+$. 
+    \begin{itemize}
+        \item Caso base: $i = 0$ \\
+        In questo caso $X \longrightarrow Y \in F$ e quindi $X \longrightarrow Y \in F^+$.
+        \item Ipotesi induttiva forte \\
+        Assumiamo che qualsiasi dipendenza funzionale ottenuta partendo da una in $F$ e applicando gli assiomi di Armstrong al più $i-1$ volte sia in $F^+$.
+        \item Passo induttivo \\
+        Abbiamo qui tre casi da analizzare:
+        \begin{enumerate}[label=\arabic*°]
+            \item Caso: $X \longrightarrow Y$ è ottenuta mediante l'assioma della riflessività. \\
+            In questo caso abbiamo $Y \subseteq X$, dunque, prese due tuple $t_1$ e $t_2$ di $r$ istanza legale di $R$, troviamo che $t_1[X] = t_2[X] \implies t_1[Y] = t_2[Y]$, ossia $X \longrightarrow Y \in F^+$.
+            \item Caso: $X \longrightarrow Y$ è ottenuta mendiante l'assioma dell'aumento. \\
+            In questo caso abbiamo un'altra dipendenza funzionale $V \longrightarrow W \in F^A$ da cui troviamo $X \longrightarrow Y$, ottenuta a sua volta applicando gli assiomi di Armstrong $i-1$ volte. Dunque, per ipotesi induttiva, troviamo che $V \longrightarrow W \in F^+$. Abbiamo quindi $X = VZ$ e $Y = WZ$ con $Z \subseteq R$. Sia ora $r$ un istanza legale di $R$ e siano $t_1$ e $t_2$ due tuple in $r$ tali che $t_1[X] = t_2[X]$. Abbiamo quindi $t_1[VZ] = t_2[VZ]$ ossia $t_1[V] = t_2[V]$ e $t_1[Z] = t_2[Z]$. Sappiamo che $t_1[V] = t_2[V] \implies t_1[W] = t_2[W]$, quindi troviamo che $t_1[WZ] = t_2[WZ]$, ossia $t_1[Y] = t_2[Y]$. Troviamo quindi che $X \longrightarrow Y \in F^+$.
+            \item Caso: $X \longrightarrow Y$ è ottenuta mediante l'assioma della transitività. \\
+            In questo caso abbiamo altre due dipendenze funzionali $X \longrightarrow Z$ e $Z \longrightarrow Y$ in $F^A$, ottenute applicando gli assiomi di Armstrong al più $i-1$ volte. Dunque, per ipotesi induttiva forte, troviamo che $X \longrightarrow Z, Y \longrightarrow Z \in F^+$. Presa ora un'istanza legale $r$ e due tuple $t_1$ e $t_2$ in $r$ tali che $t_1[X] = t_2[X]$, sappiamo per la dipendenza $X \longrightarrow Z$ che $t_1[Z] = t_2[Z]$, e per la dipendenza $Z \longrightarrow Y $ sappiamo che $t_1[Y] = t_2[Y]$. Dunque troviamo che $X \longrightarrow Y \in F^+$.
+        \end{enumerate}
+    \end{itemize}
+    Dato che in tutti e tre i casi trovimao che $X \longrightarrow Y \in F^+$, possiamo concludere che $F^A \subseteq F^+$. $\blacksquare$
+    \item $F^+ \subseteq F^A$ \\
+    Presa una dipendenza funzionale $X \longrightarrow Y \in F^+$, per dimostrare che questa appartiene a $F^A$ useremo una particolare istanza $r$ di $R$:
+    \begin{center}
+    $r$ \nopagebreak
+
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{4}{|c|}{$\bm{X^+}$} & \multicolumn{4}{c|}{$\bm{R - X^+}$}\\ \hline
+    $1$ & $1$ & $\dots$ & $1$ & $1$ & $1$ & $\dots$ & $1$\\
+    $1$ & $1$ & $\dots$ & $1$ & $0$ & $0$ & $\dots$ & $0$\\ \hline
+    \end{tabular}
+    \end{center}
+
+    Dimostrando che questa istanza è legale dimostreremo anche che se abbiamo $X \longrightarrow Y \in F^+$ allora avremo anche $X \longrightarrow Y \in F^A$, ossia $F^+ \subseteq F^A$. \\
+    Sia $V \longrightarrow W$ una dipendenza funzionale in $F$. Abbiamo due casi:
+    \begin{itemize}
+        \item $t_1[V] \neq t_2[V]$ \\
+        In questo caso la dipendenza è soddisfatta, dato che queste sono le uniche due tuple in $r$.
+        \item $t_1[V] = t_2[V]$ \\
+        In questo caso abbiamo $V \subseteq X^+$, dato che le due tuple sono uguali solo per gli attributi di $X^+$. In questo caso, per il Lemma di Chiusura, abbiamo che $X \longrightarrow Y \in F^A$, e dunque, per l'assioma di transitività, abbiamo che $X \longrightarrow W \in F^A$. Sempre per il lemma troviamo che $W \subseteq X^+$, dunque le due tuple $t_1$ e $t_2$ sono uguali anche sui valori di $W$. Dunque $V \longrightarrow W$ è soddisfatta.
+    \end{itemize}
+    Poiché abbiamo soddisfatto $V \longrightarrow W$, che è una qualsiasi dipendenza funzionale in $F$, troviamo che $r$ è un'istanza legale di $R$. \\
+    Ora che abbiamo trovato che $r$ è un'istanza legale di $R$ troviamo che questa soddisfa la dipendenza funzionale $X \longrightarrow Y$, dato che questa appartiene a $F^+$ (ricordiamo che ogni dipendenza funzionale in $F^+$ è, per definizione, soddisfatta da qualsiasi istanza legale di $R$). Poiché $X \subseteq X^+$ (dato che $X \longrightarrow X$ è sempre soddisfatta), troviamo che $t_1[X] = t_2[X]$ e quindi, poiché $r$ soddisfa $X \longrightarrow Y$, anche $t_1[Y] = t_2[Y]$ è verificata. Ciò significa che $Y \subseteq X^+$ e, per il lemma di chiusura, troviamo proprio che $X \longrightarrow Y \in F^A$. $\blacksquare$
+\end{itemize}
 
 
 
