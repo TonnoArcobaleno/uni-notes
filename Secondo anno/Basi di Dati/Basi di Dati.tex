@@ -3318,7 +3318,6 @@ Preso uno schema $R$ e un insieme di dipendenze funzionali $F$, dopo aver calcol
 $\bm{X^+ = R} \implies \bm{X}$ è l'\textbf{unica chiave} di $R$.
 \end{Proposizione}
 
-Applichiamo questo test sullo schema $R = ABCDE$, con insieme di dipendenze funzionali $F = \{AB \longrightarrow C, AC \longrightarrow B, D \longrightarrow E\}$. Troviamo che $X = R - C \cap R - D \cap  R - E = AD$.
-Ora, dato che $(AD)^+ = ADE \neq R$, troviamo che $AD$ non è l'unica chiave. Questo significa che non esiste nessuna chiave unica? No. Infatti, $X \neq R$ significa solo che $X$ non è l'unica chiave di $R$, non che non esista alcuna chiave unica in $R$.
+Applichiamo questo test sullo schema $R = ABCDE$, con insieme di dipendenze funzionali $F = \{AB \longrightarrow C, AC \longrightarrow B, D \longrightarrow E\}$. Troviamo che $X = R - C \cap R - D \cap  R - E = AD$. Ora, dato che $(AD)^+ = ADE \neq R$, concludiamo che $AD$ non è l'unica chiave. Questo significa che non esiste nessuna chiave unica? No. Infatti, $X \neq R$ significa solo che $X$ non è l'unica chiave di $R$, non che non esista alcuna chiave unica in $R$.
 
 \end{document}
