@@ -3130,10 +3130,11 @@ Preso uno schema $R$ e un sottoinsieme di attributi $X$ di $R$, la \textbf{chius
 
 \begin{Proposizione}[Lemma di chiusura]
 \label{lemma-di-chiusura}
-Preso uno schema $R$ e un insieme di dipendenze funzionali $F$ su $R$, \mbox{$\bm{X \longrightarrow Y \in F^A \iff Y \subseteq X^+}$}.
+Preso uno schema $R$ e un insieme di dipendenze funzionali $F$ su $R$, \mbox{$\bm{X} \longrightarrow \bm{Y \in F^A} \iff \bm{Y \subseteq X^+}$}.
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
+
 Poniamo per entrambi i punti della dimostrazione $Y = A_1, \ldots, A_n$.
 \begin{itemize}
     \item $X \longrightarrow Y \in F^A \implies Y \subseteq X^+$ \\
@@ -3142,7 +3143,7 @@ Poniamo per entrambi i punti della dimostrazione $Y = A_1, \ldots, A_n$.
     Banalmente, dato che $X \longrightarrow Y \in F^A$, per la regola della decomposizione abbiamo che, $\forall i \in \{1, \ldots, n\} \enspace X \longrightarrow A_i \in F^A$, ossia $A_i \in X^+$, dunque $Y \in X^+$ (notiamo anche qui come la dimostrazione di questo secondo passaggio sia identica a quella del primo ma invertita). $\blacksquare$
 \end{itemize}
 
-\begin{Proposizione}[Teorema $\bm{F^+ = F^A}$]
+\begin{Proposizione}[Teorema]
 \label{propos-teorema-op}
 Preso uno schema $R$ e un insieme di dipendenze funzionali $F$ su $R$, \mbox{$\bm{F^+ = F^A}$}.
 \end{Proposizione}
@@ -3169,10 +3170,10 @@ Dividiamo questa dimostrazione in due parti: nella prima dimostreremo che $F^A \
             \item Caso: $X \longrightarrow Y$ è ottenuta mediante l'assioma della transitività. \\
             In questo caso abbiamo altre due dipendenze funzionali $X \longrightarrow Z$ e $Z \longrightarrow Y$ in $F^A$, ottenute applicando gli assiomi di Armstrong al più $i-1$ volte. Dunque, per ipotesi induttiva forte, troviamo che $X \longrightarrow Z, Y \longrightarrow Z \in F^+$. Presa ora un'istanza legale $r$ e due tuple $t_1$ e $t_2$ in $r$ tali che $t_1[X] = t_2[X]$, sappiamo per la dipendenza $X \longrightarrow Z$ che $t_1[Z] = t_2[Z]$, e per la dipendenza $Z \longrightarrow Y $ sappiamo che $t_1[Y] = t_2[Y]$. Dunque troviamo che $X \longrightarrow Y \in F^+$.
         \end{enumerate}
+        Dato che in tutti e tre i casi trovimao che $X \longrightarrow Y \in F^+$, possiamo concludere che $F^A \subseteq F^+$. $\blacksquare$
     \end{itemize}
-    Dato che in tutti e tre i casi trovimao che $X \longrightarrow Y \in F^+$, possiamo concludere che $F^A \subseteq F^+$. $\blacksquare$
     \item $F^+ \subseteq F^A$ \\
-    Presa una dipendenza funzionale $X \longrightarrow Y \in F^+$, per dimostrare che questa appartiene a $F^A$ useremo una particolare istanza $r$ di $R$:
+    Presa una dipendenza funzionale $X \longrightarrow Y \in F^+$, dato che questa appartiene a $F^+$ sappiamo che è rispettata da una qualsiasi istanza legale di $R$. Per dimostrare che questa appartiene a $F^A$ useremo una particolare istanza $r$ di $R$, e cercheremo di dimostrare che questa è legale:
     \begin{center}
     $r$ \nopagebreak
 
@@ -3196,10 +3197,127 @@ Dividiamo questa dimostrazione in due parti: nella prima dimostreremo che $F^A \
     Ora che abbiamo trovato che $r$ è un'istanza legale di $R$ troviamo che questa soddisfa la dipendenza funzionale $X \longrightarrow Y$, dato che questa appartiene a $F^+$ (ricordiamo che ogni dipendenza funzionale in $F^+$ è, per definizione, soddisfatta da qualsiasi istanza legale di $R$). Poiché $X \subseteq X^+$ (dato che $X \longrightarrow X$ è sempre soddisfatta), troviamo che $t_1[X] = t_2[X]$ e quindi, poiché $r$ soddisfa $X \longrightarrow Y$, anche $t_1[Y] = t_2[Y]$ è verificata. Ciò significa che $Y \subseteq X^+$ e, per il lemma di chiusura, troviamo proprio che $X \longrightarrow Y \in F^A$. $\blacksquare$
 \end{itemize}
 
+\begin{Proposizione}[Corollario]
+\label{corol-verificare-dipendenza-funzionale}
+Preso uno schema $R$, due sottoinsiemi $X$ e $Y$ di $R$ e un insieme di dipendenze funzionali $F$, \mbox{$\bm{X} \longrightarrow \bm{Y \in F^+} \iff \bm{Y \subseteq X^+$}}.
+\end{Proposizione}
 
+Questo corollario deriva proprio dal lemma di chiusura, che ci dice che $X \longrightarrow Y \in F^A \iff Y \subseteq X^+$, e dal teorema appena dimostrato che ci dice che $F^A = F^+$.
 
+\begin{Proposizione}[Verificare se $\bm{K}$ sia una chiave o meno]
+\label{propos-verificare-chiave}
+Per verificare che $K$ sia una chiave di uno schema $R$ preso un insieme di dipendenze funzionali basta dimostrare che $\bm{R \subseteq K^+}$ e dimostrare che nessun sottoinsieme di $K$ verifichi questa proprietà.
+\end{Proposizione} 
 
+\section{Calcolare la chiusura di un insieme di attributi}
 
+Per verificare dunque se $X \longrightarrow Y$ appartenga a $F^+$ e per verificare se $K$ sia una chiave bisogna saper calcolare la chiusura di un insieme di attributi. Studiamo quindi un algoritmo per eseguire questo calcolo velocemente.
 
+Per arrivare a questo algoritmo studiamo prima un esempio. Ipotizziamo di avere uno schema $R = ABCDEH$, e di avere un insieme di dipendenze funzionali \mbox{$F = \{AB \longrightarrow CD, EH \longrightarrow D, D \longrightarrow H\}$}. Calcoliamo ora alcune chisure:
+\begin{itemize}
+    \item $A^+ = A$ (nessun'altro attributo in $F$ è determinato SOLO da $A$)
+    \item $D^+ = DH$
+    \item $(AB)^+ = ABCDH$ ($H$ perché $AB$ determina $CD$ e $D$ determina $H$, dunque per transitività $AB$ determina $H$)
+    \item $(ABE)^+ = ABCDHE$ (dunque $ABE$ è chiave, dato che nessun sottoinsieme di $ABE$ è chiave)
+\end{itemize} 
+
+Vediamo ora però l'algorito vero e proprio che calcola velocemnte la chiusura di un qualsiasi insieme di attributi:
+\begin{lstlisting}
+ChiusuraInsieme(R,F,X): // R schema, F insieme di dipendenze funzionali, X sottoinsieme di R
+    Z = X
+    S = {A in R | esiste Y -> V in F dove A in V e Y in Z} 
+    // Aggiungo un attributo A se fa parte di una dipendenza funzionale dove a sinistra c'è un valore Y che è contenuto in Z e a destra c'è un V tale che A è contenuto in V
+    while S non è sottoinsieme di Z:
+        Z = Z unione S // Z aumenta con Z
+        S = {A in R se esiste Y -> V in F t.c. A in V e Y in Z} // Aggiungo nuovi valori
+    // Esco dal while quando S in un giro del while non cambia più valore, ossia sono finiti gli attributi che dipendono da X
+    return Z
+\end{lstlisting}
+
+\NB Questo algoritmo è un algoritmo \textit{greedy}: ciò significa che inizia calcolando una soluzione non coretta al 100\% ma che, aggiungendo sempre più informazioni, ci permette di arrivare alla soluzione desiderata.
+
+Proviamo a eseguire questo algoritmo con $X = ABE$:
+\begin{itemize}
+    \item Prima del while: $Z = \{ABE\}, S = \{CD\}$
+    \item 1° iterazione: $Z = \{ABECD\}, S = \{CDH\}$
+    \item 2° iterazione: $Z = \{ABECDH\}, S = \{CDH\}$
+    \item Fine while: ritorniamo $Z = \{ABECDH\}$, come ci aspettavamo
+\end{itemize}
+
+Dimostriamo ora in modo formale che questo algoritmo che il valore ritornato sia sempre $X^+$.
+
+\Dimostrazione \nopagebreak
+
+Indichiamo con $Z_0$ il valore iniziale di $Z$ e con $Z_i$ il valore di $Z$ alla i-esima iterazione del while, e la stessa cosa facciamo con $S_0$ e $S_i$. Dunque avremo $Z_0 = X, Z_1 = Z_0 \cup S_0, \ldots, Z_f = Z_{f-1} \cup S_{f-1}$. $Z_f$ è il valore finale di $Z$. Questo sicuramente esiste dato che il while continua fino a quando aggiungiamo a $Z$ un attributi di $R$, ed essendo questi attributi in numero finito prima o poi il while si concluderà sicuramente. Per dimostrare quindi che l'algoritmo ci restituisca $X^+$ non ci basta che dimostrare che $Z_f = X^+$. Per farlo dividiamo la dimostrazione in due parti: nella prima dimostreremo che $Z_f \subseteq X^+$, mentre nella seconda dimostreremo che $X^+ \subseteq Z_f$.
+
+\begin{itemize}
+    \item $Z_f \subseteq X^+$ \\
+    Dimostriamo questa prima parte per induzione.
+    \begin{itemize}
+        \item Caso base: $i = 0$ \\
+        $Z_0 = X$, e dato che $X \subseteq X^+$ è sempre vero, troviamo che $Z_0 \subseteq X^+$.
+        \item Ipotesi induttiva \\
+        Assumiamo vero che $Z_i \subseteq X^+$.
+        \item Passo induttivo \\
+        Dobbiamo quindi dimostrare che $Z_{i+1} \subseteq X^+$ sia vero. Dato che $\forall A \in Z_{i+1}$ è vero che $A \in Z_i \cup S_i$, dobbiamo analizzare 2 casi:
+        \begin{enumerate}[label=\arabic*°]
+            \item Caso: $A \in Z_i$ \\
+            Per ipotesi induttiva sappiammo che $Z_i \subseteq X^+$, dunque troviamo proprio che $A \subseteq X^+$
+            \item Caso: $A \in S_i$ \\
+            Questo significa che $\exists Y \longrightarrow V \in F$ tale che $A \subseteq V$ e $Y \subseteq Z_i$. Dato che $Z_i \subseteq X^+$ per ipotsi induttiva, troviamo che $Y \subseteq X^+$, e per il lemma di chiusura troviamo che $X \longrightarrow Y \in F^A$. A questo punto, per l'assioma di transitività, troviamo che $X \longrightarrow V \in F^A$, e riapplicando il lemma di chiusura troviamo che $V \subseteq X^+$, e dato che $A \subseteq V$, troviamo proprio che $A \subseteq X^+$. 
+        \end{enumerate}
+        Dato che in entrambi i casi troviamo che $A \subseteq X^+$, possiamo concludere che $Z_{i+1} \subseteq X^+$. $\blacksquare$
+    \end{itemize}
+    \item $X^+ \subseteq Z_f$ \\
+    Vogliamo quindi dimostrare che $A \in X^+ \implies A \in Z_f$. Dato che $A \in X^+$, per il lemma di chisura sappiamo che $X \longrightarrow A \in F^+$. Dunque sappiamo che questa dipendenza è soddisfatta da ogni istanza legale. Riprendiamo a questo punto la stessa istanza $r$ già vista nella dimostrazione del teorema $F^+ = F^A$, e dimostriamo che questa istanza è legale.
+        \begin{center}
+    $r$ \nopagebreak
+
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{4}{|c|}{$\bm{Z_f}$} & \multicolumn{4}{c|}{$\bm{R - Z_f}$}\\ \hline
+    $1$ & $1$ & $\dots$ & $1$ & $1$ & $1$ & $\dots$ & $1$\\
+    $1$ & $1$ & $\dots$ & $1$ & $0$ & $0$ & $\dots$ & $0$\\ \hline
+    \end{tabular}
+    \end{center}
+
+    Prendiamo ora una dipendenza funzionale $Y \longrightarrow V \in F$. Guardando $r$ notiamo che $t_1[Y] = t_2[Y] \implies Y \subseteq Z_f$. Guardando ora la definizione di $S$, notiamo che qui ci sono tutti i signoli attributi $A$ di $V$ (dato che $Y \subseteq Z_f$). Dunque $\forall A \in V \enspace A \subseteq S_f$, ossia $V \subseteq S_f$, e dato che $S_f \subseteq Z_f$ (perché questo è l'ultimo valore di $S$, dunque stiamo uscendo dal while e dunque la condizione $S \nsubseteq Z$ non è più soddisfatta), troviamo che $V \subseteq Z_f$, ossia $t_1[V] = t_2[V]$, dunque troviamo che la dipendenza $Y \longrightarrow V$ è rispettata in $r$. Dato che questo vale per ogni dipendenza in $F$, concludiamo che $r$ è legale. \\
+    A questo punto, dato che $X = Z_0 \subseteq Z_f$, troviamo che $t_1[X] = t_2[X]$, e dato che $X \longrightarrow A$ (l'abbiamo visto all'inizio il perché questo è vero), troviamo che $t_1[X] = t_2[X] \implies t_1[A] = t_2[A]$, e affinché questo sia vero è necessario che $A \in Z_f$. $\blacksquare$   
+\end{itemize}
+
+\section{Trovare le chiavi di uno schema}
+
+Ora ripendiamo di nuovo lo schema $R = ABCDEH$, con un nuovo insieme di dipendenze funzionali  $F = \{AB \longrightarrow CD, C \longrightarrow E, AB \longrightarrow E, ABC \longrightarrow D\}$, proviamo a calcolare $(ABH)^+$ usando il nostro algoritmo:
+
+\begin{itemize}
+    \item Prima del while: $Z_0 = \{ABH\}, S_0 = \{CDE\}$
+    \item 1° iterazione: $Z_1 = \{ABHCDE\}, S_1 = \{CDE\}$
+    \item Fine while: ritorniamo $Z = \{ABHCDE\}$
+\end{itemize}
+
+A questo punto ci domandiamo: $ABH$ è chiave? Sicuramente $(ABH)^+ = R$ (dunque $ABH$ è superchiave), ma esiste un sottoinsieme di $ABH$ che è con questa stessa proprietà? Per verificarlo dovremmo teoricamente fare $2^3 - 2 = 6$ verifiche ($AB, AH, BH, A, B, H$), ossia un numero esponenziale di verifiche, ma non tutti questi controlli sono veramente necessari. Infatti, in questo caso possiamo notare due cose importanti:
+\begin{itemize}
+    \item $H$ sicruamente deve essere nella chiave, dato che non è mai stato determinato, dunque ci basta controllare tutti i sottoinsiemi con $H$ all'interno.
+    \item Non essendo né $BH$ né $AH$ delle chiavi, possiamo già concludere che nemmeno i loro rispettivi sottoinsiemi lo siano, evitandoci così degli altri controlli.
+\end{itemize}
+
+Dunque $ABH$ concludiamo che \textbf{è una chiave}. Ma è l'unica? In questo caso si, per un motivo molto semplice: non è solo $H$ a non essere determinato, ma nemmeno $AB$ lo sono, dunque sono attributi che devono per forza di cose trovarsi nella chiave, e dato che già $ABH$ è chiave, concludiamo che questa \textbf{è unica}.
+
+Prendiamo ora uno schema $R = ABCDEGH$ e un insieme di dipendenze funzionali $F = \{AB \longrightarrow D, G \longrightarrow A, G \longrightarrow B, H \longrightarrow E, H \longrightarrow G, D \longrightarrow H\}$. Cerchiamo \textit{tutte} le 4 chiavi in questo schema. 
+
+Potremmo andare per froza bruta, e verificare ogni possibile combinazione di attributi e trovare le uniche che possano funzionare come chiavi, ma questo è un approccio molto costoso e inefficace. Generalmente si parte quindi da un insieme di attributi che determinano qualcosa in $F$ e ne si calcola la  chiusura. In questo caso, inoltre, notiamo che l'attributo $C$ non è mai determinata, dunque sappiamo già con certezza che $C$ \textit{appartiene a ogni chiave}, e allo stesso modo notiamo invece che $E$ \textit{non sarà mai in nessuna chiave}, dato che è determinato ma non determina nulla. Calcoliamo dunque la chiusura $(ABC)^+$, che vale proprio $R$. Dunque sicuramente $ABC$ è superchiave, ma dobbiamo ora verificare che le chiusure $(AC)^+$ e $(BC)^+$ non valgano $R$. Dato che $(AC)^+ = AC$ e $(BC)^+ = BC$, troviamo che $\bm{ABC}$ è una delle 4 chiavi che cercavamo. \\
+Ora, dato che $G$ determina sia $A$ che $B$, è molto probabile che $CG$ sia un'altra chiave. Infatti, $(CG)^+ = ABCDEHG$, e dato che $C^+ = C$, troviamo proprio che $\bm{CG}$ è chiave. \\
+A questo punto, dato che $H$ determina $G$, è molto probabile che anche $CH$ sia una chiave. Infatti, $(CH)^+ = ABCDEHG$, e dato ceh $C$ da sola abbiamo già visto che non può essere chiave, troviamo che $\bm{CH}$ è chiave. \\
+Infine, dato che $H$ è determinato da $D$, troviamo che anche $CD$ è molto probabilmente una chiave. Infatti, $(CD)^+ = ABCDEHG$, e dato che $C$ non è una chiave troviamo che $\bm{CD}$ è una delle quattro chiavi che volevamo. \\
+Concludiamo quindi che $\bm{ABC, CG, CH}$ e $\bm{CD}$ sono le quattro chiavi di questo schema $R$.
+
+\begin{Proposizione}[Test unicità delle chiave]
+\label{propos-test-unicità}
+Preso uno schema $R$ e un insieme di dipendenze funzionali $F$, dopo aver calcolato
+{\boldmath$X = \bm{\bigcap}_{V \to W \in F} \bigl(R - (W - V)\bigr)$},
+$\bm{X^+ = R} \implies \bm{X}$ è l'\textbf{unica chiave} di $R$.
+\end{Proposizione}
+
+Applichiamo questo test sullo schema $R = ABCDE$, con insieme di dipendenze funzionali $F = \{AB \longrightarrow C, AC \longrightarrow B, D \longrightarrow E\}$. Troviamo che $X = R - C \cap R - D \cap  R - E = AD$. Ora, dato che $(AD)^+ = ADE \neq R$, concludiamo che $AD$ non è l'unica chiave. Questo significa che non esiste nessuna chiave unica? No. Infatti, $X \neq R$ significa solo che $X$ non è l'unica chiave di $R$, non che non esista alcuna chiave unica in $R$.
 
 \end{document}
