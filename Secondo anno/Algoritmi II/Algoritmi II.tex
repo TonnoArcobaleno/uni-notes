@@ -460,7 +460,7 @@ DFS_Alternativo(G,x):
                 Vis[z] = 1
                 S.push(z)
                 break
-        if S.top() == y: # y non ha vicini ancora non visitati
+        if S.top() == y: // y non ha vicini ancora non visitati
             S.pop()
     return Vis 
 \end{lstlisting}
@@ -593,7 +593,7 @@ Esami(G): // G grafo connesso
     while S != 0:
         y = S.top()
         if esiste un vicino z di y tale che Part[z] == 0:
-            Part[z] = 3 - Part[y] # In questo modo alterniamo 1 e 2
+            Part[z] = 3 - Part[y] // In questo modo alterniamo 1 e 2
             S.push(z)
         else:
             S.pop()
@@ -647,7 +647,7 @@ Per dimostrare questa proposizione dimostriamo che se ogni vertice ha archi usce
 
 Prendiamo il seguente codice:
 \begin{lstlisting}[style=Python]
-Trova_Ciclo_Diretto(G): # In G ogni nodo ha un arco uscente
+Trova_Ciclo_Diretto(G): // In G ogni nodo ha un arco uscente
     L = lista vuota
     x = nodo qualsiasi
     L.append(x)
@@ -671,7 +671,7 @@ Ora che abbiamo ben compreso la DFS, vedremo una serie di problemi risolvibili t
 Vogliamo ora invece trovare un algoritmo che trovi un ordine topologico di un grafo diretto aciclico. Per la Proposizione \ref{propos-grafo-cicli-diretti} sappiamo che esiste sicuramente un vertice senza archi uscenti. Prendiamo questo vertice, lo segniamo, e lo eliminiamo dal grafo. A questo punto, dato che il grafo non ha cicli diretti, sicuramente vi è un altro nodo che non ha più archi uscenti. Lo prendiamo, lo segniamo e lo cancelliamo, e continuiamo così fino ad aver ricavato un ordine topologico. Se vi sono più nodi senza archi uscenti nello stesso momento basta prendere uno dei nodi in modo casuale: infatti, in uno stesso grafo possono esserci anche più ordini topologici diversi. \\
 Vediamo il codice:
 \begin{lstlisting}[style=Python]
-Ordine_Topologico(G): # G è un grafo diretto aciclico
+Ordine_Topologico(G): // G è un grafo diretto aciclico
     n = numero di nodi di G
     L = []
     while G != 0:
@@ -1289,7 +1289,7 @@ Per risolvere questo problema usiamo un algoritmo che, preso un nodo $x$, trova 
 \begin{lstlisting}
 BFS(G,x): // G grafo non diretto e connesso
     n = numero di nodi di G
-    dist = [-1] * n # Array con le distanze di ogni nodo da x
+    dist = [-1] * n // Array con le distanze di ogni nodo da x 
     dist[x] = 0
     Q = queue vuota
     Q.enqueue(x)
@@ -1375,13 +1375,13 @@ BFS_cammini_minimi(G,x):
     while Q != 0:
         y = Q.dequeue()
         for z adiacente a y:
-            if dist[z] == -1: # z ancora non visitato
+            if dist[z] == -1: // z ancora non visitato
                 dist[z] = dist[y] + 1
-                count[z] = count[y] # Tutti i cammini minimi a y portano anche a z
+                count[z] = count[y] // Tutti i cammini minimi a y portano anche a z
                 Q.enqueue(z)
-            else: # z già visitato
-                if dist[z] == dist[y] + 1: # Se è un vicino con distanza uguale ma -1
-                    count[z] += count[y] # Aggiungiamo altri cammini
+            else: // z già visitato
+                if dist[z] == dist[y] + 1: // Se è un vicino con distanza uguale ma -1
+                    count[z] += count[y] // Aggiungiamo altri cammini
     return count
 \end{lstlisting}
 
@@ -1466,6 +1466,284 @@ Preso un grafo $G$ non diretto e connesso, un nodo $x \in V(G)$, un albero BFS $
     Questa seconda parte della proposizione è banale: se $G$ è un albero allora, essendo anche $T_1$ e $T_2$ degli alberi con all'interno tutti i nodi di $G$ (essendo alberi rispettivamente BFS e DFS), $G = T_1 = T_2$. $\blacksquare$
 \end{itemize}
 
+\subsection{Grafi pesati}
+
+\begin{Definizione}[Grafo pesato]
+\label{def-grafo-pesato}
+Un \textbf{grafo pesato} è un grafo che assegna ad ogni arco un \textbf{peso}, tramite la funzione
+\[
+\bm{w: E} \longrightarrow \bm{\R^+_0}
+\]
+In un grafo pesato la distanza tra due nodi viene calcolata con una formula differente, basata proprio sui pesi degli archi: $\bm{dist_w(x,y) = \min_{P \textbf{cammino tra} x \text{e} y} w(P) = \sum_{e \in P} w(e)}$. Diciamo quindi che la distanza tra $x$ e $y$ in un grafo pesato è il cammino con il peso minore che collega i due nodi.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Esempio grafo pesato.png}
+\caption{Esempio di grafo pesato}
+\label{fig-grafo-pesato}
+\end{figure}
+
+Da questo esempio notiamo fin da subito una cosa importante: \textbf{il cammino più corto tra due nodi non è sempre quello con il peso minore}. Infatti, in questo caso il cammino migliore tra $x$ e $y$ non è il semplice $P = xy$, dato che il peso di questo arco è $13$, ma piuttosto è il cammino $Q = xz,zy$, che ha un peso totale di solo $4$.
+
+\begin{Osservazione}[Osservazioni]
+\label{oss-grafo-pesato}
+\begin{enumerate}
+    \item $\bm{dist_w(x,y) \geq 0}$
+    \item $\bm{dist_w(x,x) = 0}$
+    \item $\bm{dist_w(x,y) \leq dist_w(x,z) + dist_w(z,y)}$
+\end{enumerate}
+\end{Osservazione}
+
+\Dimostrazione \nopagebreak
+
+\begin{enumerate}
+    \item Dato che $dist_w(x,y) = \min_{P \textbf{cammino tra} x \text{e} y} w(P)$, essendo $w$ una funzione che va in $R^+_0$, troviamo che $w(P) \geq 0$, ossia $dist_w(x,y) \geq 0$. $\blacksquare$ 
+    \item Banalmente, il cammnio $P$ vuoto è un cammino che collega $x$ ad $x$, e dato che non ha archi il suo peso è $0$. Essendo $dist_w(x,y) \geq 0$ per l'osservazione 1), concludiamo che questo cammino è quello con il peso minore che collega $x$ ad $x$, ossia che $dist_w(x,x) = 0$. $\blacksquare$
+    \item Ipotizziamo $dist_w(x,z), dist_w(z,y) \neq \infty$ (altrimenti la disuguaglianza è banalmente vera dato che a destra abbiamo l'infinito). Esistono dunque due cammini: $P_1$ da $x$ a $z$ con peso $dist_w(x,z)$, e $P_2$ da $z$ a $y$ con peso $dist_w(z,y)$. Se prendiamo $P = P_1 + P_2$, questo nuovo cammino è un cammino da $x$ a $y$ con peso $dist_w(x,z) + dist_w(z,y)$. A questo punto ci sono due possibilità:
+    \begin{itemize}
+        \item $P$ è il cammino con il peso minimo tra $x$ e $y$ \\
+        In questo caso abbiamo quindi $w(P) = dist_w(x,z) + dist_w(z,y) = dist_w(x,y)$
+        \item $P$ non è il cammino con il peso minimo tra $x$ e $y$ \\
+        In questo caso abbiamo quindi $w(P) = dist_w(x,z) + dist_w(z,y) > dist_w(x,y)$
+    \end{itemize}  
+    Concludiamo quindi che $dist_w(x,z) + dist(z,y) \geq dist_w(x,y)$. $\blacksquare$
+\end{enumerate}
+
+\begin{Proposizione}[Grafi diretti]
+\label{propos-grafio-pesati-diretti}
+Tutte le considerazioni viste sui grafi pesati valgono non solo per i grafi non diretti ma anche per quelli \textbf{diretti}. L'unica differenza che troviamo in questi grafi rispetto a quelli non diretti è che $\bm{dist_w(x,y) \neq dist_w(y,x)}$.
+\end{Proposizione}
+
+Cerchiamo ora un algoritmo che trovi le distanze tra un nodo $x$ e tutti gli altri nodi di un grafo $G$ pesato.
+
+Una prima idea potrebbe essere quella di utilizzare l'algoritmo della BFS classica e di modificare il calcolo delle distanze, passando da \code{dist[z] = dist[y] + 1} a \code{dist[z] = dist[y] + w(zy)}. Questo, però, non funziona proprio per lo stesso motivo di cui abbiamo discusso nell'esempio del grafo pesato, ossia che il cammino più corto tra due nodi (che è quello che calcola la BFS) non è sempre quello con il peso minore. Infatti, se utilizzassimo questo algoritmo sul grafo visto in Figura \ref{fig-grafo-pesato}, troveremmo che \code{dist(x,y) = 13}, un valore dunque sbagliato.
+
+\begin{Osservazione}[]
+\label{oss-grafi-pesati-vicini}
+Preso un grafo $G$ pesato, un nodo $x \in G$ e l'insieme $N(x)$ con all'interno tutti i vicini di un nodo $x$, $xv$ è l'arco con peso minore che collega $x$ a un altro nodo $\implies$ $\bm{dist_w(x,v) = w(xv)}$. 
+\end{Osservazione}
+
+\Dimostrazione \nopagebreak
+
+Questo è sempre vero perché, essendo l'arco $xv$ quello con peso minore tra tutti quelli che partono da $x$, non esisterà alcun cammino con peso minore di $P = xv$ che collega $x$ a $v$, perché qualsiasi altro cammino che collega questi due nodi passerà per un arco diverso da $xv$ che collega $x$ a un altro suo vicino, ma essendo $xv$ l'arco con il peso minore che collega $x$ a un altro nodo, sappiamo sicuramente che questo nuovo arco peserà già di più di $xv$, dunque concludiamo che $P = xv$ è il cammino con peso minore tra $x$ e $v$, ossia $dist_w(x,v) = xv$. $\blacksquare$
+
+Grazie a questa osservazione riusciamo quindi a trovare da $x$ almeno un valore $dist_w$ certo, ossia $dist_w(x,v)$. Creiamo ora un nuovo insieme, $R$, con all'interno tutti i vertici di cui conosciamo la distanza da $x$. Avremo quindi per ora $R = \{x,v\}$. 
+
+\begin{Proposizione}[]
+\label{propos-grafi-pesati}
+Preso un grafo $G$ pesato, un insieme $R \subseteq V(G)$ di vertici che contiene $x$ e di cui si conoscono le distanze da $x$ e un arco $u'v \in E(G)$ tali che $u' \in R$ e $v \notin R$ la cui somma $dist_w(x,u') + w(u'v)$ è minima tra tutti gli archi di questo tipo (ossia uscenti da $R$), $\bm{dist_w(x,v) = dist_w(x,u') + w(u'v)}$.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Abbiamo dunque l'arco $u'v$ uscente da $R$ tale che, presi tutti gli archi uscenti da $R$ $uv$, $\min dist_w(x,u) + w(uv) = dist(x,u') + w(uv)$. Poniamo ora $dist_w(x,u') + w(u'v) = m$. Vogliamo ora dimostrare che $m = dist_w(x,v)$, ossia che questo cammino tra $x$ e $u'$ + l'arco $uv$ sia il cammino di peso minore tra $x$ e $v$. Per farlo, dimostriamo prima che $m \geq dist_w(x,v)$ e poi che $m \leq dist_w(x,v)$. 
+\begin{itemize}
+    \item $m \geq dist_w(x,v)$ \\
+    $dist_w(x,u') + w(u'v) \geq dist_w(x,v)$ è sempre vera per l'osservazione 3) vista in precedenza.
+    \item $m \leq dist_w(x,v)$ \\
+    Sia $P$ un cammino qualunque da $x$ a $v$. Dato che $x \in R$ e $v \notin R$, è naturale che $P$ prima o poi debba uscire da $R$. Chiamiamo $b$ il primo vertice di $P$ fuori da $R$ e $a$ il vertice che nel cammino $P$ lo precede. Possiamo quindi spezzare $P$ in tre diversi sottocammini: $P = P_1 + ab + P_2$, dove $P_1$ è il cammino da $x$ ad $a$ mentre $P_2$ è il cammino da $b$ a $v$. Troviamo quindi che $w(P) = w(P_1) + w(ab) + w(P_2)$. Sappiamo sicuramente che $w(P_1) \geq dist_w(x,a)$, essendo questo un cammino proprio da $x$ a $a$, e sappiamo ovviamente che $w(P_2) \geq 0$, dato che i pesi non sono mai negativi. Troviamo quindi che $w(P) \geq dist_w(x,a) + w(ab)$. A questo punto, per la stessa definizione di $m$, troviamo che $dist_w(x,a) + w(ab) \geq m$, e quindi $w(P) \geq m$. Dato che questo vale per ogni cammino $P$ tra $x$ e $y$, vale anche per il cammino minimo, dunque troviamo che $m \leq dist_w(x,v)$.
+\end{itemize}
+
+Concludiamo dunque che $dist_w(x,v) = dist_w(x,u') + w(u'v)$. $\blacksquare$
+
+Questa proposizione è fondamentale, perchè ci permette di aggiungere sempre dei nuovi nodi a $R$ partendo da quelli che già ne fanno parte. Vediamo come ci può essere utile con un grafo d'esempio.
+
+\begin{minipage}[c]{0.6\textwidth}
+Partendo da $x$, troviamo subito il nodo $c$ per l'Osservazione \ref{oss-grafi-pesati-vicini}, che avrà distanza pari a $1$ da $x$. Abbiamo quindi per ora $R = \{x,c\}$. Ora, per applicare la Proposizioen \ref{propos-grafi-pesati} dobbiamo analizzare 3 valori: $dist_w(x,x) + w(xb), dist_w(x,c) + w(cb)$ e $dist_w(x,c) + w(cd)$. Tra questi tre valori, il minimo è $dist_w(x,c) + w(cd)$, che vale $3$, dunque troviamo che $dist_w(x,d) = 3$, e aggiungiamo $d$ a $R$. Riapplicando la proposizione, troviamo che $dist_w(x,b) = 4$, e riapplicandola ancora una volta troviamo infine che $dist_w(x,e) = 15$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Djkstra esempio.png}
+\end{minipage}
+
+Traduciamo questa idea utilizzata per trovare tutte le distanze di questo grafo in un vero e proprio algoritmo:
+
+\begin{lstlisting}
+Dijkstra_beta(G,w,x): // G grafo non diretto e connesso
+    n = numero di nodi di G
+    dist = [-1] * n
+    dist[x] = 0
+    R = {x}
+    while R != V(G): // Finché in R non ci sono tutti i nodi
+        min = -1
+        arco = 0
+        for uv in E(G): // Per ogni arco nel grafo
+            if (u in R e v not in R): // Prendiamo solo gli archi uscenti
+                if dist[u] + w(uv) < min or min == -1: // Cerchiamo il cammino minimo
+                    min = dist[u] + w(uv)
+                    arco = uv
+        R.add(arco.v) // Aggiungiamo il nuovo nodo a R
+\end{lstlisting}
+
+Il costo computazionale di questo algoritmo è $\textbf{O}\bm{(nm)}$, dato che il while fa sempre $n$ iterazioni, ognuna con un costo di $\O(m)$ per colpa del for che gira tutti gli archi.
+
+\begin{Definizione}[Albero di copertura]
+\label{def-albero-copertura}
+Un \textbf{albero di copertura} di un grafo $G$ è un albero $T$ dove $\bm{V(T) = V(G)}$, ossia che contiene tutti i nodi del grafo $G$.
+\end{Definizione}
+
+\begin{Osservazione}[]
+\label{oss-dijkstra}
+Se aggiungiamo al nostro algoritmo un grafo $T$ che salva tutti gli archi uscenti con il cammino minimo,
+\begin{itemize}
+    \item $T$ \textbf{è un albero}, dato che tutti gli archi che aggiungiamo sono sempre uscenti da $R$
+    \item $\forall y \in V(G)$, $T$ contiene un \textbf{cammino minimo} tra $x$ e $y$
+\end{itemize}
+\end{Osservazione}
+
+$T$ in questo caso è quindi un albero di copertura del nostro insieme $R$. Sfruttando questo albero, possiamo migliorare la complessità temporale del nostro algoritmo, introducendo una struttura dati di cui studiata nel corso di Algoritmi I: il \textbf{min heap}. L'unica cosa che ci deve interessare del min heap è che questa struttura ci permette di estrarre il minimo e inserire/rimuovere un valore in tempo $\log(n)$, dove $n$ è il numero di elementi nel heap. Inserendo tutti i possibili archi uscenti $uv$ da $R$ con il loro valore come chiave, ossia \code{dist[u] + w(uv)}, ci è possibile calcolare la minima distanza tra $x$ e un nuovo nodo fuori da $R$ in costo $\O(\log n)$ piuttosto che $\O(m)$, dato che ad ogni iterazione non dobbiamo più ricalcolare tutti gli archi uscenti da $R$ ma solo quelli uscenti dal nodo inserito nell'ultimo giro del for. Tutto ciò si traduce in questo algoritmo:
+
+\begin{lstlisting}
+Dijkstra(G,w,x):
+    n = numero di nodi di G
+    dist = [-1] * n
+    dist[x] = 0
+    P = [-1] * n // Vettore dei padri
+    P[x] = x // x è la radice di T
+    H = minHeap
+    for v adiacente a x: // Inseriamo i primi archi, ossia quelli che collegano x a un suo vicino
+        H.insert(xv con chiave w(xv)) 
+    for i in range(1,n): // Per ogni nodo in G tolto x
+        uv = H.extractMin() // Prendiamo il nodo che ci permette di trovare il cammino minimo
+        if P[u] == -1: // u è il nodo fuori da R
+            new = u
+            old = v
+        else: // v è il nodo fuori da R
+            new = v
+            old = u
+        P[new] = old // Aggiungiamo il nodo in R
+        dist[new] = dist[old] + w(uv)
+        for y vicino di new:
+            if P[y] == -1: // Prendiamo tutti i nuovi archi all'infuori
+                H.insert(ynew con chiave dist[new] + w(ynew)) // e li aggiungiamo all'heap
+            else:
+                H.remove(ynew) // Togliamo tutti gli archi che da R puntano a new, dato che ormai fa parte di R
+    return dist
+\end{lstlisting}
+
+Il costo toale di questo algoritmo è $\O(n \log n + m \log n) = \textbf{O}\bm{(\log n(n+m))}$. Infatti, abbiamo un ciclo for che esegue $n$ iterazioni con costo $\log n$ (per l'estrazione del minimo dell'heap) + un altro ciclo for, che in totale esegue $\O(m)$ iterazioni (stiamo infatti analizzando tutti gli archi del grafo) con un costo sempre di $\log n$ per l'inserimento o la rimozione di un arco dall'heap.
+
+\subsection{Funzioni peso particolari}
+
+Analizziamo ora due nuove funzioni peso particolari:
+
+\begin{minipage}{0.48\textwidth}
+\begin{align*}
+w_1: &E(G) \to \mathbb{R}^+_0 \\
+ &w_1(e) = w(e) + 1
+\end{align*}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{align*}
+w_2: &E(G) \to \mathbb{R}^+_0 \\
+&w_2(e) = 2w(e)
+\end{align*}
+\end{minipage}
+
+Preso un array $P$ con all'interno il cammino da un nodo $x$ a tutti i vertici di un grafo $G$ con il peso minore, ci domandiamo se questo array sia corretto anche dopo aver applicato le funzioni $w_1$ e $w_2$ a tutti i pesi di $G$.
+
+È facile dimostrare che per $w_1$ l'array $P$ non funziona con un controesempio:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Controesempio pesi 1.png}
+\end{figure}
+
+In questo grafo, dove i pesi sono calcolati con la funzione classica $w$, abbiamo come cammino minimo da $x$ a $b$ il cammino $P = xa,ac,cb$. Se però ricostruiamo questo grafo con la funzione $w_1$, troviamo un cammino diverso:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Controesempio pesi 2.png}
+\end{figure}
+
+Il cammino $P$ non è più il cammino minimo, che ora è diventato semplicemnte $Q = xb$. Dunque applicando $\bm{w_1}$ a tutti i pesi di questo grafo $P$ \textbf{non è rimasto invariato}.
+
+Questo però non è vero per la funzione $w_2$. Infatti, una volta applicata questa funzione a tutti i pesi di $G$, troviamo che $w_2(P) = w_2(\sum_{e \in P} e) = \sum_{e \in P} w_2(e) = \sum_{e \in P} 2 w(e) = 2 \sum_{e \in P} w(e) = 2w(P)$. Dunque, preso un qualsiasi cammino $P$ in $G$, troviamo che $w_2(P) = 2 w(P)$, dunque il cammino minimo tra $x$ e un qualsiasi nodo rimane sempre lo stesso (se $w(P) < w(Q)$, allora anche $w_2(P) = 2w(P) < w_2(Q) = 2w(Q)$). Possiamo quindi concludere che, applicando $\bm{w_2}$ a tutti i pesi di un qualsiasi grafo $G$, $P$ \textbf{resta invariato}.
+
+Questa stessa dimostrazione che abbiamo appena visto per $w_2$ può essere utilizzata anche per dimostrare che con $w_1$ $P$ non rimane invariato. Infatti, troviamo che \mbox{$w_1(P) = w_1(\sum_{e \in P} e) = \sum_{e \in P} w_1(e) = \sum_{e \in P} w(e) + 1 = \sum_{e \in P} w(e) + \sum_{e \in P} 1 = w(P) + \text{lun}(P)$}. Dunque, presi due cammini $P$ e $Q$ in $G$ tali che $w(P) < w(Q)$, troviamo che $w_1(P) = w(P) + \text{lun}(P) < w_2(Q) = w(Q) + \text{lun(Q)}$ è verificato se e solo se $\text{lun}(P) < w(Q) - w(P) + \text{lun}(Q)$, quindi è possibile che l'array $P$ effettivamente cambi.
+
+\subsection{Esempio di esercizio sulle distanze}
+
+Dati in input un vettore padri $P$ di un albero $T$ con all'interno il nodo $x$, e un array \code{Pesi} lungo $n$ dove \code{Pesi[v] = w(v,P[v])} (ossia il peso dell'arco che lega il nodo al padre), trovare in $\O(n)$ l'array \code{dist} contenente tutte le distanze da $x$ a un qualsiasi nodo dell'albero.
+
+Dato che vogliamo un costo lineare, non possiamo semplicemente prendere ogni e calcolare la sua distanza da $x$, perché questo richiederebbe $\O(n^2)$. Per questo, quando risaliamo da un nodo $y$ fino a $x$, non dobbiamo limitarci a calcolare la distanza da $x$ a $y$, ma dobbiamo calcolare la distanza anche di tutti i nodi che si trovano lungo il percorso. In questo modo, ogni volta che rilasiamo da un nodo $y$ a $x$ con $k$ passaggi, non ci limitamo a calcolare solo \code{dist[y]}, ma calcoliamo $k$ valori \code{dist}, uno per ogni nodo intermedio. In questo modo avremo una complessità $\O(n)$. Vediamo com'è fatto l'algoritmo che risolve questo problema:
+
+\begin{lstlisting}
+Alg(P,X, Pesi):
+    n = lun(P)
+    dist = [-1] * n
+    dist[x] = 0
+    for v in P:
+        S = stack nuovo
+        if dist[v] == 0: // Se non abbiamo ancora visitato il nodo
+            padre = P[v]
+            S.push(v) // Aggiungiamo v allo stack
+            while padre != x: // Risaliamo l'albero
+                S.push(padre)
+                padre = P[padre]
+            somma = 0
+            while S != 0: // Svuotiamo lo stack
+                u = S.pop()
+                somma += Pesi[u]
+                dist[u] = somma
+    return dist
+\end{lstlisting}
+
+\chapter{Algoritmi Greedy}
+
+\section{Problemi di ottimizzazione}
+
+Esistono dei problemi dove trovare la soluzione migliore analizzando tutte quelle possibile è semplicemente impossibile, perché essendo queste generalmente in numero esponenziale richiederebbero dei tempi assurdi. Si introducono quindi dei nuovi algoritmi, più efficienti: gli \textbf{algoritmi greedy}
+
+\begin{Definizione}[Algoritmo greedy]
+\label{def-greedy}
+Un \textbf{algoritmo greedy} è un algoritmo che costruisce la soluzione in modo incrementale, effettuando a ogni passo la scelta in quel momento migliore.
+\end{Definizione}
+
+In questi algoritmi ogni scelta è definitiva, dunque non si perde mai tempo tornando indietro. Lo svantaggio, però, è che una scelta localmente ottima non genera al 100\% una soluzione globalmente ottima. Bisogna dunque fare attenzione, e scegliere un algoritmo greedy solo se il problema ha la struttura adatta per essere risolto con uno di questi.
+
+Un classico algoritmo greedy è proprio l'algoritmo di Dijkstra, che abbiamo appena studiato: infatti questo a ogni passo sceglie il vertice più vicino tra quelli non ancora visitati, effettuando così una scelta localmente ottima che alla fine genera qui una soluzione globalmente ottima.
+
+\section{Esempio di algoritmo greedy}
+
+Vediamo ora un altro problema risolvibile tramite un algoritmo greedy.
+
+Dati in input una serie di intervalli $[a_i, b_i]$, vogliamo trovare il sottoinsieme di intervalli disgiunti con il maggior numero di intervalli al proprio interno.
+
+\begin{minipage}[c]{0.6\textwidth}
+Con questi intervalli, ad esempio, la soluzione dovrebbe essere $\{[1,3], [5,12], [14,22]\}$. 
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Intervalli esempio.png}
+\end{minipage}
+
+È evidente come scegliere un qualsiasi intervallo iniziale e aggiungere all'insieme tutti gli intervalli disgiunti possibili non ci porti necessariamente alla soluzione ottimale, dato che se si sceglie come intervallo iniziale $[2,5.5]$ si arriva ad avere come soluzione l'insieme $\{[2,5.5], [10,15]\}$, che non è di cardinalità massima. Allo stesso tempo, però, questa idea può funzionare se decidiamo di ordinare gli intervalli secondo un determinato criterio prima di dover scegliere il primo intervallo da aggiungere all'insieme. Il problema ora è uno: \textit{come ordiniamo gli intervalli?} Abbiamo tre possibilità:
+\begin{enumerate}
+    \item Per \textbf{lunghezza crescente}, ossia ordinandoli in base al valore $b_i - a_i$
+    \item Per $\bm{a_i}$ \textbf{crescente}
+    \item Per $\bm{b_i}$ \textbf{crescente}
+\end{enumerate}
+
+Il primo ordinamento non funziona: infatti, se prendiamo gli intervalli $[2,3.5], [4.5,6], [1,3], [2,4], [3,5]$, restituiamo l'insieme $\{[2,3.5], [4.5,6]\}$, che non è la soluzione ottimale.
+
+Il secondo ordinamento nemmeno funziona: infatti, se prendiamo gli intervalli $[1,100], [2,3], [4,5]$ restituiamo l'insieme $\{[1,100]\}$, che non è la soluzione ottimale.
+
+Il terzo ordinamento, invece, sembra funzionare. Proviamo quindi a creare un algoritmo che ordina gli intervalli per $b_i$ crescente e li esamina uno alla volta in quest'ordine: il primo viene inserito nell'insieme finale $R$, mentre i successivi vengono inseriti solo se sono disgiunti da tutti quelli  già presenti in $R$.
+
+\begin{lstlisting}
+Intervalli(I): // I insieme iniziale di intervalli
+    Sol = set nuovo
+    sort(I) // Ordiniamo I per valori di b crescenti
+    for i in range(n):
+        intervallo = I[i]
+        if intervallo disgiunto da tutti gli intervalli in Sol:
+            Sol.add(intervallo)
+    return Sol
+\end{lstlisting}
+
+Adesso però sorge un dubbio importante: \textit{come possiamo essere certi che questo algoritmo restituisca sempre la soluzione ottimale?} Infatti, essendo questo un algoritmo greedy non ci è garantito che la soluzione finale sia ottimale. Dobbiamo dunque dimostrarlo.
 
 
 
