@@ -202,7 +202,7 @@ Nel nostro caso abbiamo quindi uno schema del tipo
     \item \textbf{Memorizzazione del grafo}: $\bm{\Theta(n + m)}$ (spaziale), dove $m = \# E$
     \item \textbf{Visita del grafo}: $\bm{\Theta(n+m)}$
     \item \textbf{Verificare se} $\bm{i \sim j}$: $\textbf{O}\bm{(\min(\deg(i), \deg(j)))}$
-    \item \textbf{Preso un nodo $\bm{x}$, calcolare} $\bm{\deg(x)}$: $\bm{\deg(x)}$
+    \item \textbf{Preso un nodo $\bm{x}$, calcolare} $\bm{\deg(x)}$: $\textbf{O}(\deg(x))$
 \end{itemize}
 \end{Proprieta}
 
@@ -305,7 +305,7 @@ Un \textbf{ciclo} è un grafo connesso dove ogni vertice è di grado 2.
 
 "Dato un grafo dove ogni nodo $x$ ha $\deg(x) \geq 2$, trovare un ciclo". Proviamo a studiare un algoritmo per risolvere questo problema.
 
-Scegliamo un nodo di partenza $x$. Camminiamo lungo il grafo spostandoci sempre su un vicino diverso dal quale siamo arrivati (il che è possibile dato che $\deg(x) \geq 2$). Prima o poi troveremo un vicino già visitato. In quel momento il nodo su cui ci troveremo avrà due vicini già visitati, il che significa che siamo arrivati ad un ciclo.
+Scegliamo un nodo di partenza $x$. Camminiamo lungo il grafo spostandoci sempre su un vicino diverso da quello dal quale siamo arrivati (il che è possibile dato che $\deg(x) \geq 2$). Prima o poi troveremo un vicino già visitato. In quel momento il nodo su cui ci troveremo avrà due vicini già visitati, il che significa che siamo arrivati ad un ciclo.
 
 \begin{lstlisting}[style=Python]
 def trovaCiclo(G):
@@ -494,7 +494,7 @@ DFS_Componenti(G):
     x = nodo qualsiasi
     contatore = 0
     while x != -1:
-        contatore += 1
+        contatore ++
         S = stack nuovo
         S.push(x)
         Comp[x] = contatore
@@ -553,12 +553,12 @@ Studiamo ora un algoritmo per trovare la \textbf{distanza dalla radice} di un no
 Distanza_Radice(P,x):
     con = 0
     while P[x] != x:
-        con += 1
+        con ++
         x = P[x]
     return con
 \end{lstlisting}
 
-Il costo di questo algoritmo è $\O(h)$, dove h indica l'\textbf{altezza} dell'albero, ossia la massima distanza tra la radice e una delle foglie. Se ci troviamo in un albero degenere (ossia un albero lineare, dove l'altezza è pari a $n-1$), il costo può arrivare a $\O(n)$.
+Il costo di questo algoritmo è $\O(h)$, dove $h$ indica l'\textbf{altezza} dell'albero, ossia la massima distanza tra la radice e una delle foglie. Se ci troviamo in un albero degenere (ossia un albero lineare, dove l'altezza è pari a $n-1$), il costo può arrivare a $\O(n)$.
 
 \subsection{Problema degli esami}
 
@@ -626,7 +626,7 @@ allora il grafo sarà di questo tipo:
 \includegraphics[width=0.6\textwidth]{Grafo diretto problema.png}
 \end{figure}
 
-In questo caso la soluzione sarebbe $x_4$ --- $x_3$ --- $x_1$ --- $x_2$. Questo ordine viene detto \textbf{ordine topologico del grafo}. È importante capire che se il nostro grafo avesse avuto un \textbf{ciclo diretto} (ossia una passeggiata che segue il verso degli archi e non ripete vertici, tranne il primo che coincide con l'ultimo), allora non avremmo avuto soluzione.
+In questo caso la soluzione sarebbe $x_4$ --- $x_3$ --- $x_1$ --- $x_2$. Questo ordine viene detto \textbf{ordine topologico del grafo}. È importante capire che se il nostro grafo avesse avuto un \textbf{ciclo diretto} (ossia una passeggiata di almeno un arco che segue il verso degli archi e non ripete vertici, tranne il primo che coincide con l'ultimo), allora non avremmo avuto soluzione.
 
 \begin{minipage}[c]{0.35\textwidth}
 \centering
@@ -754,7 +754,7 @@ In un grafo connesso non diretto, $G$ ha un ciclo $\iff$ ogni DFS ha un arco all
 
 \begin{enumerate}[label=\arabic*°]
     \item $G$ ha un ciclo $\implies$ ogni DFS ha un arco all'indietro \\
-    Sappiamo per la proposizione appena vista che ogni arco fuori dall'albero di ricerca in un grafo non diretto è all'indietro. Preso un ciclo, per definizione stessa dell'albero sicuro non esiste un ciclo in questo (gli alberi sono infatti grafi aciclici). Dunque esiste sicuramente un arco del ciclo che non fa parte dell'albero, e dato che tutti gli archi fuori dall'albero sono all'indietro, questo è un arco all'indietro. $\blacksquare$
+    Sappiamo per la proposizione appena vista che ogni arco fuori dall'albero di ricerca in un grafo non diretto è all'indietro. Preso un ciclo, per definizione stessa dell'albero sicuramente non esiste un ciclo in questo (gli alberi sono infatti grafi aciclici). Dunque esiste sicuramente un arco del ciclo che non fa parte dell'albero, e dato che tutti gli archi fuori dall'albero sono all'indietro, questo è un arco all'indietro. $\blacksquare$
     \item $G$ ha un ciclo $\impliedby$ ogni DFS ha un arco all'indietro \\
     Sia $uv$ un arco all'indietro fuori dall'albero di ricerca con $u$ discendente di $v$. Sappiamo sicuramente che nell'albero esiste un cammino $P$ da $u$ a $v$, e dato che $uv$ non fa parte dell'albero questo chiude un ciclo. $\blacksquare$
 \end{enumerate}
@@ -787,7 +787,7 @@ Algoritmo(G,x):
 dove \code{Algoritmo\_Ricorsivo} è questa funzione ricorsiva:
 \begin{lstlisting}[style=Python]
 Algoritmo_Ricorsivo(G,x,t,T,con):
-    while esiste un nodo y con arco (x,y) e t[y] == -1:
+    while esiste un nodo y con arco (x,y) e t[y] ==    Ora che abbiamo trovato che $r$ è un'istanza legale di $R$ troviamo che questa soddisfa la dipendenza funzionale $X \longrightarrow Y$, dato che questa appartiene a $F^$ (ricordiamo che ogni dipendenza funzionale in $F^+$ è, per definizione, soddisfatta da qualsiasi istanza legale di $R$). Poiché $X \subseteq X^+$ (dato che $X \longrightarrow X$ è sempre soddisfatta), troviamo che $t_1[X] = t_2[X]$ e quindi, poiché $r$ soddisfa $X \longrightarrow Y$, anche $t_1[Y] = t_2[Y]$ è verificata. Ciò significa che $Y \subseteq X^+$ e, per il lemma di chiusura, troviamo proprio che $X \longrightarrow Y \in F^A$. $\blacksquare$ -1:
         con ++
         t[y] = con
         con = Algoritmo_Ricorsivo(G,y,t,T,con)
@@ -797,7 +797,7 @@ Algoritmo_Ricorsivo(G,x,t,T,con):
 
 \begin{Proposizione}[]
 \label{propos-tu<tv}
-In un ordine topologico $T$ di un grafo $G$ connesso e diretto, preso un arco $(u,v) \in E(G)$, $\bm{T(v) \leq T(u)}$.  
+In un ordine topologico $T$ di un grafo $G$ diretto e aciclico, calcolato con una DFS che raggiunge tutti i nodi, preso un arco $(u,v) \in E(G)$, $\bm{T(v) \leq T(u)}$.  
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -835,7 +835,7 @@ OrdTop_ric(G,v,Vis,L):
     L.append(v)
 \end{lstlisting} 
 
-Sembra strano però: non stiamo mai calcolando il valore $t$ o $T$ di nessun nodo. Questo però non è necessario: infatti, ogni volta che abbiamo un arco $(u,v)$ abbiamo detto che $T(v) \leq T(u)$, e infatti noi nel nostro algoritmo mettiamo sempre $v$ prima di $u$ nella lista (aggiungendolo dopo usando \code{append}), in modo da rispettare questa condizione sempre e senza dover calcolare il valore $T$ dei nodi.
+Sembra strano però: non stiamo mai calcolando il valore $t$ o $T$ di nessun nodo. Questo però non è necessario: infatti, ogni volta che abbiamo un arco $(u,v)$ abbiamo detto che $v$ esce dallo stack prima di $u$, e infatti noi nel nostro algoritmo mettiamo sempre $v$ prima di $u$ nella lista (aggiungendolo dopo usando \code{append}), in modo da rispettare questa condizione sempre e senza dover calcolare il valore $T$ dei nodi.
 
 \subsection{DFS impossibili}
 
@@ -863,7 +863,7 @@ In un grafo diretto un \textbf{pozzo universale} è un nodo $x$ a cui tutti gli 
 \end{figure}
 
 Vogliamo ora stabilire, preso un grafo diretto $G$ salvato tramite matrice di adiacenze, se \textbf{esiste un pozzo universale} (uno solo, dato che in ogni grafo può esistere al più un pozzo universale per la definizione stessa di pozzo) in $G$ in tempo $\textbf{O}\bm{(n)}$. Ricordiamo che in una matrice di adiacenze $(i,j) \in E(G)$ si traduce in $m[i,j] = 1$ (scriviamo quindi sulle colonne gli archi entranti di un nodo e sulle righe gli archi uscenti). Stiamo quindi cercando un nodo che abbia \textbf{una colonna di soli 1} (tranne che per la cella che si incrocia con sé stesso), e \textbf{una riga di soli 0}. Sembra facile: basta controllare ogni colonna di ogni nodo e ogni sua riga. Questo però ha costo totale $\O(n^2)$ e non l'$\O(n)$ richiesto. Per questo motivo cerchiamo un approccio diverso. \\
-Notiamo che, presa una cella $(i,j)$, se $m[i,j] = 1$ allora possiamo subito eliminare $i$ dai possibili candidati al pozzo universale, dato che manda un arco in uscita, mentre se $m[i,j] = 0$ allora possiamo subito eliminare $j$ dai possibili candidati, dato che il nodo $i$ non punta a $j$. Dunque, con un controllo su una singola cella, in ogni caso riusciamo a eliminare un nodo dai possibili candidati ad essere pozzo universale. Ci bastano quindi solo $n$ check per trovare un possibile pozzo universale, e ci servono poi solo $2n$ controlli su quel candidato per controllare che funzioni davvero da pozzo universale. Vediamo come si traduce questo in codice:
+Notiamo che, presa una cella $(i,j)$, se $m[i,j] = 1$ allora possiamo subito eliminare $i$ dai possibili candidati al pozzo universale, dato che manda un arco in uscita, mentre se $m[i,j] = 0$ allora possiamo subito eliminare $j$ dai possibili candidati, dato che il nodo $i$ non punta a $j$. Dunque, con un controllo su una singola cella, in ogni caso riusciamo a eliminare un nodo dai possibili candidati ad essere pozzo universale. Ci bastano quindi solo $n-1$ check per trovare un possibile pozzo universale, e ci servono poi solo $2n$ controlli su quel candidato per controllare che funzioni davvero da pozzo universale. Vediamo come si traduce questo in codice:
 \begin{lstlisting}[style=Python]
 PozzoUniversale(m):
     n = numero di nodi del grafo
@@ -1088,7 +1088,7 @@ Sia $x$ un vertice di $H$ e $P$ un cammino da $y \in V(G/V(H))$ a $x$ in $G$ (si
 
 \begin{Osservazione}[]
 \label{oss-fortemente-connesso-contrazione}
-Preso un grafo G diretto, esiste sempre un sottoinsieme $X \subseteq G$ che renda $G/X$ fortemente connesso.
+Preso un grafo $G$ diretto, esiste sempre un sottoinsieme $X \subseteq G$ che renda $G/X$ fortemente connesso.
 \end{Osservazione}
 
 Questo è sempre vero perché banalmente, prendendo $X = V(G)$, $G/X$ altro non è che un grafo con un solo nodo $v_X$, e un grafo con un solo nodo è per definizione fortemente connesso.
@@ -1122,7 +1122,7 @@ Per quanto riguarda il costo di questo algoritmo, sappiamo che la ricerca di un 
 
 \begin{Proposizione}[]
 \label{propos-antenato-comune}
-Preso un grafo diretto $G$, un'arborescenza di questo grafo $T$ e un nodo $u \in V(G)$, $\exists$ un arco di attraversamento $(x,y) \in E(G)$ con $x \in T_u$ e $y \notin T_u \implies \exists$ l'antenato comune più vicino di $x$ e $y$ $z \in G$ che è anche antenato di $u$, ed esistono due figli $u_1$ e $u_2$ di $z$ tali che $x \in T_{u_1}$ e $y \in T_{u_2}$ e, $\forall x' \in T_{u_1}$ e $\forall y' \in T_{u_2}$, $t(x') > t(y')$ (ossia tutti i nodi nel sottoalbero $T_{u_2}$ sono visitati prima di quelli del sottoalbero $T_{u_1}$).
+Preso un grafo diretto $G$, un'arborescenza di questo grafo $T$ e un nodo $u \in V(G)$, $\exists$ un arco di attraversamento $(x,y) \in E(G)$ con $x \in T_u$ e $y \notin T_u \implies \exists$ l'antenato comune più vicino $z$ di $x$ e $y$ che è anche antenato di $u$, ed esistono due figli $u_1$ e $u_2$ di $z$ tali che $x \in T_{u_1}$ e $y \in T_{u_2}$ e, $\forall x' \in T_{u_1}$ e $\forall y' \in T_{u_2}$, $t(x') > t(y')$ (ossia tutti i nodi nel sottoalbero $T_{u_2}$ sono visitati prima di quelli del sottoalbero $T_{u_1}$).
 \end{Proposizione}
 
 \Dimostrazione \nopagebreak
@@ -1167,7 +1167,7 @@ Preso $u$ una c-radice di una componente fortemente connessa:
 \Dimostrazione \nopagebreak
 
 \begin{enumerate}
-    \item Supponiamo per assurdo che $C(u) \nsubseteq T_u$. Questo significa che $\exists y \notin T_u \land y \in C(u)$. Preso un cammino da $u$ a $y$, sia $(x,y')$ il primo arco del cammino che esce da $T_u$ ($x \in T_u$, $y' \notin T_u$): anche $y' \in C(u)$, perché da $u$ si arriva a $y'$ e da $y'$ si arriva a $y$ e quindi a $u$. Sostituendo $y$ con $y'$, possiamo quindi supporre che esista un arco $(x,y)$ con $x \in T_u$, $y \notin T_u$ e $y \in C(u)$. Sicuramente sappiamo che $(x,y)$ non è un arco in avanti, perché altrimenti avremmo $y \in T_x$ e quindi $y \in T_u$, dunque può essere solo di attraversamento o all'indietro. Analizziamo entrambi i casi:
+    \item Supponiamo per assurdo che $C(u) \nsubseteq T_u$. Questo significa che $\exists y \notin T_u \land y \in C(u)$. Preso un cammino da $u$ a $y$, sia $(x,y')$ il primo arco del cammino che esce da $T_u$ ($x \in T_u$, $y' \notin T_u$): anche $y' \in C(u)$, perché da $u$ si arriva a $y'$ e da $y'$ si arriva a $y$ e quindi a $u$. Sostituendo $y$ con $y'$, possiamo quindi supporre che esista un arco $(x,y)$ con $x \in T_u$, $y \notin T_u$ e $y \in C(u)$. Sicuramente sappiamo che $(x,y)$ non è un arco dell'albero né avanti, perché altrimenti avremmo $y \in T_x$ e quindi $y \in T_u$, dunque può essere solo di attraversamento o all'indietro. Analizziamo entrambi i casi:
     \begin{itemize}
         \item $(x,y)$ è di attraversamento \\
         In questo caso ci troviamo nelle esatte condizioni della Proposizione \ref{propos-antenato-comune}. Dunque sappiamo che $y$ viene visitato prima di $u$ nell'arborescenza, e dato che $y \in C(u)$ troviamo che $u$ non può essere una c-radice essendoci $y$ prima di lui. Ma per ipotesi sappiamo che $u$ è una c-radice, dunque concludiamo che $(x,y)$ non può essere un arco di attraversamento.
@@ -1275,7 +1275,7 @@ DFS_SCC_ric(G,u,CC,Open,t,comp):
     return back
 \end{lstlisting}
 
-Come nell'algoritmo visto per i ponti utilizziamo qui la variabile \code{back}. In questa inseriamo il valore di visita minore che troviamo percorrendo tutti gli archi con nodi di cui ancora non conosciamo la componente fortemente connessa nel sottoalbero $T_u$. In particolare, se troviamo un nodo che non è stato ancora visitato rifacciamo una chiamata ricorsiva e controlliamo quanto indietro andiamo seguendo il suo sottoalbero, mentre se troviamo un nodo che è già stato visitato ma di cui non conosciamo la componente controlliamo solo se il suo tempo di visita è minore di \code{back} e nel caso lo aggiorniamo. Se in questa ricerca troviamo anche solo un arco che porta a un nodo $w$ tale che $t(w) < t(u)$, ossia $back < -CC[u]$ (infatti in questo algoritmo $CC[u] = -t[u]$ quando non conosciamo ancora la componente di $u$, e diventa uguale a $comp$ solo quando capiamo in che componente si trova), allora siamo sicuri che $u$ non è una c-radice per la Proposizione \ref{propos-nodo-c-radice}.  \\
+Come nell'algoritmo visto per i ponti utilizziamo qui la variabile \code{back}. In questa inseriamo il valore di visita minore che troviamo percorrendo tutti gli archi con nodi di cui ancora non conosciamo la componente fortemente connessa nel sottoalbero $T_u$. In particolare, se troviamo un nodo che non è stato ancora visitato rifacciamo una chiamata ricorsiva e controlliamo quanto indietro andiamo seguendo il suo sottoalbero, mentre se troviamo un nodo che è già stato visitato ma di cui non conosciamo la componente, controlliamo solo se il suo tempo di visita è minore di \code{back} e nel caso lo aggiorniamo. Se in questa ricerca troviamo anche solo un arco che porta a un nodo $w$ tale che $t(w) < t(u)$, ossia $back < -CC[u]$ (infatti in questo algoritmo $CC[u] = -t[u]$ quando non conosciamo ancora la componente di $u$, e diventa uguale a $comp$ solo quando capiamo in che componente si trova), allora siamo sicuri che $u$ non è una c-radice per la Proposizione \ref{propos-nodo-c-radice}.  \\
 Restituiamo quindi un array finale \code{CC} dove all'indice i-esimo corrisponde il numero della componente del nodo i-esimo. Ad esempio, per il grafo in Figura \ref{fig-esempio-c-radice} avremmo in output l'array \code{[3,3,2,2,2,1,3]} (infatti, la prima componente trovata è \{6\}, la seconda \{5,4,3\} e la terza \{7,2,1\}). \\
 Il costo totale di questo algoritmo è semplicemente $\textbf{O}(n+m)$, essendo di base un DFS con solo alcune modifiche che però apportano un costo di $\O(1)$ (come già visto per l'algoritmo dei ponti). \\
 Questo algoritmo che abbiamo studiato prende anche il nome di \textbf{algoritmo di Tarjan}.
@@ -1303,7 +1303,7 @@ BFS(G,x): // G grafo non diretto e connesso
 \end{lstlisting}
 
 Sfruttiamo quindi in questo caso una coda dove inseriamo tutti i nodi non appena vengono visitati per la prima volta. Per ogni nodo $y$ poi controlliamo i vicini e, per tutti quelli ancora da visitare, calcoliamo la distanza con la stessa formula che abbiamo visto prima, ossia distanza $dist(x,y) + 1$, e alla fine restituiamo l'array con tutte le distanze. \\
-In totale il costo sarà dato da questa formula: $\sum_{y \in V(G)}\O(1 + \deg(y))$. Infatti, $\O(1)$ perché ogni nodo viene inserito nella queue esattamente una volta, e $\O(\deg(y))$ dato che per ogni nodo eseguiamo un for che legge ogni suo vicino. Il costo totale sarà quindi \mbox{$\sum_{y \in V(G)} \O(1) + \sum_{y \in V(G)} \O(\deg(y)) = \O(n) + \O(2m) = \textbf{O}\bm{(n+m)}$}.
+In totale il costo sarà dato da questa formula: $\sum_{y \in V(G)}\O(1 + \deg(y))$. Infatti, $\O(1)$ perché ogni nodo viene inserito nella queue al più una volta, e $\O(\deg(y))$ dato che per ogni nodo eseguiamo un for che legge ogni suo vicino. Il costo totale sarà quindi \mbox{$\sum_{y \in V(G)} \O(1) + \sum_{y \in V(G)} \O(\deg(y)) = \O(n) + \O(2m) = \textbf{O}\bm{(n+m)}$}.
 
 Vediamo con un esempio come funziona questo algoritmo:
 
@@ -1339,7 +1339,7 @@ Preso un grafo non diretto $G$ e due vertici $x,y \in V(G)$, $dist(x,y) = k$ con
 
 Sia $P$ il cammino tra $x$ e $y$ di lunghezza $k$. Prendiamo ora l'arco finale di $P$ $zy$. Il cammino tra $x$ e $z$ è ovviamente lungo $k-1$, dunque sicuramente $dist(x,z) \leq k-1$ (perché la distanza è il cammino minimo, che può essere anche più corto di $k-1$ ma sicuramente non più lungo). Ma non solo, possiamo con certezza dire che $dist(x,z) = k-1$: infatti, se così non fosse, vorrebbe dire che avremmo un cammino tra $x$ e $z$ di lunghezza $j < k-1$, e quindi avremmo un cammino tra $x$ e $y$ di lunghezza $j+1 < k$, ma questo è impossibile dato che $dist(x,y) = k$. Possiamo quindi concludere che $dist(x,z) = k-1$. $\blacksquare$
 
-Grazie a questa proposizione, ci è possibile dimostrare che l'array \code{dist} nell'algoritmo che abbiamo appena visto contenga effettivamente le distanze tra $x$ e tutti gli altri nodi. Infatti, prima abbiamo scritto la BFS sfruttando l'intuizione che, presa $dist(x,y) = k$, ogni vicino $z$ di $y$ non ancora raggiunto si trovi a distanza $k + 1$. Ora ci è possibile dimostrare che l'array \code{dist} contiene davvero tutte le distanze, e possiamo farlo tramite induzione.
+Grazie a questa proposizione, ci è possibile dimostrare che l'array \code{dist} nell'algoritmo che abbiamo appena visto contenga effettivamente le distanze tra $x$ e tutti gli altri nodi. Infatti, prima abbiamo scritto la BFS sfruttando l'intuizione che, presa $dist(x,y) = k$, ogni vicino $z$ di $y$ non ancora raggiunto nel momento in cui $y$ viene estratto dalla coda si trovi a distanza $k + 1$. Dimostriamolo ora per induzione.
 
 \begin{itemize}
     \item Caso base: $dist(x,x)$  \\

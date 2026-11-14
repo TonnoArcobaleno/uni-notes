@@ -1579,7 +1579,7 @@ I \textbf{FPGA} (Field Programmable Gate Array) sono dispositivi logici programm
 I LE (ossia gli elementi logici) sono composti da:
 \begin{itemize}
     \item un \textbf{LUT}, che si occupa della logica combinatoria
-    \item un \textbf{flip-flop}, che si occupa della logica sequenziale (che vedremo più avanti quando parleremo nel concreto di circuiti sequenziali)
+    \item un \textbf{Flip-Flop}, che si occupa della logica sequenziale (che vedremo più avanti quando parleremo nel concreto di circuiti sequenziali)
     \item un \textbf{MUX}, che collega i LUT ai flip-flop
 \end{itemize}
 
@@ -1600,7 +1600,7 @@ Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta un
 \end{array}
 \]
 
-dove Data 4 indica il quarto ingresso non utilizzato: per la funzione è un Don't Care, ma dato che nel circuito deve comunque avere un valore, viene fissato a 0.
+dove Data 4 indica il quarto ingresso non utilizzato: per la funzione è un don't care, ma dato che nel circuito deve comunque avere un valore, viene fissato a 0.
 
 \chapter{Circuiti sequenziali}
 
@@ -1856,6 +1856,7 @@ Oltre ai D Flip-Flop esistono altri due tipi di Flip-Flop:
 \begin{itemize}
     \item \textbf{T Flip-Flop} (Toggle Flip-Flop)
     \item \textbf{JK Flip-Flop}
+    \item \textbf{SR Flip-Flop}
 \end{itemize}
 
 \begin{Definizione}[T Flip-Flop]
@@ -1905,6 +1906,21 @@ Rappresentiamo un JK Flip-Flop come un D Flip-Flop ma con in ingresso $J$ e $K$.
 \includegraphics[width=1\textwidth, valign=t]{JK FlipFlop rappresentazione.png}
 \end{minipage}
 
+\begin{Definizione}[SR Flip-Flop]
+\label{def-SR Flip-Flop}
+Un \textbf{SR Flip-Flop} è un JK Flip-Flop che però non ammette la configurazione $S = 1$ e $R = 1$, come gli SR Latch.
+\end{Definizione}
+
+La rappresentazione interna di un SR Flip-Flop altro non è che un JK Flip-Flop dove però la combinazione 11 non è collegata a nulla, dato che non è ammessa.
+
+\begin{minipage}[c]{0.55\textwidth}
+Rappresentiamo un SR Flip-Flop come un D Flip-Flop ma con in ingresso $S$ e $R$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{SR Flip Flop.png}
+\end{minipage}
+
 Comunque, quando parleremo di Flip-Flop senza specificare ci riferiremo sempre a un D Flip-Flop.
 
 \section{Progettazione logica sequenziale sincrona}
@@ -1930,7 +1946,9 @@ Esistono due tipi di circuiti sequenziali sincroni:
     \item \textbf{Pipeline}
 \end{itemize}
 
-\subsection{FSM}
+Noi vedremo nel dettaglio il primo tipo, le FSM.
+
+\section{FSM}
 
 \begin{Definizione}[FSM]
 \label{def-FSM}
@@ -1949,7 +1967,7 @@ Il prossimo stato è sempre determinato dagli input e dal Current State (stato c
 
 Per capire bene questi circuiti sequenziali sincroni la cosa migliore è fare qualche esempio. 
 
-\subsubsection*{Moore FSM}
+\subsection{Moore FSM}
 
 Ipotizziamo quindi di voler rappresentare un semaforo all'incrocio tra due strade: $A$ e $B$. Prendiamo quindi in input $T_A$ e $T_B$, che valgono $1$ se c'è traffico nella loro strada e $0$ se non c'è, e mandiamo in output $L_A$ e $L_B$, che rappresentano la luce del semaforo sulla rispettiva strada (vedremo dopo come rappresentare i vari colori in binario). Vogliamo che, quando non c'è più traffico sulla strada con la luce attuale verde, i semafori si invertano, passando prima dal verde al giallo e poi dal giallo al rosso e dal rosso al verde. Ipotizziamo poi di avere un $RESET$ che ci riporti allo stato noto $L_A = \text{Verde}$ e $L_B = \text{Rosso}$. 
 
@@ -2133,7 +2151,7 @@ Ipotizzando ora di avere un $CLK$ con un periodo di $5$ secondi, vediamo come si
 
 Notiamo come $S$ cambi solo in corrispondenza di un $RESET = 1$ o di una salita del $CLK$, mentre $S'$ cambia subito in base agli input. Questo ha perfettamente senso: infatti $S'$ è l'output del Next State Logic, ossia di un circuito combinatorio, mentre $S$ è l'output del registro, ossia di tanti D Flip-Flop. $L_A$ e $L_B$, invece, cambiano appena $S$ cambia, in modo istantaneo senza aspettare il $CLK$, dato che anche loro fanno parte di un circuito combinatorio, ossia l'Output Logic.
 
-\subsubsection*{Mealy FSM}
+\subsection{Mealy FSM}
 
 Vediamo ora un altro esempio. Ipotizziamo di avere una sequenza lunghissima di $1$ e $0$, e di voler restituire in output $1$ se gli ultimi due numeri letti sono, nell'ordine, $01$, e restituire $0$ se invece non lo sono. 
 
@@ -2198,7 +2216,7 @@ Notiamo una cosa importante: in Moore, $Y$ cambia solo quando abbiamo una salita
 
 \subsubsection*{Passare da Moore a Mealy e da Mealy a Moore}
 
-Vediamo ora un concetto molto importante già anticipato dalla Proposizione \ref{propos-moore-mealy}, ossia che, presa una macchina di Moore, è sempre possibile passare a una macchina di Mealy, e viceversa.
+Come già accenato nella Proposizione \ref{propos-moore-mealy}, è sempre possibile, presa una macchina di Moore, passare a una macchina di Mealy, e viceversa. Vediamo ora come farlo.
 
 \begin{minipage}[c]{0.60\textwidth}
 Per passare da Moore a Mealy basta spostare gli output dagli stati alle transizioni, mentre per passare da Mealy a Moore il procedimento è l'opposto: si spostano gli output dalle transizioni agli stati, sdoppiando uno stato quando le sue transizioni entranti hanno output diversi. 
@@ -2209,7 +2227,7 @@ Abbiamo qui anche una dimostrazione visiva della Proposizione \ref{propos-moore-
 \includegraphics[width=1\textwidth, valign=t]{Moore to Mealy.png}
 \end{minipage}
 
-\subsubsection*{Esempio di FSM}
+\subsection{Esempio di FSM}
 
 Prima di vedere un altro esempio di FSM, diamo una definizione che ci tornerà utile tra poco.
 
@@ -2254,7 +2272,7 @@ Vediamo ora la tabella degli stati e degli output:
   \centering
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
-    \multicolumn{4}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{4}{|c|}{\textbf{Stato successivo}} & \multicolumn{2}{|c|}{\textbf{Output}} \\
+    \multicolumn{4}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{4}{c|}{\textbf{Stato successivo}} & \multicolumn{2}{c|}{\textbf{Output}} \\
     \hline
     \textbf{Stato} & $Q_2$ & $Q_1$ & $Q_0$ & $X$ & \textbf{Stato} & $Q_2'$ & $Q_1'$ & $Q_0'$ & $Z_1$ & $Z_0$ \\ \hline
     $R$ & $0$ & $0$ & $1$ & $0$ & $S_{x0}$ & $0$ & $1$ & $0$ & $0$ & $0$ \\
@@ -2297,7 +2315,7 @@ Al posto di rifare tutto il circuito di Mealy da capo, notiamo che ci basta pren
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{Mealy Esempio due.png}
+\includegraphics[width=0.6\textwidth]{Mealy Esempio due.png}
 \end{figure}
 
 Abbiamo quindi reso gli stati $R, S_{x0}$ e $S_{x1}$ \textbf{irraggiungibili}. A questo punto anche le codifiche e la tabella degli stati e degli output possiamo riprenderle da quelle già fatte, eliminando di fatto un bit per la codifica portandola a una codifica a soli due bit:
@@ -2306,7 +2324,7 @@ Abbiamo quindi reso gli stati $R, S_{x0}$ e $S_{x1}$ \textbf{irraggiungibili}. A
   \centering
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
     \hline
-    \multicolumn{3}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{3}{|c|}{\textbf{Stato successivo}} & \multicolumn{2}{|c|}{\textbf{Output}} \\
+    \multicolumn{3}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{3}{c|}{\textbf{Stato successivo}} & \multicolumn{2}{c|}{\textbf{Output}} \\
     \hline
     \textbf{Stato} &  $Q_1$ & $Q_0$ & $X$ & \textbf{Stato} & $Q_1'$ & $Q_0'$ & $Z_1$ & $Z_0$ \\ \hline
     $S_{00}$ & $0$ & $0$ & $0$ & $S_{00}$ & $0$ & $0$ & $0$ & $1$ \\
@@ -2334,7 +2352,7 @@ Troviamo quindi il seguente circuito:
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{Circuito Mealy Esempio 2.png}
+\includegraphics[width=0.8\textwidth]{Circuito Mealy Esempio 2.png}
 \end{figure}
 
 Consideriamo ora il caso in cui i primi due output non sono trascurati ma le sovrapposizioni non sono ammesse. Ciò significa che i simboli che hanno completato una sequenza non possono essere riutilizzati come inizio della sequenza successiva. In pratica, ogni volta che viene riconosciuta una sequenza (cioè l'uscita diventa $Z_1 = 1$ oppure $Z_0 = 1$), la macchina deve ripartire da zero, tornando allo stato iniziale $R$, come se non avesse letto nulla.
@@ -2352,7 +2370,7 @@ Anche per la tabella degli stati e degli output possiamo prendere quella già fa
   \centering
   \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
     \hline
-    \multicolumn{4}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{4}{|c|}{\textbf{Stato successivo}} & \multicolumn{2}{|c|}{\textbf{Output}} \\
+    \multicolumn{4}{|c|}{\textbf{Stato corrente}}  & \textbf{Input} & \multicolumn{4}{c|}{\textbf{Stato successivo}} & \multicolumn{2}{c|}{\textbf{Output}} \\
     \hline
     \textbf{Stato} & $Q_2$ & $Q_1$ & $Q_0$ & $X$ & \textbf{Stato} & $Q_2'$ & $Q_1'$ & $Q_0'$ & $Z_1$ & $Z_0$ \\ \hline
     $R$ & $0$ & $0$ & $1$ & $0$ & $S_{x0}$ & $0$ & $1$ & $0$ & $0$ & $0$ \\
@@ -2389,6 +2407,502 @@ Troviamo quindi il seguente circuito:
 \includegraphics[width=1\textwidth]{Circuito esempio 3.png}
 \end{figure}
 
+\subsection{Passare da un circuito di una FSM al diagramma degli stati}
+
+Fino ad ora abbbiamo visto in una FSM come passare dal diagramma degli stati al circuito finale. Vediamo ora un esempio dove proviamo invece a fare l'opposto. Prendiamo il seguente circuito e cerchiamo di ricavarne il diagramma degli stati da cui esso è stato generato:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Circuito inziale.png}
+\end{figure} 
+
+Da questo circuito troviamo che:
+
+\begin{itemize}
+    \item $S_1' = S_0 \bar{A_1} A_0$
+    \item $S_0' = \bar{S_1} A_1 A_0$
+    \item $Y = S_1$
+\end{itemize}
+
+Dato che l'output non dipende dagli input, concludiamo subito che questa è una Moore FSM, dunque dobbiamo ricavarci due tabelle distinte: una per i prossimi stati e una per gli output:
+
+\begin{table}[H]
+  \centering
+    Tabella degli stati
+
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{3}{|c|}{\textbf{Stato corrente}} & \multicolumn{2}{c|}{\textbf{Input}} & \multicolumn{3}{c|}{\textbf{Stato successivo}} \\
+    \hline
+    \textbf{Stato} & $\bm{S_1}$ & $\bm{S_0$} & $\bm{A_1}$ & $\bm{A_0}$ & \textbf{Stato} & $\bm{S_1'}$ & $\bm{S_0'}$ \\ \hline
+    $S_0$ & 0 & 0 & 0 & 0 & $S_0$ & 0 & 0 \\
+    $S_0$ & 0 & 0 & 0 & 1 & $S_0$ & 0 & 0 \\
+    $S_0$ & 0 & 0 & 1 & 0 & $S_0$ & 0 & 0 \\
+    $S_0$ & 0 & 0 & 1 & 1 & $S_1$ &  0 & 1 \\ 
+    $S_1$ & 0 & 1 & 0 & 0 & $S_0$ & 0 & 0 \\
+    $S_1$ & 0 & 1 & 0 & 1 & $S_2$ & 1 & 0 \\
+    $S_1$ & 0 & 1 & 1 & 0 & $S_0$ & 0 & 0 \\
+    $S_1$ & 0 & 1 & 1 & 1 & $S_1$ & 0 & 1 \\ 
+    $S_2$ & 1 & 0 & 0 & 0 & $S_0$ & 0 & 0 \\
+    $S_2$ & 1 & 0 & 0 & 1 & $S_0$ & 0 & 0 \\
+    $S_2$ & 1 & 0 & 1 & 0 & $S_0$ & 0 & 0 \\
+    $S_2$ & 1 & 0 & 1 & 1 & $S_0$ & 0 & 0 \\ 
+    $S_3$ & 1 & 1 & 0 & 0 & $S_0$ & 0 & 0 \\
+    $S_3$ & 1 & 1 & 0 & 1 & $S_2$ & 1 & 0 \\
+    $S_3$ & 1 & 1 & 1 & 0 & $S_0$ & 0 & 0 \\
+    $S_3$ & 1 & 1 & 1 & 1 & $S_0$ & 0 & 0 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+      Tabella degli output
+
+  \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Stato} & $\bm{S_1}$ & $\bm{S_0}$ & $\bm{Y}$ \\ \hline
+    $S_0$ & 0 & 0 & 0 \\
+    $S_1$ & 0 & 1 & 0 \\
+    $S_2$ & 1 & 0 & 1 \\
+    $S_3$ & 1 & 1 & 1 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+\NB Usiamo 2 bit per gli stati perché abbiamo 2 Flip-Flop nel nostro registro, dunque avremo in totale 4 stati da analizzare.
+
+Dalla tabella degli stati notiamo una cosa molto interessante: lo stato $S_3$, dato che il reset punta allo stato $S_0$, \textbf{non è raggiungibile}. Infatti, non c'è nessuna combinazione di input che da $S_0$ ci porti a $S_3$, dunque possiamo anche non rappresentarlo nel nostro diagramma degli stati:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Diagramma stati finale.png}
+\end{figure}
+
+Vediamo ora un altro circuito da analizzare:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Circuito più strano.png}
+\end{figure}
+
+Questo esempio è interessante per un motivo molto semplice. Se infatti lo guardiamo attentamente, notiamo subito una cosa: il secondo Flip-Flop (l'SR Flip-Flop) non è collegato a nulla! Questo significa che non influisce nell'FSM e che quindi è come se non esistesse. Il nostro output $Z$ non è collegato in alcun modo a questo Flip-Flop. Troviamo quindi le seguenti equazioni:
+\begin{itemize}
+    \item $Q_0 = T \bar{Q_0} + \bar{T} Q_0 = T \oplus Q_0 = X \oplus Q_0 \oplus Q_0 = X \oplus 0 = X$
+    \item $Z = X Q_0$
+\end{itemize}
+
+Dato che l'output dipende dall'input $X$ ci troviamo davanti un FSM Mealy. Rappresentiamo quindi la tabella degli stati e degli output in un'unica tabella:
+
+\begin{table}[H]
+  \centering
+    Tabella degli stati e degli output
+
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Stato corrente}} & \textbf{Input} & \multicolumn{2}{c|}{\textbf{Stato successivo}} & \textbf{Output} \\
+    \hline
+    \textbf{Stato} & $\bm{S}$ & $\bm{X}$ & \textbf{Stato} & $\bm{S'}$ & $\bm{Z}$ \\ \hline
+    $S_0$ & 0 & 0 & $S_0$ & 0 & 0 \\
+    $S_0$ & 0 & 1 & $S_1$ & 1 & 0 \\
+    $S_1$ & 1 & 0 & $S_0$ & 0 & 0 \\
+    $S_1$ & 1 & 1 & $S_1$ & 1 & 1 \\
+    \hline
+  \end{tabular}
+\end{table}
+
+Troviamo quindi il seguente diagramma degli stati:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Esempio strano diagramma.png}
+\end{figure}
+
+\subsection{Contatori}
+
+\begin{Definizione}[Contatore]
+\label{def-contatore}
+Un \textbf{contatore} è una Moore FSM che ad ogni ciclo di clock incrementa il proprio valore di un bit. Ad esempio, con un contatore a 3 bit avremo in totale 9 possibili valori che si ripetono in sequenza ogni 9 cicli di clock.
+\end{Definizione}
+
+Questo viene utilizzato negli orologi digitali, per contare i secondi/minuti, e per il Program Counter (PC) del processore, che tiene traccia dell'istruzione che si sta eseguendo.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Contatore interno.png}
+\caption{Rappresentazione interna di un contatore}
+\label{fig-contatore}
+\end{figure}
+
+\NB L'elemento a sinistra del registro è un \textbf{sommatore a N bit}: è un costrutto che vedremo più avanti, ma per ora ci basta sapere che somma i due valori che prende in input, ossia $Q$ e $1_{10}$ (1 decimale, ossia $0\ldots01$ con $N-1$ zeri).
+
+\begin{minipage}[c]{0.55\textwidth}
+Rappresentiamo un contatore come un Flip-Flop senza input ma con in output una $Q$ formata da $N$ bit.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Contatore.png}
+\end{minipage}
+
+\section{Registri a scorrimento}
+
+\begin{Definizione}[Registro a scorrimento]
+\label{def-registro-scorrimento}
+Un \textbf{registro a scorrimento} (shift register) a $N$ bit è una catena di $N$ flip-flop collegati allo stesso $CLK$, dove l'uscita di ciascun flip-flop è collegata all'ingresso del successivo. A ogni ciclo del clock:
+\begin{itemize}
+    \item un nuovo bit entra da $S_{\text{in}}$ nel primo flip-flop
+    \item ogni bit si sposta di una posizione lungo la catena
+    \item il bit contenuto nell'ultimo flip-flop esce da $S_{\text{out}}$
+\end{itemize}
+\end{Definizione}
+
+Le uscite di tutti i flip-flop nei registri a scorrimento sono disponibili contemporaneamente, quindi il registro a scorrimento funziona da \textbf{convertitore seriale-parallelo}: i bit entrano uno alla volta ed escono tutti insieme in parallelo.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Registro a scorrimento implementazione.png}
+\caption{Rappresentazione interna di un registro a scorrimento}
+\label{fig-registro-a-scorrimento}
+\end{figure}
+
+\begin{minipage}[c]{0.55\textwidth}
+Rappresentiamo un registro a scorrimento come un contatore ma con in input $S_\text{in}$ e in output, oltre a $Q$, anche $S_{\text{out}}$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.40\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Registro a scorrimento.png}
+\end{minipage}
+
+\subsection{Registri a scorrimento con input paralleli}
+
+Esiste un'altra versione dei registri a scorrimento, nella quale è possibile caricare tutti i flip flop in parallelo. Questi registri prendono il nome di \textbf{registri a scorrimento con input paralleli}.
+
+\begin{Definizione}[Registro a scorrimento con input paralleli]
+\label{def-registri-input-paralleli}
+Un \textbf{registro a scorrimento con input paralleli} è un registro a scorrimento dei nuovi input: $LOAD$, che se vale 0 fa lavorare questo registro come un normale registro a scorrimento, mentre se vale 1 lo fa lavorare come un normale registro a $N$ bit, inserendo nei Flip-Flop $N$ valori in input in contemporanea ($D_0, \ldots, D_{N-1}$).
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Registro input paralleli intenro.png}
+\caption{Rappresentazione interna di un registro a scorrimento con input paralleli}
+\label{fig-registro-a-scorrimento-input-paralleli}
+\end{figure}
+
+\subsection{Trasmettitore seriale}
+
+Grazie a questi due nuovi registri che abbiamo appena studiato possiamo creare un costrutto fondamentale, che prende il nome di \textbf{trasmettitore seriale}.
+
+\begin{Definizione}[Trasmettitore seriale]
+\label{def-trasmettitore-seriale}
+Un \textbf{trasmettitore seriale} è un circuito che invia $N$ bit facendoli passare uno alla volta su un unico filo. Si realizza con due registri a scorrimento (uno con input paralleli, l'altro senza) collegati allo stesso $CLK$:
+\begin{itemize}
+    \item Il primo registro $SR_1$ è un registro a scorrimento con input paralleli: con $LOAD = 1$ carica in un ciclo gli $N$ bit e poi, con $LOAD = 0$, li fa scorrere uno alla volta sul filo.
+    \item Il secondo registro $SR_2$ è un registro a scorrimento che riceve i bit emessi da $SR_1$ e, dopo $N$ cicli, li rende disponibili in parallelo su $D_{out}$.
+\end{itemize}
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Trasmettitore seriale.png}
+\caption{Rappresentazione interna di un trasmettitore seriale}
+\label{fig-trasmettitore-seriale}
+\end{figure}
+
+\chapter{Memorie}
+
+\section{Introduzione ai memory array}
+
+Fino ad ora abbiamo usato dei Flip-Flop per memorizzare un singolo bit e dei registri per memorizzare più bit insieme. Queste strutture sono ottime per memorizzare piccole quantità di dati, ma per memorie più grandi sono troppo costose. Per questo motivo introduciamo una nuova struttura: i \textbf{memory array}.
+
+\begin{Definizione}[Memory array]
+\label{def-memory-array}
+Un \textbf{memory array} è una struttura che memorizza in modo efficiente grandi quantità di dati. Questo altro non è che un \textbf{array bidimensionale di celle di bit}. Ogni riga di questo array bidimensionale rappresenta una \textbf{parola}, ed a ogni accesso è possibile leggere/scrivere il contenuto di una riga intera specificandone l'indirizzo. Dunque, dato che le righe sono distinte dall'indirizzo, con $N$ bit di indirizzo avremo $2^N$ possibili righe e quindi parole, che sono lunghe $M$ bit. Avremo quindi una matrice con $2^N$ righe e $M$ colonne. Il numero di righe prende il nome di \textbf{lunghezza}, mentre il numero di colonne rappresenta la \textbf{larghezza} del memory array. Infine, la \textbf{dimensione} del memory array è la lunghezza $\times$ la larghezza, ossia $2^N \times M$ bit.\\
+Esistono tre tipi di memory array:
+\begin{itemize}
+    \item \textbf{DRAM} (Dynamic Random Access Memory)
+    \item \textbf{SRAM} (Static Random Access Memory)
+    \item \textbf{ROM} (Read Only Memory)
+\end{itemize}
+Le RAM sono memorie \textbf{volatili}, mentre la ROM è \textbf{non volatile}. Questo significa che una volta tolta la corrente le RAM vengono completamente cancellatate e tutti i loro dati sono eliminati, mentre ciò non accade per la ROM.\\
+\NB La parola \textit{random} nell'acronimo RAM non significa che queste memorie prendono dati casuali, ma piuttosto che è possibile trovare un dato in una qualunque posizione senza alcuna sequenzialità necessaria. 
+\end{Definizione}
+
+Ad esempio, una memoria da 32Kb (ossia 4KB) può essere rappresentata con $1024$ parole da $32$ bit. In questo caso avremo quindi $N = 10$ bit di indirizzo, dato che $2^{10} = 1024$, e $M = 32$ bit di dato, per un totale proprio di $32768$ bit, ossia 32Kb. 
+
+Dato che sulle memorie ROM non è possibile scrivere (o comunque il processo risulta molto lento), non è necessario nessun bit che ci dica se stiamo scrivendo o leggendo. Questo bit è invece presente nelle memorie RAM, ed è salvato in una variabile chiamata $\bm{WE}$ (Write Enable). Quando $WE$ vale 1 stiamo scrivendo in memoria, mentre quando $WE$ vale 0 stiamo leggendo dalla memoria. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Memoria RAM interna.png}
+\caption{Rappresentazione schematica della memoria RAM}
+\label{fig-RAM-interna}
+\end{figure}
+
+Una ROM viene rappresentata come una RAM nella 1° rappresentazione ma senza l'ingresso $WE$ e con la freccia che va solo dall'array a $DATA$ e non viceversa.
+
+\subsection{Interno di un memory array}
+
+Abbiamo visto come un memory array sia fatto internamente di sole celle di bit. Queste devono fare solo due cose: conservare i bit e, nel caso vengano selezionate, comunicare il bit all'esterno. Esistono per questa motivazione due diversi fili che si collegano ad ogni cella:
+\begin{itemize}
+    \item La \textbf{wordline} è un filo orizzontale comune a tutte le celle di una riga/parola, che vale $0$ quando la riga non è stata selezionata per la lettura/scrittura, mentre vale $1$ quando invece lo è.
+    \item La \textbf{bitline} è un filo verticale comune a tutte le celle di una colonna sul quale passa il valore da mandare dentro la cella selezionata se si sta scrivendo o da mandare fuori dalla cella selezionata se si sta leggendo.
+\end{itemize}
+
+Per implementare la wordline in modo che solo una riga alla volta venga selezionata si utilizza un costrutto che abbiamo già visto in passato: un \textbf{decoder}, utilizzato in questo modo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Memory Array interno.png}
+\caption{Rappresentazione interna di un memory array $4 \times 3$}
+\label{fig-memory-array-interno}
+\end{figure}
+
+Ovviamente in base alla modalità questo memory array cambia direzione: se ci troviamo in modalità lettura, i dati vengono letti e salvati nelle variabili $Data_2, Data_1$ e $Data_0$, mentre se ci troviamo in modalità scrittura i dati vengono presi da queste stesse variabili e sovrascritti nelle celle della word selezionata dall'indirizzo.
+
+\section{Memorie RAM}
+
+Lo schema che abbiamo appena visto è valido sia per le memorie ROM che per quelle RAM. Di quest'utlime, però, abbiamo visto che ne esistono due tipi: DRAM e SRAM, che differiscono nel \textbf{modo in cui queste salvano i dati}.
+
+\begin{minipage}[c]{0.55\textwidth}
+Le DRAM utilizzano dei \textbf{condensatori} per memorizzare i bit, e un \textbf{transistor}, una specie di interruttore tra la bitline e il bit che viene attivato e fa passare la corrente solo quando la wordline vale $1$.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.4\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{DRAM interna.png}
+\end{minipage}
+
+Ma come fa la bitline a leggere il valore della cella? Semplicemente, la bitline parte con una carica $X$, che, quando si collega al condensatore, varia. In particolare, se il condensatore è carico $X$ aumenta, mentre se è scarico diminuisce. Questa gestione ha, però, un problema molto grande: ad ogni lettura, il valore del bit viene perso, ossia \textbf{la lettura è distruttiva}. Questo significa che, ad ogni lettura, bisogna riscrivere il valore nella cella. Questa riscrittura, poi, non va effettuata solo quando c'è una lettura, ma anche \textbf{periodicamente} per salvaguardare il valore della cella. Infatti, l'isolamento di questi sistemi non è perfetto, dunque la carica dopo pochi millisecondi si va a perdere. Per questo motivo, ogni circa $32/64ms$ bisogna riscrivere la cella per mantenerne il valore intatto. Il nome \textit{dinamica} deriva proprio dal fatto che il valore non resta mai fermo, ma tende a cambiare e a essere riscritto.
+
+\begin{minipage}[c]{0.55\textwidth}
+Le SRAM utilizzano invece un \textbf{bistabile} per memorizzare i bit, collegato a non una bitline ma a due: una negata e una normale. In totale utilizzano 6 transistor (dato che ogni \code{NOT} ne utilizza internamente 2).
+\end{minipage}\hfill
+\begin{minipage}[c]{0.4\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{SRAM Interna.png}
+\end{minipage}
+
+La bitline in questo caso legge/scrive i nodi con la stessa idea della DRAM, ma in questo caso non vi è alcuna distruzione perché i bit sono sempre salvi nel bistabile. Il nome \textit{stabile} deriva proprio dal fatto che il valore, se nessuno lo tocca, resta fermo e costante nel tempo. Sorge però qui un'altra domanda: come si fa a sovrascrivere il dato all'interno del bistabile per effettuare una scrittura? Semplicemente, le bitline vengono forzate dall'esterno così da costringere il circuito a sovrascrivere i dati al proprio 
+
+\subsection{Confronto tra le diverse RAM e i Flip-Flop}
+
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Tipo} & \textbf{Transistori per bit} & \textbf{Velocità} \\
+\hline
+Flip-flop & Circa $20$ & Alta \\
+SRAM & 6 & Media \\
+DRAM & 1 & Bassa \\
+\hline
+\end{tabular}
+\end{table}
+
+
+Dunque la DRAM è sicuramente la memoria più economica, ma è anche la più lenta tra le 3. Questo per due motivi:
+\begin{itemize}
+    \item Il valore va sempre riscritto ad ogni lettura
+    \item La carica sulla bitline cambia di pochissimo: è necessario un amplificatore che la renda leggibile, e questo richiede tempo
+\end{itemize}
+
+Le SRAM invece, essendo collegate alla corrente, riempiono la bitline più velocemente rispetto alle DRAM, ma non raggiungono la velocità dei Flip-Flop, dato che questi restituiscono direttamente il bit su un semplice filo senza alcun passaggio intermedio.
+
+Le DRAM, essendo economiche, vengono quindi usate per la memoria principale di un computer (la classica memoria RAM di cui sentiamo spesso parlare è proprio DRAM)
+
+\subsection{Chip DRAM}
+
+Lo schema visto fino ad ora, che utilizza una riga per ogni singola parola, funziona per memorie piccole, ma inizia ad essere problematico quando ci spostiamo su memorie più grandi. Già una memoria con 1024 parole da 32 bit avrebbe 1024 wordline e solo 32 bitline, creando una striscia molto alta ma molto stretta, che rallenta notevolmente la lettura. Per questo introduciamo ora un nuovo sistema che si basa su un presupposto molto semplice: \textbf{mettiamo sulla stessa wordline più parole}. Mettendo più parole su una stessa riga il decoder non è più sufficiente, ma è necessario un oggetto che ci permetta di scegliere tra le diverse parole selezionate. Questo oggetto non è altri che un \textbf{mux}. Abbiamo quindi ora un decoder che sceglie quale riga selezionare, e un mux che invece sceglie quale colonna selezionare. Il nostro indirizzo sarà quindi diviso in 2 parti, una per dire quale riga selezionare e una per dire quale colonna selezionare. \\
+Riprendendo l'esempio di prima delle 1024 parole da 32 bit, se utilizziamo righe da 32 parole possiamo trovare un \textbf{chip quadrato} (in realtà sono 32 righe e 1024 colonne, ma dato che le colonne sono divise in gruppi di 32, troviamo 32 righe e 32 "gruppi di colonne"). Dunque, con un indirizzo di 10 bit, ne utilizzeremo 5 per decidere quale riga selezionare ($A_9, \ldots, A_5$), e 5 per decidere quale colonna selezionare ($A_4, \ldots, A_0$).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Chip DRAM interna.png}
+\caption{Chip interno di una DRAM}
+\label{fig-chip-dram}
+\end{figure}
+
+I chip delle DRAM utilizzano proprio il principio che abbiamo appena visto, mettendo quindi più word sulla stessa riga . Esistono poi tre comandi che gestiscono questi chip:
+\begin{itemize}
+    \item \codeb{ACT}, che attiva una wordline e copia l'intera riga nel \textbf{buffer di riga}, dove questa viene momentaneamente salvata
+    \item \codeb{RD/WR} (read/write), che sceglie una delle parole all'interno del buffer di riga per leggerla o sovrascriverla
+    \item \codeb{PRE}, che riscrive l'intera riga nel memory array dato che questa viene distrutta durante la lettura eseguita con \code{ACT} e prepara la bitline per la prossima \code{ACT}
+\end{itemize}
+
+Quando vogliamo leggere una parola su una nuova riga, dobbiamo effettuare tutte e tre queste operazioni, nell'ordine \code{PRE, ACT} e \code{RD}. Se però subito dopo vogliamo leggere una parola su questa stessa riga, non è necessario rieffettuare tutte e tre queste operazioni, perché la riga è già salvata nel buffer di riga, dunque ci basta effettuare semplicemente una \code{RD}. Dato che ogni comando ha un costo di $14/17ns$, se effettuiamo un cosidetto \textbf{row hit}, ossia se troviamo la riga che vogliamo già nel buffer di riga, riusciamo a risparmiare $28/34ns$, altrimenti, se effettuaimo un \textbf{row miss}, ossia se non troviamo la riga che vogliamo nel buffer di riga, dovremo impiegare $42/51ns$ per effettuare tutte e 3 le operazioni.
+
+\begin{Definizione}[Banchi]
+\label{def-banchi}
+Ogni chip non è composto da un'unica matrice, ma da più matrici indipendenti, che prendono il nome di \textbf{banchi} (banks). Ogni banco ha un proprio decoder e un proprio mux per poter lavorare in modo indipendente e soprattutto in modo \textbf{parallelo}, così da ridurre ancora di più i tempi di lettura/scrittura.
+\end{Definizione}
+
+Con più banchi è possibile poi avere più righe salvate nel buffer di riga, così da aumentare ancora di più i row hit rispetto ai row miss.
+
+\subsection{DDR}
+
+Abbiamo già visto come le DRAM siano delle memorie comuqnue abbastanza lente. Possiamo provare a migliorare la loro efficienza in due modi:
+\begin{itemize}
+    \item Introducendo le \textbf{SDRAM} (Syncrhonous DRAM), ossia DRAM dove comandi e dati vengono sincronizzati da un clock, così da rendere più prevedibile e schematica la gestione degli accessi alla RAM, aumentando i dati trasferiti al secondo senza star effettivamente aumentando la velocità della singola lettura
+    \item Utilizzando la \textbf{DDR} (Double Data Rate) al posto della SDR (Single Data Rate), ossia facendo muovere i dati non solo durante la salita del clock, ma anche durante la discesa, raddoppiando il numero di trasferimenti al secondo mantenendo una frequenza di clock identica. 
+\end{itemize}
+
+Tramite questi accorgimenti, riusciamo a migliorare la quantità di dati che trasporta una singola cella senza però modificarne la velocità, che resta uguale, andando a modificare ad esempio il \textbf{prefetch}, ossia il numero di bit che un chip riesce a prelevare contemporaneamente per ogni pin. È importante inoltre capire che le parole, anche se lette in parallelo, escono comunque serializzate, ossia una alla volta, un po' come succede nei trasmettitori seriali che abbiamo visto lo scorso capitolo. La parallelizzazione è però fondamentale perché dà il tempo al chip di prepararsi per l'accesso successivo mentre le parole escono una alla volta.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Generazione} & \textbf{Anno} & \textbf{Data rate (MT/s)} & \textbf{Prefetch} & \textbf{Banda  massima con un canale} \\
+\hline
+DDR & 2000 & 200-400 & 2n & 3.2 GB/s \\
+DDR2 & 2003 & 400-1066 & 4n & 8.5 GB/s \\
+DDR3 & 2007 & 800-2133 & 8n & 17.1 GB/s \\
+DDR4 & 2014 & 1600-3200 & 8n & 25.6 GB/s \\
+DDR5 & 2020 & 3200-6400 & 16n & 51.2 GB/s \\ 
+\hline
+\end{tabular}
+\caption{Generazioni di DDR}
+\end{table}
+
+L'ultima colonna ci dice il valore massimo della \textbf{banda} (bandwidth, BW), che rappresenta il numero di dati che possono passare al secondo. Il calcolo è semplice:
+
+\[
+\text{Banda} = \text{canali} \times 8B \times \text{Data rate} 
+\]
+
+dove i \textbf{canali} sono le diverse strade che collegano il processore alla RAM (se ho una sola strada tutti i dati passano da lì, mentre con più di una strada i dati possono viaggiare su più strade contemporaneamente). In generale, una CPU su un PC domestico ha 2 canali, mentre una CPU che gestisce un server ne ha fino a 12, dato che deve gestire un traffico di dati molto elevato. Invece, per quanto riguarda gli $8$ byte nella formula, questi semplicemente rappresentano la larghezza di ogni canale, ossia 64 bit.
+
+Ci sono due valori che però restano sempre costanti o quasi durante le varie generazioni:
+\begin{itemize}
+    \item La \textbf{frequenza} (della matrice), che è passata solo da 200 MHz a 400 MHz
+    \item La \textbf{latenza}, che è fissa a $14/17ns$
+\end{itemize} 
+
+
+La frequenza è aumentata molto poco durante questi anni, ma questa viene compensata dal prefetch che invece è aumentato di 8 volte dal 2000 al 2020. Questi due valori insieme ci danno il data rate totale (ossia il numero di megatransfer al secondo), dato che $\text{data rate} \approx \text{prefetch} \times \text{frequenza}$, dunque è importante con ogni generazione cercare di migliorare o uno o l'altro per avere dei veri miglioramenti anche nella banda. \\
+La latenza è invece rimasta sempre fissa perché dipende dalla fisica della cella e non dal clock: per leggere un dato bisogna comunque aprire la riga, aspettare il piccolo segnale prodotto dai condensatori e amplificarlo, e nessuna di queste operazioni diventa più rapida aumentando la frequenza dei pin.
+
+\subsection{HBM}
+
+Abbiamo visto come la DDR aumenti la banda facendo correre pochi fili ma più in fretta, aumentando ad  esempio il prefetch. È possibile però aumentare la banda in un altro modo, ossia tenendo i fili a velocità normale ma aggiugnendone moltissimi. Questa idea da vita a un nuovo sistema, che prende il nome di \textbf{HBM} (High Bandwidth Memory), ad oggi sempre più importante perché fa parte delle GPU usate per l'IA. 
+
+Far passare però 1024 fili da un chip di memroia al processore attraverso una scheda madre è un'impresa impossibile, dunque l'HBM avvicina direttamente la memoria al processore così che questi si trovino direttamente nello stesso contenitore:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{HBM}
+\caption{Contenitore con all'interno HBM e GPU/CPU insieme}
+\label{fig-HBM}
+\end{figure}
+
+Abbiamo quindi più DRAM impliati sopra un die logico (ossia pezzetti di silicio), che formano dei veri e propri \textit{stack}, uniti da delle TSV, ossia dei collegamenti verticali che attraversano il silicio e permettono di collegare i diversi die DRAM senza passare dall'esterno. Vi è poi un interposer di silicio dove si trovano i fili di collegamento a distanza di millimetri.
+
+Questo sistema ci permette di scambiare 1024 bit alla volta contro i 64 di un singolo canale di DDR, ma con un costo di implementazione decisamente più elevato. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Generazione} & \textbf{Pin} & \textbf{Gb/s per pin} & \textbf{Banda per stack} & \textbf{GB per stack} \\
+\hline
+HBM2 & 1024 & 2 & 256 GB/s & 8 \\ 
+HBM2E & 1024 & 3.6 & 461 GB/s & 16 \\ 
+HBM3 & 1024 & 6.4 & 819 GB/s & 24 \\ 
+HBM3E & 1024 & 9.6 & 1.2 TB/s & 36 \\ 
+HBM4 & 2048 & 8 & 2 TB/s & Fino a 64 \\ 
+\hline
+\end{tabular}
+\caption{Generazioni di HBM}
+\end{table}
+
+Abbiamo quindi una banda che arriva fino a 2 TB/s per stack, contro i 51.2 GB/s di un canale DDR5. Questo è fondamentale per l'IA: infatti, un modello da 7 miliardi di parametri in FP16 (14 GB) può generare al massimo circa 146 token al secondo con uno stack HBM4, contro i 3.7 di un canale DDR5-6400 (una DDR5 con data rate da 6400 MT/s).
+
+\subsection{Memoria multi-porta}
+
+Le memorie che abbiamo visto fino ad ora ci permettono di accedere ad una sola parola per volta. Questo però non è sufficiente. Se infatti volessimo fare una somma tra due operandi, dovremmo avere la possibilità di farlo in un unico ciclo di clock, senza attendere la lettura di due parole in modo sequenziale. Nascono così le \textbf{memorie multi-porta}.
+
+\begin{Definizione}[Memorie multi-porta]
+\label{def-memorie-multi-porta}
+Una \textbf{memoria multi-porta} è una memoria che ha più \textbf{porte} (ossia coppie di indirizzo/dato), che ci permette di leggere/scrivere più dati contemporaneamente.
+\end{Definizione}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{Multi-porta.png}
+\caption{Memoria multi-porta}
+\label{fig-multi-porta}
+\end{figure}
+
+Una memoria multi-porta ha di solito diverse porte per la lettura e una (o poche più) porte per la scrittura, con un solo bit $WE$ per decidere se la scrittura è abilitata o meno.
+
+\subsection{Costruire una memoria a partire da blocchi}
+
+Nella pratica non costruiamo mai una memoria da zero: si prendono invece dei \textbf{blocchi} di memorie più piccole di una certa forma per comporli in un certo modo così da ottenere il risultato voluto. Ci sono in generale tre casi in cui ci possiamo ritrovare:
+\begin{enumerate}
+    \item Il blocco è \textbf{più stretto} della memoria richiesta (ossia restituisce una parola più piccola di quella voluta): in questo caso ne affianchiamo diversi per allargare la parola del nostro blocco finale 
+    \item Il blocco è \textbf{più corto} della memoria richiesta (ossia si utilizzano indirizzi più piccoli di quelli voluti): in questo caso se ne impilano diversi così da formare più parole
+    \item Il blocco è \textbf{più largo} della memoria richiesta (ossia restituisce una parola pià grande di quella voluta): in questo caso si utilizza solo una parte della parola alla volta
+\end{enumerate}
+
+Vediamo tre esempi, uno per caso, per capire veramente come risolvere questi problemi.
+
+\subsubsection*{Blocco più stretto}
+
+Costruiamo una memoria di $1$ MB con parole da $32$ bit a partire da blocchi di memoria di dimensioni $2^{18} \times 8$ (ossia di $2^{18} \times 8$ bit con parole da $8$ bit l'una).
+
+\begin{minipage}[c]{0.6\textwidth}
+Abbiamo quindi blocchi di questo tipo, con indirizzi da 18 bit e parole in output/input da 8 bit l'una.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Esempio 1.png}
+\end{minipage}
+ 
+Dato che vogliamo arrivare a parole di $32$ bit, ci basta semplicemente unire 4 di questi blocchi insieme. In questo modo arriveremo poi a una capacità totale di $2^{18} \times 8 \times 4 = 2^{23}$ bit, ossia $2^{20}$ byte, ossia $1$MB, proprio come volevamo. Dunque avremo come soluzione a questo esempio la seguente memoria:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Esempio 1 finale.png}
+\end{figure}
+
+\subsubsection*{Blocco più corto}
+
+Costruiamo una memoria di $1$ MB con parole da $32$ bit a partire da blocchi di memoria di dimensioni $2^{16} \times 32$. 
+
+\begin{minipage}[c]{0.6\textwidth}
+Abbiamo quindi blocchi di questo tipo, con indirizzi da 16 bit e parole in output/input da 32 bit l'una.
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Esempio 2.png}
+\end{minipage}
+
+Dato che vogliamo rappresentare non $2^{16}$ parole ma $2^{18}$ possiamo anche qui prendere quattro di questi blocchi, così da avere $2^{16} \times 4 = 2^{18}$ parole totali. Per fare ciò, però, avremo bisogno di un mux che ci dice quale delle quattro parole all'indirizzo $A_{17}, \ldots, A_2$ selezionare. Questo mux avrà quindi 2 bit di selezione, che sono proprio i due bit dell'indirizzo $A_1$ e $A_0$ che mancavano tra il blocco e la memoria che volevamo creare. Oltre al mux, dovremo però aggiungere anche un decoder: questo è necessario per quanto riguarda la parte di scrittura. Infatti, se vogliamo scrivere una parola in memoria a un certo indirizzo dobbiamo farlo solo su uno dei quattro blocchi, dunque dobbiamo abilitare il bit $WE$ solo su uno di questi quattro blocchi, e il decoder è proprio il costrutto perfetto che ci permette di fare ciò. Dunque avremo come soluzione a questo esempio la seguente memoria:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Esempio 2 finale.png}
+\end{figure}
+
+\subsubsection*{Blocco più largo}
+
+Costruiamo una memoria di $1$ MB con parole da $8$ bit in modalità solo lettura a partire da blocchi di memoria di dimensioni $2^{18} \times 32$.
+
+\begin{minipage}[c]{0.6\textwidth}
+Abbiamo quindi blocchi di questo tipo, con indirizzi da 16 bit e parole solo in input da 32 bit l'una. 
+\end{minipage}\hfill
+\begin{minipage}[c]{0.35\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Esempio 3.png}
+\end{minipage}
+
+Dato che vogliamo rappresentare parole non da $32$ bit ma solo da $8$, possiamo usare 8 MUX che prendano in ingresso $4$ bit e ne restituiscano uno solo, così da avere in totale parole da soli $8$ bit. Useremmo quindi un indirizzo da $18$ bit per il blocco di memoria che abbiamo, e i due bit che avanzano dell'indirizzo della nostra memoria (che ne ha $20$ dato che $2^{32}/8 = 2^{20}$) verranno usati come bit di selezione per gli 8 mux. Dunque avremo come soluzione a questo esempio la seguente memoria:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Esempio 3 finale.png}
+\end{figure}
 
 
 \end{document}
