@@ -1574,6 +1574,8 @@ Dijkstra_beta(G,w,x): // G grafo non diretto e connesso
                     min = dist[u] + w(uv)
                     arco = uv
         R.add(arco.v) // Aggiungiamo il nuovo nodo a R
+        dist[arco.v] = min
+    return dist
 \end{lstlisting}
 
 Il costo computazionale di questo algoritmo è $\textbf{O}\bm{(nm)}$, dato che il while fa sempre $n$ iterazioni, ognuna con un costo di $\O(m)$ per colpa del for che gira tutti gli archi.
