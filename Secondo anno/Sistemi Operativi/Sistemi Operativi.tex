@@ -2817,7 +2817,7 @@ void *worker(void *arg) {
         head = (head + 1) % MAX_TASKS; // Modifico l'indice della testa: il prossimo worker deve prendere la task dopo
         count--; 
         pthread_mutex_unlock(&m); // Lascio la lock
-        t.func(t.arg); // Eseguiamo la funzione fuori dal lock: dobbiamo prima lasciarlo altrimenti ce lo teniamo per tutto il tempo della funzione
+        t.func(t.arg); // Eseguiamo la funzione fuori dalla lock: dobbiamo prima lasciarlo altrimenti ce lo teniamo per tutto il tempo della funzione
     }
 }
 
@@ -3018,6 +3018,63 @@ void Zem_post(Zem_t *s) {
     pthread_mutex_unlock(&s->lock);
 }
 \end{lstlisting}
+
+\section{Deadlock}
+
+\subsection{Cos'è un deadlock?}
+
+Abbiamo già accennato a cos'è un deadlock durante l'analisi del problema dei filosofi a cena. In sostanza è uno \textit{stallo}: se ogni filosofo prende prima il bastoncino alla propria destra e poi quello alla propria sinistra, può accadere che tutti riescano a prendere il primo. A quel punto il bastoncino a sinistra di ciascuno è già in mano al vicino, e ogni filosofo resta in attesa indefinitamente di una risorsa che nessuno rilascerà mai. \\ 
+In generale, questo problema può verificarsi quando più thread devono acquisire due o più lock e lo fanno in ordine diverso. Ad esempio, supponiamo che due thread $A$ e $B$ abbiano bisogno di entrambe le lock $\text{Lock}_1$ e $\text{Lock}_2$ per lavorare, e che $A$ provi a prendere prima la $\text{Lock}_1$ mentre $B$ prova a prendere prima la $\text{Lock}_2$. È possibile che $A$ ottenga la $\text{Lock}_1$ e che, subito dopo, $B$ ottenga la $\text{Lock}_2$. A quel punto ciascun thread possiede una sola delle due lock e aspetta quella in mano all'altro: nessuno dei due può lavorare, e nessuno dei duepuò rilasciare la propria lock, rimanendo in attesa per sempre. Siamo così entrati in un vero e proprio \textbf{deadlock}. Possiamo modellare questa deadlock usando un grafo:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Deadlock.png}
+\caption{Esempio di deadlock}
+\label{fig-deadlock}
+\end{figure}
+
+Questo grafo prende il nome di \textbf{RAG} (Resource Allocation Graph). Con una freccia continua da un lock a un thread stiamo dicendo che quel lock è tenuto da quel thread, mentre con una freccia tratteggiata da un thread a un lock indichiamo che quel lock è richiesto da quel thread ma non è tenuto da esso.
+
+Ogni volta che \textbf{non è presente un ciclo} possiamo essere sicuri che \textbf{non è presente un deadlock}. Questo signfica che un ciclo indica sempre un deadlock? Non sempre. Nonostante in Figura \ref{fig-deadlock} questo sia vero, esistono dei RAG con dei cicli al proprio interno che però non rappresentano dei deadlock, come questo ad esempio:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{No deadlock.png}
+\end{figure}
+
+In questa RAG, nonostante abbiamo un ciclo ($A, \text{Lock}_2, B, \text{Lock}_1$), non abbiamo una deadlock. Infatti, la $\text{Lock}_2$ in realtà è un semaforo con $N = 2$ (nel grafo questo viene rappresentato dai due pallini neri sotto alla $\text{Lock}_2$, che è invece uno solo per la $\text{Lock}_1$), che permette quindi a due thread in contemporanea di lavorare. In questo modo, il thread $C$, che è fuori dal ciclo, può accedere alla lock, lavorare, e uscire lasciando il posto libero al thread $A$, che avrà quindi accesso ad entrambe le lock. \\
+In generale, \textbf{i cicli sono sempre delle deadlock} solo quando le lock ammettono a un \textbf{singolo thread di lavorare}. Se invece ammettono a più thread di accedere contemporaneamente questo non è necessariamente vero.
+
+\subsection{Quand'è che si forma un ciclo in un sistema?}
+
+Abbiamo visto che la creazione di un ciclo in un sistema può essere pericoloso perché potrebbe portare a una deadlock. Ma quali sono le condizioni che portano alla formazione di un ciclo? Sono ben quattro, e sono chiamate le \textbf{condizioni di Coffman}.
+
+\begin{Proprieta}[Condizioni di Coffman]
+\label{prop-condizioni-coffman}
+Un deadlock può verificarsi solo se valgono contemporaneamente tutte e quattro le seguenti condizioni:
+\begin{enumerate}
+    \item \textbf{Mutua esclusione}, ossia una risorsa può essere posseduta da un solo thread alla volta
+    \item \textbf{Hold and wait}, ossia un thread tiene una risorsa mentre ne attende un'altra
+    \item \textbf{No preemption}, ossia una risorsa può essere rilasciata solo da chi la possiede
+    \item \textbf{Attesa circolare}, ossia esiste una catena di thread $T_1, \dots, T_n$ in cui ogni thread attende una risorsa posseduta dal successivo, e $T_n$ attende una risorsa posseduta da $T_1$
+\end{enumerate}
+Se anche una sola di queste condizioni non vale, il deadlock è impossibile.
+\end{Proprieta}
+
+Se riprendiamo il problema dei filosofi a cena, notiamo che questo con la soluzione iniziale rispettava proprio tutte e quattro le condizioni di Coffman:
+\begin{itemize}
+    \item Ogni bastoncino erano un semaforo binario, il che garantiva la \textit{mutua esclusione}
+    \item Ogni filosofo prendeva il bastoncino alla propria sinistra/destra e attendeva che l'altro si liberasse, il che garantiva l'\textit{hold and wait}
+    \item Con l'utilizzo semafori binari è possibile restituire una risorsa solo se è il proprietario a farlo, il che garantisce il \textit{no preemption}
+    \item Ogni filosofo aspettava che quello alla sua destra/sinistra finisse di mangiare, con l'ultimo che aspettava il primo, il che garantiva l'\textit{attesa circolare}  
+\end{itemize}
+
+Abbiamo eliminato questo deadlock rimuovendo proprio l'attesa circolare, facendo in modo che l'ultimo filosofo non debba aspettare il primo.
+
+Rimuovere l'attesa circolare è sempre la risposta migliore per eliminare un deadlock. Infatti a volte eliminare una delle altre condizioni può creare dei nuovi problemi. Proviamo ad esempio ad eliminare l'\textit{hold and wait}. Per farlo si usa un \textbf{trylock}, una funzione che prova ad acquisire una lock senza bloccarsi: se la lock è libera la prende, altrimenti ritorna subito segnalando il fallimento. Con questa funzione un thread acquisisce o tutte le lock di cui necessita o nessuna. Se infatti anche una sola è occupata, rilascia quelle che ha già preso e riprova da capo (con questa procedura, in realtà, stiamo eliminando anche il \textit{no preemption}, dato che stiamo costringendo un thread a rilasciare una risorsa che aveva acquisito). In questo modo nessun thread può tenere "in ostaggio" una lock mentre ne attende un'altra. Questa tecnica, però, può creare una situazione problematica tanto quanto il deadlock, ossia un \textbf{livelock}. Se infatti due thread eseguono questa procedura in contemporanea, è possibile che ciascuno prenda la prima lock, fallisca sulla seconda, rilasci tutto e riprovi, ripetendo all'infinito la stessa sequenza. A differenza del deadlock, i thread non sono bloccati: continuano a essere eseguiti, ma senza mai fare progressi. Questo problema si può cercare di risolvere facendo attendere a ogni thread un tempo casuale ogni volta che fallisce prima di riprovare ad accedere alle lock, così da rendere molto improbabile che i due continuino a muoversi in contemporanea.  \\
+Concludiamo quindi che \textit{eliminare l'attesa circolare}, riordinando l'ordine di acquisizione delle lock dei vari thread, sia la \textit{scelta ottimale}.
+
+
 
 
 
