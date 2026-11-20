@@ -3045,9 +3045,9 @@ Ogni volta che \textbf{non è presente un ciclo} possiamo essere sicuri che \tex
 In questa RAG, nonostante abbiamo un ciclo ($A, \text{Lock}_2, B, \text{Lock}_1$), non abbiamo una deadlock. Infatti, la $\text{Lock}_2$ in realtà è un semaforo con $N = 2$ (nel grafo questo viene rappresentato dai due pallini neri sotto alla $\text{Lock}_2$, che è invece uno solo per la $\text{Lock}_1$), che permette quindi a due thread in contemporanea di lavorare. In questo modo, il thread $C$, che è fuori dal ciclo, può accedere alla lock, lavorare, e uscire lasciando il posto libero al thread $A$, che avrà quindi accesso ad entrambe le lock. \\
 In generale, \textbf{i cicli sono sempre delle deadlock} solo quando le lock ammettono a un \textbf{singolo thread di lavorare}. Se invece ammettono a più thread di accedere contemporaneamente questo non è necessariamente vero.
 
-\subsection{Quand'è che si forma un ciclo in un sistema?}
+\subsection{Prevenire la formazione di un ciclo}
 
-Abbiamo visto che la creazione di un ciclo in un sistema può essere pericoloso perché potrebbe portare a una deadlock. Ma quali sono le condizioni che portano alla formazione di un ciclo? Sono ben quattro, e sono chiamate le \textbf{condizioni di Coffman}.
+Abbiamo visto che la creazione di un ciclo in un sistema può essere pericoloso perché potrebbe portare a una deadlock. Ma quali sono le condizioni che portano alla formazione di un ciclo? Sono ben quattro, e prendono il nome di \textbf{condizioni di Coffman}.
 
 \begin{Proprieta}[Condizioni di Coffman]
 \label{prop-condizioni-coffman}
@@ -3072,7 +3072,7 @@ Se riprendiamo il problema dei filosofi a cena, notiamo che questo con la soluzi
 Abbiamo eliminato questo deadlock rimuovendo proprio l'attesa circolare, facendo in modo che l'ultimo filosofo non debba aspettare il primo.
 
 Rimuovere l'attesa circolare è sempre la risposta migliore per eliminare un deadlock. Infatti a volte eliminare una delle altre condizioni può creare dei nuovi problemi. Proviamo ad esempio ad eliminare l'\textit{hold and wait}. Per farlo si usa un \textbf{trylock}, una funzione che prova ad acquisire una lock senza bloccarsi: se la lock è libera la prende, altrimenti ritorna subito segnalando il fallimento. Con questa funzione un thread acquisisce o tutte le lock di cui necessita o nessuna. Se infatti anche una sola è occupata, rilascia quelle che ha già preso e riprova da capo (con questa procedura, in realtà, stiamo eliminando anche il \textit{no preemption}, dato che stiamo costringendo un thread a rilasciare una risorsa che aveva acquisito). In questo modo nessun thread può tenere "in ostaggio" una lock mentre ne attende un'altra. Questa tecnica, però, può creare una situazione problematica tanto quanto il deadlock, ossia un \textbf{livelock}. Se infatti due thread eseguono questa procedura in contemporanea, è possibile che ciascuno prenda la prima lock, fallisca sulla seconda, rilasci tutto e riprovi, ripetendo all'infinito la stessa sequenza. A differenza del deadlock, i thread non sono bloccati: continuano a essere eseguiti, ma senza mai fare progressi. Questo problema si può cercare di risolvere facendo attendere a ogni thread un tempo casuale ogni volta che fallisce prima di riprovare ad accedere alle lock, così da rendere molto improbabile che i due continuino a muoversi in contemporanea.  \\
-Concludiamo quindi che \textit{eliminare l'attesa circolare}, riordinando l'ordine di acquisizione delle lock dei vari thread, sia la \textit{scelta ottimale}.
+Concludiamo quindi che \textbf{eliminare l'attesa circolare}, riordinando l'ordine di acquisizione delle lock dei vari thread, sia la \textbf{scelta ottimale}.
 
 
 

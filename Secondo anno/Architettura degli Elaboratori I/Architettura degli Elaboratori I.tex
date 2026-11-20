@@ -2609,6 +2609,8 @@ Un \textbf{trasmettitore seriale} è un circuito che invia $N$ bit facendoli pas
 \label{fig-trasmettitore-seriale}
 \end{figure}
 
+Spesso in un trasmettitore seriale vengono aggiunti all'inizio e alla fine di una trasmissione dei bit, chiamati proprio bit di \textbf{start} e bit di \textbf{stop}. Questi servono per dichiarare in modo esplicito quando una trasmissione inizia e quando finisce (altrimenti non potremmo sapere se stiamo ricevendo tanti 0 o se invece non stiamo ricevendo nulla). Questi bit ovviamente rallentano leggermente il trasmettitore seriale, modificando il suo \textbf{throughput utile}, ossia la quantità di bit al secondo che questo può inviare. Ad esempio, con un $CLK$ con una frequenza di $10$ MHz, dovremmo avere $10^7$ bit trasmessi al secondo, ma essendoci i bit di start e di stop, questo valore può variare. Se ad esempio abbiamo un trasmettitore che invia parole da 8 bit, avremo un throughput utile di $8 \cdot 10^6$ bit al secondo, dato che $2$ milioni dei bit trasmessi sono "inutili" perché di start e stop.
+
 \chapter{Memorie}
 
 \section{Introduzione ai memory array}
@@ -2903,6 +2905,53 @@ Dato che vogliamo rappresentare parole non da $32$ bit ma solo da $8$, possiamo 
 \centering
 \includegraphics[width=1\textwidth]{Esempio 3 finale.png}
 \end{figure}
+
+\subsection{Indirizzi}
+
+Il modo in cui un \textbf{indirizzo} viene interpretato dal sistema dipende da come è organizzata la memoria. Possiamo vederlo come un insieme di valori che, dati al decoder e ai mux, ci permettono di raggiungere il byte desiderato (parliamo di byte e non di parola perché nei sistemi reali si preferisce restituire un singolo byte piuttosto che una parola intera). L'indirizzo viene spesso diviso in tre campi (dai bit più significativi ai meno significativi): il primo indica la \textbf{riga} in cui si trova il byte (e serve quindi al decoder), il secondo indica la \textbf{colonna}, ossia la parola all'interno della riga (e quindi serve al mux), e il terzo, detto \textbf{offset}, indica quale byte prendere all'interno della parola trovata (e quindi serve a un secondo mux, che introduciamo proprio per scegliere questo byte all'interno di una stessa parola).
+
+Vediamo un esempio. Supponiamo di avere una DRAM da $4$ GB, con un buffer di riga da $2$ KB e parole da $8$ B. Gli indirizzi saranno di $32$ bit (dato che $4$ GB $= 2^{32}$ byte) e saranno così divisi:
+\begin{itemize}
+    \item $21$ bit per la selezione della \textbf{riga}: le righe sono da $2$ KB $= 2^{11}$ byte, quindi ci sono $2^{32}/2^{11} = 2^{21}$ righe
+    \item $8$ bit per la selezione della \textbf{colonna}: ogni riga contiene $2^{11}$ byte divisi in parole da $2^3$ byte, quindi ci sono $2^{11}/2^{3} = 2^{8}$ parole per riga
+    \item $3$ bit per l'\textbf{offset}: ogni parola contiene $8 = 2^3$ byte
+\end{itemize}
+In totale abbiamo quindi $21 + 8 + 3 = 32$ bit, come ci aspettavamo.
+
+\section{ROM}
+
+\subsection{Dot Notation}
+
+Le \textbf{ROM} sono delle memory accedibili solo in lettura. La loro struttura di base è identica a quella delle RAM: un decoder, una bitline, una wordline e un mux. La differenza fondamentale con le RAM, però, è il fatto che le celle di bit siano decise fin da subito, da quando la ROM viene creata, e dunque non sono modificabili (in realtà le ROM moderne, come una flash, permettono di modificare i dati, ma molto lentamente). Proprio perché le ROM non sono modificabili esiste una rappresentazione grafica chiamata \textbf{Dot Notation} che rappresenta con un pallino tutte le celle con all'interno un bit pari a 1, e che invece lascia vuoto quando il bit vale 0. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{ROM Dot Notation.png}
+\caption{Esempio di ROM rappresentata con dot notation}
+\label{fig-rom-dot-notation}
+\end{figure}
+
+Questa notazione ha ora senso perché il valore all'interno delle celle nelle ROM non può ovviamente cambiare. Non avremmo potuto utilizzarla ad esempio per rappresentare le RAM.
+
+Questa notazione l'avevamo vista con un altro costrutto in passato, ossia per le PLA. Effettivamente le ROM utilizzano come le PLA una serie di \code{AND} seguiti da una serie di \code{OR}. Queste, però, ci permettono di realizzare \textit{qualunque funzione possibile}, e non solo un sottoinsieme di funzioni come nelle PLA. Ad esempio, riprendendo la ROM in Figura \ref{fig-rom-dot-notation}, se poniamo $ADDR = AB$, abbiamo ad esempio tre diverse funzioni: $\text{Data}_1 = A \oplus B$, $\text{Data}_2 = \bar{A} + B$ e $\text{Data}_3 = \bar{A}\bar{B}$. 
+
+Una ROM è il costrutto perfetto per realizzare delle \textbf{LUT}, un circuito che avevamo già accennato in precedenza con le FPGA e che, in poche parole, calcola una funzione senza fare alcun calcolo, dato che i risultati sono già scritti in memoria. 
+
+\subsection{LUT e Shannon}
+
+Vogliamo ora rappresentare una qualsiasi funzione a 5 ingressi $f(A,B,C,D,E)$ utilizzando delle LUT a 4 ingressi. Sappiamo, dal teorema di Shannon, che \mbox{$f(A,B,C,D,E) = \bar{E}f(A,B,C,D,0) + Ef(A,B,C,D,1)$}. Dunque possiamo 
+rappresentare la funzione $f$ usando un totale di 3 LUT: con una rappresentiamo $f(0)$ (abbreviamo $f(A,B,C,D,0/1)$ scrivendo solo $f(0/1)$), con un'altra $f(1)$, e con l'ultima rappresentiamo un mux, che avrà come bit di selezione $E$, e che sceglie $f(0)$ quando $E = 0$ e $f(1)$ quando $E = 1$. Tutto questo si traduce in questo sistema:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{3 LUT a 4 ingressi.png}
+\end{figure}
+
+E se invece volessimo rappresentare una funzione a 6 ingressi utilizzando delle LUT a 4 ingressi? In questo caso avremmo 4 LUT per rappresentare $f(0,0), f(0,1), f(1,0)$ e $f(1,1)$, e 3 LUT che fanno da mux per poter scegliere solo una di queste funzioni, per un totale di 7 LUT. \\
+Notiamo come questo incremento sia graduale: questo è per colpa del teorema di Shannon, che ad ogni variabile eliminata raddoppia il numero di LUT necessari per rappresentare tutti i possibili stati della funzione $f$.
+
+\chapter{Timing}
+
 
 
 \end{document}

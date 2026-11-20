@@ -3320,4 +3320,116 @@ $\bm{X^+ = R} \implies \bm{X}$ è l'\textbf{unica chiave} di $R$.
 
 Applichiamo questo test sullo schema $R = ABCDE$, con insieme di dipendenze funzionali $F = \{AB \longrightarrow C, AC \longrightarrow B, D \longrightarrow E\}$. Troviamo che $X = R - C \cap R - D \cap  R - E = AD$. Ora, dato che $(AD)^+ = ADE \neq R$, concludiamo che $AD$ non è l'unica chiave. Questo significa che non esiste nessuna chiave unica? No. Infatti, $X \neq R$ significa solo che $X$ non è l'unica chiave di $R$, non che non esista alcuna chiave unica in $R$.
 
+
+\chapter{Terza Forma Normale}
+
+\section{Cercare uno schema buono}
+
+Supponiamo di voler creare una base di dati contenente i seguenti dati di studenti relazionali:
+
+\begin{itemize}
+    \item Dati anagrafici e identificativi
+    \item Nome e cognome,
+    \item Data, comune e provincia di nascita, matricola,
+    \item Codice fiscale
+    \item Dati curriculari
+    \item Per ogni esame sostenuto:
+    \begin{itemize}
+    \item  Voto
+    \item  Data
+    \item  Codice, titolo e docente del corso
+    \end{itemize}
+\end{itemize}
+
+Per creare questa base di dati abbiamo molti possibili schemi relazionali tra cui scegliere. Decidiamo inizialmente di usare una sola relazione:
+\[
+\text{Curriculum}(\text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{DataN}, \text{Com}, \text{Prov}, \text{C}\#, \text{Tit}, \text{Doc}, \text{DataE}, \text{Voto})
+\]
+
+Questa scelta, però, crea un problema di \textbf{ridondanza}. Infatti, per ogni esame sostenuto da uno stesso studente riportiamo nuovamente tutti i suoi dati anagrafici, che invece potremmo salvarci una sola volta creando una relazione a parte. Questa ridondanza crea sicuramente spreco di memoria, ma soprattutto anomalie di aggiornamento, inserimento e cancellazione:
+
+\begin{itemize}
+    \item Anomalia  di \textbf{aggiornamento} perché, se cambiamo il nome del docente di un determinato corso, dobbiamo cambiare questo nome per ogni riga della relazione. Questa anomalia è risolvibile con un trigger, ma sicuramente non è una soluzione poco costosa. 
+    \item Anomalia di \textbf{inserimento} perché non possiamo inserire uno studente nel database finché questo non ha sostenuto un esame, e allo stesso modo non possiamo inserire un corso finché questo non è stato sostenuto da qualche studente. Inoltre, ogni volta che inseriamo una nuova riga nella relazione dobbiamo controllare che tutti i valori inseriti siano consistenti con le restanti tuple (se ho dato il codice 10 al corso di fisica, ogni volta che inserisco un esame di fisica devo controllare che il codice sia pari a 10)
+    \item Anomalia di \textbf{cancellazione} perché eliminando i dati di uno studente è possibile che vengano eliminati anche i dati di un intero corso, il cui esame magari era stato sostenuto solo da quello studente. 
+\end{itemize}
+
+Questo schema relazionale dunque non funziona. Proviamo invece a ricreare questa base di dati usando tre relazioni:
+\begin{align*}
+& \text{Studente}(\text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data}, \text{Com}, \text{Prov}) \\
+&\text{Corso} (\text{C}\#, \text{Tit}, \text{Doc}) \\
+&\text{Esame} (\text{Matr}, \text{C}\#, \text{Data}, \text{Voto})
+\end{align*}
+
+I problemi già visti qui si ripresentano, ma in modo meno impattante:
+\begin{itemize}
+    \item La \textbf{ridondanza} rimane perché, ipotizzando che un comune si trova sempre in una certa provincia, ogni volta che inseriamo due studenti dello stesso comune stiamo ripetendo che quel comune è di quella provincia
+    \item L'anomalia di \textbf{aggiornamento} rimane perché se un comune cambia provinicia bisogna aggiornare tutte le tuple della relazione Studente
+    \item L'anomalia di \textbf{inserimento} rimane perché per memorizzare che un comune si trovi in una certa provincia bisogna attendere che arrivi uno studente da quel comune
+    \item L'anomalia di \textbf{cancellazione} rimane perché eliminando i dati di uno studente è possibile che si eliminno anche i dati di un comune
+\end{itemize}
+
+Notiamo dunque come siano gli attributi Comune e Provincia il problema di questo schema relazionale. Per questo motivo, per cercare di eliminare questi problemi creiamo una quarta relazione, che contiene proprio le informazioni di tutti i comuni degli studenti (eliminiamo dunque gli attributi Com e Prov da Studenti):
+\[
+\text{Comune}(\text{Com}, \text{Prov})
+\]
+
+Con questo nuovo schema a quattro relazioni abbiamo eliminato le ridondanze e le anomalie. Diciamo in questo caso che lo schema è \textbf{buono}.
+
+\begin{Definizione}[Schema buono]
+\label{def-schema-buono}
+Uno schema è detto \textbf{buono} se non vi sono \textbf{ridondanze} e \textbf{anomalie} al suo interno. \\
+Per progettare uno schema buono è necessario rappresentare \textit{separatamente ogni concetto} in una relazione a parte.
+\end{Definizione}
+
+Riguardando l'esempio di prima, uno schema che mette insieme le informazioni di Studente e di Comune è ovvio che non sia uno schema buono proprio perché unisce due concetti in una sola relazione. Avremmo dovuto usare una foreign key in questo caso per assegnare a uno studente un proprio comune.
+
+Ma in generale come facciamo a distinguere i diversi concetti all'interno di uno schema velocemente? Dobbiamo sfruttare il concetto di chiave.
+
+\begin{Proposizione}[]
+\label{propos-distinguere-concetti-velocemente}
+Una relazione con schema $R = Z$ rappresenta un unico concetto se le uniche dipendenze funzionali non banale al suo interno sono le relazionei $K_i \longrightarrow Z$, dove $K_i$ sono tutte le possibili chiavi in $R$.
+\end{Proposizione}
+
+Riprendendo la relazione $\text{Studente}(\text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data})$, notiamo come le uniche dipendenze funzionali non banali sono proprio \mbox{$\text{Matr} \longrightarrow \text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data}$} e \mbox{$\text{CF} \longrightarrow \text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data}$}, dove Matr e CF sono le uniche chiavi possibili di Studente. Dunque concludiamo che la relazione Studente rappresenta proprio un unico concetto. Lo stesso procedimento può essere fatto con le relazioni Corso, Esame e Comune per verificare che anch'essi siano relazioni corrette.
+
+\section{Terza forma normale}
+
+\begin{Definizione}[Terza forma normale]
+\label{def-3NF}
+Presi uno schema di relazione $R$ e un insieme di dipendenze fnzionali $F$, $R$ è in \textbf{terza forma normale} (in \textbf{3NF}, o \textbf{normalizzata}) se $\forall X \longrightarrow A \in F^+$, con $A \notin X$ (consideriamo solo le dipendenze non banali), $A$ \textbf{appartiene a una chiave} (ossia è \textbf{un attributo primo}) \textit{oppure} $X$ \textbf{contiene una chiave} (ossia \textbf{è superchiave}). 
+\end{Definizione}
+
+Per capire perché scriviamo $X \longrightarrow A \in F^+$ e non $\in F$ vediamo un esempio. \\
+Prendiamo $R = ABCD$ e $F = \{A \longrightarrow B, B \longrightarrow CD\}$. Se usassimo la definizione $\in F$, non dovremmo considerare la dipendenza $B \longrightarrow CD$ perché non è nella forma $X \longrightarrow A$. Ma se usassimo invece la definzione $\in F^+$, troveremmo le dipendenze $B \longrightarrow C$ e $B \longrightarrow D$, che violano proprio la definizione di 3FN. Dunque utilizzando $\in F$ troveremmo che questa relazione è in 3FN, mentre utilizzano $\in F^+$ diremmo che questa non lo è. Ecco spiegato perché è così imporante essere in grado di calcolare $F^+$.
+
+Riprendendo sempre la base di dati riguardo gli studenti e gli esami di un università, è facile dimostrare che tutte e quattro le relazioni finali fossero in 3FN. Invece, prendendo lo schema a una sola relazione Curriculum, basta trovare la dipendenza $\text{Matr} \longrightarrow \text{Cogn} \in F^+$ per determinare che Curriculum non sia in terza forma normale, dato che Matr non è superchiave e Cogn non è primo.
+
+\begin{Definizione}[Dipendenza transitiva]
+\label{def-dipendenza-transitiva}
+Se una dipendenza funzionale $A\longrightarrow C$ deriva dalle dipendenze $A \longrightarrow B$ e $B \longrightarrow C$, la dipendenza $\bm{B} \longrightarrow \bm{C}$ prende il nome di \textbf{dipendenza transitiva}.
+\end{Definizione}
+
+\begin{Definizione}[Dipendenza parziale]
+\label{def-dipendenza-parziale}
+Se una dipendenza funzionael $AB \longrightarrow C$ è una conseguenza della dipendenza $A \longrightarrow C$, $\bm{A} \longrightarrow \bm{C}$ prende il nome di \textbf{dipendenza parziale}.
+\end{Definizione}
+
+Questi due tipi di dipendenze ci permettono di dare un'altra definizione di terza forma normale.
+
+\begin{Definizione}[Altra definizione di terza forma normale]
+\label{def-terza-forma-normale-2}
+Presi uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$, $R$ è in \textbf{terza forma normale} se non ci sono \textbf{dipendenze transitive o parziali} in $F^+$.
+\end{Definizione}
+
+
+
+
+
+
+
+
+
+
+
 \end{document}
