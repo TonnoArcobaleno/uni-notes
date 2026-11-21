@@ -2386,9 +2386,8 @@ P6 & 09/09/1990 & D3 & P6 & 09/09/1990 & D3 \\\hline
 
 A questo punto, prendiamo solo le tuple dove la data a destra è strettamente maggiore di quella a sinistra:
 
-
 \begin{center}
-ProgettoPL $\bowtie_{\text{DipenId} = \text{DipenId2} \land \text{Data} < \text{Data2}}$ ProgettoPL2
+ProgettoPL $\bowtie_{\text{DipenId} = \text{DipenId2} \land \text{Data} < \text{Data2}}$ ProgettoPL2 \nopagebreak
     
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
@@ -2399,6 +2398,7 @@ P5 & 11/03/2019 & D1 & P2 & 13/02/2023 & D1 \\
 P6 & 09/09/1990 & D3 & P3 & 11/04/2010 & D3 \\\hline
 \end{tabular}
 \end{center}
+
 
 A questo punto notiamo una cosa: tutte le date che si trovano nella colonna Data2 sicuramente non possono corrispondere al progetto più vecchio del project leader a cui si riferiscono. Infatti, si riferiscono a progetti avvenuti sicuramente dopo altri seguiti sempre dallo stesso project leader. Dunque, per ottenere i progetti più vecchi, non ci resta che prendere la tabella iniziale e eliminare tutte le tuple con i progetti che sono presenti nella parte destra di questa nostra tabella. Se chiamiamo la tabella qui sopra $r$, arriviamo alla query \mbox{Min = $\text{ProgettoPL} - \pi_{\text{ProgId2}, \text{Data2}, \text{DipenId2}}(r)$}, ossia alla tabella
 
@@ -3323,7 +3323,7 @@ Applichiamo questo test sullo schema $R = ABCDE$, con insieme di dipendenze funz
 
 \chapter{Terza Forma Normale}
 
-\section{Cercare uno schema buono}
+\section{Cercare un buono schema}
 
 Supponiamo di voler creare una base di dati contenente i seguenti dati di studenti relazionali:
 
@@ -3388,19 +3388,27 @@ Ma in generale come facciamo a distinguere i diversi concetti all'interno di uno
 
 \begin{Proposizione}[]
 \label{propos-distinguere-concetti-velocemente}
-Una relazione con schema $R = Z$ rappresenta un unico concetto se le uniche dipendenze funzionali non banale al suo interno sono le relazionei $K_i \longrightarrow Z$, dove $K_i$ sono tutte le possibili chiavi in $R$.
+Una relazione con schema $R$ rappresenta un unico concetto se le uniche dipendenze funzionali non banale al suo interno sono le relazionei $K_i \longrightarrow R$, dove $K_i$ sono tutte le possibili chiavi in $R$.
 \end{Proposizione}
 
 Riprendendo la relazione $\text{Studente}(\text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data})$, notiamo come le uniche dipendenze funzionali non banali sono proprio \mbox{$\text{Matr} \longrightarrow \text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data}$} e \mbox{$\text{CF} \longrightarrow \text{Matr}, \text{CF}, \text{Cogn}, \text{Nome}, \text{Data}$}, dove Matr e CF sono le uniche chiavi possibili di Studente. Dunque concludiamo che la relazione Studente rappresenta proprio un unico concetto. Lo stesso procedimento può essere fatto con le relazioni Corso, Esame e Comune per verificare che anch'essi siano relazioni corrette.
 
 \section{Terza forma normale}
 
+\begin{Definizione}[Forma normale]
+\label{def-forma normale}
+Una \textbf{forma normale} è una proprietà di uno schema di relazione $R$ che ne garantisce la qualità, ossia l'assenza did determinati difetti, tra cui ad esempio la ridondanza.
+\end{Definizione}
+
+Le forme normali sono di solito definite sul modello relazionale, ma può aver senso iniziare a parlare di forma normale anche dal modello ER. Tra le forme normali esistenti la più importante è la \textbf{terza forma normale}.
+
 \begin{Definizione}[Terza forma normale]
 \label{def-3NF}
 Presi uno schema di relazione $R$ e un insieme di dipendenze fnzionali $F$, $R$ è in \textbf{terza forma normale} (in \textbf{3NF}, o \textbf{normalizzata}) se $\forall X \longrightarrow A \in F^+$, con $A \notin X$ (consideriamo solo le dipendenze non banali), $A$ \textbf{appartiene a una chiave} (ossia è \textbf{un attributo primo}) \textit{oppure} $X$ \textbf{contiene una chiave} (ossia \textbf{è superchiave}). 
 \end{Definizione}
 
-Per capire perché scriviamo $X \longrightarrow A \in F^+$ e non $\in F$ vediamo un esempio. \\
+Per capire perché scriviamo $X \longrightarrow A \in F^+$ e non $X \longrightarrow A \in F$ vediamo un esempio. 
+
 Prendiamo $R = ABCD$ e $F = \{A \longrightarrow B, B \longrightarrow CD\}$. Se usassimo la definizione $\in F$, non dovremmo considerare la dipendenza $B \longrightarrow CD$ perché non è nella forma $X \longrightarrow A$. Ma se usassimo invece la definzione $\in F^+$, troveremmo le dipendenze $B \longrightarrow C$ e $B \longrightarrow D$, che violano proprio la definizione di 3FN. Dunque utilizzando $\in F$ troveremmo che questa relazione è in 3FN, mentre utilizzano $\in F^+$ diremmo che questa non lo è. Ecco spiegato perché è così imporante essere in grado di calcolare $F^+$.
 
 Riprendendo sempre la base di dati riguardo gli studenti e gli esami di un università, è facile dimostrare che tutte e quattro le relazioni finali fossero in 3FN. Invece, prendendo lo schema a una sola relazione Curriculum, basta trovare la dipendenza $\text{Matr} \longrightarrow \text{Cogn} \in F^+$ per determinare che Curriculum non sia in terza forma normale, dato che Matr non è superchiave e Cogn non è primo.
@@ -3412,23 +3420,188 @@ Se una dipendenza funzionale $A\longrightarrow C$ deriva dalle dipendenze $A \lo
 
 \begin{Definizione}[Dipendenza parziale]
 \label{def-dipendenza-parziale}
-Se una dipendenza funzionael $AB \longrightarrow C$ è una conseguenza della dipendenza $A \longrightarrow C$, $\bm{A} \longrightarrow \bm{C}$ prende il nome di \textbf{dipendenza parziale}.
+Se una dipendenza funzionale $AB \longrightarrow C$ è una conseguenza della dipendenza $A \longrightarrow C$, $\bm{A} \longrightarrow \bm{C}$ prende il nome di \textbf{dipendenza parziale}.
+\end{Definizione}
+
+Ora che abbiamo capito cosa sono queste dipendenze funzionali e parziali, diamone una definizione formale.
+
+\begin{Definizione}[Definizione formale di dipendenze transitive e parziali]
+\label{def-dipendenza-parziale-transitiva-formale}
+Presi uno schema $R$ e un insieme di dipendenze funzionali $F$:
+\begin{itemize}
+    \item $X \longrightarrow A \in F^+$ è una \textbf{dipendenza parziale} su $R$ se $A$ non è primo (ossia non appartiene a una chiave) e se $X \subset K$, dove $K$ è una qualsiasi chiave di $R$ (ossia $X$ è contenuto propriamente in una delle chiavi)
+    \item $X \longrightarrow A \in F^+$ è una \textbf{dipendenza transitiva} su $R$ se $A$ non è primo e se, $\forall K$ chiavi in $R$, $X \nsubset K$ (ossia $X$ non è contenuto propriamente in nessuna chiave)
+\end{itemize}
 \end{Definizione}
 
 Questi due tipi di dipendenze ci permettono di dare un'altra definizione di terza forma normale.
 
 \begin{Definizione}[Altra definizione di terza forma normale]
 \label{def-terza-forma-normale-2}
-Presi uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$, $R$ è in \textbf{terza forma normale} se non ci sono \textbf{dipendenze transitive o parziali} in $F^+$.
+Presi uno schema $R$ e un insieme di dipendenze funzionali $F$, $R$ è in \textbf{terza forma normale} se \textbf{non ci sono dipendenze transitive o parziali} in $F^+$.
 \end{Definizione}
 
+Abbiamo dunque capito cos'è una terza forma normale di uno schema di relazione $R$. Il nostro obiettivo d'ora in avanti nella creazione di una base di dati sarà quello di produrre uno schema con all'interno solo relazioni in 3FN. 
 
+\section{La 3NF può non bastare}
 
+La 3FN ci dà sicuramente dei vantaggi nella gestione di una base di dati. Ad esempio, questa elimina la ridondanza dovuta alle dipendenze transitive e le anomalie che questa ridondanza provoca, oppure ci permette di evitare di inserire mille trigger per verificare delle regole nello schema. Ma a volte non è sufficiente avere uno schema di relazione in 3FN per stare tranquilli. Ipotizziamo ad esempio di avere uno schema $R = \{ABC\}$ e un insieme di dipendenze funzionali $F = \{A \longrightarrow B, B \longrightarrow C\}$. Notiamo subito che $R$ non è in 3FN per la presenza in $F^+$ della dipendenza transitiva $B \longrightarrow C$, dunque proviamo a dividerlo in due sottoschemi $R_1$ e $R_2$, in questo modo:
+\begin{align*}
+R_1 &= AB \quad F = \{A \longrightarrow B\}  \\
+R_2 &= BC \quad F = \{B \longrightarrow C\}
+\end{align*}
 
+Abbiamo dunque diviso $R$ in due schemi di relazione $R_1$ e $R_2$ in 3FN. Ma siamo sicuri che questo sia l'unico modo per farlo? In realtà, avremmo potuto farlo anche in quest'altro modo:
 
+\begin{align*}
+R_3 &= AB \quad F = \{A \longrightarrow B\}  \\
+R_4 &= AC \quad F = \{A \longrightarrow C\} 
+\end{align*}
 
+Infatti, anche in questo caso abbiamo due schemi $R_3$ e $R_4$ in 3FN. Eppure, questa seconda soluzione \textbf{non è corretta}. Per dimostrarlo, prendiamo queste due istanze legali di $R_3$ e $R_4$:
 
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    $R_3$
 
+\begin{tabular}{|l|l|}
+\hline
+\textbf{A} & \textbf{B}  \\ \hline
+$a_1$ & $b_1$ \\
+$a_2$ & $b_1$ \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    $R_4$
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{A} & \textbf{C}   \\ \hline
+$a_1$ & $c_1$ \\
+$a_2$ & $c_2$ \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+Tramite un join naturale potremmo ricostruire a partire da queste due istanze un'istanza dello schema originale $R$:
+
+\begin{center}
+    $R$
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{A} & \textbf{B} & \textbf{C}   \\ \hline
+$a_1$ & $b_1$ & $c_1$ \\
+$a_2$ & $b_1$ & $c_2$ \\ \hline
+\end{tabular}
+\end{center}
+
+Questa istanza, però, non sarebbe un'istanza legale di $R$, dato che non rispetta la dipendenza funzionale $B \longrightarrow C$. Abbiamo dunque in questo caso decomposto $R$ in due relazioni $R_3$ e $R_4$, che, nonostante fossero in 3FN, non erano corrette. 
+
+A questo punto ci verrebbe naturale pensare che gli schemi $R_1$ e $R_2$ siano invece una corretta decomposizione dello schema $R$, dato che questi preservano tutte le dipendenze funzionali in $F^+$. Purtroppo, non è così. Prendiamo infatti un'istanza legale di $R$:
+
+\begin{center}
+    $R$
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{A} & \textbf{B} & \textbf{C}   \\ \hline
+$a_1$ & $b_1$ & $c_1$ \\
+$a_2$ & $b_1$ & $c_2$ \\ \hline
+\end{tabular}
+\end{center}
+
+Questa istanza viene decomposta in queste due istanze di $R_1$ e $R_2$:
+
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    $R_1$
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{A} & \textbf{B}  \\ \hline
+$a_1$ & $b_1$ \\
+$a_2$ & $b_1$ \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\begin{center}
+    $R_2$
+
+\begin{tabular}{|l|l|}
+\hline
+\textbf{B} & \textbf{C}   \\ \hline
+$b_1$ & $c_1$ \\
+$b_1$ & $c_2$ \\ \hline
+\end{tabular}
+\end{center}
+\end{minipage}
+
+Ora, tramite un join naturale tra le due istanze di $R_1$ e $R_2$ in teoria dovremmo tornare alla stessa istanza di $R$. Vediamo se questo accade:
+
+\begin{center}
+    $R$
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{A} & \textbf{B} & \textbf{C}   \\ \hline
+$a_1$ & $b_1$ & $c_1$ \\
+$a_2$ & $b_1$ & $c_2$ \\
+$a_1$ & $b_1$ & $c_2$ \\
+$a_2$ & $b_1$ & $c_1$ \\
+\hline
+\end{tabular}
+\end{center}
+
+In questa istanza derivante dal join delle istanze di $R_1$ e $R_2$ troviamo quindi due nuove tuple che non erano presenti nell'istanza originale di $R$. Abbiamo dunque anche qui decomposto $R$ in due relazioni $R_1$ e $R_2$, che, nonostante fossero in 3FN e preservassero tutte le dipendenze funzionali in $F^+$ di $R$, non erano corrette.
+
+\begin{Proposizione}[]
+\label{propos-decomposizione}
+Se si vuole decomporre uno schema di relazione $R$ non in terza formale normale in diversi schemi $R_1, \ldots, R_n$ in 3FN, è necessario: 
+\begin{itemize}
+    \item \textbf{Preseverare tutte le dipendenze funzionali in } $\bm{F^+}$ di $R$. 
+    \item \textbf{Permettere di ricostruire mediante join naturale ogni istanza legale dello schema originale}, senza aggiunta di nuove tuple
+\end{itemize}
+\end{Proposizione}
+
+Introduciamo a tal proposito una nuova forma normale, più restrittiva della terza forma normale: la \textbf{forma normale di Boyce-Codd}.
+
+\begin{Definizione}[Forma normale di Boyce-Codd]
+\label{def-forma-normale-boyce-codd}
+Presi uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$, $R$ è in \textbf{forma normale di Boyce-Codd} (\textbf{BCNF}) se $\forall X \longrightarrow A \in F^+$, con $A \notin X$, $X$ è una \textbf{superchiave}.
+\end{Definizione}
+
+Abbiamo dunque preso la definzione di 3FN e abbiamo eliminato l'alternativa che $A$ sia un attributo primo. Da questo capiamo subito che $R$ in BCNF $\implies$ $R$ in 3FN (la freccia va solo da sinistra a destra, dato che se $R$ è in 3FN allora non è detto che $R$ sia anche in BCNF).
+
+Purtroppo, però, \textbf{non è sempre possibile} prendere uno schema $R$ non in BCNF e decomporlo in tanti schemi $R_1, \ldots, R_n$ in BCNF preservando allo stesso tempo tutte le dipendenze funzionali in $F^+$. L'unica certezza che avremmo è che potremmo ricostrurie mediante un join naturale ogni istanza legale dello schema originale, ma come visto nella Proposizione \ref{propos-decomposizione} questo non basta. 
+
+Invece \textbf{è sempre possibile} prendere uno schema $R$ non in 3FN e decomporlo in tanti schemi $R_1, \ldots, R_n$ in 3FN, dunque d'ora in avanti lasceremo perdere la definizione di BCNF e andremo avanti a parlare di 3FN. Vediamo ora come decomporre sempre uno schema $R$ in modo da avere dei sottoschemi tutti in 3FN.
+
+\section{Decomporre uno schema non in 3FN}
+
+\NB Tutto ciò che verrà visto in questa sezione è applicabile non solo al modello logico, ma anche al modello concettuale (utile per verificare di aver creato uno schema concettuale di qualità).
+
+Preso uno schema di relazione $R$ non in 3FN, vogliamo ora un metodo fisso e efficace per decomporlo in dei sottoschemi $R_1, \ldots, R_n$ tutti in 3FN. Per trovare questo metodo partiamo da un esempio. 
+
+Ipotizziamo di avere uno schema $R = (\underline{\text{Impiegato}}, \text{Stipendio}, \underline{\text{Progetto}}, \text{Bilancio}, \text{Funzione})$. Questo schema non è in 3FN, e lo notiamo perché ci crea non pochi problemi:
+\begin{itemize}
+    \item Lo stipendio di ciascun impiegato si ripete più volte, creando così \textit{ridondanza}
+    \item Se lo stipendio di un impiegato cambia, è necessario modificarne il valore in più di una tupla, creando così un'\textit{anomalia di aggiornamento}
+    \item Se un impiegato smette di partecipare a ogni progetto questo viene eliminato anche dal database, creando così un'\textit{anomalia di cancellazione}
+    \item Un impiegato senza progetto e un progetto senza impiegati non può essere inserito, creando così un'\textit{anomalia di inserimento}
+\end{itemize} 
+
+Tutto ciò è dovuto a un semplice errore iniziale: abbiamo deciso di rappresentare, con un'unica relazione $R$, delle informazioni diverese tra loro. Abbiamo infatti in $R$ sia gli impiegati, che i progetti, che le partecipazioni degli impiegati ai progetti. Per risolvere queste anomalie, studiamo tutte le dipendenze funzionali in $R$. Troviamo che $F^+ = \{\text{Impiegato} \longrightarrow \text{Stipendio}, \text{Progetto} \longrightarrow \text{Bilancio}, \text{Impiegato}, \text{Progetto} \longrightarrow \text{Funzione}\}$. In particolare sono le prime due dipendenze funzionali a causare anomalie, dato che la terza è una dipendenza del tipo $X \longrightarrow A$ con $X$ superchiave, che come ben sappiamo è una dipendenza funzionale accettabile in 3FN e che quindi non può causare anomalie di questo tipo. È necessario dunque dividere la nostra relazione $R$ in 3 diverse relazioni:
+\begin{itemize}
+    \item $R_1 = (\underline{\text{Impiegato}}, \text{Stipendio})$
+    \item $R_2 = (\underline{\text{Impiegato}}, \underline{\text{Progetto}}, \text{Funzione})$
+    \item $R_3 = (\underline{\text{Progetto}}, \text{Bilancio})$ 
+\end{itemize}
+
+Queste tre relazioni ora sappiamo che sono in 3FN, ma la Proposizione \ref{propos-decomposizione} ci ricorda che questo \textbf{non basta}. È necessario anche verificare che le dipendenze funzionali siano tutte preservate e che anche tutte le istanze legali dello schema originale lo siano. Come facciamo quindi a verificare queste due condizioni?
 
 
 
