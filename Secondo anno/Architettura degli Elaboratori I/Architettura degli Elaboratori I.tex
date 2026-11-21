@@ -1580,7 +1580,7 @@ I LE (ossia gli elementi logici) sono composti da:
 \begin{itemize}
     \item un \textbf{LUT}, che si occupa della logica combinatoria
     \item un \textbf{Flip-Flop}, che si occupa della logica sequenziale (che vedremo più avanti quando parleremo nel concreto di circuiti sequenziali)
-    \item un \textbf{MUX}, che collega i LUT ai flip-flop
+    \item un \textbf{MUX}, che collega i LUT ai Flip-Flop
 \end{itemize}
 
 Un LUT altro non è che un circuito combinatorio a 4 ingressi che rappresenta una funzione. Ad esempio, se vogliamo rappresentare la funzione $X = \bar{A} \bar{B} C + AB \bar{C}$, il LUT che useremo avrà una tabella di verità di questo tipo:
@@ -1617,8 +1617,8 @@ Sappiamo già che i circuiti sequenziali sono dei circuiti logici che si differe
 Prima di poter parlare concretamente di circuiti sequenziali è importante però dare delle definizioni importanti:
 \begin{itemize}
     \item lo \textbf{stato} di un circuito sequenziale sono tutte le informazioni riguardo tale circuito necessarie per spiegarne il comportamento presente e futuro
-    \item i \textbf{latch} e i \textbf{flip-flop} sono degli elementi di stato che salvano un bit di stato
-    \item i circuiti \textbf{sequenziali sincroni} sono circuiti combinatori seguiti da un banco di flip-flop
+    \item i \textbf{latch} e i \textbf{Flip-Flop} sono degli elementi di stato che salvano un bit di stato
+    \item i circuiti \textbf{sequenziali sincroni} sono circuiti combinatori seguiti da un banco di Flip-Flop
 \end{itemize}
 
 \section{Elementi di stato}
@@ -2142,7 +2142,7 @@ Possiamo dunque tradurre questo circuito sequenziale sincrono con questo schema:
 
 A sinistra del registro abbiamo la NSL (Next State Logic), mentre a destra la OL (Output Logic).
 
-Ipotizzando ora di avere un $CLK$ con un periodo di $5$ secondi, vediamo come si muove il nostro circuito:
+Ipotizzando ora di avere un $CLK$ con un periodo di $\SI{5}{s}$, vediamo come si muove il nostro circuito:
 
 \begin{figure}[H]
 \centering
@@ -2204,7 +2204,7 @@ Questo stesso esempio avremmo potuto risolverlo con una Moore FSM, in questo mod
 Un circuito sequenziale sincrono può sempre essere rappresentato con una FSM Moore o Mealy, ma quella Mealy avrà sempre un numero di stati \textbf{minore o uguale}.
 \end{Proposizione}
 
-Ipotizzando di avere sempre un $CLK$ con un periodo di 5 secondi, vediamo come si muovono i due circuiti Moore e Mealy:
+Ipotizzando di avere sempre un $CLK$ con un periodo di $\SI{5}{s}$, vediamo come si muovono i due circuiti Moore e Mealy:
 
 \begin{figure}[H]
 \centering
@@ -2548,15 +2548,15 @@ Rappresentiamo un contatore come un Flip-Flop senza input ma con in output una $
 
 \begin{Definizione}[Registro a scorrimento]
 \label{def-registro-scorrimento}
-Un \textbf{registro a scorrimento} (shift register) a $N$ bit è una catena di $N$ flip-flop collegati allo stesso $CLK$, dove l'uscita di ciascun flip-flop è collegata all'ingresso del successivo. A ogni ciclo del clock:
+Un \textbf{registro a scorrimento} (shift register) a $N$ bit è una catena di $N$ Flip-Flop collegati allo stesso $CLK$, dove l'uscita di ciascun Flip-Flop è collegata all'ingresso del successivo. A ogni ciclo del clock:
 \begin{itemize}
-    \item un nuovo bit entra da $S_{\text{in}}$ nel primo flip-flop
+    \item un nuovo bit entra da $S_{\text{in}}$ nel primo Flip-Flop
     \item ogni bit si sposta di una posizione lungo la catena
-    \item il bit contenuto nell'ultimo flip-flop esce da $S_{\text{out}}$
+    \item il bit contenuto nell'ultimo Flip-Flop esce da $S_{\text{out}}$
 \end{itemize}
 \end{Definizione}
 
-Le uscite di tutti i flip-flop nei registri a scorrimento sono disponibili contemporaneamente, quindi il registro a scorrimento funziona da \textbf{convertitore seriale-parallelo}: i bit entrano uno alla volta ed escono tutti insieme in parallelo.
+Le uscite di tutti i Flip-Flop nei registri a scorrimento sono disponibili contemporaneamente, quindi il registro a scorrimento funziona da \textbf{convertitore seriale-parallelo}: i bit entrano uno alla volta ed escono tutti insieme in parallelo.
 
 \begin{figure}[H]
 \centering
@@ -2609,7 +2609,7 @@ Un \textbf{trasmettitore seriale} è un circuito che invia $N$ bit facendoli pas
 \label{fig-trasmettitore-seriale}
 \end{figure}
 
-Spesso in un trasmettitore seriale vengono aggiunti all'inizio e alla fine di una trasmissione dei bit, chiamati proprio bit di \textbf{start} e bit di \textbf{stop}. Questi servono per dichiarare in modo esplicito quando una trasmissione inizia e quando finisce (altrimenti non potremmo sapere se stiamo ricevendo tanti 0 o se invece non stiamo ricevendo nulla). Questi bit ovviamente rallentano leggermente il trasmettitore seriale, modificando il suo \textbf{throughput utile}, ossia la quantità di bit al secondo che questo può inviare. Ad esempio, con un $CLK$ con una frequenza di $10$ MHz, dovremmo avere $10^7$ bit trasmessi al secondo, ma essendoci i bit di start e di stop, questo valore può variare. Se ad esempio abbiamo un trasmettitore che invia parole da 8 bit, avremo un throughput utile di $8 \cdot 10^6$ bit al secondo, dato che $2$ milioni dei bit trasmessi sono "inutili" perché di start e stop.
+Spesso in un trasmettitore seriale vengono aggiunti all'inizio e alla fine di una trasmissione dei bit, chiamati proprio bit di \textbf{start} e bit di \textbf{stop}. Questi servono per dichiarare in modo esplicito quando una trasmissione inizia e quando finisce (altrimenti non potremmo sapere se stiamo ricevendo tanti 0 o se invece non stiamo ricevendo nulla). Questi bit ovviamente rallentano leggermente il trasmettitore seriale, modificando il suo \textbf{throughput utile}, ossia la quantità di bit al secondo che questo può inviare. Ad esempio, con un $CLK$ con una frequenza di $\SI{10}{MHz}$, dovremmo avere $10^7$ bit trasmessi al secondo, ma essendoci i bit di start e di stop, questo valore può variare. Se ad esempio abbiamo un trasmettitore che invia parole da 8 bit, avremo un throughput utile di $8 \cdot 10^6$ bit al secondo, dato che $2$ milioni dei bit trasmessi sono "inutili" perché di start e stop.
 
 \chapter{Memorie}
 
@@ -2630,7 +2630,7 @@ Le RAM sono memorie \textbf{volatili}, mentre la ROM è \textbf{non volatile}. Q
 \NB La parola \textit{random} nell'acronimo RAM non significa che queste memorie prendono dati casuali, ma piuttosto che è possibile trovare un dato in una qualunque posizione senza alcuna sequenzialità necessaria. 
 \end{Definizione}
 
-Ad esempio, una memoria da 32Kb (ossia 4KB) può essere rappresentata con $1024$ parole da $32$ bit. In questo caso avremo quindi $N = 10$ bit di indirizzo, dato che $2^{10} = 1024$, e $M = 32$ bit di dato, per un totale proprio di $32768$ bit, ossia 32Kb. 
+Ad esempio, una memoria da $\SI{32}{Kb}$ (ossia $\SI{4}{KB}$) può essere rappresentata con $1024$ parole da $32$ bit. In questo caso avremo quindi $N = 10$ bit di indirizzo, dato che $2^{10} = 1024$, e $M = 32$ bit di dato, per un totale proprio di $32768$ bit, ossia $\SI{32}{Kb}$. 
 
 Dato che sulle memorie ROM non è possibile scrivere (o comunque il processo risulta molto lento), non è necessario nessun bit che ci dica se stiamo scrivendo o leggendo. Questo bit è invece presente nelle memorie RAM, ed è salvato in una variabile chiamata $\bm{WE}$ (Write Enable). Quando $WE$ vale 1 stiamo scrivendo in memoria, mentre quando $WE$ vale 0 stiamo leggendo dalla memoria. 
 
@@ -2674,7 +2674,7 @@ Le DRAM utilizzano dei \textbf{condensatori} per memorizzare i bit, e un \textbf
 \includegraphics[width=1\textwidth, valign=t]{DRAM interna.png}
 \end{minipage}
 
-Ma come fa la bitline a leggere il valore della cella? Semplicemente, la bitline parte con una carica $X$, che, quando si collega al condensatore, varia. In particolare, se il condensatore è carico $X$ aumenta, mentre se è scarico diminuisce. Questa gestione ha, però, un problema molto grande: ad ogni lettura, il valore del bit viene perso, ossia \textbf{la lettura è distruttiva}. Questo significa che, ad ogni lettura, bisogna riscrivere il valore nella cella. Questa riscrittura, poi, non va effettuata solo quando c'è una lettura, ma anche \textbf{periodicamente} per salvaguardare il valore della cella. Infatti, l'isolamento di questi sistemi non è perfetto, dunque la carica dopo pochi millisecondi si va a perdere. Per questo motivo, ogni circa $32/64ms$ bisogna riscrivere la cella per mantenerne il valore intatto. Il nome \textit{dinamica} deriva proprio dal fatto che il valore non resta mai fermo, ma tende a cambiare e a essere riscritto.
+Ma come fa la bitline a leggere il valore della cella? Semplicemente, la bitline parte con una carica $X$, che, quando si collega al condensatore, varia. In particolare, se il condensatore è carico $X$ aumenta, mentre se è scarico diminuisce. Questa gestione ha, però, un problema molto grande: ad ogni lettura, il valore del bit viene perso, ossia \textbf{la lettura è distruttiva}. Questo significa che, ad ogni lettura, bisogna riscrivere il valore nella cella. Questa riscrittura, poi, non va effettuata solo quando c'è una lettura, ma anche \textbf{periodicamente} per salvaguardare il valore della cella. Infatti, l'isolamento di questi sistemi non è perfetto, dunque la carica dopo pochi millisecondi si va a perdere. Per questo motivo, ogni circa $\SI{32}{ms}/\SI{64}{ms}$ bisogna riscrivere la cella per mantenerne il valore intatto. Il nome \textit{dinamica} deriva proprio dal fatto che il valore non resta mai fermo, ma tende a cambiare e a essere riscritto.
 
 \begin{minipage}[c]{0.55\textwidth}
 Le SRAM utilizzano invece un \textbf{bistabile} per memorizzare i bit, collegato a non una bitline ma a due: una negata e una normale. In totale utilizzano 6 transistor (dato che ogni \code{NOT} ne utilizza internamente 2).
@@ -2732,7 +2732,7 @@ I chip delle DRAM utilizzano proprio il principio che abbiamo appena visto, mett
     \item \codeb{PRE}, che riscrive l'intera riga nel memory array dato che questa viene distrutta durante la lettura eseguita con \code{ACT} e prepara la bitline per la prossima \code{ACT}
 \end{itemize}
 
-Quando vogliamo leggere una parola su una nuova riga, dobbiamo effettuare tutte e tre queste operazioni, nell'ordine \code{PRE, ACT} e \code{RD}. Se però subito dopo vogliamo leggere una parola su questa stessa riga, non è necessario rieffettuare tutte e tre queste operazioni, perché la riga è già salvata nel buffer di riga, dunque ci basta effettuare semplicemente una \code{RD}. Dato che ogni comando ha un costo di $14/17ns$, se effettuiamo un cosidetto \textbf{row hit}, ossia se troviamo la riga che vogliamo già nel buffer di riga, riusciamo a risparmiare $28/34ns$, altrimenti, se effettuaimo un \textbf{row miss}, ossia se non troviamo la riga che vogliamo nel buffer di riga, dovremo impiegare $42/51ns$ per effettuare tutte e 3 le operazioni.
+Quando vogliamo leggere una parola su una nuova riga, dobbiamo effettuare tutte e tre queste operazioni, nell'ordine \code{PRE, ACT} e \code{RD}. Se però subito dopo vogliamo leggere una parola su questa stessa riga, non è necessario rieffettuare tutte e tre queste operazioni, perché la riga è già salvata nel buffer di riga, dunque ci basta effettuare semplicemente una \code{RD}. Dato che ogni comando ha un costo di $\SI{14}{ns}/\SI{17}{ns}$, se effettuiamo un cosidetto \textbf{row hit}, ossia se troviamo la riga che vogliamo già nel buffer di riga, riusciamo a risparmiare $\SI{28}{ns}/\SI{34}{ns}$, altrimenti, se effettuaimo un \textbf{row miss}, ossia se non troviamo la riga che vogliamo nel buffer di riga, dovremo impiegare $\SI{42}{ns}/\SI{51}{ns}$ per effettuare tutte e 3 le operazioni.
 
 \begin{Definizione}[Banchi]
 \label{def-banchi}
@@ -2757,11 +2757,11 @@ Tramite questi accorgimenti, riusciamo a migliorare la quantità di dati che tra
 \hline
 \textbf{Generazione} & \textbf{Anno} & \textbf{Data rate (MT/s)} & \textbf{Prefetch} & \textbf{Banda  massima con un canale} \\
 \hline
-DDR & 2000 & 200-400 & 2n & 3.2 GB/s \\
-DDR2 & 2003 & 400-1066 & 4n & 8.5 GB/s \\
-DDR3 & 2007 & 800-2133 & 8n & 17.1 GB/s \\
-DDR4 & 2014 & 1600-3200 & 8n & 25.6 GB/s \\
-DDR5 & 2020 & 3200-6400 & 16n & 51.2 GB/s \\ 
+DDR & 2000 & 200-400 & 2n & $\SI{3.2}{GB/s}$ \\
+DDR2 & 2003 & 400-1066 & 4n & $\SI{8.5}{GB/s}$ \\
+DDR3 & 2007 & 800-2133 & 8n & $\SI{17.1}{GB/s}$ \\
+DDR4 & 2014 & 1600-3200 & 8n & $\SI{25.6}{GB/s}$ \\
+DDR5 & 2020 & 3200-6400 & 16n & $\SI{51.2}{GB/s}$ \\ 
 \hline
 \end{tabular}
 \caption{Generazioni di DDR}
@@ -2770,15 +2770,15 @@ DDR5 & 2020 & 3200-6400 & 16n & 51.2 GB/s \\
 L'ultima colonna ci dice il valore massimo della \textbf{banda} (bandwidth, BW), che rappresenta il numero di dati che possono passare al secondo. Il calcolo è semplice:
 
 \[
-\text{Banda} = \text{canali} \times 8B \times \text{Data rate} 
+\text{Banda} = \text{canali} \times \SI{8}{B} \times \text{Data rate} 
 \]
 
 dove i \textbf{canali} sono le diverse strade che collegano il processore alla RAM (se ho una sola strada tutti i dati passano da lì, mentre con più di una strada i dati possono viaggiare su più strade contemporaneamente). In generale, una CPU su un PC domestico ha 2 canali, mentre una CPU che gestisce un server ne ha fino a 12, dato che deve gestire un traffico di dati molto elevato. Invece, per quanto riguarda gli $8$ byte nella formula, questi semplicemente rappresentano la larghezza di ogni canale, ossia 64 bit.
 
 Ci sono due valori che però restano sempre costanti o quasi durante le varie generazioni:
 \begin{itemize}
-    \item La \textbf{frequenza} (della matrice), che è passata solo da 200 MHz a 400 MHz
-    \item La \textbf{latenza}, che è fissa a $14/17ns$
+    \item La \textbf{frequenza} (della matrice), che è passata solo da $\SI{200}{MHz}$ a $\SI{400}{MHz}$
+    \item La \textbf{latenza}, che è fissa a $\SI{14}{ns}/\SI{17}{ns}$
 \end{itemize} 
 
 
@@ -2808,17 +2808,17 @@ Questo sistema ci permette di scambiare 1024 bit alla volta contro i 64 di un si
 \hline
 \textbf{Generazione} & \textbf{Pin} & \textbf{Gb/s per pin} & \textbf{Banda per stack} & \textbf{GB per stack} \\
 \hline
-HBM2 & 1024 & 2 & 256 GB/s & 8 \\ 
-HBM2E & 1024 & 3.6 & 461 GB/s & 16 \\ 
-HBM3 & 1024 & 6.4 & 819 GB/s & 24 \\ 
-HBM3E & 1024 & 9.6 & 1.2 TB/s & 36 \\ 
-HBM4 & 2048 & 8 & 2 TB/s & Fino a 64 \\ 
+HBM2 & 1024 & 2 & $\SI{256}{GB/s}$ & 8 \\ 
+HBM2E & 1024 & 3.6 & $\SI{461}{GB/s}$ & 16 \\ 
+HBM3 & 1024 & 6.4 & $\SI{819}{GB/s}$ & 24 \\ 
+HBM3E & 1024 & 9.6 & $\SI{1.2}{TB/s}$ & 36 \\ 
+HBM4 & 2048 & 8 & $\SI{2}{TB/s}$ & Fino a 64 \\ 
 \hline
 \end{tabular}
 \caption{Generazioni di HBM}
 \end{table}
 
-Abbiamo quindi una banda che arriva fino a 2 TB/s per stack, contro i 51.2 GB/s di un canale DDR5. Questo è fondamentale per l'IA: infatti, un modello da 7 miliardi di parametri in FP16 (14 GB) può generare al massimo circa 146 token al secondo con uno stack HBM4, contro i 3.7 di un canale DDR5-6400 (una DDR5 con data rate da 6400 MT/s).
+Abbiamo quindi una banda che arriva fino a $\SI{2}{TB/s}$ per stack, contro i $\SI{51.2}{GB/s}$ di un canale DDR5. Questo è fondamentale per l'IA: infatti, un modello da 7 miliardi di parametri in FP16 ($\SI{14}{GB}$) può generare al massimo circa 146 token al secondo con uno stack HBM4, contro i 3.7 di un canale DDR5-6400 (una DDR5 con data rate da $\SI{6400}{MT/s}$).
 
 \subsection{Memoria multi-porta}
 
@@ -2851,7 +2851,7 @@ Vediamo tre esempi, uno per caso, per capire veramente come risolvere questi pro
 
 \subsubsection*{Blocco più stretto}
 
-Costruiamo una memoria di $1$ MB con parole da $32$ bit a partire da blocchi di memoria di dimensioni $2^{18} \times 8$ (ossia di $2^{18} \times 8$ bit con parole da $8$ bit l'una).
+Costruiamo una memoria di $\SI{1}{MB}$ con parole da $32$ bit a partire da blocchi di memoria di dimensioni $2^{18} \times 8$ (ossia di $2^{18} \times 8$ bit con parole da $8$ bit l'una).
 
 \begin{minipage}[c]{0.6\textwidth}
 Abbiamo quindi blocchi di questo tipo, con indirizzi da 18 bit e parole in output/input da 8 bit l'una.
@@ -2861,7 +2861,7 @@ Abbiamo quindi blocchi di questo tipo, con indirizzi da 18 bit e parole in outpu
 \includegraphics[width=1\textwidth, valign=t]{Esempio 1.png}
 \end{minipage}
  
-Dato che vogliamo arrivare a parole di $32$ bit, ci basta semplicemente unire 4 di questi blocchi insieme. In questo modo arriveremo poi a una capacità totale di $2^{18} \times 8 \times 4 = 2^{23}$ bit, ossia $2^{20}$ byte, ossia $1$MB, proprio come volevamo. Dunque avremo come soluzione a questo esempio la seguente memoria:
+Dato che vogliamo arrivare a parole di $32$ bit, ci basta semplicemente unire 4 di questi blocchi insieme. In questo modo arriveremo poi a una capacità totale di $2^{18} \times 8 \times 4 = 2^{23}$ bit, ossia $2^{20}$ byte, ossia $\SI{1}{MB}$, proprio come volevamo. Dunque avremo come soluzione a questo esempio la seguente memoria:
 
 \begin{figure}[H]
 \centering
@@ -2870,7 +2870,7 @@ Dato che vogliamo arrivare a parole di $32$ bit, ci basta semplicemente unire 4 
 
 \subsubsection*{Blocco più corto}
 
-Costruiamo una memoria di $1$ MB con parole da $32$ bit a partire da blocchi di memoria di dimensioni $2^{16} \times 32$. 
+Costruiamo una memoria di $\SI{1}{MB}$ con parole da $32$ bit a partire da blocchi di memoria di dimensioni $2^{16} \times 32$. 
 
 \begin{minipage}[c]{0.6\textwidth}
 Abbiamo quindi blocchi di questo tipo, con indirizzi da 16 bit e parole in output/input da 32 bit l'una.
@@ -2889,7 +2889,7 @@ Dato che vogliamo rappresentare non $2^{16}$ parole ma $2^{18}$ possiamo anche q
 
 \subsubsection*{Blocco più largo}
 
-Costruiamo una memoria di $1$ MB con parole da $8$ bit in modalità solo lettura a partire da blocchi di memoria di dimensioni $2^{18} \times 32$.
+Costruiamo una memoria di $\SI{1}{MB}$ con parole da $8$ bit in modalità solo lettura a partire da blocchi di memoria di dimensioni $2^{18} \times 32$.
 
 \begin{minipage}[c]{0.6\textwidth}
 Abbiamo quindi blocchi di questo tipo, con indirizzi da 16 bit e parole solo in input da 32 bit l'una. 
@@ -2910,9 +2910,9 @@ Dato che vogliamo rappresentare parole non da $32$ bit ma solo da $8$, possiamo 
 
 Il modo in cui un \textbf{indirizzo} viene interpretato dal sistema dipende da come è organizzata la memoria. Possiamo vederlo come un insieme di valori che, dati al decoder e ai mux, ci permettono di raggiungere il byte desiderato (parliamo di byte e non di parola perché nei sistemi reali si preferisce restituire un singolo byte piuttosto che una parola intera). L'indirizzo viene spesso diviso in tre campi (dai bit più significativi ai meno significativi): il primo indica la \textbf{riga} in cui si trova il byte (e serve quindi al decoder), il secondo indica la \textbf{colonna}, ossia la parola all'interno della riga (e quindi serve al mux), e il terzo, detto \textbf{offset}, indica quale byte prendere all'interno della parola trovata (e quindi serve a un secondo mux, che introduciamo proprio per scegliere questo byte all'interno di una stessa parola).
 
-Vediamo un esempio. Supponiamo di avere una DRAM da $4$ GB, con un buffer di riga da $2$ KB e parole da $8$ B. Gli indirizzi saranno di $32$ bit (dato che $4$ GB $= 2^{32}$ byte) e saranno così divisi:
+Vediamo un esempio. Supponiamo di avere una DRAM da $\SI{4}{GB}$, con un buffer di riga da $\SI{2}{KB}$ e parole da $\SI{8}{B}$. Gli indirizzi saranno di $32$ bit (dato che $\SI{4}{GB} = 2^{32}$ byte) e saranno così divisi:
 \begin{itemize}
-    \item $21$ bit per la selezione della \textbf{riga}: le righe sono da $2$ KB $= 2^{11}$ byte, quindi ci sono $2^{32}/2^{11} = 2^{21}$ righe
+    \item $21$ bit per la selezione della \textbf{riga}: le righe sono da $\SI{2}{KB} = 2^{11}$ byte, quindi ci sono $2^{32}/2^{11} = 2^{21}$ righe
     \item $8$ bit per la selezione della \textbf{colonna}: ogni riga contiene $2^{11}$ byte divisi in parole da $2^3$ byte, quindi ci sono $2^{11}/2^{3} = 2^{8}$ parole per riga
     \item $3$ bit per l'\textbf{offset}: ogni parola contiene $8 = 2^3$ byte
 \end{itemize}
@@ -2952,6 +2952,200 @@ Notiamo come questo incremento sia graduale: questo è per colpa del teorema di 
 
 \chapter{Timing}
 
+\section{Delay}
+
+\begin{Definizione}[Delay]
+\label{def-delay}
+In un circuito chiamiamo \textbf{delay} il tempo che passa tra un cambiamento dell'input e il conseguente cambiamento dell'output.
+
+Questo delay è presente in tutti i circuiti ed è dovuto a limitazioni fisiche, come la capacità e la resistenza dei componenti, o anche, più banalmente, alla velocità della luce: nessun segnale può propagarsi più velocemente di essa.
+\end{Definizione}
+
+Abbiamo già accennato in precedenza a questo concetto quando, studiando i grafici dei vari D Latch/ D Flip-Flop, notammo che il valore di $Q$ non cambiava non appena variava $CLK$, ma c'era sempre un piccolo ritardo.
+
+\begin{Definizione}[Delay di propagazione e delay di contaminazione]
+\label{def-delay-prop-cont}
+Chiamiamo \textbf{delay di propagazione} ($\bm{t_{pd}}$) il tempo \textbf{massimo} che passa tra un cambiamento dell'input e il momento in cui l'output raggiunge il suo valore finale.
+
+Chiamiamo invece \textbf{delay di contaminazione} ($\bm{t_{cd}}$) il tempo \textbf{minimo} che passa tra un cambiamento dell'input e il momento in cui l'output inizia a cambiare.
+\end{Definizione}
+
+Questi valori possono essere differenti per diverse ragioni, spesso fisiche, ma anche per come è progettato il circuito. Infatti, tra gli input e gli output di un circuito possono esistere percorsi più corti e percorsi più lunghi, come in questo caso:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Delay ciruciti.png}
+\end{figure}
+
+In rosso abbiamo il cosiddetto \textbf{critical path}, ossia il percorso più lento, mentre in verde abbiamo lo \textbf{short path}, ossia il percorso più veloce. In questo caso abbiamo quindi:
+\begin{align*}
+t_{pd} &= 2t_{pd\_AND} + t_{pd\_OR}  \\
+t_{cd} &= t_{cd\_AND} 
+\end{align*}
+
+Dunque il tempo di propagazione dipende dal tempo di propagazione dell'OR e dell'AND, mentre il tempo di contaminazione dipende dal tempo di contaminazione dell'AND. In poche parole abbiamo che questo circuito ha un delay massimo pari a 2 volte il delay massimo di un AND + il delay massimo di un OR (dato che nel critical path passiamo proprio per due AND e per un OR), mentre il delay minimo è pari solo al delay minimo dell'AND (dato che nello short path passiamo solo per un AND).
+
+\section{Delay nei D Flip-Flop}
+
+Sappiamo che i D Flip-Flop cambiano il valore di $Q$ ad ogni salita del clock. È importante, in questi circuiti, che il valore di $D$ sia stabile già prima che il $CLK$ salga, e che rimanga stabile anche per un breve lasso di tempo dopo che il $CLK$ è salito. Se infatti questo non succede, si entra in uno stato chiamato \textbf{metastabilità}.
+
+\begin{Definizione}[Metastabilità]
+\label{def-metastabilita}
+Un circuito si trova in uno stato di \textbf{metastabilità} quando il suo valore interno si trova in uno stadio intermedio tra lo $0$ e l'$1$.
+\end{Definizione}
+
+Per evitare questo stato introduciamo due nuove variabili: il \textbf{tempo di setup} e il \textbf{tempo di hold}.
+
+\begin{Definizione}[Tempo di setup e tempo di hold]
+\label{def-setup-hold}
+In un D Flip-Flop, il \textbf{tempo di setup} ($\bm{t_{\textbf{setup}}}$) è il lasso di tempo prima della salita del clock durante il quale $D$ deve essere stabile.
+
+Il \textbf{tempo di hold} ($\bm{t_{\textbf{hold}}}$) è invece il lasso di tempo dopo la salita del clock durante il quale $D$ deve essere stabile.
+
+La somma di questi due tempi prende il nome di \textbf{tempo di apertura} ($\bm{t_a} = t_{\text{setup}} + t_{\text{hold}}$), e rappresenta la finestra di tempo entro la quale $D$ deve assolutamente rimanere stabile.
+\end{Definizione}
+
+\NB Nei D Flip-Flop il delay di propagazione viene rappresentato con il simbolo $\bm{t_{pcq}}$ (p = propagazione, c = clock, q = $Q$), mentre il delay di contaminazione viene rappresentato con il simbolo $\bm{t_{ccq}}$ (c = contaminazione, c = clock, q = $Q$).
+
+\subsection{Limiti di un Flip-Flop}
+
+Vediamo ora alcuni limiti di un Flip-Flop derivanti proprio dal tempo di setup e dal tempo di hold. Per farlo, prendiamo il seguente circuito in analisi:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Circuito tempo di setup e hold.png}
+\caption{}
+\label{fig-circuito-setup-hold}
+\end{figure}
+
+\NB $R_1$ e $R_2$ potrebbero anche essere lo stesso registro collegati in un circuito sequenziale logico.
+
+Partiamo con l'analizzare i limiti dovuti al tempo di setup:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Schema setup e clock.png}
+\end{figure}
+
+In questo diagramma $T_c$ è il tempo di clock, $t_{pd}$ è il delay di propagazione del circuito combinatorio al centro e $t_{pcq}$ è il tempo di propagazione del primo registro. Per evitare di entrare in uno stato di metastabilità, questo circuito deve rispettare la seguente disequazione:
+\[
+T_c \geq t_{pcq} + t_{pd} + t_{\text{setup}}
+\]
+
+Se infatti il tempo di clock fosse più piccolo della somma di questi tre tempi, non faremmo in tempo a ricevere $Q_1$ dal primo registro, a eseguire tutti i calcoli in $CL$ e ad avere $D_2$ stabile per il tempo di setup richiesto dal secondo registro, rischiando dunque di avere un circuito metastabile. Possiamo riscrivere questa disequazione anche in un altro modo:
+
+\[
+\bm{t_{pd} \leq T_c - (t_{pcq} + t_{\textbf{setup}})}
+\]
+
+In questo modo abbiamo a sinistra tutto ciò che riguarda il circuito combinatorio e a destra tutto ciò che riguarda il Flip-Flop e il tempo di clock. Dato che $t_{pcq}$ e $t_{\text{setup}}$ sono determinati dal Flip-Flop e non possono essere modificati da chi fa il circuito, per soddisfare questa disequazione si può solo cercare di modificare $t_{pd}$, andando a cambiare la struttura interna del nostro circuito combinatorio per quanto possibile, o $T_c$, aumentando il tempo di clock.
+
+Analizziamo ora i limiti dovuti al tempo di hold:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Schema hold e clock.png}
+\end{figure}
+
+In questo diagramma $t_{ccq}$ è il tempo di contaminazione del registro, $t_{cd}$ è il tempo di contaminazione del circuito combinatorio. Anche qui per evitare di entrare in uno stato di metastabilità dobbiamo rispettare la seguente disequazione:
+
+\[
+t_{\text{hold}} < t_{ccq} + t_{cd}
+\]
+
+Se infatti avessimo un tempo di hold pari o superiore alla somma dei due tempi di contaminazione, sarebbe possibile calcolare un nuovo $D_2$ prima che questo sia stato salvato in $R_2$. In questo modo non staremmo rispettando l'ipotesi che $D_2$ sia stabile per tutto il tempo $t_{\text{hold}}$ del registro $R_2$, e potremmo entrare in uno stato di metastabilità. Possiamo anche qui riscrivere questa disequazione in un altro modo:
+
+\[
+\bm{t_{cd} > t_{\textbf{hold}} - t_{ccq}}
+\]
+
+In questo modo abbiamo anche qui a sinistra tutto ciò che riguarda il circuito combinatorio e a destra tutto ciò che riguarda il Flip-Flop. Dato che $t_{\text{hold}}$ e $t_{ccq}$ sono determinati dal Flip-Flop e non possono essere modificati da chi fa il circuito, per soddisfare questa disequazione possiamo solo modificare $t_{cd}$, ad esempio aggiungendo dei buffer sullo short path, che rendono il percoso più lento.
+
+Vediamo ora un esempio vero. Preso il circuito
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Esempio delay.png}
+\end{figure}
+
+con i seguenti tempi di delay:
+\begin{align*}
+t_{ccq} &= \SI{30}{ps}  \\
+t_{pcq} &= \SI{50}{ps} \\
+t_{\text{setup}} &= \SI{60}{ps} \\
+t_{\text{hold}} &= \SI{70}{ps} \\
+t_{pd\_\text{porta logica}} &= \SI{35}{ps} \\
+t_{cd\_\text{porta logica}} &= \SI{25}{ps}
+\end{align*}
+
+verifichiamo se è un circuito corretto o meno.
+
+Per quanto riguarda i limiti dovuti al tempo di setup, dato che non abbiamo un tempo di clock deciso lo possiamo calcolare direttamente noi. Notiamo che il critic path passa per 3 porte logiche (da $A/B$ a $Y$), dunque avremo $t_{pd} = 3 t_{pd\_\text{porta logica}} = 3 \cdot \SI{35}{ps} = \SI{105}{ps}$. Possiamo quindi dire che $\bm{T_c} = t_{pcq} + t_{pd} + t{\text{setup}} = 50 + 105 + 60 = \SI{215}{ps}$, che ci da una frequenza pari a $1/T_c = \SI{4.65}{GHz}$, dato che $\SI{1}{ps} = \SI{e-12}{s}$. 
+
+Per quanto riguarda invece i limiti dovuti al tempo di hold, notiamo che lo short path passa per una sola porta logica (da $C$ a $X$ o da $D$ a $Y$), dunque avremo $t_{cd} = t_{cd\_\text{porta logica}} = \SI{25}{ps}$. Inserendo questo valore nella disequazione, troviamo che $25 > 70 - 30 = 40$, che è falso. Concludiamo quindi che questo circuito, ora come ora, \textbf{non funziona}. Per farlo funzionare è necessario aumentare il $t_{cd}$, ossia aumentare il tempo di contaminazione degli short path. Per farlo possiamo inserire dei buffer, che mantengono il valore in input invariato ma che, essendo delle porte logiche, aumentano di $\SI{25}{ps}$ il $t_{cd}$, arrivando a $\SI{50}{ps}$ che sono effettivamente maggiori di $\SI{40}{ps}$. Nella figura seguente è mostrato quindi il circuito effettivamente funzionante:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Circuito esempio effettivamente funzionante setup hold.png}
+\end{figure}
+
+\subsection{Skew}
+
+\begin{Definizione}[Skew]
+\label{def-skew}
+In un circuito sequenziale due registri collegati allo stesso clock \textbf{non ricevono il segnale di clock nello stesso momento}. La differenza tra i due segnali prende il nome di \textbf{skew}.
+\end{Definizione}
+
+Ad esempio, riprendendo il circuito in Figura \ref{fig-circuito-setup-hold}, se chiamiamo $CLK_1$ il segnale di clock ricevuto dal primo registro e $CLK_2$ quello ricevuto dal secondo registro, troviamo il seguente diagramma temporale:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{Diagramma skew.png}
+\end{figure}
+
+Vediamo ora come cambiano i limiti definiti dal tempo di setup e dal tempo di hold con l'aggiunta del tempo di skew.
+
+Partiamo con l'analizzare i limiti dovuti al tempo di setup. Per farlo, ipotizziamo il caso peggiore, ossia che $CLK_2$ sia in anticipo rispetto a $CLK_1$:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{setup e skew.png}
+\end{figure}
+
+Per evitare di entrare in uno stato di metastabilità, questo circuito deve rispettare la seguente disequazione:
+
+\[
+T_c \geq t_{pcq} + t_{pd} + t_{\text{setup}} + t_{\text{skew}}
+\]
+
+Se infatti il tempo di clock fosse più piccolo della somma di questi quattro tempi, non faremmo in tempo a ricevere $Q_1$, a eseguire i calcoli in $CL$, ad avere $D_2$ stabile per il tempo di setup richiesto e a gestire il tempo di skew, rischiando dunque di avere un circuito metastabile. Possiamo riscrivere questa disequazione anche in un altro modo:
+
+\[
+\bm{t_{pd} < T_c - (t_{pcq} + t_{\textbf{setup}} + t_{\textbf{skew}})}
+\]
+
+In questo modo avremo sempre a sinistra ciò che riguarda il circuito combinatorio e a destra ciò che riguarda il Flip-Flop, il tempo di clock e il tempo di skew. Anche qui per rispettare questa disequazione non possiamo fare altro che modificare $t_{pd}$ o $T_c$, dato che gli altri tempi sono determinati dal Flip-Flop e non possono essere modificati.
+
+Analizziamo ora i limiti dovuti allo stato di hold. Per farlo ipotizziamo anche qui il caso peggiore, ossia che $CLK_1$ sia in anticipo rispetto a $CLK_2$:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{hold e skew.png}
+\end{figure}
+
+Per evitare di entrare in uno stato di metastabilità, questo circuito deve rispettare la seguente disequazione:
+
+\[
+t_{ccq} + t_{cd} > t_{\text{hold}} + t_{\text{skew}}
+\]
+
+Se infatti avessimo un tempo di hold + un tempo di skew pari o superiore alla somma dei due tempi di contaminazione, sarebbe possibile calcolare un nuovo $D_2$ prima che questo sia stato salvato in $R_2$. Non staremmo in questo caso rispettando quindi l'ipotesi che $D_2$ sia stabile per tutto il tempo $t_{\text{hold}}$ del registro $R_2$, e potremmo entrare in uno stato di metastabilità. Possiamo anche qui riscrivere questa disequazione in un altro modo:
+
+\[
+\bm{t_{cd} > t_{\textbf{hold}} + t_{\textbf{skew}} - t_{ccq}}
+\]
+
+In questo modo abbiamo anche qui a sinistra tutto ciò che riguarda il circuito combinatorio e a destra tutto ciò che riguarda il Flip-Flop e il tempo di skew. Anche qui per rispettare questa diseguazione non possiamo fare altro che modificare $t_{cd}$, dato che gli altri tempi sono determinati dal Flip-Flop e non possono essere modificati.
 
 
 \end{document}
