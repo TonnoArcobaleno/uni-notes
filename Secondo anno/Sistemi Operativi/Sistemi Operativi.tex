@@ -3045,6 +3045,15 @@ Ogni volta che \textbf{non è presente un ciclo} possiamo essere sicuri che \tex
 In questa RAG, nonostante abbiamo un ciclo ($A, \text{Lock}_2, B, \text{Lock}_1$), non abbiamo una deadlock. Infatti, la $\text{Lock}_2$ in realtà è un semaforo con $N = 2$ (nel grafo questo viene rappresentato dai due pallini neri sotto alla $\text{Lock}_2$, che è invece uno solo per la $\text{Lock}_1$), che permette quindi a due thread in contemporanea di lavorare. In questo modo, il thread $C$, che è fuori dal ciclo, può accedere alla lock, lavorare, e uscire lasciando il posto libero al thread $A$, che avrà quindi accesso ad entrambe le lock. \\
 In generale, \textbf{i cicli sono sempre delle deadlock} solo quando le lock ammettono a un \textbf{singolo thread di lavorare}. Se invece ammettono a più thread di accedere contemporaneamente questo non è necessariamente vero.
 
+Per le lock a singola istanza, ossia quelle che permettono solo a un thread di lavorare, è possibile collassare la RAG in un grafo più compatto, che prende il nome di \textbf{WFG} (Wait For Graph). In questo inseriamo solo i diversi thread, collegati tra loro da delle frecce. Ogni volta che vediamo una freccia $T_i \longrightarrow T_j$ in questi grafi, quella ci sta dicendo che $T_i$ aspetta per una risorsa che $T_j$ ha. Possiamo dunque collassare la RAG in Figura \ref{fig-deadlock} in questo WFG:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{WFG.png}
+\end{figure}
+
+In questi WFG trovare un ciclo ha un costo pari a $\O(V + E)$, dove $V$ è il numero di nodi, ossia di thread, e $E$ è il numero di archi che collega i vari nodi. 
+
 \subsection{Prevenire la formazione di un ciclo}
 
 Abbiamo visto che la creazione di un ciclo in un sistema può essere pericoloso perché potrebbe portare a una deadlock. Ma quali sono le condizioni che portano alla formazione di un ciclo? Sono ben quattro, e prendono il nome di \textbf{condizioni di Coffman}.
@@ -3074,9 +3083,67 @@ Abbiamo eliminato questo deadlock rimuovendo proprio l'attesa circolare, facendo
 Rimuovere l'attesa circolare è sempre la risposta migliore per eliminare un deadlock. Infatti a volte eliminare una delle altre condizioni può creare dei nuovi problemi. Proviamo ad esempio ad eliminare l'\textit{hold and wait}. Per farlo si usa un \textbf{trylock}, una funzione che prova ad acquisire una lock senza bloccarsi: se la lock è libera la prende, altrimenti ritorna subito segnalando il fallimento. Con questa funzione un thread acquisisce o tutte le lock di cui necessita o nessuna. Se infatti anche una sola è occupata, rilascia quelle che ha già preso e riprova da capo (con questa procedura, in realtà, stiamo eliminando anche il \textit{no preemption}, dato che stiamo costringendo un thread a rilasciare una risorsa che aveva acquisito). In questo modo nessun thread può tenere "in ostaggio" una lock mentre ne attende un'altra. Questa tecnica, però, può creare una situazione problematica tanto quanto il deadlock, ossia un \textbf{livelock}. Se infatti due thread eseguono questa procedura in contemporanea, è possibile che ciascuno prenda la prima lock, fallisca sulla seconda, rilasci tutto e riprovi, ripetendo all'infinito la stessa sequenza. A differenza del deadlock, i thread non sono bloccati: continuano a essere eseguiti, ma senza mai fare progressi. Questo problema si può cercare di risolvere facendo attendere a ogni thread un tempo casuale ogni volta che fallisce prima di riprovare ad accedere alle lock, così da rendere molto improbabile che i due continuino a muoversi in contemporanea.  \\
 Concludiamo quindi che \textbf{eliminare l'attesa circolare}, riordinando l'ordine di acquisizione delle lock dei vari thread, sia la \textbf{scelta ottimale}.
 
+\subsection{Algoritmo del banchiere}
 
+Abbiamo dunque visto come \textbf{prevenire i cicli} in un sistema. Prevenendo la formazione di un ciclo noi siamo certi di star prevenendo anche la formazione di un deadlock, ma in realtà esiste anche un altro algoritmo per evitare la formazione di deadlock, che segue un ragionamento un po' più complesso. Questo algoritmo prende il nome di \textbf{algoritmo del banchiere}. 
 
+Nell'algoritmo del banchiere partiamo con l'ipotesi di avere una sequenza di thread $T_1, \ldots, T_n$ e un insieme di risorse $A_1, \ldots, A_m$ che i thread possono richiedere. Ogni thread dovrà, prima di partire, dichiarare il \textbf{massimo} di ogni tipo di risorsa di cui avrà mai bisogno durante la propria esecuzione (\NB qui stiamo facendo un'assunzione molto forte, dato che sapere a priori di quante risorse si avrà bisogno non è mai un compito facile). Oltre a questo valore MAX, che appunto ci dice il massimo di ogni tipo di risorsa, avremo per ogni thread anche un valore ALLOCATED, che ci dice le risorse attualmente allocate a quel thread, e NEED, pari a MAX $-$ ALLOCATED. Abbiamo anche un valore AVAILABLE, pari al numero di ogni tipo di risorsa che possiamo ancora allocare, e un valore TOTAL, pari al numero di risorse globalmente disponibile. Infine, definiamo uno \textbf{stato sicuro} uno stato in cui esiste una sequenza sicura $\langle T_1, \ldots, T_n \rangle$, ossia una sequenza dove il valore NEED di $T_i$ sia minore o uguale al valore di AVAILABLE, $\forall i \in \{1, \ldots, n\}$. \\
+\NB Uno stato non sicuro non indica per forza un deadlock: infatti, non è detto che un thread debba per forza consumare tutte le risorse che ha dichiarato a priori come MAX, ma sicuramente, se entriamo in uno stato non sicuro, non possiamo più evitare al 100\% un deadlock.
 
+Per capire questo algoritmo dobbiamo prima di tutto capire come verificare se ci si trova in uno stato sicuro o meno. Ipotizziamo di avere solo 5 thread $T_0, \ldots, T_4$, 3 tipi di risorse, $A,B$ e $C$, di avere un valore TOTAL $= (10,5,7)$, e di ritrovarci in questa situazione:
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Thread} & \textbf{ALLOCATED (A,B,C)} & \textbf{MAX(A,B,C)} & \textbf{NEED}   \\ \hline
+$T_0$ & $(0,1,0)$ & $(7,5,3)$ & $(7,4,3)$ \\ 
+$T_1$ & $(2,0,0)$ & $(3,2,2)$ & $(1,2,2)$ \\ 
+$T_2$ & $(3,0,2)$ & $(9,0,2)$ & $(6,0,0)$ \\ 
+$T_3$ & $(2,1,1)$ & $(2,2,2)$ & $(0,1,1)$ \\ 
+$T_4$ & $(0,0,2)$ & $(4,3,3)$ & $(4,3,1)$ \\ \hline 
+\end{tabular}
+\end{center}
+
+In questo caso abbiamo AVAILABLE $=$ TOTAL $- \sum$ ALLOCATED $= (3,3,2)$. Ora ci domandiamo: ma questo stato è sicuro? La risposta è si. Infatti, abbiamo sia il thread $T_1$ sia il thread $T_3$ con un valore NEED $\leq$ AVAILABLE. Per comodità quando ci sono più thread che potrebbero ricevere tutte le risorse disponibili prendiamo sempre il primo thread che appare nella tabella, ossia $T_1$. Dunque diamo $(1,2,2)$ risorse a $T_1$, e una volta che questo è completato lo eliminiamo dalla tabella, e modifichiamo AVAILABLE, che diventa ora pari a $(5,3,2)$ ($(2,0,0)$ liberati da $T_1$ $+ (3,3,2)$, il precedente valore di AVAILABLE). A questo punto abbiamo sia $T_3$ sia $T_4$ che possono essere eseguiti. Scegliamo $T_3$, e una volta che questo finisce troviamo che AVAILABLE $= (7,4,3)$. Ora possiamo eseguire sia $T_0$, sia $T_2$, sia $T_4$. Dato che tutti i thread sono eseguibili, possiamo confermare che quello rappresentato dalla tabella è uno stato sicuro, la cui sequenza sicura è $\langle T_1, T_3, T_0, T_2, T_4 \rangle$. 
+
+Ora che sappiamo come verificare se uno stato è sicuro, possiamo introdurre il vero e proprio algoritmo del banchiere. Il ragionamento è molto semplice. Ogni volta che un thread $T_i$ fa una richiesta REQUEST (ad esempio chiede una risorsa in più di tipo $B$), l'algoritmo non gli dà subito la risorsa, ma prima esegue tre controlli:
+\begin{enumerate}[label=\arabic*°]
+    \item REQUEST $\leq$ NEED[i]? Questo serve per verificare che nessun thread richieda più di quanto abbia definito all'inizio con il valore MAX. Se questo test dovesse ritornare falso allora l'algoritmo ritornerà un errore, e la richiesta verrebbe dunque rifiutata
+    \item REQUEST $\leq$ AVAILABLE? Questo serve per verificare se la richiesta è effettivamente soddisfaccibile nello stato attuale o meno. Se questo test dovesse ritornare falso allora il thread non potrà fare altro che aspettare, in attesa che altri thread finiscano e liberino dunque le loro risorse, e la richiesta verrebbe dunque rifiutata
+    \item Il nuovo stato che si verrebbe a creare se la richiesta fosse acconsentita sarebbe uno stato sicuro? Questo serve ovviamente a evitare eventuali deadlock. Se questo test dovesse ritornare falso allora il thread non potrà fare altro che aspettare, e la richiesta verrebbe dunque rifiutata
+\end{enumerate}
+
+Solo se la richiesta supera tutti e 3 i test allora questa verrà accetata, e il thread richiedente potrà effettivamente ricevere le risorse di cui neccesita. 
+
+Questo algoritmo funziona molto bene, ma ha costi abbastanza elevati: infatti, ogni volta che vogliamo allocare una risorsa 
+
+\subsection{Come gestire i deadlock}
+
+Abbiamo visto quindi due modi per evitare la formazione di un deadlock. Ma se il sistema se ne trovasse davanti uno, come dovrebbe comportarsi? Esistono due filosofie:
+\begin{itemize}
+    \item Si può provare a \textbf{gestire il deadlock}, con una delle seguenti tecniche:
+    \begin{enumerate}
+        \item Terminando tutti i thread coinvolti nel deadlock (semplice, ma butta tutto il lavoro fatto fino ad ora)
+        \item Terminando uno alla volta i thread che fanno parte del deadlock e controllando a ogni eliminazione se il deadlock sia sparito o meno (questa spreca meno lavoro, ma ha un costo più elevato perché ogni volta che eliminiamo un thread dobbiamo controllare se il deadlock è scomparso o mneo)
+        \item Prendendo un thread, rubandogli le risorse, e facendogli fare un rollback, che può essere parziale, ossia facendolo ritornare a una situazione precedente dove il thread poteva lavorare anche senza quelle risorse (una specie di checkpoint), o totale, ossia che resetta completamente il thread allo stato iniziale. In questo modo si possono dare le nuove risorse a un altro thread. Si continua in questo modo fino a quando il deadlock non sparisce
+    \end{enumerate}
+    Per il secondo e il terzo caso è necessario scegliere una vittima da cui iniziare, e per farlo si usa una funzione che tiene conto di diversi fattori:
+    \begin{itemize}
+        \item Priorità: meglio sacrificare un thread meno importante
+        \item Lavoro già fatto: meglio sacrificare un thread che ha appena iniziato
+        \item Risorse in possesso e ancora necessarie: meglio sacrificare chi ha tante risorse in possesso o chi ne necessita ancora tante per finire (dato che comunque ci metterebbe tempo per finire)
+        \item Quanti thread è necessario uccidere per eliminare il deadlock
+        \item Thread Batch: meglio eliminare un batch (ossia un processo di CPU, senza interazione con l'utente), rispetto a un thread interrativo, dato che quest'ultimo l'utente lo noterebbe molto di più
+        \item Quante volte un thread è già stato scelto come vittima: è molto importante non scegliere sempre lo stesso thread come vittima, altrimenti si rischierebbe un problema di starvation
+    \end{itemize}
+    Il terzo caso funziona poi solo se lo stato della risorsa è salvabile e ripristinabile: non possiamo rubare le risorse a un thread che stava facendo delle modifiche a una struttura dati ad esempio, sennò la lascerebbe in uno stato incoerente.
+    \item Oppure si può completamente \textbf{ignorare il deadlock}. Questa idea è alla base dell'\textbf{Ostrich algorithm} (Algoritmo dello struzzo), che semplicemente assume che i deadlock non possano mai capitare e, se mai ne trova uno, uccide tutto il processo e lo riavvia da capo. Può sembrare un idea folle, ma in realtà è la scelta che quasi tutti i veri sistemi operativi operano. Ha senso in particolare per due motivi:
+    \begin{itemize}
+        \item I deadlock nella realtà sono rari: spesso sono infatti trovati in fase di debugging prima che il codice venga rilasciato, evitando così il problema alla radice
+        \item Essendo i deadlock rari ha poco senso controllare ogni volta se un deadlock è presente o meno: è sicuramente più conveniente far finta che non esistano e basta, evitando tutti i costi dovuti alla prevenzione
+    \end{itemize}
+    L'unico caso in cui invece questo algoritmo non funziona è per i \textit{database}. Infatti qui, dato che molte transazioni concorrenti bloccano più righe insieme, i deadlock sono molto comuni, e non rari come nei processi comuni. Per questo motivo nei database viene utilizzata la tecnica 3) vista poco fa, che permette, in caso di deadlock con due transazioni, di annullare una transizione con un rollback per far proseguire l'altra.
+\end{itemize}
 
 
 
