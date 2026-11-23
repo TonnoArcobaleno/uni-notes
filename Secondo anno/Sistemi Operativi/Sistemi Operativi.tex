@@ -32,7 +32,7 @@ Prima di entrare nel vivo del corso, è bene fare un'introduzione riguardo all'a
 L'\textbf{Architettura Von Neumann} è il fondamento teorico di tutte le architetture hardware dei computer moderni. Si basa su diversi principi:
 \begin{itemize}
     \item Le istruzioni e i dati \textbf{si trovano nello stesso spazio in memoria}
-    \item Le istruzioni sono \textbf{sequenziali}: vengono lette una ad una dalla memoria per poi essere eseguite dalla CPU
+    \item Le istruzioni sono \textbf{sequenziali}: vengono lette una ad una dalla memoria per poi essere eseguite dalla CPU (Central Processing Unit)
 \end{itemize}
 Le componenti principali che la compongono sono:
 \begin{itemize}
@@ -68,9 +68,9 @@ Il \textbf{System bus} (o Internal Bus) è l'insieme di cavi che permette alla C
 \end{itemize}
 \end{Definizione}
 
-L'\textbf{Address Bus} è \textbf{unidirezionale}, dato che viaggia sempre dalla CPU verso la memoria e mai il contrario. La \textbf{Bus width} è il numero di linee fisiche che compongono il bus. Con \textbf{N} linee si riesce ad ottenere un numero massimo di $\bm{2^N}$ locazioni uniche. Fino a qualche anno fa erano comuni i sistemi a 32 bit, ma essendo diventati troppo limitanti si è passati ai modelli a 64 bit. Questi, in realtà, sono troppo anche per gli hardware moderni, e dunque per risparmiare si usano in pratica indirizzi virtuali a 48 bit, molto più che sufficienti.
+L'\textbf{Address Bus} è \textbf{unidirezionale}, dato che viaggia sempre dalla CPU verso la memoria e mai il contrario. La \textbf{Bus width} è il numero di linee fisiche che compongono il bus. Con \textbf{N} linee si riesce ad ottenere un numero massimo di $\bm{2^N}$ locazioni uniche. Fino a qualche anno fa erano comuni i sistemi a $\SI{32}{bit}$, ma essendo diventati troppo limitanti si è passati ai modelli a $\SI{64}{bit}$. Questi, in realtà, sono troppo anche per gli hardware moderni, e dunque per risparmiare si usano in pratica indirizzi virtuali a $\SI{48}{bit}$, molto più che sufficienti.
 
-Il \textbf{Data Bus} è \textbf{bidirezionale}, dato che il dato può sia arrivare alla CPU (se lo si vuole leggere), sia partire da essa (se lo si vuole scrivere). La \textbf{Bus width} indica quanti bit si possono trasferire in un singolo clock cycle. La \textbf{Word Size} invece è la quantità di bit con cui la CPU elabora i dati (da cui si dividono i processori a 32 bit o a 64 bit). 
+Il \textbf{Data Bus} è \textbf{bidirezionale}, dato che il dato può sia arrivare alla CPU (se lo si vuole leggere), sia partire da essa (se lo si vuole scrivere). La \textbf{Bus width} indica quanti bit si possono trasferire in un singolo clock cycle. La \textbf{Word Size} invece è la quantità di bit con cui la CPU elabora i dati (da cui si dividono i processori a $\SI{32}{bit}$ o a $\SI{64}{bit}$). 
 
 Il \textbf{Control Bus} può trasportare diversi messaggi, tra cui i più comuni sono:
 \begin{itemize}
@@ -130,8 +130,8 @@ La \textbf{Control Unit} gestisce il datapath e gli dice \textbf{come} e \textbf
 
 Abbiamo visto nel datapath i registri, che sono piccolissime e velocissime unità di memoria nella CPU. Si dividono in due macrogruppi:
 \begin{itemize}
-    \item \textbf{User-visible registers} (ossia i \textbf{General-Purpose}), che sono richiamabili direttamente tramite assembly (come i registri \code{\%rax} e \code{\%rbx} visti prima)
-    \item \textbf{Control \& Status registers} (ossia i \textbf{Special-Purpose}), che sono usati dalla Control Unit per modificare il flusso di esecuzione
+    \item \textbf{Registri visibili agli utenti} (ossia i \textbf{General-Purpose}), che sono richiamabili direttamente tramite assembly (come i registri \code{\%rax} e \code{\%rbx} visti prima)
+    \item \textbf{Registri Control e Status} (ossia i \textbf{Special-Purpose}), che sono usati dalla Control Unit per modificare il flusso di esecuzione
 \end{itemize}
 
 \subsubsection*{General-Purpose Registers}
@@ -208,7 +208,7 @@ Ogni core è una CPU indipendente che può far partire il proprio ciclo di istru
 
 \begin{Definizione}[Clock]
 \label{def-clock}
-Ogni CPU lavora in base al proprio \textbf{System Clock}. Esistono il \textbf{Clock period}, che è la durata di un singolo clock cycle (come ad esempio 0.25 ns), e la \textbf{Clock Frequency}, ossia il numero di cicli di Clock al secondo, misurato in Hz e che si calcola banalmente prendendo il reciproco del periodo.
+Ogni CPU lavora in base al proprio \textbf{System Clock}. Esistono il \textbf{Clock period}, che è la durata di un singolo clock cycle (come ad esempio $\SI{0.25}{ns}$), e la \textbf{Clock Frequency}, ossia il numero di cicli di Clock al secondo, misurato in Hz e che si calcola banalmente prendendo il reciproco del periodo.
 \end{Definizione}
 
 Le istruzioni più semplici impiegano anche un solo ciclo, ma quelle più complesse possono impiegarne anche molti. Esiste quindi il \textbf{CPI}, ossia il numero di cicli medio per istruzione, e anche l'\textbf{IPC}, ossia il numero di istruzioni per ciclo (che non è altro che l'inverso del CPI). Avendo più core, i processori moderni riescono nelle condizioni ideali anche a superare il limite di un'istruzione per ciclo, ottenendo quindi un valore di IPC $>1$.
@@ -221,13 +221,13 @@ Abbiamo già visto in breve questo problema quando abbiamo parlato del Von Neuma
 
 Per risolvere questo problema, si è creata una \textbf{struttura gerarchica delle memorie}:
 \begin{enumerate}[label=\arabic*°]
-    \item \textbf{Registri} (tempo: $<1ns$, capacità: $<1$KiB)
-    \item \textbf{L1 Cache} (tempo: $1ns$, capacità: $32/64$KiB)
-    \item \textbf{L2 Cache} (tempo: $3ns$, capacità: $256/512$KiB)
-    \item \textbf{L3 Cache} (tempo: $10ns$, capacità: $8/64$MiB)
-    \item \textbf{RAM} o Memoria Principale (tempo: $60 ns$, capacità: $8/64$GiB)
-    \item \textbf{SSD} (tempo: $10 \mu s$, capacità: $256$GiB$/2$TiB)
-    \item \textbf{HDD} (tempo: $10 ms$, capacità: $1/10$TiB)
+    \item \textbf{Registri} (tempo: $<\SI{1}{ns}$, capacità: $<\SI{1}{KiB}$)
+    \item \textbf{L1 Cache} (tempo: $\SI{1}{ns}$, capacità: $32/\SI{64}{KiB}$)
+    \item \textbf{L2 Cache} (tempo: $\SI{3}{ns}$, capacità: $256/\SI{512}{KiB}$)
+    \item \textbf{L3 Cache} (tempo: $\SI{10}{ns}$, capacità: $8/\SI{64}{MiB}$)
+    \item \textbf{RAM} o Memoria Principale (tempo: $\SI{60}{ns}$, capacità: $8/\SI{64}{GiB}$)
+    \item \textbf{SSD} (tempo: $\SI{10}{\micro\second}$, capacità: $\SI{256}{GiB}/\SI{2}{TiB}$)
+    \item \textbf{HDD} (tempo: $\SI{10}{ms}$, capacità: $1/\SI{10}{TiB}$)
 \end{enumerate}
 
 È evidente che i registri sono molto più veloci di un SSD o della memoria RAM, ma sono anche meno capienti, e più costosi. Infatti, il costo di tutte queste memorie diminuisce scendendo giù nella gerarchia, rendendo l'HDD il meno costoso e i registri i più costosi.
@@ -248,7 +248,7 @@ for (int i = 0; i < 1000; i++){
 }
 \end{lstlisting}
 
-Per la località temporale, le variabili \code{sum} e \code{i} sono salvate nei registri o nella L1 cache, così da non dover riaccedere alla DRAM. Allo stesso modo, per la località spaziale, è molto probabile che anche i valori \code{array[1], array[2]...} saranno richiesti in un breve futuro, dunque la CPU salva il maggior numero possibile di questi valori riempiendo una linea di L1 cache, di 64 byte. Dato che ogni \code{int} in C occupa 4 byte, si salveranno in totale 16 valori dell'array, da \code{array[0]} a \code{array[15]}. In questo modo accediamo una sola volta alla DRAM al posto di 16.
+Per la località temporale, le variabili \code{sum} e \code{i} sono salvate nei registri o nella L1 cache, così da non dover riaccedere alla DRAM. Allo stesso modo, per la località spaziale, è molto probabile che anche i valori \code{array[1], array[2]...} saranno richiesti in un breve futuro, dunque la CPU salva il maggior numero possibile di questi valori riempiendo una linea di L1 cache, di $\SI{64}{byte}$. Dato che ogni \code{int} in C occupa $\SI{4}{byte}$, si salveranno in totale 16 valori dell'array, da \code{array[0]} a \code{array[15]}. In questo modo accediamo una sola volta alla DRAM al posto di 16.
 
 \subsubsection*{RAM}
 
@@ -261,17 +261,17 @@ La memoria \textbf{RAM} si divide in due sottocategorie:
 \end{enumerate}
 \end{Definizione}
 
-Fisicamente, la RAM è un \textbf{vettore lineare di locazioni}. Nella maggior parte delle architetture l'indirizzamento è al byte: a ogni indirizzo univoco corrisponde esattamente un singolo byte (8 bit). La CPU può comunque richiedere accessi a parole di 4 o 8 byte, accedendo a una sequenza di indirizzi contigui.
+Fisicamente, la RAM è un \textbf{vettore lineare di locazioni}. Nella maggior parte delle architetture l'indirizzamento è al byte: a ogni indirizzo univoco corrisponde esattamente un singolo byte ($\SI{8}{bit}$). La CPU può comunque richiedere accessi a parole di 4 o $\SI{8}{byte}$, accedendo a una sequenza di indirizzi contigui.
 
 \subsubsection*{Cache}
 
 \begin{Definizione}[Linee di cache]
 \label{def-linee-cache}
-Le cache non operano sui singoli byte, ma su strutture chiamate \textbf{linee di cache}. Queste sono blocchi (di solito di 64 byte), che contengono:
+Le cache non operano sui singoli byte, ma su strutture chiamate \textbf{linee di cache}. Queste sono blocchi (di solito di $\SI{64}{byte}$), che contengono:
 \begin{itemize}
     \item Un \textbf{valid bit}, che indica se i dati salvati sono validi o meno
     \item I \textbf{tag bit}, utili per identificare la singola linea
-    \item I \textbf{data block}, ossia gli effettivi 64 byte copiati dalla RAM
+    \item I \textbf{data block}, ossia gli effettivi $\SI{64}{byte}$ copiati dalla RAM
 \end{itemize}
 \end{Definizione}
 
@@ -371,15 +371,15 @@ La CPU ha tre diversi protocolli per comunicare con un dispositivo I/O:
     \item \textbf{DMA} (Direct Memory Access)
 \end{itemize}
 
-Il \textbf{Programmed I/O}, più comunemente chiamato \textbf{Polling}, è il metodo più semplice: semplicemente, se la CPU vuole ad esempio leggere qualcosa su un dispositivo I/O, legge lo Status Register del suo Device Controller, e se lo stato è "Busy" continua a chiederlo, finché non lo è più e può finalmente leggere i dati dal Data Register. Dunque semplicemente la CPU continua a chiedere al dispositivo i dati finché questo non è libero e può darglieli. Questo processo prende il nome di \textit{busy-waiting}. Il problema più grande di questo protocollo è che la CPU è impegnata al 100\%.
+Il \textbf{Programmed I/O}, più comunemente chiamato \textbf{Polling}, è il metodo più semplice: semplicemente, se la CPU vuole ad esempio leggere qualcosa su un dispositivo I/O, legge lo Status Register del suo Device Controller, e se lo stato è "Busy" continua a chiederlo, finché non lo è più e può finalmente leggere i dati dal Data Register. Dunque semplicemente la CPU continua a chiedere al dispositivo i dati finché questo non è libero e può darglieli. Questo processo prende il nome di \textit{busy-waiting}. Il problema più grande di questo protocollo è che la CPU è impegnata al $100\%$.
 
 L'\textbf{Interrupt-Driven I/O} risolve il problema del busy-waiting: semplicemente, sono direttamente i dispositivi di I/O ad avvertire la CPU di esser pronti. Dunque la CPU manda la richiesta al device, e mentre aspetta esegue altre istruzioni. Quando il dispositivo manda l'ok, inviando un segnale su una \textbf{Interrupt Line}, la CPU mette in pausa l'esecuzione, e passa all'\textbf{IVT} (Interrupt Vector Table), un array di puntatori che le indica dove trovare la corretta \textbf{ISR} (Interrupt Service Routine), che è una speciale funzione che salva tutti i flags e i registers e li ripristina alla fine dell'esecuzione dell'istruzione. Vi sono due problemi con questo protocollo: 
 \begin{itemize}
     \item salvare/ripristinare i registri e i flags richiede tempo
-    \item se si ha un dispositivo molto veloce, è possibile che la CPU sia sempre interrotta perché le operazioni di I/O finiscono subito e le interruzioni arrivano di continuo, finendo così per utilizzarne quasi il 100\% solo per gestirle.
+    \item se si ha un dispositivo molto veloce, è possibile che la CPU sia sempre interrotta perché le operazioni di I/O finiscono subito e le interruzioni arrivano di continuo, finendo così per utilizzarne quasi il $100\%$ solo per gestirle.
 \end{itemize}
 
-Il \textbf{DMA} (Direct Memory Access) consiste nel delegare il trasferimento ad un controller hardware a parte, chiamato appunto \textbf{DMA controller}. Se per esempio bisogna spostare 4 KiB dal Disco alla RAM, la CPU può delegare tale operazione al DMA controller che lo farà senza dover coinvolgere la CPU. Alla fine, il DMA controller crea un singolo segnale che invia alla CPU per avvisare della fine del trasferimento. Il più grande problema del DMA è che condivide il bus di sistema con la CPU, dunque se la CPU deve accedere alla RAM spesso finisce per dover aspettare il DMA controller. 
+Il \textbf{DMA} (Direct Memory Access) consiste nel delegare il trasferimento ad un controller hardware a parte, chiamato appunto \textbf{DMA controller}. Se per esempio bisogna spostare $\SI{4}{KiB}$ dal Disco alla RAM, la CPU può delegare tale operazione al DMA controller che lo farà senza dover coinvolgere la CPU. Alla fine, il DMA controller crea un singolo segnale che invia alla CPU per avvisare della fine del trasferimento. Il più grande problema del DMA è che condivide il bus di sistema con la CPU, dunque se la CPU deve accedere alla RAM spesso finisce per dover aspettare il DMA controller. 
 
 La soluzione dunque è quella di sfruttare le potenzialità di tutti e 3 i protocolli, usando uno o l'altro in base alla situazione. Ad esempio, per operazioni veloci e semplici il polling è la migliore opzione, mentre per dispositivi lenti, come la tastiera, l'Interrupt-Driven I/O ha più senso. 
 
@@ -468,7 +468,7 @@ Tutti i thread di uno stesso processo hanno lo stesso spazio di memoria e gli st
 
 \subsubsection*{Astrazione della memoria principale}
 
-La nostra RAM fisica è una griglia di celle: per gestire meglio questo spazio, il sistema operativo la astrae in uno \textbf{spazio di indirizzamento}. Ogni processo ha un range di indirizzi che va da $0$ a $2^N - 1$ in base al sistema (nei sistemi a 64 bit si arriva fino a $2^{64}$ indirizzi diversi). Ogni indirizzo virtuale viene poi mappato ad un indirizzo fisico unico. Due processi A e B possono avere quindi lo stesso indirizzo di memoria virtuale 0x1000 (nel proprio spazio di indirizzamento) mappato a due indirizzi fisici differenti (rispettivamente 0x7fff000 e 0x8aaa000, ad esempio). 
+La nostra RAM fisica è una griglia di celle: per gestire meglio questo spazio, il sistema operativo la astrae in uno \textbf{spazio di indirizzamento}. Ogni processo ha un range di indirizzi che va da $0$ a $2^N - 1$ in base al sistema (nei sistemi a $\SI{64}{bit}$ si arriva fino a $2^{64}$ indirizzi diversi). Ogni indirizzo virtuale viene poi mappato ad un indirizzo fisico unico. Due processi A e B possono avere quindi lo stesso indirizzo di memoria virtuale 0x1000 (nel proprio spazio di indirizzamento) mappato a due indirizzi fisici differenti (rispettivamente 0x7fff000 e 0x8aaa000, ad esempio). 
 
 Questa gestione della memoria è tutta opera del sistema operativo, e viene fatta per tre motivi:
 \begin{itemize}
@@ -697,17 +697,17 @@ C è un linguaggio \textbf{staticamente tipato}, dove quindi ogni variabile ha u
 
 \begin{Definizione}[\codeb{char}]
 \label{def-char}
-\codeb{char} è il tipo con meno spazio di memoria disponibile in C: solo 1 byte. Questo rappresenta un qualsiasi carattere della tabella ASCII, che è una tabella dove ad ogni indice da 0 a 127 corrisponde un simbolo. Si può inizializzare usando direttamente il carattere che si vuole, scrivendo \code{char c = 'A'}, oppure scrivendo l'indice della tabella ASCII che indica il carattere che si vuole, scrivendo ad esempio \code{char c = 65} (65 in ASCII indica proprio il simbolo 'A').
+\codeb{char} è il tipo con meno spazio di memoria disponibile in C: solo $\SI{1}{byte}$. Questo rappresenta un qualsiasi carattere della tabella ASCII, che è una tabella dove ad ogni indice da 0 a 127 corrisponde un simbolo. Si può inizializzare usando direttamente il carattere che si vuole, scrivendo \code{char c = 'A'}, oppure scrivendo l'indice della tabella ASCII che indica il carattere che si vuole, scrivendo ad esempio \code{char c = 65} (65 in ASCII indica proprio il simbolo 'A').
 \end{Definizione}
 
 \begin{Definizione}[Tipi interi]
 \label{def-int}
 Il \code{char} è solo uno dei tanti tipi che fanno parte della \textbf{famiglia dei tipi interi}. Oltre a lui troviamo:
 \begin{itemize}
-    \item \codeb{short}, con almeno 2 byte di memoria
-    \item \codeb{int}, con almeno 2 byte di memoria (tipicamente 4 byte)
-    \item \codeb{long}, con almeno 4 byte di memoria (su Linux/macOS sono 8 byte)
-    \item \codeb{long long}, con almeno 8 byte di memoria 
+    \item \codeb{short}, con almeno $\SI{2}{byte}$ di memoria
+    \item \codeb{int}, con almeno $\SI{2}{byte}$ di memoria (tipicamente $\SI{4}{byte}$)
+    \item \codeb{long}, con almeno $\SI{4}{byte}$ di memoria (su Linux/macOS sono $\SI{8}{byte}$)
+    \item \codeb{long long}, con almeno $\SI{8}{byte}$ di memoria 
 \end{itemize}
 \end{Definizione}
 
@@ -729,9 +729,9 @@ Riguardo all'overflow, i tipi signed e unsigned si comportano in modo diverso:
 \label{def-tipi-floating-point}
 I tipi \textbf{floating point} (a virgola mobile) sono quei tipi usati per rappresentare i numeri decimali. Seguono tutti lo standard IEEE 754 e sono tre:
 \begin{itemize}
-    \item \codeb{float}, con 4 byte di memoria e una precisione di 7 cifre decimali
-    \item \codeb{double}, con 8 byte di memoria e una precisione di 15 cifre decimali
-    \item \codeb{long double}, con almeno 10 byte e fino a 16 byte e una precisione di almeno 18 cifre decimali
+    \item \codeb{float}, con $\SI{4}{byte}$ di memoria e una precisione di 7 cifre decimali
+    \item \codeb{double}, con $\SI{8}{byte}$ di memoria e una precisione di 15 cifre decimali
+    \item \codeb{long double}, con almeno $\SI{10}{byte}$ e fino a $\SI{16}{byte}$ e una precisione di almeno 18 cifre decimali
 \end{itemize} 
 \end{Definizione}
 
@@ -765,7 +765,7 @@ Tutti gli array hanno le seguenti proprietà:
 \begin{enumerate}
     \item \textbf{Dimensione fissa}
     \item Il primo elemento \textbf{indicizzato a 0}
-    \item Elementi \textbf{salvati vicini in memoria} (in un array di \code{int}, se il primo elemento si trova all'indirizzo di memoria x il secondo si troverà all'indirizzo x + \code{sizeof(int)}, tipicamente x + 4 byte)
+    \item Elementi \textbf{salvati vicini in memoria} (in un array di \code{int}, se il primo elemento si trova all'indirizzo di memoria x il secondo si troverà all'indirizzo x + \code{sizeof(int)}, tipicamente x + $\SI{4}{byte}$)
 \end{enumerate}
 \end{Proprieta}
 
@@ -837,7 +837,7 @@ printf("Sum = %d\n", sum);
 Il passaggio di un array a una funzione (\textbf{array decay}) in C non avviene copiando interamente l'array ma \textbf{passando un puntatore al primo elemento}. 
 \end{Proprieta}
 
-Infatti, dato che gli array sono salvati in memoria in modo lineare, basta conoscere il puntatore al primo elemento per conoscere tutti gli elementi. È importante, però, passare alla funzione anche la dimensione dell'array. Si potrebbe pensare di usare l'operatore \code{sizeof} per trovare la lunghezza dell'array, ma questo non è possibile. Infatti, se passiamo ad una funzione il parametro \code{int arr[]}, abbiamo detto che stiamo passando solo il puntatore al primo elemento, dunque \code{sizeof(arr)} restituisce la lunghezza del puntatore, che è di 8 byte sui sistemi a 64 bit.
+Infatti, dato che gli array sono salvati in memoria in modo lineare, basta conoscere il puntatore al primo elemento per conoscere tutti gli elementi. È importante, però, passare alla funzione anche la dimensione dell'array. Si potrebbe pensare di usare l'operatore \code{sizeof} per trovare la lunghezza dell'array, ma questo non è possibile. Infatti, se passiamo ad una funzione il parametro \code{int arr[]}, abbiamo detto che stiamo passando solo il puntatore al primo elemento, dunque \code{sizeof(arr)} restituisce la lunghezza del puntatore, che è di $\SI{8}{byte}$ sui sistemi a $\SI{64}{bit}$.
 
 Ci sono tre dichiarazioni equivalenti per scrivere come parametro di una funzione un array:
 \begin{lstlisting}[style=C]
@@ -977,7 +977,7 @@ Un'altra cosa interessante da notare è che \codeb{arr[i] = *(arr + i)} sempre.
 \label{def-puntatore-array}
 Abbiamo visto che per puntare a un array si punta al suo primo elemento. Esistono però anche dei \textbf{puntatori} che puntano direttamente a tutto l'array. In questo caso si usa la \& per riferirsi all'intero array.
 \end{Definizione}
-Ad esempio, preso l'array \code{int arr[5] = \{1,2,3,4,5\}}, possiamo istanziare il puntatore \code{int (*p)[5] = \&arr} che punta all'intero array. In questo caso, \code{p+1} non avanzerà quindi di 4 byte nella memoria ma di ben 20. Questi puntatori ad array interi sono particolarmente utili negli array 2D, che ricordiamo sono array di array. 
+Ad esempio, preso l'array \code{int arr[5] = \{1,2,3,4,5\}}, possiamo istanziare il puntatore \code{int (*p)[5] = \&arr} che punta all'intero array. In questo caso, \code{p+1} non avanzerà quindi di $\SI{4}{byte}$ nella memoria ma di ben 20. Questi puntatori ad array interi sono particolarmente utili negli array 2D, che ricordiamo sono array di array. 
 
 I puntatori possono poi puntare anche a delle \textbf{funzioni}. Ad esempio, il puntatore \code{int (*p) (int, int)} è un puntatore che può puntare a una funzione che prende in input due \code{int} e restituisce un \code{int}. Capiremo l'importanza di questi puntatori solo quando introdurremo più avanti concetti più avanzati.
 
@@ -1061,7 +1061,7 @@ Tra le proprietà dello stack troviamo:
 \begin{itemize}
     \item filosofia \textbf{LIFO} (Last In First Out)
     \item \textbf{gestione automatica}
-    \item \textbf{limite fissato} (tipicamente a 1-8 MB per thread)
+    \item \textbf{limite fissato} (tipicamente a 1-$\SI{8}{MB}$ per thread)
     \item \textbf{veloce}
 \end{itemize}
 \end{Proprieta}
@@ -1647,12 +1647,12 @@ dove $x_i$ rappresenta il tempo di CPU allocato a un processo i. Se tutti i proc
 
 La policy più semplice di tutte è quella \textbf{FIFO} (First-In First-Out), la stessa usata nelle code, anche chiamata \textbf{FCFS} (First-Come First-Served). In questo caso la coda pronti è una vera e propria coda informatica, dove i processi \textbf{vengono eseguiti nell'ordine di arrivo}. 
 
-Supponiamo di avere tre processi A, B e C arrivati tutti a tempo $t = 0$ (ipotizziamo che A sia arrivato leggermente prima di B e che questo sia arrivato leggermente prima di C), tutti con un tempo di esecuzione di 10 secondi. In questo caso, avremo come tempo medio di turnaround $\bm{20}$ \textbf{secondi} (10 secondi di A + 20 di B + 30 di C tutto diviso 3). È un ottimo tempo, ma vediamo cosa succede appena togliamo la prima assunzione, ossia quando prendiamo 3 processi con tempi di esecuzione diversi. \\
-Ipotizziamo gli stessi tre processi di prima ma modifichiamo il tempo di esecuzione di A da 10 secondi a 100 secondi. In questo caso il tempo medio di turnaround arriva a $\bm{110}$ \textbf{secondi} (100 secondi di A + 110 di B + 120 di C tutto diviso 3). Questo succede per l'\textbf{effetto convoglio}: il processo A, più lento degli altri, essendo eseguito per primo rallenta anche gli altri che senza di lui sarebbero molto più veloci.
+Supponiamo di avere tre processi A, B e C arrivati tutti a tempo $t = 0$ (ipotizziamo che A sia arrivato leggermente prima di B e che questo sia arrivato leggermente prima di C), tutti con un tempo di esecuzione di $\SI{10}{s}$. In questo caso, avremo come tempo medio di turnaround \textbf{\boldmath$\SI[reset-math-version=false]{20}{s}$} ($\SI{10}{s}$ di A + 20 di B + 30 di C tutto diviso 3). È un ottimo tempo, ma vediamo cosa succede appena togliamo la prima assunzione, ossia quando prendiamo 3 processi con tempi di esecuzione diversi. \\
+Ipotizziamo gli stessi tre processi di prima ma modifichiamo il tempo di esecuzione di A da $\SI{10}{s}$ a $\SI{100}{s}$. In questo caso il tempo medio di turnaround arriva a \textbf{\boldmath$\SI[reset-math-version=false]{110}{s}$} ($\SI{100}{s}$ di A + 110 di B + 120 di C tutto diviso 3). Questo succede per l'\textbf{effetto convoglio}: il processo A, più lento degli altri, essendo eseguito per primo rallenta anche gli altri che senza di lui sarebbero molto più veloci.
 
 \subsubsection*{SJF}
 
-Per risolvere l'effetto convoglio si è pensato di eseguire prima i processi più veloci e dopo quelli più lenti, dando così vita a una nuova policy che prende il nome di \textbf{SJF} (Shortest-Job-First). Se proviamo a eseguire i tre processi visti prima con la nuova policy vediamo un netto miglioramento nel tempo di turnaround, che arriva a una media di $\bm{50}$ \textbf{secondi} (10 secondi del processo B + 20 del C + 120 di A tutto diviso 3).
+Per risolvere l'effetto convoglio si è pensato di eseguire prima i processi più veloci e dopo quelli più lenti, dando così vita a una nuova policy che prende il nome di \textbf{SJF} (Shortest-Job-First). Se proviamo a eseguire i tre processi visti prima con la nuova policy vediamo un netto miglioramento nel tempo di turnaround, che arriva a una media di \textbf{\boldmath$\SI[reset-math-version=false]{50}{s}$} ($\SI{10}{s}$ del processo B + 20 del C + 120 di A tutto diviso 3).
 
 \begin{Proposizione}[]
 \label{propos-SJF}
@@ -1676,13 +1676,13 @@ T_{\text{turnaround}} = \sum_{i = 1}^n T_{\text{turnaround del processo i}} = R_
 A questo punto è facile notare come ordinando i diversi processi possiamo ordinare i diversi $R_i$. Ci conviene dunque mettere sempre come primo processo quello con il tempo di esecuzione minore, dato che il suo valore $R$ è quello che appare più spesso nella sommatoria (abbiamo visto come compaia ben $n$ volte), mentre come ultimo processo ci conviene mettere il più lento. Abbiamo quindi dimostrato come ordinare i processi dal più veloce al più lento sia il modo migliore per ottimizzare il tempo di turnaround. $\blacksquare$
 
 Proviamo ora a togliere anche la seconda assunzione, ossia prendiamo 3 processi con tempi di arrivo diversi. \\
-Ipotizziamo gli stessi tre processi di prima $A, B$ e $C$, ma ipotizziamo che i processi $B$ e $C$ arrivino dopo 10 secondi rispetto ad $A$. In questo caso, la SJF a tempo 0 farà partire il processo più veloce, e dato che è presente solo $A$ sarà questo a partire. Dunque troviamo che il tempo medio di turnaround sarà in questo caso $\bm{103.3}$ \textbf{secondi} (100 secondi di A + 100 di B + 110 di C tutto diviso 3). Questo succede perché, per la terza assunzione, i nostri processi una volta iniziati non possono essere interrotti.
+Ipotizziamo gli stessi tre processi di prima $A, B$ e $C$, ma ipotizziamo che i processi $B$ e $C$ arrivino dopo $\SI{10}{s}$ rispetto ad $A$. In questo caso, la SJF a tempo 0 farà partire il processo più veloce, e dato che è presente solo $A$ sarà questo a partire. Dunque troviamo che il tempo medio di turnaround sarà in questo caso \textbf{\boldmath$\SI[reset-math-version=false]{103.3}{s}$} ($\SI{100}{s}$ di A + 100 di B + 110 di C tutto diviso 3). Questo succede perché, per la terza assunzione, i nostri processi una volta iniziati non possono essere interrotti.
 
 \subsubsection*{PSJF/STCF}
 
 Per risolvere il problema della SJF viene introdotto un nuovo concetto chiamato \textbf{preemption}. Il SO non è più vincolato a dover eseguire un processo per intero prima di passare a un altro, ma può effettuare ora un context switch per passare da un processo all'altro. Stiamo dunque eliminando la terza assunzione per risolvere i problemi relativi alla SJF. È nata così un'altra policy, chiamata \textbf{PSJF} (Preemptive Shortest Job First), anche detta \textbf{STCF} (Shortest Time-to-Complete First). In questa policy, ogni volta che arriva un nuovo processo lo scheduler si sveglia per controllare quale tra i processi presenti ha il minor tempo rimanente per terminare (per quello già in esecuzione si considera solo quanto gli manca), e sceglie di mandare in esecuzione sempre quello, anche se la CPU è occupata con un altro. Ovviamente, se un processo appena arrivato ha lo stesso tempo che rimane al processo che si trova già sulla CPU, non avviene nessuno scambio per non sprecare tempo con il context switch. 
 
-Riprendendo l'esempio di prima, in questo caso troviamo che il tempo medio di turnaround è tornato ad essere $\bm{50}$ \textbf{secondi} (120 secondi di A + 10 di B + 20 di C tutto diviso 3). Infatti, seguendo questa policy troviamo che il processo A parte per primo e viene eseguito per 10 secondi, ma poi questo viene fermato per far eseguire i processi B e C, appena arrivati e più veloci. 
+Riprendendo l'esempio di prima, in questo caso troviamo che il tempo medio di turnaround è tornato ad essere \textbf{\boldmath$\SI[reset-math-version=false]{50}{s}$} ($\SI{120}{s}$ di A + 10 di B + 20 di C tutto diviso 3). Infatti, seguendo questa policy troviamo che il processo A parte per primo e viene eseguito per $\SI{10}{s}$, ma poi questo viene fermato per far eseguire i processi B e C, appena arrivati e più veloci. 
 
 \begin{Proposizione}[Corollario]
 \label{propos-corollario-PSJF}
@@ -1698,7 +1698,7 @@ La \textbf{starvation} è un fenomeno che si verifica quando un processo non vie
 
 Nella policy PSJF il problema della starvation è evidente: preso infatti un processo molto lento, è possibile che questo non venga mai eseguito se arrivano in continuazione nuovi processi sempre più rapidi di lui. 
 
-Notiamo quindi come la PSJF non sia perfetta. Infatti, oltre al problema della starvation, c'è anche la quinta assunzione su cui si basa che è molto irrealistica (vedremo più avanti che è possibile stimare la durata di un processo, ma non avremo mai una certezza al 100\%). Inoltre, vi è anche un altro problema: durante l'analisi di queste policy abbiamo totalmente trascurato il tempo medio di reazione dei processi. Questo dato, però, non è da sottovalutare affatto. Infatti, nell'utilizzo quotidiano del computer l'utente richiede feedback immediato (o quasi, diciamo in tempo <100 ms), e queste nostre policy non rispettano sempre questa condizione. È infatti possibile che un processo richiesto dall'utente vada indietro nella coda pronti perché più lento, aumentandone così il tempo di attesa. Questa cosa è assolutamente da evitare, dunque dobbiamo cercare una nuova policy di scheduling che provi a risolvere alcuni tra questi problemi.
+Notiamo quindi come la PSJF non sia perfetta. Infatti, oltre al problema della starvation, c'è anche la quinta assunzione su cui si basa che è molto irrealistica (vedremo più avanti che è possibile stimare la durata di un processo, ma non avremo mai una certezza al $100\%$). Inoltre, vi è anche un altro problema: durante l'analisi di queste policy abbiamo totalmente trascurato il tempo medio di reazione dei processi. Questo dato, però, non è da sottovalutare affatto. Infatti, nell'utilizzo quotidiano del computer l'utente richiede feedback immediato (o quasi, diciamo in tempo <$\SI{100}{ms}$), e queste nostre policy non rispettano sempre questa condizione. È infatti possibile che un processo richiesto dall'utente vada indietro nella coda pronti perché più lento, aumentandone così il tempo di attesa. Questa cosa è assolutamente da evitare, dunque dobbiamo cercare una nuova policy di scheduling che provi a risolvere alcuni tra questi problemi.
 
 \subsubsection*{Round Robin}
 
@@ -1713,9 +1713,9 @@ Scegliere la durata del Time Slice è una delle scelte più importanti nella pol
 \[
 \text{Overhead} = \frac{\text{Tempo di switch tra un processo e l'altro}}{\text{Time Slice + Tempo di switch tra un processo e l'altro}}
 \] 
-e trovare un valore tale che l'overhead sia minore dell'1\%. Ad esempio, se abbiamo come tempo di switch 1 ms, ha senso porre come Time Slice \textbf{100 ms}, dato che $\frac{1}{101} = 0.99 \% < 1\%$.
+e trovare un valore tale che l'overhead sia minore dell'1\%. Ad esempio, se abbiamo come tempo di switch $\SI{1}{ms}$, ha senso porre come Time Slice \textbf{\boldmath$\SI[reset-math-version=false]{100}{ms}$}, dato che $\frac{1}{101} = 0.99 \% < 1\%$.
 
-Vediamo con un esempio come funziona il RR. Presi tre processi $A, B$ e $C$ che arrivano tutti insieme e che durano tutti 10 secondi, con la policy SJF avremmo come tempo di reazione medio 10 secondi (0 secondi di A + 10 di B + 20 di C tutto diviso 3), mentre con il RR (con un time slice di 2 secondi) avremmo come tempo medio solo $\bm{2}$ \textbf{secondi} (0 secondi di A + 2 di B + 4 di C tutto diviso 3). Dunque notiamo un grande miglioramento per quanto riguarda i tempi di risposta. Purtroppo, però, lo stesso non si può dire per i tempi di turnaround. Infatti, avremo come tempo medio di turnaround $\bm{28}$ \textbf{secondi} (26 secondi di A + 28 di B + 30 di C tutto diviso 3), contro i 20 secondi della SJF o della FIFO. Questo accade perché nella policy RR tutti questi processi che durano lo stesso quantitativo di tempo finiscono praticamente insieme verso la fine, dunque hanno un tempo di turnaround tutti più o meno uguale e molto alto, cosa che invece non succedeva ad esempio con la SJF, dove i processi erano eseguiti in modo \textit{sequenziale}. Notiamo, però, come la policy RR sia anche più \textbf{equa} di tutte le altre policy sequenziali. Infatti, qui ogni processo ha sempre lo stesso tempo a disposizione sulla CPU di tutti gli altri, rendendola quindi una policy più equa. Per quanto riguarda invece la quinta assunzione, nemmeno con il RR siamo riusciti a eliminarla.
+Vediamo con un esempio come funziona il RR. Presi tre processi $A, B$ e $C$ che arrivano tutti insieme e che durano tutti $\SI{10}{s}$, con la policy SJF avremmo come tempo di reazione medio $\SI{10}{s}$ ($\SI{0}{s}$ di A + 10 di B + 20 di C tutto diviso 3), mentre con il RR (con un time slice di $\SI{2}{s}$) avremmo come tempo medio solo \textbf{\boldmath$\SI[reset-math-version=false]{2}{s}$} ($\SI{0}{s}$ di A + 2 di B + 4 di C tutto diviso 3). Dunque notiamo un grande miglioramento per quanto riguarda i tempi di risposta. Purtroppo, però, lo stesso non si può dire per i tempi di turnaround. Infatti, avremo come tempo medio di turnaround \textbf{\boldmath$\SI[reset-math-version=false]{28}{s}$} ($\SI{26}{s}$ di A + 28 di B + 30 di C tutto diviso 3), contro i $\SI{20}{s}$ della SJF o della FIFO. Questo accade perché nella policy RR tutti questi processi che durano lo stesso quantitativo di tempo finiscono praticamente insieme verso la fine, dunque hanno un tempo di turnaround tutti più o meno uguale e molto alto, cosa che invece non succedeva ad esempio con la SJF, dove i processi erano eseguiti in modo \textit{sequenziale}. Notiamo, però, come la policy RR sia anche più \textbf{equa} di tutte le altre policy sequenziali. Infatti, qui ogni processo ha sempre lo stesso tempo a disposizione sulla CPU di tutti gli altri, rendendola quindi una policy più equa. Per quanto riguarda invece la quinta assunzione, nemmeno con il RR siamo riusciti a eliminarla.
 
 \begin{Proposizione}[]
 \label{propos-trade-off}
@@ -1729,9 +1729,9 @@ Questa proposizione ci costringe quindi a fare una scelta tra equità + velocit�
 
 \subsection{Incorporare operazioni I/O}
 
-Abbiamo quindi visto diverse policy di scheduling, ma non siamo mai riusciti a eliminare con nessuna di queste la quarta assunzione, ossia quella che prevede che \textbf{non ci siano operazioni I/O}. Anche questa è un'assunzione del tutto irrealistica: i programmi veri non fanno solo calcoli sulla CPU, ma leggono anche dati sul disco, si connettono a internet, o aspettano che l'utente scriva qualcosa. Quando qualcosa di questo succede, il processo passa immediatamente allo stato BLOCKED, e non può usare la CPU fino a quando l'operazione I/O non è stata completata. Di solito, un programma alterna tra operazioni CPU e operazioni I/O, dunque l'obiettivo dello scheduler deve essere quello di massimizzare l'utilizzo delle risorse dando a ogni processo la CPU solo quando questo ne ha realmente bisogno. Per farlo, dividiamo gli utilizzi della CPU di un processo in dei \textbf{piccoli sottoprocessi}, uno per ogni tratto di CPU tra due operazioni I/O (detto \textbf{CPU burst}). Se ad esempio abbiamo un processo che usa la CPU per 10 ms e poi fa un'operazione I/O, per 5 volte, lo scheduler lo vedrà come 5 sottoprocessi da 10 ms l'uno e li tratterà come processi a sé. 
+Abbiamo quindi visto diverse policy di scheduling, ma non siamo mai riusciti a eliminare con nessuna di queste la quarta assunzione, ossia quella che prevede che \textbf{non ci siano operazioni I/O}. Anche questa è un'assunzione del tutto irrealistica: i programmi veri non fanno solo calcoli sulla CPU, ma leggono anche dati sul disco, si connettono a internet, o aspettano che l'utente scriva qualcosa. Quando qualcosa di questo succede, il processo passa immediatamente allo stato BLOCKED, e non può usare la CPU fino a quando l'operazione I/O non è stata completata. Di solito, un programma alterna tra operazioni CPU e operazioni I/O, dunque l'obiettivo dello scheduler deve essere quello di massimizzare l'utilizzo delle risorse dando a ogni processo la CPU solo quando questo ne ha realmente bisogno. Per farlo, dividiamo gli utilizzi della CPU di un processo in dei \textbf{piccoli sottoprocessi}, uno per ogni tratto di CPU tra due operazioni I/O (detto \textbf{CPU burst}). Se ad esempio abbiamo un processo che usa la CPU per $\SI{10}{ms}$ e poi fa un'operazione I/O, per 5 volte, lo scheduler lo vedrà come 5 sottoprocessi da $\SI{10}{ms}$ l'uno e li tratterà come processi a sé. 
 
-Per capire come funziona tutto ciò, vediamo un esempio. Ipotizziamo di avere due processi: $A$ è un processo da 100 ms totali, 50 dei quali sono di operazioni CPU mentre 50 di operazioni I/O, mentre $B$ è un processo da 50 ms solo di operazioni CPU. Il nostro scheduler vedrà quindi i 50 ms di operazioni CPU di $A$ come 5 sottoprocessi da 10 ms, separati dalle operazioni I/O. Ora, se ad esempio usiamo una policy di PSJF, avremo all'inizio 2 processi a competere: il primo sottoprocesso di $A$ da 10 ms e $B$ da 50 ms (i sottoprocessi successivi di $A$ arriveranno uno alla volta, ogni volta che $A$ finisce un'operazione I/O). Dato che il sottoprocesso di $A$ è più veloce, lo scheduler prenderà il primo sottoprocesso di $A$ e lo manderà in esecuzione. Una volta terminato, il processo $A$ si troverà in attesa di un'operazione I/O, e nel frattempo che attende sulla CPU ci sarà il processo $B$. In questo modo non stiamo sprecando alcun tempo vuoto sulla CPU, e una volta che $A$ sarà tornato disponibile dopo l'operazione I/O, verrà subito rimesso al lavoro dato che sarà nuovamente il processo più corto, a meno che $B$ nel frattempo non abbia quasi finito (ossia gli siano rimasti <10 ms di tempo).
+Per capire come funziona tutto ciò, vediamo un esempio. Ipotizziamo di avere due processi: $A$ è un processo da $\SI{100}{ms}$ totali, 50 dei quali sono di operazioni CPU mentre 50 di operazioni I/O, mentre $B$ è un processo da $\SI{50}{ms}$ solo di operazioni CPU. Il nostro scheduler vedrà quindi i $\SI{50}{ms}$ di operazioni CPU di $A$ come 5 sottoprocessi da $\SI{10}{ms}$, separati dalle operazioni I/O. Ora, se ad esempio usiamo una policy di PSJF, avremo all'inizio 2 processi a competere: il primo sottoprocesso di $A$ da $\SI{10}{ms}$ e $B$ da $\SI{50}{ms}$ (i sottoprocessi successivi di $A$ arriveranno uno alla volta, ogni volta che $A$ finisce un'operazione I/O). Dato che il sottoprocesso di $A$ è più veloce, lo scheduler prenderà il primo sottoprocesso di $A$ e lo manderà in esecuzione. Una volta terminato, il processo $A$ si troverà in attesa di un'operazione I/O, e nel frattempo che attende sulla CPU ci sarà il processo $B$. In questo modo non stiamo sprecando alcun tempo vuoto sulla CPU, e una volta che $A$ sarà tornato disponibile dopo l'operazione I/O, verrà subito rimesso al lavoro dato che sarà nuovamente il processo più corto, a meno che $B$ nel frattempo non abbia quasi finito (ossia gli siano rimasti <$\SI{10}{ms}$ di tempo).
 
 \subsection{Implementazioni delle diverse policy in C}
 
@@ -1814,7 +1814,7 @@ Immaginiamo di avere due processi da dover eseguire $A$ e $B$, e di voler distri
 
 Se poi a questi due processi si aggiunge $C$, qualsiasi numero di biglietti che verranno dati a $C$ modificherà la priorità degli altri processi. Ad esempio, se diamo a $C$ 50 biglietti, troviamo che $P(C) = \frac{50}{150} = 33\%$, mentre le percentuali $P(A) = \frac{75}{150} = 50\%$ e $P(B) = \frac{25}{150} = 17\%$ sono scese. Se volessimo modificare queste percentuali dovremmo poi aumentare o diminuire il numero di biglietti di $A$ o di $B$.
 
-Il problema di usare estrazioni casuali è che, sul breve termine, queste possono sbilanciarsi molto su scenari improbabili. Ad esempio, presi due processi $A$ e $B$ con il 50\% di biglietti per entrambi, è possibile che dopo 10 estrazioni il processo $A$ vinca 8 estrazioni, mentre $B$ solo 2. Calcoliamo in questo caso l'\textbf{indice di equità}:
+Il problema di usare estrazioni casuali è che, sul breve termine, queste possono sbilanciarsi molto su scenari improbabili. Ad esempio, presi due processi $A$ e $B$ con il $50\%$ di biglietti per entrambi, è possibile che dopo 10 estrazioni il processo $A$ vinca 8 estrazioni, mentre $B$ solo 2. Calcoliamo in questo caso l'\textbf{indice di equità}:
 \[
 U = \frac{\min(C_A, C_B)}{\max(C_A,C_B)}
 \]
@@ -1867,7 +1867,7 @@ Ci sono due importanti parametri nel CFS:
     \item \textbf{Minimum Granularity}, ossia il tempo minimo assegnato a ogni processo sulla CPU
 \end{itemize}
 
-Ovviamente questi due valori vanno bilanciati: non posso avere come TSL 1 s e poi come MG 0.5 s, perché già con soli 3 processi questi due valori vanno in conflitto. Con un numero elevato di processi si arriverà sempre a una scelta tra TSL e MG: in questo caso, il minimum granularity avrà la priorità sul TSL, dunque ogni processo avrà sempre quel tot minimo di tempo sulla CPU \textbf{indipendentemente} dal numero di processi.
+Ovviamente questi due valori vanno bilanciati: non posso avere come TSL $\SI{1}{s}$ e poi come MG $\SI{0.5}{s}$, perché già con soli 3 processi questi due valori vanno in conflitto. Con un numero elevato di processi si arriverà sempre a una scelta tra TSL e MG: in questo caso, il minimum granularity avrà la priorità sul TSL, dunque ogni processo avrà sempre quel tot minimo di tempo sulla CPU \textbf{indipendentemente} dal numero di processi.
 
 \section{Virtualizzazione della memoria}
 
@@ -1898,7 +1898,7 @@ Lo \textbf{spazio d'indirizzamento} è l'astrazione che fa il sistema operativo 
 
 \begin{Osservazione}[Range degli spazi d'indirizzamento]
 \label{oss-range}
-Gli spazi d'indirizzamento più vecchi avevano 16 o 32 bit di spazio allocato. Nei sistemi moderni troviamo indirizzi detti a \textbf{64 bit}, che però in realtà sono indirizzi a 48 bit, che creano spazi d'indirizzamento di addirittura 256 TiB, più che sufficienti, o al massimo 57 bit (con la paginazione a 5 livelli) che creano spazi da 128 PiB (gli indirizzi fisici invece arrivano al massimo a 52 bit, ossia 4 PiB).
+Gli spazi d'indirizzamento più vecchi avevano 16 o $\SI{32}{bit}$ di spazio allocato. Nei sistemi moderni troviamo indirizzi detti a \textbf{\boldmath$\SI[reset-math-version=false]{64}{bit}$}, che però in realtà sono indirizzi a $\SI{48}{bit}$, che creano spazi d'indirizzamento di addirittura $\SI{256}{TiB}$, più che sufficienti, o al massimo $\SI{57}{bit}$ (con la paginazione a 5 livelli) che creano spazi da $\SI{128}{PiB}$ (gli indirizzi fisici invece arrivano al massimo a $\SI{52}{bit}$, ossia $\SI{4}{PiB}$).
 \end{Osservazione}
 
 
@@ -1976,7 +1976,7 @@ Nessuna politica è perfetta in assoluto: la scelta va effettuata valutando lo s
 
 Il problema principale del base and bounds è il requisito di memoria \textbf{contigua}, del tutto analogo a quello della riallocazione statica. Ciò comporta un limite enorme: anche in presenza di una grande quantità di memoria libera complessiva, se questa è fortemente frammentata potrebbe non esistere un singolo blocco contiguo sufficientemente ampio per contenere l'intero processo.
 
-Questo fenomeno di inefficienza si presenta anche all'interno dello spazio d'indirizzamento del processo. Se ad esempio vengono allocati 16 KB di RAM a un processo, 12 KB potrebbero essere riservati preventivamente allo Stack e all'Heap (ovvero lo spazio intermedio previsto per la loro espansione), rimanendo inizialmente inutilizzati. Di conseguenza, in ogni processo è presente una porzione di RAM fisica non sfruttata, un problema che si amplifica all'aumentare dei processi attivi. Ciò accade perché il base and bounds alloca fin da subito tutto lo spazio necessario al processo in modo preventivo, anche se al momento non serve: un processo che richiede inizialmente solo 3 KB di RAM si vedrà assegnare un blocco molto più grande, trasformando la parte residua in memoria sprecata. \\
+Questo fenomeno di inefficienza si presenta anche all'interno dello spazio d'indirizzamento del processo. Se ad esempio vengono allocati $\SI{16}{KB}$ di RAM a un processo, $\SI{12}{KB}$ potrebbero essere riservati preventivamente allo Stack e all'Heap (ovvero lo spazio intermedio previsto per la loro espansione), rimanendo inizialmente inutilizzati. Di conseguenza, in ogni processo è presente una porzione di RAM fisica non sfruttata, un problema che si amplifica all'aumentare dei processi attivi. Ciò accade perché il base and bounds alloca fin da subito tutto lo spazio necessario al processo in modo preventivo, anche se al momento non serve: un processo che richiede inizialmente solo $\SI{3}{KB}$ di RAM si vedrà assegnare un blocco molto più grande, trasformando la parte residua in memoria sprecata. \\
 Un altro problema del base and bounds è l'impossibilità di eseguire qualsiasi processo il cui spazio d'indirizzamento virtuale sia più grande della memoria RAM fisica disponibile. \\
 Infine, con il base and bounds non è possibile condividere alcuna porzione di memoria tra processi distinti, anche quando questi condividono dati o codice.
 
@@ -1985,28 +1985,28 @@ Infine, con il base and bounds non è possibile condividere alcuna porzione di m
 Per risolvere alcuni di questi problemi del base and bounds, si è pensato di dividere il blocco contiguo di memoria di un singolo processo in tre diversi segmenti: \textbf{code segment}, \textbf{heap segment} e \textbf{stack segment}, ognuno con la sua coppia di registri base and bounds e con i propri permessi (il code segment ha permessi R-X, ossia di lettura ed esecuzione ma non scrittura, mentre l'heap e lo stack segment hanno permessi RW-, ossia di lettura e scrittura ma non di esecuzione). In questo modo eliminiamo tutta la memoria allocata in eccesso tra l'heap e lo stack in modo preventivo, così da allocare solo la memoria necessaria per il processo in sé. Inoltre, rendendo il blocco del codice di un programma un segmento indipendente dal resto del processo, è possibile ora usare un singolo code segment per più processi di uno stesso programma, risparmiando ulteriore memoria.
 
 Gli indirizzi di memoria virtuale si presentano ora in questo modo:\\
-2 bit per il \textbf{segmento} (00 per il code, 01 per l'heap e 11 per lo stack), e il resto dei bit per l'\textbf{offset}, ossia quanto dobbiamo spostarci dal base del segmento interessato per trovare l'indirizzo fisico che realmente vogliamo. Ad esempio, se abbiamo VA = $01000000001100$ (dove VA significa virtual address, ossia l'indirizzo di memoria), allora stiamo puntando a un indirizzo fisico nell'heap segment (01, calcolato dal computer facendo uno shift a destra di 12) con offset $000000001100 = 12_{10}$ (calcolato dal computer facendo una maschera, facendo un \code{AND} con $0x0FFF$), dunque dobbiamo prendere il base register dell'heap segment di tale processo e aggiungere 12 per trovare l'indirizzo fisico richiesto (ricordiamo che tutto ciò è eseguito dall'MMU a livello hardware, che controlla anche che questo valore di 12 + base rientri nel bound di quello specifico segmento, in questo caso dell'heap segment). 
+$\SI{2}{bit}$ per il \textbf{segmento} (00 per il code, 01 per l'heap e 11 per lo stack), e il resto dei bit per l'\textbf{offset}, ossia quanto dobbiamo spostarci dal base del segmento interessato per trovare l'indirizzo fisico che realmente vogliamo. Ad esempio, se abbiamo VA = $01000000001100$ (dove VA significa virtual address, ossia l'indirizzo di memoria), allora stiamo puntando a un indirizzo fisico nell'heap segment (01, calcolato dal computer facendo uno shift a destra di 12) con offset $000000001100 = 12_{10}$ (calcolato dal computer facendo una maschera, facendo un \code{AND} con $0x0FFF$), dunque dobbiamo prendere il base register dell'heap segment di tale processo e aggiungere 12 per trovare l'indirizzo fisico richiesto (ricordiamo che tutto ciò è eseguito dall'MMU a livello hardware, che controlla anche che questo valore di 12 + base rientri nel bound di quello specifico segmento, in questo caso dell'heap segment). 
 
 Lo stack è un caso particolare. Infatti, abbiamo già visto come questo \textit{si muova verso il basso}, dunque il ruolo dell'offset è differente per lui. Avremo un valore base che indica la cima della pila, e dunque l'indirizzo più alto raggiungibile, e un offset che quindi non va aggiunto al valore base, perché altrimenti andremmo oltre l'indirizzo più alto assegnato allo stack, ma va usato per calcolarsi il \textbf{negative offset}. In sostanza, preso un offset di 24, una dimensione massima del segmento di 32, un bound di 20 e un base di 30, per trovare l'indirizzo fisico dobbiamo calcolare il negative offset, che è pari all'offset - la dimensione massima del segmento, e poi dobbiamo sommare questo valore al base, che quindi diminuirà, scendendo verso il basso. L'MMU controlla poi che il valore assoluto del negative offset non superi il bound, altrimenti andiamo fuori dallo stack. Nel nostro esempio avremo quindi un negative offset pari a 16 - 24 = -8 ($8 \leq 20$, quindi l'accesso è valido), per cui il nostro indirizzo di memoria fisico si troverà al byte 30-8 = 22.
 
 Anche l'heap si comporta in modo particolare, ma non per quanto riguarda la traduzione da VA a PA (physical address), ma per quanto riguarda la richiesta di memoria aggiuntiva. Se ad esempio un programma esegue una \code{malloc()} ma l'heap è pieno, questa non restituisce un errore, ma chiama prima la syscall \textbf{sbrk()}, che prende un valore in input pari alla memoria in più richiesta e cerca se c'è memoria fisica contigua grande abbastanza per ospitare l'heap più la nuova memoria richiesta. Prima di spostare l'intero blocco, però, l'OS controlla sempre se c'è memoria fisica vuota vicina all'heap grande quanto la richiesta di \code{sbrk()}, e solo se non trova questa memoria vicina va a cercarla altrove. Se poi non dovesse trovare mai questa memoria, restituirebbe un errore, e questa che sembra una situazione molto difficile in realtà con la segmentazione è più frequente di quello che si potrebbe pensare. Infatti, se da una parte abbiamo eliminato la frammentazione interna, rimuovendo lo spreco di memoria che vi era prima tra heap e stack, dall'altra diventa ancora più grave la \textbf{frammentazione esterna} (già presente con il base and bounds): in poche parole, con la segmentazione si vengono a formare velocemente tanti piccoli blocchi di memoria contigua che occupano da soli poca memoria, ma che insieme formano uno spreco di RAM considerevole. Questi blocchi, essendo troppo piccoli per qualsiasi segment di qualsiasi processo importante, rimangono lì inutilizzati, sprecando memoria. \\ 
-Vediamo visivamente perché questo è un problema. Supponiamo di richiedere al sistema operativo 25 KB di memoria contigua libera, e di avere 4 processi A, B, C e D che già occupano memoria sulla RAM, che si trova in questa situazione:
+Vediamo visivamente perché questo è un problema. Supponiamo di richiedere al sistema operativo $\SI{25}{KB}$ di memoria contigua libera, e di avere 4 processi A, B, C e D che già occupano memoria sulla RAM, che si trova in questa situazione:
 
 \begin{center}
 \begin{tikzpicture}[
     box/.style={draw, minimum height=1.2cm, inner sep=2pt, align=center, font=\sffamily}
 ]
 
-  \node[box, minimum width=1.2cm] (b1) at (0,0) {OS\\8 KB};
-  \node[box, minimum width=1.0cm, anchor=west] (b2) at (b1.east) {FREE\\2 KB};
-  \node[box, minimum width=1.4cm, anchor=west] (b3) at (b2.east) {A\\7 KB};
-  \node[box, minimum width=1.1cm, anchor=west] (b4) at (b3.east) {FREE\\3 KB};
-  \node[box, minimum width=1.2cm, anchor=west] (b5) at (b4.east) {B\\5 KB};
-  \node[box, minimum width=1.5cm, anchor=west] (b6) at (b5.east) {FREE\\8 KB};
-  \node[box, minimum width=1.1cm, anchor=west] (b7) at (b6.east) {C\\4 KB};
-  \node[box, minimum width=1.0cm, anchor=west] (b8) at (b7.east) {FREE\\1 KB};
-  \node[box, minimum width=1.1cm, anchor=west] (b9) at (b8.east) {D\\3 KB};
-  \node[box, minimum width=2.4cm, anchor=west] (b10) at (b9.east) {FREE\\23 KB};
+  \node[box, minimum width=1.2cm] (b1) at (0,0) {OS\\$\SI{8}{KB}$};
+  \node[box, minimum width=1.0cm, anchor=west] (b2) at (b1.east) {FREE\\$\SI{2}{KB}$};
+  \node[box, minimum width=1.4cm, anchor=west] (b3) at (b2.east) {A\\$\SI{7}{KB}$};
+  \node[box, minimum width=1.1cm, anchor=west] (b4) at (b3.east) {FREE\\$\SI{3}{KB}$};
+  \node[box, minimum width=1.2cm, anchor=west] (b5) at (b4.east) {B\\$\SI{5}{KB}$};
+  \node[box, minimum width=1.5cm, anchor=west] (b6) at (b5.east) {FREE\\$\SI{8}{KB}$};
+  \node[box, minimum width=1.1cm, anchor=west] (b7) at (b6.east) {C\\$\SI{4}{KB}$};
+  \node[box, minimum width=1.0cm, anchor=west] (b8) at (b7.east) {FREE\\$\SI{1}{KB}$};
+  \node[box, minimum width=1.1cm, anchor=west] (b9) at (b8.east) {D\\$\SI{3}{KB}$};
+  \node[box, minimum width=2.4cm, anchor=west] (b10) at (b9.east) {FREE\\$\SI{23}{KB}$};
 
   \node[font=\sffamily, anchor=north east] at (b1.south west) {0};
   \node[font=\sffamily, anchor=north] at (b1.south east) {8};
@@ -2024,16 +2024,16 @@ Vediamo visivamente perché questo è un problema. Supponiamo di richiedere al s
 
 \end{center}
 
-La nostra memoria libera totale è 37 KB (2+3+8+1+23), dunque 25 KB ci entrano senza alcun problema, ma purtroppo la nostra RAM è frammentata in piccoli blocchi di RAM da pochi KB, e il blocco contiguo più grande è di soli 23 KB, non sufficiente. Questo spreco non è assolutamente accettabile! Si potrebbe risolvere compattando la memoria, ma è una soluzione con costo troppo elevato, dunque non attuabile. Per questo motivo nasce un nuovo modo di virtualizzare la memoria, che prende il nome di \textbf{memoria con paginazione}.
+La nostra memoria libera totale è $\SI{37}{KB}$ (2+3+8+1+23), dunque $\SI{25}{KB}$ ci entrano senza alcun problema, ma purtroppo la nostra RAM è frammentata in piccoli blocchi di RAM da pochi KB, e il blocco contiguo più grande è di soli $\SI{23}{KB}$, non sufficiente. Questo spreco non è assolutamente accettabile! Si potrebbe risolvere compattando la memoria, ma è una soluzione con costo troppo elevato, dunque non attuabile. Per questo motivo nasce un nuovo modo di virtualizzare la memoria, che prende il nome di \textbf{memoria con paginazione}.
 
 \subsubsection*{Memoria con paginazione (paging)}
 
-L'idea alla base della memoria con paginazione (o \textbf{paging}, in inglese) è semplice: smettiamo di allocare blocchi di memoria variabili, come nel base and bounds, e iniziamo a dividere la memoria in \textbf{blocchi fissi}, che prendono il nome di \textbf{pagine} (\NB pagine è il termine per la memoria virtuale, per quella fisica dovremmo parlare di frame, ma spesso useremo pagine in entrambi i contesti). Il sistema operativo ha poi il compito di mantenere una \textbf{page table} per ogni processo dove ad ogni sua pagina virtuale vi è mappata una fisica (tramite un \textbf{PFN}, physical frame number), in una corrispondenza uno a uno essendo le pagine e i frame della stessa dimensione. Questa divisione in pagine rompe il vincolo più pesante che ci siamo sempre portati con noi, ossia il \textbf{vincolo di contiguità}. Infatti, pagine contigue nella memoria virtuale NON devono corrispondere per forza a pagine contigue nella memoria fisica, eliminando quindi il problema della frammentazione esterna. Torna però ovviamente il problema della frammentazione interna: infatti, se le pagine sono tutte di 4 KB (standard nei sistemi moderni) e io ho un programma che richiede 4 KB + 1 B, a questo verranno allocate due pagine, di cui una però sarà totalmente vuota fatta eccezione per un byte solo. 
+L'idea alla base della memoria con paginazione (o \textbf{paging}, in inglese) è semplice: smettiamo di allocare blocchi di memoria variabili, come nel base and bounds, e iniziamo a dividere la memoria in \textbf{blocchi fissi}, che prendono il nome di \textbf{pagine} (\NB pagine è il termine per la memoria virtuale, per quella fisica dovremmo parlare di frame, ma spesso useremo pagine in entrambi i contesti). Il sistema operativo ha poi il compito di mantenere una \textbf{page table} per ogni processo dove ad ogni sua pagina virtuale vi è mappata una fisica (tramite un \textbf{PFN}, physical frame number), in una corrispondenza uno a uno essendo le pagine e i frame della stessa dimensione. Questa divisione in pagine rompe il vincolo più pesante che ci siamo sempre portati con noi, ossia il \textbf{vincolo di contiguità}. Infatti, pagine contigue nella memoria virtuale NON devono corrispondere per forza a pagine contigue nella memoria fisica, eliminando quindi il problema della frammentazione esterna. Torna però ovviamente il problema della frammentazione interna: infatti, se le pagine sono tutte di $\SI{4}{KB}$ (standard nei sistemi moderni) e io ho un programma che richiede $\SI{4}{KB}$ + $\SI{1}{B}$, a questo verranno allocate due pagine, di cui una però sarà totalmente vuota fatta eccezione per un byte solo. 
 
-I VA in questa nuova virtualizzazione si dividono in due: i primi $n$ bit servono per la \textbf{VPN} (virtual page number), ossia per indicare in quale pagina virtuale si trova quell'indirizzo, mentre i restanti $m$ bit servono per l'\textbf{offset}, ossia per dire dove si trova l'informazione all'interno della pagina virtuale. Ad esempio, in un sistema a 32 bit con pagine da 4 KB, useremo 12 bit per l'offset e 20 per la VPN, permettendoci quindi di avere $2^{20} \approx 1000000$ pagine virtuali diverse, anche se magari abbiamo una memoria fisica che ci permette di avere solo $500000$ pagine diverse. 
+I VA in questa nuova virtualizzazione si dividono in due: i primi $n$ bit servono per la \textbf{VPN} (virtual page number), ossia per indicare in quale pagina virtuale si trova quell'indirizzo, mentre i restanti $m$ bit servono per l'\textbf{offset}, ossia per dire dove si trova l'informazione all'interno della pagina virtuale. Ad esempio, in un sistema a $\SI{32}{bit}$ con pagine da $\SI{4}{KB}$, useremo $\SI{12}{bit}$ per l'offset e 20 per la VPN, permettendoci quindi di avere $2^{20} \approx 1000000$ pagine virtuali diverse, anche se magari abbiamo una memoria fisica che ci permette di avere solo $500000$ pagine diverse. 
 
 \begin{minipage}[c]{0.48\textwidth}
-    Per capire meglio come funziona il paging vediamo un esempio. Ipotizziamo di avere una memoria RAM di 128 byte divisa in 8 frame da 16 byte ciascuno con all'attivo un processo A così diviso.
+    Per capire meglio come funziona il paging vediamo un esempio. Ipotizziamo di avere una memoria RAM di $\SI{128}{byte}$ divisa in 8 frame da $\SI{16}{byte}$ ciascuno con all'attivo un processo A così diviso.
 
 \end{minipage}\hfill
 \begin{minipage}[c]{0.47\textwidth}
@@ -2048,14 +2048,14 @@ I VA in questa nuova virtualizzazione si dividono in due: i primi $n$ bit servon
     \draw (0, \i*\h) -- (\w, \i*\h);
   }
 
-  \node[anchor=west] at (0.4, 0.5*\h) {Frame 0 \quad (16 byte) \quad [OS Kernel]};
-  \node[anchor=west] at (0.4, 1.5*\h) {Frame 1 \quad (16 byte) \quad [Page 1 of A]};
-  \node[anchor=west] at (0.4, 2.5*\h) {Frame 2 \quad (16 byte) \quad [Page 0 of A]};
-  \node[anchor=west] at (0.4, 3.5*\h) {Frame 3 \quad (16 byte) \quad [Page 2 of A]};
-  \node[anchor=west] at (0.4, 4.5*\h) {Frame 4 \quad (16 byte) \quad [FREE]};
-  \node[anchor=west] at (0.4, 5.5*\h) {Frame 5 \quad (16 byte) \quad [Page 3 of A]};
-  \node[anchor=west] at (0.4, 6.5*\h) {Frame 6 \quad (16 byte) \quad [FREE]};
-  \node[anchor=west] at (0.4, 7.5*\h) {Frame 7 \quad (16 byte) \quad [FREE]};
+  \node[anchor=west] at (0.4, 0.5*\h) {Frame 0 \quad ($\SI{16}{byte}$) \quad [OS Kernel]};
+  \node[anchor=west] at (0.4, 1.5*\h) {Frame 1 \quad ($\SI{16}{byte}$) \quad [Page 1 of A]};
+  \node[anchor=west] at (0.4, 2.5*\h) {Frame 2 \quad ($\SI{16}{byte}$) \quad [Page 0 of A]};
+  \node[anchor=west] at (0.4, 3.5*\h) {Frame 3 \quad ($\SI{16}{byte}$) \quad [Page 2 of A]};
+  \node[anchor=west] at (0.4, 4.5*\h) {Frame 4 \quad ($\SI{16}{byte}$) \quad [FREE]};
+  \node[anchor=west] at (0.4, 5.5*\h) {Frame 5 \quad ($\SI{16}{byte}$) \quad [Page 3 of A]};
+  \node[anchor=west] at (0.4, 6.5*\h) {Frame 6 \quad ($\SI{16}{byte}$) \quad [FREE]};
+  \node[anchor=west] at (0.4, 7.5*\h) {Frame 7 \quad ($\SI{16}{byte}$) \quad [FREE]};
 
 \end{tikzpicture}
 \end{minipage}
@@ -2082,12 +2082,12 @@ Nella page table di A avremo quindi quattro righe, una per ogni pagina. La pagin
 \end{tabular}
 \end{minipage}
 
-Ipotizzando di trovarci in un sistema a 16 bit, useremo quindi 12 bit per la VPN e 4 per l'offset. Preso ad esempio un virtual address $0000000000110101$, l'MMU sa già che ci stiamo riferendo alla virtual page $000000000011_2 = 3_{10}$, con un offset di $0101_2 = 5_{10}$, dunque andrà nella Page Table del processo A alla riga 3, prenderà il PFN, troverà la page fisica giusta e aggiungerà l'offset di 5, che è \textbf{uguale tra pagine fisiche e virtuali} proprio perché la dimensione di queste due pagine è uguale (sono tutte e due pagine da 16 byte). Tutto ciò si riassume quindi nella formula $\bm{\textbf{PA} = \textbf{PFN} \times \textbf{page\_size} + \textbf{offset}}$.
+Ipotizzando di trovarci in un sistema a $\SI{16}{bit}$, useremo quindi $\SI{12}{bit}$ per la VPN e 4 per l'offset. Preso ad esempio un virtual address $0000000000110101$, l'MMU sa già che ci stiamo riferendo alla virtual page $000000000011_2 = 3_{10}$, con un offset di $0101_2 = 5_{10}$, dunque andrà nella Page Table del processo A alla riga 3, prenderà il PFN, troverà la page fisica giusta e aggiungerà l'offset di 5, che è \textbf{uguale tra pagine fisiche e virtuali} proprio perché la dimensione di queste due pagine è uguale (sono tutte e due pagine da $\SI{16}{byte}$). Tutto ciò si riassume quindi nella formula $\bm{\textbf{PA} = \textbf{PFN} \times \textbf{page\_size} + \textbf{offset}}$.
 
 Per quanto riguarda le PTE (page table entry), oltre al PFN queste hanno, come già visto nella tabella, altre informazioni, come la validità, la possibilità di leggere/scrivere/eseguire la pagina e anche diverse altre. Tra i bit più importanti troviamo:
 \begin{itemize}
     \item \textbf{Valid bit}: 1 se la pagina fa parte dello spazio d'indirizzamento del processo, 0 altrimenti (se si accede a una pagina con valid bit pari a 0, la MMU lancia un page fault e l'OS, visto che l'accesso non è lecito, invia al processo il segnale \textbf{SIGSEGV})
-    \item \textbf{Readable/Writable/Executable bit} (3 bit differenti, uno per leggere, uno per scrivere e uno per eseguire): 1 se la pagina è leggibile/scrivibile/eseguibile, 0 se non lo è
+    \item \textbf{Readable/Writable/Executable bit} ($\SI{3}{bit}$ differenti, uno per leggere, uno per scrivere e uno per eseguire): 1 se la pagina è leggibile/scrivibile/eseguibile, 0 se non lo è
     \item \textbf{User bit}: 1 se è accessibile in user-mode, 0 se è accessibile solo in kernel mode
     \item \textbf{Accessed bit}: 1 se la pagina è stata usata (letta o scritta) di recente, 0 se non lo è stata
     \item \textbf{Dirty bit}: 1 se la pagina è stata riscritta, 0 se non lo è stata
@@ -2095,7 +2095,7 @@ Per quanto riguarda le PTE (page table entry), oltre al PFN queste hanno, come g
 \end{itemize}
 
 
-Questo nuovo sistema, che sembra perfetto tralasciando un po' di spreco riguardante la frammentazione interna, ha ovviamente anche lui dei problemi  importanti. Infatti, per effettuare un accesso in memoria in questo modo avremo bisogno non di un solo accesso, ma di \textbf{due accessi}: uno per arrivare alla page table e uno per arrivare all'indirizzo che realmente ci interessa. Inoltre, una singola page table consuma molto spazio da sola. Riguardiamo la page table di A dell'esempio precedente: questa ha $2^{12}$ righe, ognuna di $2$ byte, dunque consuma $2^{12} \cdot 2 = 2^{13}$ byte, ossia 8 KB. Sembra poco, ma se ci spostiamo in un sistema a 64 bit (ossia 48 bit realmente utilizzati), con pagine da 4 KB, avremo $2^{48} / 2^{12} = 2^{36}$ righe di $8$ byte ciascuna, per un costo totale di $2^{36} \cdot 8 = 2^{39}$ byte, ossia 512 GB di RAM solo per una singola page table! Cerchiamo quindi di capire come possiamo risolvere questi problemi.
+Questo nuovo sistema, che sembra perfetto tralasciando un po' di spreco riguardante la frammentazione interna, ha ovviamente anche lui dei problemi  importanti. Infatti, per effettuare un accesso in memoria in questo modo avremo bisogno non di un solo accesso, ma di \textbf{due accessi}: uno per arrivare alla page table e uno per arrivare all'indirizzo che realmente ci interessa. Inoltre, una singola page table consuma molto spazio da sola. Riguardiamo la page table di A dell'esempio precedente: questa ha $2^{12}$ righe, ognuna di $\SI{2}{byte}$, dunque consuma $2^{12} \cdot 2 = \SI[parse-numbers=false]{2^{13}}{byte}$, ossia $\SI{8}{KB}$. Sembra poco, ma se ci spostiamo in un sistema a $\SI{64}{bit}$ (ossia $\SI{48}{bit}$ realmente utilizzati), con pagine da $\SI{4}{KB}$, avremo $2^{48} / 2^{12} = 2^{36}$ righe di $\SI{8}{byte}$ ciascuna, per un costo totale di $2^{36} \cdot 8 = \SI[parse-numbers=false]{2^{39}}{byte}$, ossia $\SI{512}{GB}$ di RAM solo per una singola page table! Cerchiamo quindi di capire come possiamo risolvere questi problemi.
 
 \subsubsection*{TLB}
 
@@ -2107,7 +2107,7 @@ Ogni volta che viene effettuato un memory access da un programma l'MMU controlle
 \text{EMAT} = h \cdot (T_{\text{TLB}} + T_{\text{mem}}) + (1-h) \cdot (T_{\text{TLB}} + T_{\text{PT}} + T_{\text{mem}})
 \]
 
-Sembra molto complicata ma in realtà è molto semplice: semplicemente, il costo di un accesso in memoria è pari alla probabilità che l'entrata richiesta sia nel TLB moltiplicata per il costo di accesso al TLB e il costo di accesso alla RAM più la probabilità che l'entrata non sia nel TLB moltiplicata per il costo di accesso al TLB, alla page table e alla RAM. Se assumiamo che $T_{\text{TLB}} \approx 0$, essendo questo tempo molto piccolo, semplifichiamo la formula in $\textbf{EMAT} \bm{ \approx T_{\textbf{mem}} + (1-h) \cdot T_{\textbf{PT}}}$. Se ipotizziamo di avere $T_{\text{mem}} = 100\text{ ns}, T_{\text{PT}} = 100\text{ ns}, h = 0.99$, troviamo che $\text{EMAT} \approx 100 + 0.01 \times 100 = 101 ns$, un costo ben migliore rispetto a quello che avremmo avuto senza TLB, che sarebbe pari a $200 ns$. È indispensabile però che l'hit-rate sia molto alto (generalmente tra 95 e 99\%): questo per fortuna è quasi sempre rispettato anche con poche entrate nel TLB. Per capire perché questo è vero, guardiamo questo codice:
+Sembra molto complicata ma in realtà è molto semplice: semplicemente, il costo di un accesso in memoria è pari alla probabilità che l'entrata richiesta sia nel TLB moltiplicata per il costo di accesso al TLB e il costo di accesso alla RAM più la probabilità che l'entrata non sia nel TLB moltiplicata per il costo di accesso al TLB, alla page table e alla RAM. Se assumiamo che $T_{\text{TLB}} \approx 0$, essendo questo tempo molto piccolo, semplifichiamo la formula in $\textbf{EMAT} \bm{ \approx T_{\textbf{mem}} + (1-h) \cdot T_{\textbf{PT}}}$. Se ipotizziamo di avere $T_{\text{mem}} = \SI{100}{ns}, T_{\text{PT}} = \SI{100}{ns}, h = 0.99$, troviamo che $\text{EMAT} \approx 100 + 0.01 \times 100 = \SI{101}{ns}$, un costo ben migliore rispetto a quello che avremmo avuto senza TLB, che sarebbe pari a $\SI{200}{ns}$. È indispensabile però che l'hit-rate sia molto alto (generalmente tra 95 e 99\%): questo per fortuna è quasi sempre rispettato anche con poche entrate nel TLB. Per capire perché questo è vero, guardiamo questo codice:
 \begin{lstlisting}[style=C]
 int sum = 0;
 for (int i = 0; i <1000; i++){
@@ -2115,7 +2115,7 @@ for (int i = 0; i <1000; i++){
 }
 \end{lstlisting}
 Salvando la VPN della pagina dello stack dove si trova la variabile \code{sum} e la variabile \code{i}, e salvando le VPN delle pagine dove si trova l'array \code{A} (per 1000 interi serviranno circa 1 o 2 pagine) nel TLB, dopo i primi 3 o 4 miss quando ancora le variabili non sono salvate avremo sempre degli hit per 996 o 997 iterazioni, arrivando a un hit rate > 99\%. \\
-La \textbf{TLB coverage} è poi un altro valore importante che corrisponde alla quantità di spazio di indirizzamento virtuale mappabile dal TLB. Banalmente, $\text{TLB coverage} = \text{entrate del TLB} \times \text{grandezza della pagina}$. Se ad esempio abbiamo una pagina di 4 KB e 1024 entrate sul TLB, avremo una TLB coverage di $4 \times 1024 = 4096$ KB, ossia 4 MB. 
+La \textbf{TLB coverage} è poi un altro valore importante che corrisponde alla quantità di spazio di indirizzamento virtuale mappabile dal TLB. Banalmente, $\text{TLB coverage} = \text{entrate del TLB} \times \text{grandezza della pagina}$. Se ad esempio abbiamo una pagina di $\SI{4}{KB}$ e 1024 entrate sul TLB, avremo una TLB coverage di $4 \times 1024 = \SI{4096}{KB}$, ossia $\SI{4}{MB}$. 
 
 Il TLB può essere gestita sia a livello hardware (cosa che fanno architetture tipo x86 o ARM, ossia le architetture più moderne), sia a livello software (cosa che fanno architetture tipo MIPS R2000). Vediamo le differenze:
 \begin{itemize}
@@ -2124,16 +2124,16 @@ Il TLB può essere gestita sia a livello hardware (cosa che fanno architetture t
 \end{itemize}
 
 Un fenomeno da tenere bene a mente quando si lavora con il TLB è il \textbf{TLB thrashing}. In poche parole, se si hanno diverse pagine che lavorano in circolo, senza averne nessuna prediletta rispetto alle altre, avremo un continuo circolo di indirizzi che vengono scritti per poi essere eliminati prima ancora di essere letti dall'MMU, cosa che non porta alcun vantaggio. Ipotizziamo ad esempio di avere un TLB con spazio per 64 PTE, e di avere un ciclo che gira sempre tra le stesse 100 pagine. Una volta arrivata alla 65° pagina, il TLB è pieno, dunque per far spazio a questa sul TLB bisogna eliminare la 1° pagina, ma facendo così quando torneremo alla 1° pagina non la avremo di nuovo sul TLB, e per rimetterla dovremo eliminare un'altra pagina. Continuando così, notiamo che ogni volta che il TLB potrebbe rivelarsi utile la pagina da noi richiesta è già stata tolta per fare spazio a un'altra. \\
-Un modo per risolvere il TLB thrashing è quello di usare delle \textbf{pagine più grandi} (\textbf{huge pages}, da 1 GB o da 2 MB nelle architetture x86-64, dove le pagine da 2 MB prendono il nome di large pages), così da aumentare la TLB coverage. In questo modo riusciamo a coprire più RAM ed evitare che una pagina venga sovrascritta prima che torni a essere richiesta. Per usare le huge pages, spesso piuttosto che modificare tutta la virtualizzazione della memoria cambiando dimensione delle pagine si preferisce adottare un altro sistema, ossia quello delle \textbf{THP} (transparent huge pages). In poche parole, il kernel in automatico, se vede più pagine diverse che lavorano, cerca un blocco di memoria contiguo dove riscriverle tutte insieme per salvarle come un'unica pagina da mettere nel TLB, usandone così solo un'entrata.
+Un modo per risolvere il TLB thrashing è quello di usare delle \textbf{pagine più grandi} (\textbf{huge pages}, da $\SI{1}{GB}$ o da $\SI{2}{MB}$ nelle architetture x86-64, dove le pagine da $\SI{2}{MB}$ prendono il nome di large pages), così da aumentare la TLB coverage. In questo modo riusciamo a coprire più RAM ed evitare che una pagina venga sovrascritta prima che torni a essere richiesta. Per usare le huge pages, spesso piuttosto che modificare tutta la virtualizzazione della memoria cambiando dimensione delle pagine si preferisce adottare un altro sistema, ossia quello delle \textbf{THP} (transparent huge pages). In poche parole, il kernel in automatico, se vede più pagine diverse che lavorano, cerca un blocco di memoria contiguo dove riscriverle tutte insieme per salvarle come un'unica pagina da mettere nel TLB, usandone così solo un'entrata.
 
 \subsubsection*{Page table a più livelli}
 
-Per quanto riguarda invece il problema dello spazio eccessivo delle page table, si è osservata una cosa molto importante: una page table alloca sempre il numero massimo di entrate possibili, ma un processo normale non utilizza mai questo numero di entrate: non ci va nemmeno vicino! Un processo di solito utilizza circa 500 pagine da 4 KB, ossia circa 2 MB, ma in un sistema a 64 bit abbiamo visto che gli vengono allocate $2^{36}$ righe nella page table, un numero decisamente eccessivo. Nascono per questo le \textbf{page table a più livelli}. Da questo momento in poi non esiste più una singola page table per ogni processo, ma tante page table diverse, puntate da una tabella più grande chiamata \textbf{page directory}, le cui righe prendono il nome di \textbf{PDE} (page directory entry). La memoria diventa quindi una specie di albero: la page directory è la radice, ogni PDE punta a una page table, e le PTE di quest'ultima puntano ai frame. Nel caso a 32 bit, la page directory ha 1024 PDE e ogni page table ha 1024 PTE. Un valid bit pari a 1 nella PDE i-esima indica che la page table a cui punta esiste (ossia contiene almeno una PTE valida); se è 0, quella page table non viene nemmeno allocata. \\
+Per quanto riguarda invece il problema dello spazio eccessivo delle page table, si è osservata una cosa molto importante: una page table alloca sempre il numero massimo di entrate possibili, ma un processo normale non utilizza mai questo numero di entrate: non ci va nemmeno vicino! Un processo di solito utilizza circa 500 pagine da $\SI{4}{KB}$, ossia circa $\SI{2}{MB}$, ma in un sistema a $\SI{64}{bit}$ abbiamo visto che gli vengono allocate $2^{36}$ righe nella page table, un numero decisamente eccessivo. Nascono per questo le \textbf{page table a più livelli}. Da questo momento in poi non esiste più una singola page table per ogni processo, ma tante page table diverse, puntate da una tabella più grande chiamata \textbf{page directory}, le cui righe prendono il nome di \textbf{PDE} (page directory entry). La memoria diventa quindi una specie di albero: la page directory è la radice, ogni PDE punta a una page table, e le PTE di quest'ultima puntano ai frame. Nel caso a $\SI{32}{bit}$, la page directory ha 1024 PDE e ogni page table ha 1024 PTE. Un valid bit pari a 1 nella PDE i-esima indica che la page table a cui punta esiste (ossia contiene almeno una PTE valida); se è 0, quella page table non viene nemmeno allocata. \\
 Con la page table a 2 livelli stiamo però aggiungendo un nuovo accesso in memoria: arriviamo quindi a 3 accessi in memoria se il TLB fallisce. Purtroppo, questo è un costo necessario: è il famoso trade-off di cui spesso parliamo. Non sarà mai possibile avere un sistema velocissimo e perfettamente efficiente a livello di memoria, ma bisogna piuttosto trovare un giusto compromesso così da avere un sistema funzionante. \\
 
-I VA dunque vengono modificati: in un sistema a 32 bit, i 20 bit prima destinati alla VPN si dividono ora in due gruppi. Il primo, che rappresenta la \textbf{VPN1}, serve per indicare a quale PDE bisogna andare a cercare, mentre il secondo gruppo, che rappresenta la \textbf{VPN2}, serve per indicare a quale PTE bisogna andare nella tabella puntata dalla PDE. 
+I VA dunque vengono modificati: in un sistema a $\SI{32}{bit}$, i $\SI{20}{bit}$ prima destinati alla VPN si dividono ora in due gruppi. Il primo, che rappresenta la \textbf{VPN1}, serve per indicare a quale PDE bisogna andare a cercare, mentre il secondo gruppo, che rappresenta la \textbf{VPN2}, serve per indicare a quale PTE bisogna andare nella tabella puntata dalla PDE. 
 
-In un sistema a 64 bit, però, una page table a 2 livelli non basta più. Infatti, avremmo 36 bit da dividere per le due VPN, arrivando a 18 bit per ogni VPN, ossia $2^{18}$ entrate per ogni livello. Dato che ogni entrata costa 8 byte, avremmo un costo totale di $2^{18} \times 8 \approx $2 MB per la page directory più 2 MB per ogni page table interna, un costo comunque troppo elevato. Per questo motivo, si introducono le page table \textbf{a quattro livelli} (standard per l'architettura Intel x86-64). Qui dividiamo i 36 bit tra 4 VPN, ognuna da 9 bit, arrivando a tabelle di massimo 4 KB, pochissimo rispetto ai 2 MB visti con le page table a due livelli, e infinitamente piccolo rispetto ai 512 GB visti per le page table a un solo livello (ora arriviamo a circa 512 GB di page table solo se un processo mappa davvero tutto lo spazio virtuale di 256 TiB, cosa però ovviamente praticamente impossibile). I diversi gruppi nei sistemi x86-64 non sono chiamati semplicemente VPN1, VPN2..., ma invece sono detti, in ordine dal più alto in gerarchia al più basso:
+In un sistema a $\SI{64}{bit}$, però, una page table a 2 livelli non basta più. Infatti, avremmo $\SI{36}{bit}$ da dividere per le due VPN, arrivando a $\SI{18}{bit}$ per ogni VPN, ossia $2^{18}$ entrate per ogni livello. Dato che ogni entrata costa $\SI{8}{byte}$, avremmo un costo totale di $2^{18} \times 8 \approx \SI{2}{MB}$ per la page directory più $\SI{2}{MB}$ per ogni page table interna, un costo comunque troppo elevato. Per questo motivo, si introducono le page table \textbf{a quattro livelli} (standard per l'architettura Intel x86-64). Qui dividiamo i $\SI{36}{bit}$ tra 4 VPN, ognuna da $\SI{9}{bit}$, arrivando a tabelle di massimo $\SI{4}{KB}$, pochissimo rispetto ai $\SI{2}{MB}$ visti con le page table a due livelli, e infinitamente piccolo rispetto ai $\SI{512}{GB}$ visti per le page table a un solo livello (ora arriviamo a circa $\SI{512}{GB}$ di page table solo se un processo mappa davvero tutto lo spazio virtuale di $\SI{256}{TiB}$, cosa però ovviamente praticamente impossibile). I diversi gruppi nei sistemi x86-64 non sono chiamati semplicemente VPN1, VPN2..., ma invece sono detti, in ordine dal più alto in gerarchia al più basso:
 \begin{enumerate}[label=\arabic*°]
     \item \textbf{PML4} (Page Map Level 4, la radice puntata dal registro \code{CR3})
     \item \textbf{PDPT} (Page Directory Pointer Table)
@@ -2151,7 +2151,7 @@ Per quanto riguarda le large e huge pages, queste saltano rispettivamente uno e 
 
 \subsection{Swapping}
 
-Arriviamo ora a una delle domande più importanti da farsi quando si parla di memoria virtuale. Abbiamo visto come ogni processo, tramite il paging, in un sistema a 64 bit possa avere a disposizione potenzialmente fino a $2^{36}$ pagine, ossia 256 TiB di informazioni (se si parla di pagine standard da 4 KB). Moltiplicato questo per diversi processi attivi in contemporanea, si arriva a quantità di memoria che anche i migliori pc si sognano. Arriveremo quindi a un certo punto a dover affrontare un problema: cosa succede quando la somma degli spazi di indirizzamento virtuale supera la memoria fisica a disposizione? Nasce una nuova tecnica per gestire questa situazione, che prende il nome di \textbf{swapping}. L'illusione che dà lo swapping è semplice: ogni processo pensa di avere RAM illimitata, sempre e comunque. Questo però ovviamente non è vero, e il SO gestisce questa situazione semplicemente spostando (swapping) sulla memoria secondaria le pagine meno usate quando la RAM non basta, così da liberare memoria sulla RAM. Queste pagine vanno a finire in una zona specifica della memoria secondaria, che prende il nome di \textbf{swap space}. Quando poi queste pagine swappate verranno richieste dal processo, viene chiamata l'eccezione page-fault e la pagina viene ricaricata seguendo un processo che prende il nome di \textbf{page-in} (o major page fault), che legge dove si trova sul disco secondario dalla PTE e trova uno spazio in memoria RAM dove inserire la pagina in questione, in un tempo che varia dai $100 \mu s$ per le SSD ai $10 ms$ per gli HDD (ciò avviene non solo quando una pagina viene riswappata dalla memoria secondaria alla RAM, ma si verifica anche ogni volta che una nuova pagina mai letta che si trova sulla memoria secondaria viene richiesta). Tutto ciò, ricordiamo, avviene totalmente all'oscuro del processo, che pensa di aver ricevuto l'informazione come se fosse sempre stata sulla RAM.
+Arriviamo ora a una delle domande più importanti da farsi quando si parla di memoria virtuale. Abbiamo visto come ogni processo, tramite il paging, in un sistema a $\SI{64}{bit}$ possa avere a disposizione potenzialmente fino a $2^{36}$ pagine, ossia $\SI{256}{TiB}$ di informazioni (se si parla di pagine standard da $\SI{4}{KB}$). Moltiplicato questo per diversi processi attivi in contemporanea, si arriva a quantità di memoria che anche i migliori pc si sognano. Arriveremo quindi a un certo punto a dover affrontare un problema: cosa succede quando la somma degli spazi di indirizzamento virtuale supera la memoria fisica a disposizione? Nasce una nuova tecnica per gestire questa situazione, che prende il nome di \textbf{swapping}. L'illusione che dà lo swapping è semplice: ogni processo pensa di avere RAM illimitata, sempre e comunque. Questo però ovviamente non è vero, e il SO gestisce questa situazione semplicemente spostando (swapping) sulla memoria secondaria le pagine meno usate quando la RAM non basta, così da liberare memoria sulla RAM. Queste pagine vanno a finire in una zona specifica della memoria secondaria, che prende il nome di \textbf{swap space}. Quando poi queste pagine swappate verranno richieste dal processo, viene chiamata l'eccezione page-fault e la pagina viene ricaricata seguendo un processo che prende il nome di \textbf{page-in} (o major page fault), che legge dove si trova sul disco secondario dalla PTE e trova uno spazio in memoria RAM dove inserire la pagina in questione, in un tempo che varia dai $\SI{100}{\micro\second}$ per le SSD ai $\SI{10}{ms}$ per gli HDD (ciò avviene non solo quando una pagina viene riswappata dalla memoria secondaria alla RAM, ma si verifica anche ogni volta che una nuova pagina mai letta che si trova sulla memoria secondaria viene richiesta). Tutto ciò, ricordiamo, avviene totalmente all'oscuro del processo, che pensa di aver ricevuto l'informazione come se fosse sempre stata sulla RAM.
 
 Per supportare lo swapping, nella PTE nasce un nuovo bit: il \textbf{present bit}, che vale 1 se la pagina è presente in RAM e 0 se si trova sul disco (questo però solo se valid bit = 1, altrimenti l'indirizzo non è nemmeno presente sul disco). Entra qui in gioco anche un altro bit di cui abbiamo già parlato, ossia il \textbf{dirty bit}, che ricordiamo evidenzia se una pagina è stata sovrascritta o meno. Ipotizziamo di avere una pagina sulla memoria secondaria che, dopo un page-in, viene trasferita nella RAM (ricordiamo che, dopo un page-in, la pagina swappata rimane su entrambe le memorie, non viene eliminata dalla memoria secondaria). Quando questa deve essere riswappata, ossia deve essere effettuato un \textbf{page-out}, il SO controlla prima di tutto il dirty bit: se questo è pari a 1 allora bisognerà sovrascrivere la pagina in memoria secondaria con quella nuova perché questa è stata modificata, ma se questo è invece pari a 0 significa che la pagina presente in memoria secondaria è una copia identica di quella sulla RAM, dunque non serve riscrivere nulla sulla memoria secondaria ma basta solo eliminare sulla RAM la pagina da swappare. 
 
@@ -2164,7 +2164,7 @@ Un page fault è un'eccezione sollevata dall'MMU quando un accesso in memoria ri
     \item Una pagina mai allocata, che ha quindi un present bit = 0 e che, se non accessibile dal processo che la chiama, può sfociare in un SIGSEGV, uccidendo il processo chiamante
     \item Un tipo di accesso non permesso su una pagina, come ad esempio una scrittura su una pagina riguardante il codice che ha protezione R-X, e che sfocia in un SIGSEGV che uccide il programma
     \item Un'azione write su una pagina \textit{Copy-on-Write}: brevemente, quando un processo esegue una \code{fork}, padre e figlio puntano allo stesso frame fisico. Questa pagina, che logicamente dovrebbe essere scrivibile, viene contrassegnata dall'OS come read-only nella page table: quando un processo prova a scriverci, la MMU genera un page-fault. L'OS gestisce l'eccezione allocando un nuovo frame, copiandovi i dati e rendendolo writable per il processo che ha scritto. Il vecchio frame del padre tornerà writable solo se il padre rimarrà l'unico processo a puntare a quel frame fisico.
-    \item \textit{Minor page fault}, ossia un page fault che si risolve senza leggere dalla memoria secondaria (ad esempio perché la pagina si trova già sulla RAM, ma non nella page table di questo processo). Ciò si verifica spesso quando parliamo di spazi di memoria condivisi tra più processi o quando si fa un primo accesso alla memoria anonima: in poche parole, quando con una \code{malloc} allochiamo un oggetto dinamico, il sistema operativo non assegna subito dei frame fisici, dunque al nostro primo accesso su tale memoria la MMU genererà un page fault e il SO prenderà un frame vuoto in RAM e lo mapperà alla PTE corrispondente. In entrambi i casi, però, tutto ciò avviene senza dover effettuare alcuna operazione I/O sulla memoria secondaria, dunque le operazioni non sono lente come nei major page fault, che richiedono in media $100 \mu s$ (su una SSD), ma richiedono solo $1-10 \mu s$.
+    \item \textit{Minor page fault}, ossia un page fault che si risolve senza leggere dalla memoria secondaria (ad esempio perché la pagina si trova già sulla RAM, ma non nella page table di questo processo). Ciò si verifica spesso quando parliamo di spazi di memoria condivisi tra più processi o quando si fa un primo accesso alla memoria anonima: in poche parole, quando con una \code{malloc} allochiamo un oggetto dinamico, il sistema operativo non assegna subito dei frame fisici, dunque al nostro primo accesso su tale memoria la MMU genererà un page fault e il SO prenderà un frame vuoto in RAM e lo mapperà alla PTE corrispondente. In entrambi i casi, però, tutto ciò avviene senza dover effettuare alcuna operazione I/O sulla memoria secondaria, dunque le operazioni non sono lente come nei major page fault, che richiedono in media $\SI{100}{\micro\second}$ (su una SSD), ma richiedono solo $1-\SI{10}{\micro\second}$.
     \item \textit{Major page fault}, ossia un page-in.
 \end{itemize}
 
@@ -2205,7 +2205,7 @@ Tra tutte, sospendere i processi è quasi sempre la scelta migliore. Infatti, è
 
 \begin{Definizione}[Concorrenza]
 \label{def-concorrenza}
-La \textbf{concorrenza} è la capacità di un sistema operativo di gestire più processi/thread in contemporanea, permettendo di portare avanti più attività contemporaneamente.
+La \textbf{concorrenza} è la capacità di un sistema operativo di gestire più processi/thread in contemporanea, permettendo così di portare avanti più attività insieme.
 \end{Definizione}
 
 \section{Thread}
@@ -2599,7 +2599,7 @@ Abbiamo quindi 3 possibili stati in questa implementazione:
     \item \code{flag = 2} $\implies$ Sezione critica occupata e qualcuno in attesa
 \end{itemize}
 
-Un'altra strategia ancora per implementare una lock che dorme è il cosiddetto \textbf{two-phase lock}. Questo lock unisce spinning e sleeping insieme: quando un thread trova la lock occupato, piuttosto che eseguire spinning continuo come fanno le TAS o le CAS e piuttosto che andare subito a dormire come fanno i mutex, questo nel two-phase lock prova prima una fase di spinning a tempo limitato e, se questa non dovesse bastare per entrare nella sezione critica, si parcheggia finché non è il suo turno. Questo tempo limitato, che prende il nome di \textbf{spin budget}, spesso vale quanto un context switch (ossia pochi $\mu s$), così che, nel caso peggiore, si sprechi al più circa il doppio del tempo rispetto alla scelta migliore (che non si può conoscere in anticipo).
+Un'altra strategia ancora per implementare una lock che dorme è il cosiddetto \textbf{two-phase lock}. Questo lock unisce spinning e sleeping insieme: quando un thread trova la lock occupato, piuttosto che eseguire spinning continuo come fanno le TAS o le CAS e piuttosto che andare subito a dormire come fanno i mutex, questo nel two-phase lock prova prima una fase di spinning a tempo limitato e, se questa non dovesse bastare per entrare nella sezione critica, si parcheggia finché non è il suo turno. Questo tempo limitato, che prende il nome di \textbf{spin budget}, spesso vale quanto un context switch (ossia pochi $\mu$s), così che, nel caso peggiore, si sprechi al più circa il doppio del tempo rispetto alla scelta migliore (che non si può conoscere in anticipo).
 
 \subsection{Tabella riepilogativa}
 
@@ -2789,9 +2789,9 @@ I sistemi reali usano la \textit{semantica Mesa}, che è anche quella che abbiam
 
 \subsection{Quando il \codeb{signal} non è più sufficiente}
 
-Ci sono situazioni in cui il \code{signal} da solo non basta. Ad esempio, se abbiamo una CV con thread che attendono condizioni diverse. Potremmo avere due thread $A$ e $B$: $A$ aspetta 50 byte liberi, mentre $B$ 100. In questo caso solo $A$ va svegliato quando si hanno 50 byte liberi: se $B$ viene svegliato tornerà a dormire e il segnato andrà perso.
+Ci sono situazioni in cui il \code{signal} da solo non basta. Ad esempio, se abbiamo una CV con thread che attendono condizioni diverse. Potremmo avere due thread $A$ e $B$: $A$ aspetta $\SI{50}{byte}$ liberi, mentre $B$ 100. In questo caso solo $A$ va svegliato quando si hanno $\SI{50}{byte}$ liberi: se $B$ viene svegliato tornerà a dormire e il segnato andrà perso.
 
-Potremmo pensare di usare più CV per ogni condizione diversa, seguendo lo stesso ragionamento visto prima nel problema del produttore consumatore. La soluzione ottimale però è un'altra, ossia quella di usare la funzione \codeb{broadcast()}, che ricordiamo sveglia tutti i thread addormentati. In questo modo, utilizzando comunque solo una CV sono sicuro al 100\% di svegliare il thread che mi interessava realmente svegliare. In questo modo, però, rallentiamo leggeremente l'operazione perché, svegliando tutti, introduciamo una lock contention. In poche parole, tutti i thread svegli vogliono acquisire la lock, ma dato che solo uno alla volta potrà acquisirla, ci metteremo un po' prima di trovare il thread desiderato.
+Potremmo pensare di usare più CV per ogni condizione diversa, seguendo lo stesso ragionamento visto prima nel problema del produttore consumatore. La soluzione ottimale però è un'altra, ossia quella di usare la funzione \codeb{broadcast()}, che ricordiamo sveglia tutti i thread addormentati. In questo modo, utilizzando comunque solo una CV sono sicuro al $100\%$ di svegliare il thread che mi interessava realmente svegliare. In questo modo, però, rallentiamo leggeremente l'operazione perché, svegliando tutti, introduciamo una lock contention. In poche parole, tutti i thread svegli vogliono acquisire la lock, ma dato che solo uno alla volta potrà acquisirla, ci metteremo un po' prima di trovare il thread desiderato.
 
 \subsection{Thread Pool}
 
@@ -3088,7 +3088,7 @@ Concludiamo quindi che \textbf{eliminare l'attesa circolare}, riordinando l'ordi
 Abbiamo dunque visto come \textbf{prevenire i cicli} in un sistema. Prevenendo la formazione di un ciclo noi siamo certi di star prevenendo anche la formazione di un deadlock, ma in realtà esiste anche un altro algoritmo per evitare la formazione di deadlock, che segue un ragionamento un po' più complesso. Questo algoritmo prende il nome di \textbf{algoritmo del banchiere}. 
 
 Nell'algoritmo del banchiere partiamo con l'ipotesi di avere una sequenza di thread $T_1, \ldots, T_n$ e un insieme di risorse $A_1, \ldots, A_m$ che i thread possono richiedere. Ogni thread dovrà, prima di partire, dichiarare il \textbf{massimo} di ogni tipo di risorsa di cui avrà mai bisogno durante la propria esecuzione (\NB qui stiamo facendo un'assunzione molto forte, dato che sapere a priori di quante risorse si avrà bisogno non è mai un compito facile). Oltre a questo valore MAX, che appunto ci dice il massimo di ogni tipo di risorsa, avremo per ogni thread anche un valore ALLOCATED, che ci dice le risorse attualmente allocate a quel thread, e NEED, pari a MAX $-$ ALLOCATED. Abbiamo anche un valore AVAILABLE, pari al numero di ogni tipo di risorsa che possiamo ancora allocare, e un valore TOTAL, pari al numero di risorse globalmente disponibile. Infine, definiamo uno \textbf{stato sicuro} uno stato in cui esiste una sequenza sicura $\langle T_1, \ldots, T_n \rangle$, ossia una sequenza dove il valore NEED di $T_i$ sia minore o uguale al valore di AVAILABLE, $\forall i \in \{1, \ldots, n\}$. \\
-\NB Uno stato non sicuro non indica per forza un deadlock: infatti, non è detto che un thread debba per forza consumare tutte le risorse che ha dichiarato a priori come MAX, ma sicuramente, se entriamo in uno stato non sicuro, non possiamo più evitare al 100\% un deadlock.
+\NB Uno stato non sicuro non indica per forza un deadlock: infatti, non è detto che un thread debba per forza consumare tutte le risorse che ha dichiarato a priori come MAX, ma sicuramente, se entriamo in uno stato non sicuro, non possiamo più evitare al $100\%$ un deadlock.
 
 Per capire questo algoritmo dobbiamo prima di tutto capire come verificare se ci si trova in uno stato sicuro o meno. Ipotizziamo di avere solo 5 thread $T_0, \ldots, T_4$, 3 tipi di risorse, $A,B$ e $C$, di avere un valore TOTAL $= (10,5,7)$, e di ritrovarci in questa situazione:
 
@@ -3145,7 +3145,272 @@ Abbiamo visto quindi due modi per evitare la formazione di un deadlock. Ma se il
     L'unico caso in cui invece questo algoritmo non funziona è per i \textit{database}. Infatti qui, dato che molte transazioni concorrenti bloccano più righe insieme, i deadlock sono molto comuni, e non rari come nei processi comuni. Per questo motivo nei database viene utilizzata la tecnica 3) vista poco fa, che permette, in caso di deadlock con due transazioni, di annullare una transizione con un rollback per far proseguire l'altra.
 \end{itemize}
 
+\chapter{Persistenza}
 
+\begin{Definizione}[Persistenza]
+\label{def-persistenza}
+La \textbf{persistenza} è la capacità di un sistema operativo di conservare i dati in modo duraturo nel tempo su dispositivi di memoria non volatile (come gli SSD), così che questi siano disponibili anche dopo lo spegnimento della macchina.
+\end{Definizione}
+
+\section{Comunicare con i dispositivi di I/O}
+
+\subsection{I dispositivi di I/O}
+
+Un buon sistema operativo deve cercare di sprecare il meno possibile i cicli della CPU. Questo concetto lo abbiamo già visto più e più volte, sia quando abbiamo parlato di scheduling, sia quando abbiamo parlato di livelock ad esempio. Ma non ci siamo ancora fermati a parlare di un aspetto molto importante che ogni sistema operativo deve implementare in modo corretto, ossia la \textbf{gestione dell'I/O} nei vari processi. 
+
+Sappiamo già che la maggior parte dei processi non fa solo calcolo sulla CPU, ma ha spesso bisogno di comunicare con dei dispositivi di I/O, come ad esempio una SSD o una scheda di rete, per poter lavorare. Lasciare un processo sulla CPU mentre sta eseguendo delle operazioni di I/O non ha senso, essendo questo un lavoro che assolutamente non richiede la potenza che la CPU può dare. Per renderci conto veramente di quanto sia uno spreco eseguire i comandi di I/O sulla CPU vediamo un breve esempio. Ipotizziamo di avere una CPU a $\SI{3}{GHz}$ (ossia che esegue $3 \cdot 10^9$ cicli al secondo), e un HDD dove una lettura richiede $\SI{8}{ms}$. Se vogliamo eseguire una lettura sull'HDD tramite CPU, ci vorrebbero in totale $24$ milioni di cicli ($3 \cdot 10^9 \cdot 0.008 = 2.4 \cdot 10^7$ cicli), per un lavoro nel quale la CPU fa 0 calcolo (e dunque è praticamente inutilizzata). \\
+Questi calcoli possono in realtà migliorare in base al componente di I/O col quale si vuole comunicare. Infatti, una lettura su una SSD in generale costa $\SI{80}{\micro\second}$, oppure una lettura in DRAM costa solo $\SI{100}{ns}$. Questi valori dipendono sia da come sono strutturati i diversi dispositivi (una SSD, non essendo un componente elettromeccanico, non ha più la parte meccanica dell'HDD che rallentava notevolmente la lettura), ma anche in base a come questi dispositivi sono messi in comunicazione con la CPU. In generale possiamo suddividere le componenti del sistema in 4 livelli, in base a quanto sono vicine alla CPU (e quindi a quanto velocemente vi si accede):
+\begin{enumerate}[label=\arabic*°]
+    \item Livello: componenti sulla CPU \\
+    In questa categoria troviamo i registri e tutte le diverse cache (L1, L2 e L3), alle quali la CPU accede in pochissimo tempo ($< \SI{1}{ns}$ per i registri e tra gli $1$ e i $20$ ns per le cache, in base al tipo). Ovviamente, queste componenti, trovandosi già sulla CPU, non devono passare per nessun bus a loro dedicato, come invece devono fare tutte le componenti facenti parte degli altri livelli che ora vedremo.
+    \item Livello: componenti collegati dal \textbf{memory bus} ($50/100$ GB/s) \\
+    In questa categoria troviamo la DRAM, alla quale la CPU accede molto spesso. Proprio perché la CPU spesso lavora con la DRAM gli accessi a questa devono essere molto veloci, e per questo si parla di circa $50/100$ GB/s di traffico massimo totale sul bus, resi possibili anche dalla distanza tra la CPU e la DRAM, che è molto ridotta rispetto ad altri componenti.
+    \item Livello: \textbf{PCIe} ($1/64$ GB/s) \\
+    In questa categoria troviamo i dispositivi veloci collegati direttamente alla CPU tramite lo standard PCIe (PCI Express): schede video, SSD NVMe e schede di rete.
+    \item Livello: \textbf{Chipset Link} ($8/16$ GB/s totale) \\
+    Nel quarto e ultimo livello troviamo i dispositivi SATA (HDD e SSD SATA), i dispositivi USB e in generale tutti i dispositivi più lenti. Questi non si collegano direttamente alla CPU, ma passano per il chipset (PCH), un hub di I/O collegato alla CPU tramite un unico link, il cui traffico è condiviso tra tutti i dispositivi. Essendo dispositivi lenti, non avrebbe senso dedicare loro le lane PCIe della CPU: il chipset link offre già banda sufficiente a un costo minore.
+\end{enumerate}
+
+\subsection{Come parla il sistema operativo con i dispositivi di I/O}
+
+Fino ad ora abbiamo visto la gestione della memoria solo dal punto di vista della RAM, ma non sappiamo ancora come fa il sistema operativo a comunicare con i dispositivi di I/O. La tecnica usata è il \textbf{Memory-Mapped I/O} (\textbf{MMIO}): i registri di controllo di ogni dispositivo vengono collocati all'interno dello stesso spazio di indirizzi fisici usato dalla RAM, ciascuno in un proprio intervallo di indirizzi. In questo modo il kernel può comunicare con un dispositivo usando le normali istruzioni di lettura e scrittura in memoria esattamente come farebbe con la RAM.
+
+Ma se le istruzioni sono le stesse, come si capisce con chi si sta comunicando? È proprio l'indirizzo stesso a deciderlo: quando la CPU esegue una load o una store, l'hardware controlla in quale intervallo ricade l'indirizzo e capisce con quale dispositivo deve comunicare. La stessa istruzione può quindi avere effetti completamente diversi: scrivere un valore in RAM oppure, ad esempio, dare un comando a una scheda di rete. 
+
+\NB Per i dispositivi di I/O vengono mappati solo i registri del dispositivo, non tutti i dati come per le RAM: per leggere un file da un SSD, il kernel scrive un comando nei registri del dispositivo, e sarà poi il dispositivo stesso a copiare i dati in RAM. 
+
+Addesso sorge invece un'altra domanda: ma chi è che decide il range di ogni dispositivo? Chi è che decide ad esempio che i registri della scheda di rete siano a $0x8000\_0000$ e non ci siano invece i registri della SSD a quell'indirizzo? E poi come fa il kernel ad arrivare a questi indirizzi fisici dato che lavora con quelli virtuali? 
+
+La risposta alla prima domanda si divide in 2 parti:
+\begin{itemize}
+    \item La prima parte del lavoro viene effettuata dal firmware (il software scritto direttamente nella memoria non volatile della scheda madre, BIOS/UEFI), che prende tutti i dispositivi PCIe, chiede ad ognuno di loro di quanto spazio di indirizzamento hanno bisogno, e assegna un intervallo libero fuori dalla zona già riservata alla RAM. L'indirizzo di partenza di questo intervallo vinene poi scritto nel BAR del dispositivo, un registro standard per tutti i dispositivi PCIe, dove è anche presente la dimensione dello spazio d'indirizzamento a lui riservato. Diciamo che l'idea è molto simile al \textit{base and bounds}, già visto quando abbiamo parlato di virtualizzazione della memoria.
+    \item La seconda parte del lavoro invece viene effettuata dal kernel. Questo legge il lavoro lasciato dal firmware e rienumera tutti gli slot del bus PCIe, per controllare se sia presente qualcuno o meno. In questo modo viene a crearsi una vera e propria lista di dispositivi, dove sono presenti anche i dispositivi hot-plugged, ossia quelli inseriti dopo l'accensione del computer (come una chiavetta).
+\end{itemize}
+
+La risposta alla seconda domanda invece sta nei \textbf{driver}, dei pezzi di codice kernel assegnati unici per ogni dispositivo I/O. Un driver traduce gli indirizzi virtuali dei programmi utenti in indirizzi fisici, tramite la funzione \codeb{ioremap()}. Questa funzione aggiunge delle righe nella page table del kernel che collegano una pagina virtuale del kernel all'intervallo fisico associato al dispositivo. Marca poi quelle pagine come \textit{uncached}, dao che un registro di un dispositivo può cambiare valore da solo senza avvisare la CPU, dunque avere una copia salvata in cache vorrebbe dire avere una copia dei dati errata. Infine, rende queste pagine accessibili solo al kernel, dato che un programma utente non deve essere in grado di comunicare direttamente con l'hardware.
+
+\subsection{Come appare un dispositivo di I/O al sistema operativo}
+
+Abbiamo già detto che il range di intervalli assegnato a un dato dispositivo di I/O non serve per mappare tutti i suoi dati, ma solo per una porzione di registri. In particolare ci sono tre registri fondamentali che ogni dispositivo deve rendere visibili al sistema operativo:
+\begin{itemize}
+    \item \textbf{Status}: qui il sistema operativo \textit{legge} lo stato del dispositivo (BUSY, READY, ERR e così via)
+    \item \textbf{Command}: qui il sistema operativo \textit{scrive} il comando che il dispositivo deve eseguire (READ, WRITE, RESET e così via)
+    \item \textbf{Data}: qui il sistema operativo \textit{legge/scrive} i dati interessati (se stiamo eseguendo una READ allora i dati verranno ovviamente letti, mentre con una WRITE verranno scritti)
+\end{itemize}
+
+\subsection{Aspettare un dispositivo}
+
+Ogni volta che chiediamo a un dispositivo una lettura, questo impiega del tempo per fornirci i dati che vogliamo, perché deve andarli a cercare prima di poterceli restituire. Viene quindi da chiedersi: come facciamo ad \textit{aspettare} questi dati? Cosa deve fare la CPU?
+
+Potremmo pensare di fare \textbf{polling}, ma questo spesso è fin troppo costoso. Infatti, se abbiamo ad esempio un processo che fa in loop $\SI{12}{ms}$ di calcolo e aspetta $\SI{8}{ms}$ in attesa che un dispositivo si liberi, avremmo una CPU che per il $40\%$ del tempo non lavora ma sta in spinning, che è tantissimo.
+
+Un'alternativa invece più valida è \textbf{togliere il processo dalla CPU} (facendo quidni preemption) e lasciarlo in stato WAITING finché non sarà il dispositivo stesso a mandare un \textbf{interrupt} per avvisare di essere pronto. Quando ciò accade, il processo torna READY e può essere rischedulato. Tutto ciò ha un costo minimo, pari a circa $5/10 \mu$s. 
+
+Possiamo quindi denotare che lavorare con gli interrupt è la scelta migliore. Questo, seppur vero nella maggior parte dei casi, non è sempre vero. Se infatti avessimo un'attesa pari non a $\SI{8}{ms}$, come nell'esempio precedente, ma pari a $\SI{0.8}{\micro\second}$, sarebbe davvero ancora la scelta migliore usare gli interrupt? In realtà no. Infatti, in questo caso gli interrupt sono troppo lenti per poter gestire un'attesa così breve, dunque qui è necessario fare polling. Questo nei sistemi operativi reali succede con la gestione dei pacchetti di rete, che arrivano a $\SI{0.07}{\micro\second}$ di distanza l'uno dall'altro (circa 15 milioni di pacchetti al secondo). 
+
+È importante capire che in questo scenario non c'è una scelta tra usare gli interrupt o il polling: il polling è \textbf{obbligatorio}. Se infatti usassimo gli interrupt, avremmo circa 15 milioni di interrupt al secondo, con un costo per ogni interrupt di circa $\SI{5}{\micro\second}$. Tutto ciò si traduce in $5 \cdot 10^{-6} \cdot 15000000 = \SI{75}{s}$ spesi a gestire gli interrupt ogni secondo. Staremmo quindi spendendo ogni secondo ben 75 secondi a gestire gli interrupt, il che è ovviamente impossibile. \\ 
+Il limite massimo di interrupt oltre il quale il polling diventa obbligatorio è facile da calcolare: basta fare la divisione $1/C_{\text{int}}$, dove $C_{\text{int}}$ sta per costo per interrupt. Dunque se abbiamo $C_\text{int} = \SI{5}{\micro\second}$, avremo come limite $1/(5 \cdot 10^{-6}) = 2 \cdot 10^6 = 200000$ interrupt al secondo. Oltre questo limite (ma in realtà anche poco prima) la CPU spende il $100\%$ del suo tempo a gestire gli interrupt. Non riesce nemmeno a leggere i dati che le arrivano, perché è troppo impegnata a gestire altro. Questa situazione è ovviamente da evitare e prende il nome di \textbf{receive livelock}.
+
+Purtroppo, la soluzione degli interrupt anche prima che venga raggiunto il limite di interrupt al secondo non è una soluzione perfetta. Questo per colpa della \textbf{latenza}. Ipotizziamo ad esempio di avere una SSD con un tempo di lettura di $\SI{10}{\micro\second}$. Utilizzando il polling potremmo utilizzare i dati letti a tempo $t = \SI{10}{\micro\second}$, mentre con gli interrupt solo a $t = \SI{15}{\micro\second}$, per i costi dovuti alla gestione degli interrupt. Questa latenza ci rende ogni lettura il $50\%$ più lenta, che non è affatto poco. 
+
+Per questo motivo introduciamo un nuovo metodo di attesa ibrido, che prende proprio il nome di \textbf{polling ibrido} (la vera tecnica usata dai sistemi operativi moderni).
+In questo polling ibrido si toglie inizialemente il processo dalla CPU, e lo si manda in attesa non fino all'interrupt del dispositivo, ma per un tempo deciso a priori, e una volta sveglio gli si fa fare polling fino alla fine. Se riprendiamo l'esempio di prima, se con il polling ibrido decidessimo di usare come timer $\SI{7}{\micro\second}$, elimineremmo totalmente il problema della latenza con soli $\SI{3}{\micro\second}$ di spinning (contro i $10$ che registreremmo con il polling normale). 
+
+\subsection{DMA}
+
+Fino ad ora abbiamo lascito alla CPU il compito di gestire tutti i processi di I/O, come ad esempio richiedere una read a una ssd oppure ricevere dei pacchetti da una scheda di rete. Questa gestione dei dispositivi I/O prende il nome di \textbf{programmed I/O} (PIO). Nonostante funzioni, la PIO non è la gestione migliore. Infatti, per una read di $\SI{1}{MB}$ si arriva nei casi migliori a utilizzare per ben $\SI{250}{\micro\second}$ la CPU per un lavoro dove questa non sta praticamente lavorando. Questo problema lo avevamo già accennato all'inizio di questo capitolo e venne risolto dal DMA.
+
+\begin{Definizione}[DMA]
+\label{def-DMA}
+Il \textbf{DMA} (Direct Memory Access) è un meccanismo che permette a un dispositivo di leggere e scrivere direttamente nella RAM senza l'utilizzo di CPU.
+\end{Definizione}
+
+Questo viene reso possibile nei computer moderni dal \textbf{DMA controller}, un dispositivo hardware che si trova in ogni dispositivo e che permette proprio di eseguire read e write senza l'utilizzo della CPU.
+
+Grazie al DMA controller la CPU non è più necessaria per eseguire alcuna operazione di lettura/scrittura: questa deve solo mandare l'input al dispositivo dicendogli cosa deve fare e gestire l'interrupt quando il dispositivo la avviserà di aver finito l'operazione richiesta. Vediamo come questo si traduce in codice:
+
+\begin{lstlisting}[style=C]
+void start_dma_read(int lba, void *buf, size_t len){
+    uint64_t pa = virt_to_phys(buf); // Traduciamo gli inidirizzi da virtuali a fisici
+    write_reg(DMA_ADDR, pa); // Scriviamo sul registro dove in RAM la DMA deve scrivere i dati che vengono letti
+    write_reg(DMA_LEN, len); // Scriviamo sul registro quanti byte devono essere letti
+    write_reg(SECTOR, lba); // Scriviamo sul registro su quale settore bisogna leggere (vedremo più avanti questo cosa significa)
+    write_reg(COMMAND, CMD_READ_DMA) // Via: la lettura parte, senza che la CPU faccia più nulla da qui in avanti
+}
+\end{lstlisting}
+
+\NB Il comando \code{write\_reg(COMMAND, CMD\_READ\_DMA)} è fondamentale che sia l'ultimo: infatti, questo fa partire la lettura, e affinché questa vada a buon fine è necessario che tutte le informazioni necessarie siano già state scritte.
+
+La cosa fondamentale da tenere bene a mente è che l'indirizzo fisico assegnato al buffer \code{buf} non deve cambiare durante la lettura. Non deve essere assolutamente mosso, altrimenti rischieremmo di scrivere i dati letti sul dispositivo di I/O su un indirizzo fisico errato.
+
+Ora, questo codice va bene per poche letture alla volta, ma se vogliamo fare tante letture diventa troppo costoso. Per questo motivo viene introdotta l'\textbf{anello dei descrittori}, una coda circolare dove all'interno abbiamo tanti descrittori, ossia piccoli record in RAM con all'interno tutte le infomrazioni di una richiesta a un dispositivo. Per questo anello il sistema operativo tiene due puntatori: uno per la coda (\code{tail}), dove vengono inseriti tutti i nuovi descrittori dalla CPU, e uno per la testa (\code{head}), dal quale il dispositivo di I/O prende le singole richieste e le esegue, segnandole come \code{done} una volta finite. Dato che il dispositivo di I/O non sa quando la CPU scrive in RAM, ogni volta che la CPU finisce di riempire l'anello con dei descrittori, il \textit{doorbell register} (registro campanello) viene riempito dal SO con il nuovo valore della tail, ossia l'ultimo indice dell'anello dove sono presenti dei descrittori. A quel punto il dispositivo può eseguire tutte le richieste, segnarle come \code{done}, e aumentare di volta in volta il proprio puntatore interno \code{head}. Quando il gruppo è terminato, ossia quando un certo numero di richieste è stata eseguita dal dispositivo, viene mandato un singolo interrupt alla CPU. In questo modo abbiamo dunque ridotto drasticamente l'interazione tra dispositivo e CPU: siamo passati da 4 write e un interrupt per ogni richiesta a un write (il doorbell register) e un interrupt per ogni batch (insieme) di richieste. \\
+Nella vita reale questo si rivela essere molto utile quando si parla di pacchetti di rete. Sappiamo infatti che questi arrivano a distanza di tempo molto ravvicinata l'uno dall'altro, dunque ridurre il numero di write e di interrupt nella loro gestione non solo rende il sistema più efficiente, ma lo rende \textbf{funzionante}. Senza l'anello dei descrittori la CPU sarebbe troppo lenta a gestire tutti gli interrupt dei vari pacchetti, non riuscendoli nemmeno a leggere. È lo stesso identico problema che abbiamo riscontrato quando volevamo utilizzare gli interrupt per gestire l'attesa dei pacchetti nella scorsa sottosezione.
+
+Tornando ora al codice precedente, quel codice per funzionare deve fare un assunzione importante, ossia che i dati che si trovano in \code{pa} siano contigui in memoria fisica. Noi sappiamo benissimo che dati contigui in memoria virtuale non si traducono sempre in dati contigui in memoria fisica, anzi. Se ad esempio avessimo un buffer di $\SI{16}{KB}$ contiguo in memoria virtuale diviso in 4 pagine da $\SI{4}{KB}$, è possibile che queste quattro pagine siano sparse nello spazio d'indirizzamento fisico, e che quindi non siano tutte vicine tra loro come ci aspetteremmo. 
+
+Per risolvere questo problema potremmo pensare di cercare un cosiddetto \textbf{bounce buffer}, ossia un buffer fisico d'appoggio di $\SI{16}{KB}$ dove copiare tutte le nostre pagine fisiche nell'ordine corretto. Questo metodo è però molto lento e soprattutto può non funzionare, dato che non è detto che esista questo buffer d'appoggio. 
+
+Il metodo che veramente funziona prende il nome di \textbf{scatter-gather}. Qui il driver crea una lista dove ogni elemento è una pagina fisica, con il proprio indirizzo e la propria lunghezza, i cui elementi sono riordinati in modo tale da rispettare l'ordine voluto dall'indirizzamento virtuale. Al dispositivo non basterà quindi che percorrere la lista in ordine per leggere le pagine nell'ordine corretto, come se fossero contigue in memoria.
+
+\subsection{Driver e pila di I/O}
+
+Sappiamo già cos'è un driver, ossia del codice kernel che parla coi registri di un dispositivo (o una famiglia di dispositivi) e che offre al sistema operativo un interfaccia standard con la quale questo può lavorare. Studiamoli ora però più affondo e cerchiamo di capire come operano.
+
+Ogni driver deve eseguire 4 distinti lavori:
+\begin{enumerate}
+    \item Deve individuare il dispositivo, mapparne i registri (con la funzione \code{ioremap()}, già vista in precedenza), prepara i vari buffer e infine istalla la funzione che gestirà i vari interrupt di quel singolo dispositivo
+    \item Deve riuscire a tradurre una generica read o write datagli dalla CPU in dei comandi che il dispositivo può capire
+    \item Deve controllare tutti gli interrupt che provengono dal dispositivo a lui associato e verificare che tutto sia andato correttamente e, nel caso, deve anche risvegliare il processo che era in attesa
+    \item Deve essere in grado di fermare il dispositivo e liberarne tutte le risorse
+\end{enumerate}
+
+Tutti i driver si trovano nel kernel perché eseguono delle operazioni I/O, che come ben sappiamo sono operazioni privilegiate. Ma il fatto che questi si trovino nel kernel introduce un problema di sicurezza: infatti, un driver con codice malevolo all'interno può distruggere l'intero sistema, dato che ha accesso a tutto ciò che vuole, e anche un driver non malevolo ma con un bug all'interno può fare lo stesso.
+
+Una volta che un driver da un interfaccia standard al sistema operativo, questo può eseguire diverse operazioni con il dispositivo di I/O configurato, ma tutte queste operazioni seguono una serie di passi di default. Sono in totale 10 questi passi, e segueno una pila chiamata \textbf{pila di I/O}: i primi 5 passi scendono questa pila, mentre gli altri 5 la risalgono. 
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|p{0.15\textwidth}|p{0.10\textwidth}|p{0.23\textwidth}|p{0.10\textwidth}|p{0.24\textwidth}|}
+\hline
+\textbf{Layer} & \textbf{Passo in discesa} & \textbf{Cosa fa} & \textbf{Passo in salita} & \textbf{Cosa fa} \\ \hline
+\textbf{Applicazioone} & 1 & Chiama il comando \code{read()} ed entra nel kernel con una syscall & 12 & \code{read()} ritorna e il programma trova i dati interessati in \code{buf} \\ \hline
+\textbf{VFS + page cache} & 2 & Trova il file e controlla la page cache per verificare se i dati interessati sono già presenti o no & 11 & Copia i dati dalla page cache al buffer utente e risveglia il processo \\ \hline
+\textbf{File system} & 3 & Traduce la posizione nel file dei dati interessati nel numero di blocco logico sul disco dove questi si trovano & 10 & Segnala che la pagina della page cache, riempita dal DMA, contiene ora dati validi \\ \hline
+\textbf{Block layer} & 4 & Accoda la richiesta, la unisce a richieste vicine e riordina la coda, costruendo il \textit{bio} & 9 & Segna la richiesta come completata e lo notifica agli strati superiori \\ \hline
+\textbf{Driver} & 5 & A partire dal bio costruisce il comando e il descrittore DMA e avvisa il dispositivo (con il registro doorbell) & 8 & Gestisce l'interrupt, controlla eventuali errori e segnala il completamento \\ \hline
+\textbf{Dispositivo} & 6 & Esegue l'operazione e copia i dati in RAM tramite DMA & 7 & Lancia un interrupt per segnalare la fine dell'operazione \\ \hline
+\end{tabular}
+\caption{Pila di I/O per una \code{read()}}
+\label{tab-pila-io}
+\end{table}
+
+Alcuni passi di questa pila di I/O già li conoscevamo, come quelli del driver, altri invece non li avevamo mai visti, come quelli del block layer, ma li approfondiremo meglio durante questo capitolo.
+
+Una cosa interessante da notare di questa tabella sono i costi dei singoli passi. I passi dall'1 al 5 e dall'8 al 12 costano un totale di circa $\SI{40}{\micro\second}$, e riguardano tutta la parte software, mentre il consumo dei passi 6 e 7 dipende dal dispositivo hardware, e possono variare dagli $\SI{8}{ms}$ di un HDD fino agli $\SI{80}{\micro\second}$ di una SSD. È evidente dunque che l'ottimizzazione software ha veramente senso solo se è supportata da hardware abbastanza veloci: possiamo avere anche una gestione software velocissima che impiega pochissimi $\mu$s per essere eseguita, ma se la parte hardware impiega diversi ms allora l'avere un software velocissimo diventa superfluo. In questo caso l'hardware sarebbe infatti un vero e proprio collo di bottiglia.
+
+\section{Hard Disk}
+
+\subsection{Dentro un Hard Disk}
+
+Fino ad ora abbiamo parlato degli Hard Disk (HDD) come dei semplici dispositivi di I/O che ci permettono di salvare dati a lungo termine con costi di operazione elevati (circa $\SI{8}{ms}$). È arrivato ora il momento di capire come sono fatti questi Hard Disk internamente, così da capire perché questi siano dei dispositivi così lenti.
+
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Hard Disk vista superiore.png}
+\end{minipage}\hfill
+\begin{minipage}[c]{0.45\textwidth}
+\centering
+\includegraphics[width=1\textwidth, valign=t]{Hard Disk vista laterale.png}
+\end{minipage}
+
+Qui sopra abbiamo sia la vista superiore (a sinistra), che la vista laterale (a destra) di un Hard Disk. Notiamo che è composto da molte componenti. In particolare, dalla vista superiore notiamo:
+\begin{itemize}
+    \item Il \textbf{piatto}: il disco vero e proprio dove si trovano i bit
+    \item Il \textbf{mandrino} (o \textbf{spindle}): l'asse di rotazione centrale che fa ruotare i piatti montati su di esso a una velocità che va dai $\SI{5400}{RPM}$ (Revolution Per Minute, ossia giri al minuto) ai $\SI{15000}{RPM}$, fermandosi però a una velocità tipica di $\SI{7200}{RPM}$
+    \item Una \textbf{traccia}: un anello concentrico sulla superficie (ce ne sono dalle $10000$ alle $100000$ su ogni superficie)
+    \item Un \textbf{settore}: un pezzo di traccia, la più piccola unità che il disco può leggere o scrivere che di solito rappresenta $\SI{4}{KB}$ nei dischi moderni o $\SI{512}{B}$ in quelli più vecchi
+    \item Una \textbf{testina}: permette di leggere o scrivere i bit magneticamente (senza toccare il piatto, ma volando a pochi nanometri dalla superficie)
+    \item Un \textbf{braccio}: questo regge la testina e muovendosi sposta la testina da una traccia all'altra (la sposta quindi più esternamente o più intermanente)  
+\end{itemize}
+
+Dalla vista laterale invece notiamo:
+\begin{itemize}
+    \item Che un disco ha \textbf{più piatti} impilati uno sopra l'altro sullo stesso spindle (solitamente su un Hard Disk troviamo dagli $1$ ai $10$ piatti), che li fa girare tutti insieme
+    \item Che ogni piatto ha \textbf{due superfici}, così da raddoppiare la quantità di dati salvata
+    \item Che c'è una \textbf{testina per ogni superficie}, così da poter raggiungere tutti i bit di tutte le superficie
+    \item Tutti i bracci sono attaccati allo stesso blocco, chiamato \textbf{attuatore}, che li fa muovere tutti insieme
+    \item Un \textbf{cilindro}: l'insieme della stessa traccia su tutte le superficie
+\end{itemize}
+
+A causa della sua struttura circolare il piatto può contenere più dati sulla superficie più esterna piuttosto che su quella più interna. Per questo stesso motivo, sulla superficie esterna riusciamo a leggere molti più dati al secondo rispetto che su quella più interna (passiamo da circa $\SI{200}{MB/s}$ a $\SI{90}{MB/S}$, più del doppio!). Inoltre, queste superfici più esterne essendo più lunghe vengono divise anche in più settori rispetto a quelle interne, così da mantere fissa la dimensione dei diversi settori in tutto il piatto (questo nell'immagine non si può vedere perché è una struttura semplificata, ma bisognerebbe dividere i cerchi più esterni in più settori rispetto a quelli interni per capire com'è davvero fatto un Hard Disk). 
+
+Il sistema operativo però non vede tutta questa struttura complicata: lui ha solo un array numerato, con all'interno tanti \textbf{LBA} (Logical Block Address), ossia dei numeri associati a un singolo settore del disco. I settori più esterni sono i primi ad apparire nell'array numerato, mentre quelli più interni sono gli ultimi. Dunque il sistema operativo non ha idea di quante piatti o tracce abbia l'HHD: lui conosce solo il numero dei settori. Se chiede LBA $= 1000$ lui vuole solo il settore numero 1000 nell'array, ma non sa dove si trova. È poi compito del firmware del disco individuare su quale piatto, superficie e traccia si trova quello specifico settore. In questo modo il firmware è anche capace di nascondere eventuali settori danneggiati al sistema operativo senza che questo mai se ne accorga.
+
+Questa gestione da parte del SO funziona molto bene anche perché tutti i settori sono della stessa dimensione. Abbiamo già accennato che i settori moderni sono divisi in $\SI{4}{KB}$, mentre quelli più vecchi erano a $\SI{512}{B}$. Per uniformare i dischi più nuovi e quelli più vecchi si è voluto creare uno standard, chiamato \textbf{512e} (512 emulated), nel quale anche i dischi più moderni con settori a $\SI{4}{KB}$ dichiarano dal sistema operativo dei selettori da soli $\SI{512}{B}$, così che questo possa lavorare sempre con selettori da $\SI{512}{B}$ senza problemi. In questo modo 8 settori logici corrispondono a un solo settore fisico. Questa gestione può sembrare innocua, ma nasconde un problema non indifferente. Se infatti il sistema operativo decidesse di scrivere su tutti i settori logici a partire da LBA $=4$ fino a LBA $= 8$, dato che il disco può lavorare solo sui singoli settori richiederebbe la lettura e riscrittura di ben due settori fisici (il primo e il secondo), dato che il primo gli da tutti i settori logici da $0$ a $7$ mentre il secondo tutti quelli da $8$ a $15$. Dato che con questa operazione non stiamo modificando un intero settore, il disco dovrà:
+\begin{itemize}
+    \item Leggere i settori fisici 1 e 2 per intero
+    \item Modificare in memoria gli LBA $4-8$
+    \item Riscrivere interamente entrambi i settori
+\end{itemize}
+Questa procedura è la classica \textbf{RMW} (Read Modify Write). Questo inconveniente invece non accade quando si vuole riscrivere un intero settore fisico: in tal caso il disco non si deve scomodare di leggere il settore vecchio per cercare i bit da non modificare, ma può direttamente sovrascrivere tutto con i nuovi dati che gli vengono forniti dal SO, senza alcun problema. Per questo motivo due operazioni che vogliono scrivere entrambe $\SI{4}{KB}$ sull'HDD ma in settori diversi possono avere costi differenti: dipende tutto da quali settori logici si vuole modificare, e se questi settori logici si trovano su due settori fisici (scrittura \textit{disallineata}) o su uno solo (scrittura \textit{allineata}).
+
+Infine, ogni Hard Disk, oltre ad avere un proprio firmware interno che gli permette di comunicare con il sistema operativo ha anche una propria \textbf{cache} (diverse centinaia di MB). Questa cache è utile per diversi motivi:
+\begin{itemize}
+    \item Ogni volta che il disco legge un settore, legge anche i settori successivi che vengono tenuti in cache, così,nel caso questi vengano richiesti, sono già pronti all'utilizzo
+    \item Ogni volta che il SO vuole scrivere qualcosa, il disco può scegliere di scriverlo in cache per metterci meno tempo (pochi $\mu$s contro gli $\SI{8}{ms}$ classici), per poi riscriverlo più tardi sul disco. La scrittura in cache viene chiamata \textit{write-back}, mentre quella sul piatto è detta \textit{write-through}.
+\end{itemize}
+
+Per la lettura è sicuramente molto comoda la cache, ma per la scrittura introduce un serio rischio di sicurezza. Infatti, se il disco, una volta ricevuta una write dal sistema operativo decide di scrivere in cache e non sul piatto, c'è il serio rischio che i dati salvati in cache si perdano se il computer viene spento di colpo. Infatti, la memoria cache è volatile, dunque tutto ciò che c'è scritto sopra viene perso una volta spento il computer. Per questo motivo esiste una funzione chiamata \codeb{fsync()} che dice al disco di scrivere la write appena richiesta non sulla cache ma direttamente sul piatto. 
+
+\subsection{Costi di un Hard Disk}
+
+Ora che sappiamo internamente com'è fatto un Hard Disk, cerchiamo di capire perché i suoi costi sono così alti. 
+
+Ogni volta che il sistema operativo richiede un settore al disco, questo deve fare 3 cose:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Seek}: Deve muovere la testina per cercare la traccia corretta ($T_{\text{seek}} \approx 4/9$ms in media)
+    \item \textbf{Rotation}: Deve ruotare il piatto fino a quando la testina non si trova sul settore corretto ($T_{\text{rotation}} \approx \SI{4.17}{ms}$ in media, ossia metà giro completo il quale invece impiega $\SI{8}{ms}$)
+    \item \textbf{Transfer}: Deve eseguire il trasferimento dei dati, leggendoli o sovrascrivendoli (\mbox{$T_{\text{transfer}} = \SI{0.04}{ms}$} per KB se si va a una velocità di $\SI{100}{MB/s}$)
+\end{enumerate}
+
+Il tempo totale dunque per un disco a $\SI{7200}{RPM}$, con un seek medio a $\SI{4}{ms}$ e con una lettura di $\SI{100}{MB/s}$ per eseguire una lettura di $\SI{4}{KB}$ è:
+\[
+T_{\text{HDD}} = T_{\text{seek}} + T_{\text{rotation}} + T_{\text{transfer}} = 4 + 4.17 + 0.04 = \SI{8.21}{ms}
+\]
+
+Ecco dunque spiegata la lentezza degli Hard Disk: sono la rotazione del piatto e il movimento della testina il vero collo di bottiglia di questo dispositivo hardware. Il disco potrà anche raggiungere velocità di $\SI{100}{MB/s}$, ma le vere letture hanno velocità pari a $\SI{0.5}{MB/s}$, circa 200 volte meno rispetto a quello di cui il disco è veramente capace.
+
+Tuttò ciò che abbiamo detto, però, vale solo per delle letture singole. Infatti, i tempi $T_{\text{seek}}$ e $T_{\text{rotation}}$ pesano molto meno se prendiamo delle letture sequenziali da ad esempio $\SI{1}{MiB}$ (ossia $2^{20} = \SI{1048576}{B}$) o più. Infatti, in queste abbiamo $T_{\text{transfer}} = 0.04 \times 256 = \SI{10.24}{ms}$, dunque troviamo $T_{\text{HDD}} = \SI{18.7}{ms}$. Questo valore è molto minore rispetto a quello che avremmo trovato eseguendo 256 letture singole (che sarebbe circa $\SI{2100}{ms} = \SI{2.1}{s}$), perché in ognuna di quelle letture avremmo dovuto anche ricalcolare il tempo di seek e quello di rotation, cosa che qui invece non abbiamo dovuto fare perché i dati erano scritti in modo sequenziale.
+
+Possiamo generalizzare questo discorso con una formula, che, presa in input la dimensione totale da leggere sul disco, ritorna la velocità in MB/s alla quale lavorerà il nostro disco:
+
+\[
+B(s) = \frac{s}{T_{\text{pos}} + s/R}
+\]
+
+Qui $s$ è la dimensione della richiesta, $R$ è la velocità massima di trasferimento (ossia quella a cui gira il disco, fino ad ora abbiamo parlato sempre di $\SI{100}{MB/s}$) e $T_{\text{pos}}$ è il tempo di seek + il tempo di rotation. Banalmente questa formula è dati letti / tempo che ci impieghiamo a leggerli. Con $s = \SI{1}{MiB}$, troviamo che $B(s) = \SI{1.049}{MB} / (0.0817 + 1.049/100) = 1.049 / 0.01866 \approx \SI{56}{MB/s}$, a metà tra i $\SI{100}{MB/s}$ massimi e i $\SI{0.5}{MB/s}$ minimi. \\
+Per questo motivo è dunque molto importante cercare di effettuare poche richieste e grandi, per evitare di avere letture molto lente. È importante anche, dal punto di vista del file system, mettere i blocchi di un file vicini uno all'altro sul disco, così da poterli leggere in modo sequenziale. 
+
+\subsection{I/O Scheduler}
+
+Con l'obiettivo di leggere più blocchi in sequenza possibili nasce l'\textbf{I/O scheduler}. Quando ci sono più richieste di lettura sul disco tutte in attesa, è l'I/O scheduler quello che deciderà quale sarà la prossimna ad andare, e lo fa seguendo delle policy che cercano proprio di diminuire il più possibile il tempo di seek. Perché il tempo di seek e non il tempo di rotation? Perché per ottimizzare il tempo di rotation bisognerebbe mandare in schedule un settore richiesto che si trova sulla stessa traccia dell'ultimo letto e che si trova il più vicino possibile a lui seguendo la rotazione del piatto. Tutte queste informazioni sono sconosciute al SO, che invece ha solo un array numerato. Per questo motivo lo scheduler può solo decidere di mandare in schedule il settore con LBA più vicino nell'array rispetto a quello dell'ultimo settore letto, dato che due LBA vicini indicano due settori su tracce vicine. Per questo motivo con lo scheduler è possibile modificare il tempo di seek ma non quello di rotation. 
+
+Per avere un buon I/O scheduler bisogna analizzare 4 punti:
+\begin{itemize}
+    \item \textbf{Efficienza} (numero di richieste eseguite al secondo)
+    \item \textbf{Attesa media} di ogni richiesta
+    \item \textbf{Attesa nel caso peggiore} di una richiesta
+    \item \textbf{Equità}
+\end{itemize}
+
+Come già visto nello scheduling dei processi, questi 4 punti sono in conflitto: se si vuole uno scheduler super produttivo allora non si potrà avere uno scheduler anche super equo, e viceversa. Bisogna trovare un giusto compromesso tra le varie cose. 
+
+\subsection{Policy di scheduling}
+
+Ipotizziamo di avere un disco con 200 tracce, e di avere la puntina ferma alla traccia $53$. Abbiamo una serie di richieste in attesa tra cui scegliere: $\{98,183,37,122,14,124,65,67\}$ (scritte nell'ordine di arrivo, i cui numeri indicano la traccia dove si trova il settore richiesto). Analizziamo ora una lista di politiche di scheduling come si comportano in questa situazione.
+
+La policy \textbf{FCFS} (First Come First Served) sceglie ovviamente le tracce da leggere in base all'ordine con cui arrivano nella coda pronti. Seppur equa, non è assolutamente efficiente, dato che passa in totale per 640 tracce diverse per poter arrivare alle 8 tracce presenti nella coda pronti. \\
+Ordine: $53-98-183-37-122-14-124-65-67$
+
+La policy \textbf{SSTF} (Shortest Seek Time First) sceglie le tracce più vicine a quella su cui si trova attualmente la testina. In totale passa dunque per sole 236 tracce rispetto alle 640 precedenti, dunque è sicuramente molto più efficiente, ma è anche molto meno equa: se continuano ad arrivare tracce sempre più vicine alla testina rispetto a una traccia $X$ in coda pronti, è possbiile che questa vada in starvation e non venga mai letta.\\
+Ordine: $53-65-67-37-14-98-124-124-183$
+
+La policy \textbf{SCAN} segue l'idea di un ascensore. Questa prima risponde a tutti i settori che si trovano più verso il centro del piatto (ossia quelli con numero più alto) e poi, una volta raggiunta la cima (ossia la traccia $199$), scende fino al punto più basso possibile presente nella coda pronti. In totale passa quindi per 331 tracce ma evita la starvation. Il problema, però, rimane l'equità: infatti, non tutte le tracce devono aspettare lo stesso tempo. Le tracce nella fascia media sono quelle che aspettano meno, rispetto invece a quelle nella fascia alta o bassa che invece devono aspettare decisamente di più (circa 2 volte tanto). \\
+Ordine: $53-65-67-98-122-124-183-(199)-37-14$ (la traccia $199$ viene raggiunta sempre anche se non c'è nessuno che l'ha richiesta)
+
+La policy \textbf{C-SCAN} cerca di risolvere il problema dell'equità della policy SCAN facendo passare in un attimo l'ascensore da $199$ a $0$. In questo modo, la fascia bassa non deve aspettare l'intera salita e poi l'intera discesa per essere letta ma solo la salita, e le fasce medie sono così uguali rispetto a tutte le altre. In questo caso passa per 382 tracce, mantenendo però l'equità.  \\
+Ordine: $53-65-67-98-122-124-183-(199)-(0)-14-37$ (Le tracce $199$ e $0$ sono raggiunte sempre anche se non c'è nessuno che le richieda)
+
+La policy \textbf{LOOK} è identica alla SCAN ma evita di raggiungere inutilmente la traccia in cima (ossia la $199$) e va invece direttamente in discesa non appena arriva alla traccia più alta presente. In totale passa quindi solo per 299 tracce al posto delle 331 della SCAN, mantenendone però i problemi di equità. \\
+Ordine: $53-65-67-98-122-124-183-37-14$
+
+La policy \textbf{C-LOOK} è identica alla C-SCAN ma, come fa la LOOK con la SCAN, evita di passare per le tracce in cima e in fondo ma passa direttamente dalla traccia più alta a quella più bassa. In totale passa quindi solo per 322 tracce al posto delle 382 della C-SCAN. \\
+Ordine: $53-65-67-98-122-124-183-14-37$
+
+Nella vita reale sono proprio le ultime due policy quelle utilizzate. La C-LOOK viene usata se si vuole mantenere l'equità a tutti i costi, mentre la LOOK se si vuole più efficienza.
+
+Esiste, però, un'altra policy di scheduling, che non si basa solo sul ridurre il tempo di seek ma anche sul ridurre il tempo di rotation. Infatti, nonostante abbiamo già visto come il SO non possa da solo migliorare questo tempo dato che dipende da informazioni che non conosce, è possibile creare una policy che, lavorando insieme al disco riesca a migliorare in parte anche questa variabile. Questa policy è la policy \textbf{SPTF} (Shortest Positioning Time First), che sceglie proprio la richiesta con il minimo tempo di seek + rotation. Dato che non può essere quindi il SO a scegliere quale settore deve essere letto per primo, il SO manda alcuni candidati al disco (scelti usando le policy viste in precedenza) e poi il disco sceglie quello con tempo di seek + rotation minore, calcolando questi valori grazie al suo firmware interno.
 
 
 \end{document}
