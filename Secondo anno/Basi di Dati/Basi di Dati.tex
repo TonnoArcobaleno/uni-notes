@@ -3601,7 +3601,51 @@ Tutto ciò è dovuto a un semplice errore iniziale: abbiamo deciso di rappresent
     \item $R_3 = (\underline{\text{Progetto}}, \text{Bilancio})$ 
 \end{itemize}
 
-Queste tre relazioni ora sappiamo che sono in 3FN, ma la Proposizione \ref{propos-decomposizione} ci ricorda che questo \textbf{non basta}. È necessario anche verificare che le dipendenze funzionali siano tutte preservate e che anche tutte le istanze legali dello schema originale lo siano. Come facciamo quindi a verificare queste due condizioni?
+Queste tre relazioni ora sappiamo che sono in 3FN, ma la Proposizione \ref{propos-decomposizione} ci ricorda che questo \textbf{non basta}. È necessario anche verificare che le dipendenze funzionali siano tutte preservate e che anche tutte le istanze legali dello schema originale lo siano. Come facciamo quindi a verificare queste due condizioni? 
+
+\subsection{Verificare che una decomposizione sia corretta}
+
+\begin{Definizione}[Insiemi di dipendenze equivalenti]
+\label{def-insiemi-equivalenti}
+Preso uno schema $R$ e due insiemi di dipendenze funzionali $F$ e $G$, $F$ e $G$ sono \textbf{equivalenti} ($\bm{F \equiv G}$) $\iff \bm{F^+ = G^+}$.
+\end{Definizione}
+
+\begin{Proposizione}[Lemma sulle chiusure di insiemi di dipendenze]
+\label{propos-lemma-chiusure-insiemi}
+Preso uno schema $R$ e due insiemi di dipendenze funzionali $F$ e $G$, $\bm{F \subseteq G^+} \iff \bm{F^+ \subseteq G^+}$.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+\begin{itemize}
+    \item $F \subseteq G^+ \implies F^+ \subseteq G^+$ \\
+    Sia $f$ una dipendenza in $F^+$ che non compare in $F$. Dato che $f \in F^+ = F^A$, sappiamo che è ricavabile da $F$ usando gli assiomi di Armstrong. Allo stesso modo, ogni dipendenza di $F$ è ricavabile da $G^+$ usando gli assiomi di Armstrong, dato che $F \subseteq G^+ = G^A$ per ipotesi. Dunque da $G^+$ noi possiamo ricavarci tutte le dipendenze in $F$, e da $F$ possiamo ricavarci tutte le dipendenze di $F^+$. Questo significa che da $G^+$ possiamo ricavarci tutte le dipendenze di $F^+$, ossia che $G^+ \subseteq F^+$. $\blacksquare$ 
+    \item $F \subseteq G^+ \impliedby F^+ \subseteq G^+$ \\
+    Banalmente, dato che $F \subseteq F^+$ troviamo che se $F^+ \subseteq G^+$ allora anche $F \subseteq G^+$. $\blacksquare$
+\end{itemize}
+
+\begin{Proposizione}[Corollario]
+\label{propos-corol-insiemi-equivlaenit}
+Preso uno schema $R$ e due insiemi di dipendenze funzionali $F$ e $G$, $\bm{F \equiv G}$ implica che:
+\begin{itemize}
+    \item $\bm{F^+ = G^+}$ (per la definizione stessa di equivalenza)
+    \item $\bm{F^+ \subseteq G^+} \land \bm{G^+ \subseteq F^+}$ (proprio perché $F^+ = G^+$)
+    \item $\bm{F \subseteq G^+} \land \bm{G \subseteq F^+}$ (per il lemma sulle chiusure)
+\end{itemize}
+\end{Proposizione}
+
+Diventa evidente che quindi un'istanza $r$ di $R$ se è legale per $F$ (ossia soddisfa tutte le dipendenze funzionali in $F^+$), e legale anche per $G$, dato che $G \subseteq F^+$, e viceversa. Quindi un'istanza legale per un insieme $F$ lo è anche per tutti gli insiemi equivalenti a $F$.
+
+\begin{Proposizione}[Corollario]
+\label{propos-corol-finale}
+$\bm{F \equiv G} \implies$ le istanze \textbf{legali su} $\bm{F}$ sono le stesse istanze\textbf{legali su} $\bm{G}$.
+\end{Proposizione}
+
+Per verificare quindi se le istanze legali su $F$ e su $G$ sono le stesse ci basta dimostrare che $F \equiv G$, e per verificare che $F \equiv G$ ci basta dimostrare che $F \subseteq G^+$ e $G \subseteq F^+$, ossia che tutte le dipendenze di $F$ siano in $G^+$ e che tutte le dipendenze di $G$ siano in $F^+$. Rimane però sempre il problema di calcolare $F^+$ e $G^+$, il cui calcolo come sappiamo può essere esponenziale. 
+
+Possiamo però evitare di calcolare $F^+$ e $G^+$ ricordando il primo lemma di chiusura che abbiamo visto, che ci dice che $X \longrightarrow Y \in F^A \iff Y \subseteq X^+_F$. Grazie a questo lemma diventa quindi evidente che per verificare che $F \equiv G$ basta prendere ogni dipendenza $X \longrightarrow Y$ di $F$ e verificare che $Y \in X^+_G$ e fare la stessa cosa con le dipendenze in $G$. \\
+\NB $X$ e $Y$ non devono essere singoli attributi, possono essere anche delle liste con più attributi
+
 
 
 
