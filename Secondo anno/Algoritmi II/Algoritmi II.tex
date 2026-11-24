@@ -1747,6 +1747,53 @@ Intervalli(I): // I insieme iniziale di intervalli
 
 Adesso però sorge un dubbio importante: \textit{come possiamo essere certi che questo algoritmo restituisca sempre la soluzione ottimale?} Infatti, essendo questo un algoritmo greedy non ci è garantito che la soluzione finale sia ottimale. Dobbiamo dunque dimostrarlo.
 
+\Dimostrazione \nopagebreak
+
+Indichiamo con $Sol_i$ il valore di \code{Sol} all'iterazione i-esima del for, e in particolare diciamo che $Sol_0 = \varnothing$. Da questa definizione notiamo già che $Sol_i \subseteq Sol_{i+1}$ (dato che a \code{Sol} nell'algoritmo vengono solo aggiunti degli intervalli e mai tolti), e in particolare notiamo che $Sol_{i+1}$ vale o $Sol_i$ o $Sol_{i} \cup I_{i+1}$.
+
+Dichiariamo ora una nuova proposizione $\bigstar$: $\forall i \in \{0, \ldots, n\}$ esiste una soluzione ottimale $Sol^*$ tale che $Sol_i \subseteq Sol^*$. Per il momento assumiamo vera questa proposizione, lasciandoci per dopo la dimostrazione.
+
+Dato che $\bigstar$ è vera, non ci resta che dimostrare che $Sol^* \subseteq Sol_n$ per dimostrare che $Sol_n = Sol^*$ e che quindi \code{Sol} sia una soluzione ottimale. \\
+Assumiamo per assurdo che $Sol_n \neq Sol^*$, ossia che $Sol^* \nsubseteq Sol_n$. Ciò significa che $\exists I_i = [a,b]$ dove $I_i \in Sol^* \land I_i \notin Sol_n$. In particolare, questo intervallo $I_i$ poteva essere aggiunto all'i-esima iterazione del for, ossia a $Sol_i$, ma dato che non è stato aggiunto dobbiamo dedurre che questo si scontrasse con qualche intervallo in $Sol_i$. Ma dato che $Sol_n \subseteq Sol^*$ (per $\bigstar$), troviamo che $I_i$ si scontra anche con qualche intervallo in $Sol^*$, dunque non può essere inserito in questo insieme. Ma per ipotesi abbiamo che $I_i \in Sol^*$: abbiamo quindi troviamo una contraddizione. Concludiamo che questo $I_i$ non esiste, e che quindi $Sol^* \subseteq Sol_n$, ossia $Sol_n = Sol^*$.
+
+Abbiamo appena visto che, se $\bigstar$ è vera, la dimostrazione di correttezza funziona. Non ci resta dunque che dimostrare $\bigstar$. Facciamolo per induzione.
+\begin{itemize}
+    \item Caso base: $i = 0$ \\
+    Banalmente $Sol_0 = \varnothing \subseteq Sol^*$.
+    \item Ipotesi induttiva \\
+    Assumiamo vera $\bigstar$ per una $i < n$ qualsiasi
+    \item Passo induttivo \\
+    Vogliamo dunque dimostrare che $Sol_{i+1} \subseteq Sol^{**}$, dove $Sol^{**}$ è una soluzione ottimale. Distinguiamo due casi:
+    \begin{itemize}
+        \item Se $Sol_{i+1} = Sol_i$ allora sappiamo che $Sol_{i+1} \subseteq Sol^*$, dunque concludiamo che $Sol^{**}$ esiste e coincide con $Sol^*$, la stessa soluzione ottimale di $Sol_i$.
+        \item Se $Sol_{i+1} \neq Sol_i$, allora sappiamo che $Sol_{i+1} = Sol_i \cup I_{i+1}$. A questo punto ci sono due casi:
+        \begin{itemize}
+            \item Se $I_{i+1} \in Sol^*$, allora troviamo anche qui che $Sol^{**} = Sol^*$
+            \item Se invece $I_{i+1} \notin Sol^*$, allora sappiamo che $\exists I_j \in Sol^*$ che non è presente in $Sol_i$ che si scontra con $I_{i+1}$ (altrimenti $Sol^+ \cup I_{i+1}$ sarebbe una soluzione ottimale e avremmo concluso). Dobbiamo ora dimostrare che $I_j$ non è stato ancora visitato quando stiamo analizzando $I_{i+1}$. Dimostriamolo per assurdo. \\
+            Supponiamo che $I_j$ sia già stato visitato quando arriviamo all'iterazione $i+1$, e che sia stato scartato (per forza deve essere scartato, altrimenti non potremmo inserire $I_{i+1}$ in $Sol_{i+1}$, ma sappiamo che se ci troviamo in questo caso $I_{i+1} \in Sol_{i+1}$). Questo significa che esiste un intervallo $I_h \in Sol_{j-1}$ che si trovava in conflitto con lui. Dato che $Sol_{j-1} \subseteq Sol_i \subseteq Sol^*$, troviamo che $I_h \in Sol^*$. Ma sappiamo che anche $I_j \in Sol^*$, dunque troviamo che i due intervalli $I_j$ e $I_h$ in conflitto si trovano entrambi nella soluzione ottimale. Questo è un assurdo, dunque concludiamo che $I_j$ non può essere visitato dall'algoritmo prima di $I_{i+1}$, e che quindi $i + 1 < j$. \\
+            Dato che $i + 1 < j$, troviamo che $b_{i+1} \leq b_j$ (ricordiamo che stiamo ordinando gli intervalli in modo crescente in base al loro valore $b_i$). Osserviamo anche che, $\forall b_k$ di un intervallo $I \in Sol_i$, $b_k < a_{i+1}$, dato che $I_{i+1}$ viene inserito in $Sol_{i+1}$ e dunque è disgiunto da tutti gli intervalli in $Sol_I$. Grazie a queste due informazioni ci è possibile definire $Sol^{**}$ in questo modo:
+            \[
+            Sol^{**} = (Sol * - I_j) \cup I_{i+1}
+            \]
+            Questa soluzione $Sol^{**}$ è poi anche ottimale perché il numero di intervalli al suo interno è pari al numero di intervalli in $Sol^*$ (abbiamo infatti effettuato solo uno scambio). Dunque abbiamo trovato una soluzione ottimale $Sol^{**}$ che contiene $Sol_{i+1}$. La dimostrazione, però, non è ancora finita. Infatti, fino ad ora siamo andati avanti con l'assunzione che $I_j$ sia unico in $Sol^*$, ma questo non è detto: dobbiamo dimostrare che è l'unico intervallo in contrasto con $I_{i+1}$ che si trova in $Sol^*$, altrimenti, se questo non fosse vero, la soluzione $Sol^{**}$ sarebbe errata (avrebbe infatti due intervalli in contrasto al proprio interno). \\
+            Dobbiamo quindi dimostrare che, $\forall I_{j'} \in Sol^{**}$ $I_{j'} \cap I_{i+1} = \varnothing$, con ovviamente $j' \neq i + 1$. Per dimostrare ciò dividiamo due casi:
+            \begin{itemize}
+                \item $I_{j'} \in Sol_i$ \\
+                Banalmente $I_{j'} \cap I_{i+1} = \varnothing$ dato che $I_{i+1}$ viene inserito in $Sol_i$, dunque non possono esserci intervalli non disgiunti con lui.
+                \item $I_{j'} \notin Sol_i$ \\
+                Poniamo per assurdo $I_{j'} \cap I_{i+1} \notin \varnothing$. Per lo stesso motivo visto con $I_j$, abbiamo che $b_{j'} \geq b_{i+1}$. Dato che $a_{j'} \leq b_{i+1}$ (altrimenti gli intervalli non sarebbero in contrasto), abbiamo che $b_{i+1} \in I_{j'}$. Lo stesso ragionamento può essere fatto anche con $I_j$, trovando quindi che $b_{i+1} \in I_j$. Ma questo è un assurdo: abbiamo due intervalli con lo stesso valore all'interno ($b_{i+1}$) che fanno parte della stessa soluzione ottimale ($Sol^*$). Concludiamo dunque che $I_{j'} \cap I_{i+1} = \varnothing$.
+            \end{itemize} 
+        \end{itemize}
+    \end{itemize}
+\end{itemize}   
+
+Avendo quindi dimostrato $\bigstar$, concludiamo che $Sol_n = Sol^*$, ossia che \code{Sol} è una soluzione ottimale. $\blacksquare$.
+
+\NB Questa dimostrazione, nonostante sia molto lunga e articolata, è importante consocerla perché all'interno vi è il \textit{template} classico di molte dimostrazioni degli algoritmi greedy. Studiando anche le altre dimostrazioni diventerà evidente che tutte seguono la stessa idea di fondo.
+
+\section{MST}
+
+
 
 
 \end{document}
