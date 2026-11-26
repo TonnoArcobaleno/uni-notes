@@ -1628,8 +1628,7 @@ Il costo toale di questo algoritmo è $\O(n \log n + m \log n) = \textbf{O}\bm{(
 
 \subsection{Funzioni peso particolari}
 
-Analizziamo ora due nuove funzioni peso particolari:
-
+Analizziamo ora due nuove funzioni peso particolari derivanti da $w$:
 \begin{minipage}{0.48\textwidth}
 \begin{align*}
 w_1: &E(G) \to \mathbb{R}^+_0 \\
@@ -1792,9 +1791,11 @@ Avendo quindi dimostrato $\bigstar$, concludiamo che $Sol_n = Sol^*$, ossia che 
 
 \section{MST}
 
+\subsection{Kruskal e Prism}
+
 \begin{Definizione}[MST]
 \label{def-MST}
-Dato un grafo $G$ pesato, un \textbf{MST} (Minimum Spanning Tree) è un albero di copertura di $G$ il cui peso è minimo tra tutti gli alberi di copertura di $G$. 
+Dato un grafo $G$ pesato, un \textbf{MST} (Minimum Spanning Tree) è un albero di copertura (spanning in inglese significa proprio di copertura) di $G$ il cui peso è minimo tra tutti gli alberi di copertura di $G$. 
 \end{Definizione}
 
 Vogliamo ora trovare, dato un albero $G$ non diretto, pesato e connesso, il minimo MST di $G$. 
@@ -1934,6 +1935,469 @@ Abbiamo appena visto che, se $\bigstar$ è vera, la dimostrazione di correttezza
 \end{itemize}
 
 Avendo quindi dimostrato $\bigstar$, concludiamo che $Sol_n = Sol^*$, ossia che \code{Sol} è una soluzione ottimale. $\blacksquare$
+
+\begin{Proposizione}[Schema generale di dimostrazione di correttezza]
+\label{propos-schema-generale}
+Notiamo come queste due dimostrazioni siano nella struttura molto simili tra loro e alla dimostrazione di correttezza dell'algoritmo degli intervalli. Questo schema è il più comune per dimostrare la correttezza di un algoritmo greedy:
+\begin{enumerate}[label=\arabic*°]
+    \item Dimostrare che l'algoritmo restituisce una soluzione possibile (come abbiamo fatto per Kruskal e Prim nella Proposizione \ref{propos-prim-kruskal}).
+    \item Definire la notazione: $Sol_i$ è il valore di \code{Sol} dopo l'$i$-esima iterazione, con $Sol_0 = \varnothing$ e $Sol_i \subseteq Sol_{i+1}$.
+    \item Definire l'invariante $\bigstar$: $\forall i$ esiste una soluzione ottimale $Sol^*$ tale che $Sol_i \subseteq Sol^*$.
+    \item Dimostrare che, se $\bigstar$ è vera, la soluzione finale coincide con una soluzione ottimale.
+    \item Dimostrare $\bigstar$ per induzione, analizzando nel passo induttivo prima i casi in cui l'elemento $e_{i+1}$ non viene aggiunto oppure viene aggiunto e appartiene già a $Sol^*$, e arrivando al caso in cui $e_{i+1}$ viene aggiunto a $Sol_{i+1}$ ma non si trova in $Sol^*$.
+    \item In quest'ultimo caso effettuare uno \textbf{scambio}:
+    \begin{enumerate}[label=\alph*)]
+        \item Trovare un elemento $f \in Sol^*$ tale che $f \notin Sol_{i+1}$
+        \item Usare la scelta greedy per dimostrare che $f$ non è migliore di $e_{i+1}$ (per gli MST, $w(e_{i+1}) \leq w(f)$)
+        \item Definire $Sol^{**} = (Sol^* - f) \cup e_{i+1}$ e verificare che sia ammissibile, che sia ottimale e che $Sol_{i+1} \subseteq Sol^{**}$
+    \end{enumerate}
+\end{enumerate}
+\end{Proposizione}
+
+
+Questo schema è molto generale e va applicato a caso per caso, e non sempre funziona per tutti gli algoritmi greedy, ma è il migliore da seguire per scrivere una dimostrazione di correttezza.
+
+\subsection{Di nuovo le funzioni peso particolari}
+
+Riprendendiamo nuovamente le funzioni peso particolari che avevamo visto nel capitolo scorso:
+\begin{minipage}{0.48\textwidth}
+\begin{align*}
+w_1: &E(G) \to \mathbb{R}^+_0 \\
+ &w_1(e) = w(e) + 1
+\end{align*}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{align*}
+w_2: &E(G) \to \mathbb{R}^+_0 \\
+&w_2(e) = 2w(e)
+\end{align*}
+\end{minipage}
+
+Preso un MST $T$ di un grafo $G$ non diretto, connesso e pesato, ci domandiamo se $T$ rimanga effettivamente un MST di $G$ anche dopo aver applicato le funzioni $w_1$ e $w_2$ a tutti i pesi di $G$. 
+
+Per i cammini avevamo visto che solo la funzione $w_2$ effettivamente non modificava la correttezza del cammino minimo $P$, mentre non si poteva dire lo stesso per la funzione $w_1$. Con gli MST, invece, \textbf{entrambe le funzioni non modificano lo status di MST dell'albero T}. Vediamo prima perché questo è vero con $w_1$ e poi perché è vero con $w_2$. 
+
+Preso $T'$ un qualsiasi albero di copertura di $G$, vogliamo quindi dimostrare che $w_1(T) \leq w_1(T')$, dove $T$ è un MST di $G$ pesato con $w$. Sappiamo che 
+\begin{align*}
+w_1(T) &= \sum_{e \in E(T)} w_1(e) \\
+       &= \sum_{e \in E(T)} (w(e) + 1) \\
+       &= \sum_{e \in E(T)} w(e) + \sum_{e \in E(T)} 1 \\
+       &= w(T) + n-1 
+\end{align*}
+
+\NB $\sum_{e \in E(T)} 1 = n-1$ perché tutti gli alberi $T$ hanno lunghezza $V(T) - 1$ e, essendo $T$ in questo caso un albero di copertura, troviamo proprio che $V(T) - 1 = n - 1$.
+
+Dato che $w_1(T') = w(T') + n-1$ (basta rieseguire i calcoli visti per $w_1(T)$ per trovare questo risultato), troviamo che 
+\begin{align*}
+w_1(T) &\leq w_1(T')  \\
+w(T) + n-1 &\leq w(T') + n-1 \\
+w(T) &\leq w(T') 
+\end{align*}
+che è sicuramente vero essendo $T$ un MST di $G$ pesato con $w$. Dunque troviamo che $T$ è rimasto un MST anche con $w_1$.
+
+Dimostrare che $T$ rimane un MST anche con $w_2$ è molto semplice e segue lo stesso procedimento visto per i cammini minimi. Infatti, dato che $w_2(T) = \sum_{e \in V(T)} w_2(T) = 2 \sum_{e \in V(T)} w(e) = 2 w(T)$, troviamo che anche $w_2(T') = 2 w(T')$, dunque dalla disugualinza $w_2(T) \leq w_2(T')$ troviamo proprio la disuguaglianza $w_2(T) \leq w_2(T')$, che è sempre vera dato che $T$ è un MST di $G$ calcolato con $w$.
+
+Dallo studio di queste due funzioni peso possiamo enunciare due proposizioni che ci saranno molto d'aiuto nel risolvere alcuni problemi.
+
+\begin{Proposizione}[]
+\label{propos-pesi-mst}
+Preso un MST $T$ di un grafo $G$ non diretto, connesso e pesato troviamo che:
+\begin{itemize}
+    \item $T$ rimane un MST anche se ai pesi del grafo viene \textbf{aggiunto} un certo valore $k \in \Z$.
+    \item $T$ rimane un MST anche se ai pesi del grafo viene \textbf{moltiplicato} un certo valore $k \in \Z$.
+\end{itemize}
+\end{Proposizione}
+
+\subsection{Problemi con MST}
+
+Vedremo ora una due problemi riguardanti gli MST. Non ci soffermeremo molto sulle varie soluzioni ma daremo semplicemente un'idea per poterli risolvere.
+
+Preso un grafo $G$ non diretto, connesso e pesato con pesi positivi ma anche negativi, vogliamo trovare un MST. Possiamo farlo in due modi:
+\begin{enumerate}
+    \item Possiamo riutilizzare o l'algoritmo di Kruskal o quello di Prism e verificare che la dimostrazione di correttezza non cambi (ossia verificare che il fatto che i pesi fossero positivi non sia importante nella dimostrazione).
+    \item Oppure possiamo prendere il peso negativo più piccolo tra tutti gli archi, che chiamiamo $k$, e aggiungere al peso di tutti gli archi del grafo $-k$. In questo modo avremo un grafo $G$ con tutti pesi $\geq 0$ e potremo trovare un MST facilmente usando Kruskal o Prism senza dover andare a ricontrollare tutta la dimostrazione di correttezza. Questo funziona perché la Proposizione \ref{propos-pesi-mst} ci dice che un MST $T$ rimane un MST anche se viene aggiunto un qualsiasi valore $k$ a tutti i pesi di $G$.
+\end{enumerate}
+
+Preso un grafo $G$ non diretto, connesso e pesato, vogliamo trovare un MaxST (Maximum Spanning Tree), ossia un albero di copertura con peso massimo. Possiamo anche qui risolvere questo problema in due modi:
+
+\begin{enumerate}
+    \item Possiamo utilizzare l'algoritmo di Kruskal ordinando gli archi in ordine decrescente e non crescente oppure possiamo utilizzare l'algoritmo di Prism utilizzando un maxheap al posto di un minheap per prendere l'arco uscente da $R$ con peso maggiore. In entrambi i casi bisogna dimostrare che la correttezza dei due algoritmi non cambia con queste modifiche.
+    \item Oppure possiamo moltiplicare tutti i pesi di $G$ per $-1$ creando così $G'$ e trovare un MST di $G'$. Questo funziona perché la Proposizione \ref{propos-pesi-mst} ci dice che un MST $T$ rimane un MST anche se tutti i pesi di $G$  sono moltiplicati per lo stesso valore $k$.
+\end{enumerate}
+
+\subsection{MST con pesi diversi}
+
+\begin{Proposizione}[]
+\label{propos-mst-pesi-diversi}
+Preso un grafo $G$ non diretto, connesso e pesato, tutti i \textbf{pesi} di $G$ \textbf{sono distinti} $\implies$ \textbf{esiste un unico MST} in $G$.
+\end{Proposizione}
+
+\Dimostrazione \nopagebreak
+
+Supponiamo per assurdo che esistano due MST diversi $T_1$ e $T_2$ in $G$, il nostro grafo pesato con tutti pesi distinti. Essendo $T_1$ e $T_2$ due alberi diversi, sappiamo sicuramente che esiste almeno un arco che appartiene o solo a $T_1$ o solo a $T_2$. Tra tutti gli archi che non si trovano in entrambi gli alberi prendiamo l'arco con peso minore $uv$. Supponiamo ora che $uv$ sia in $T_2$. Sappiamo quindi che $T_1 \cup uv$ contiene un ciclo $C$, dato che $T_1$ è un albero di copertura. Dato che tutti gli archi di $C$ non possono stare in $T_2$ (altrimenti anche lì ci sarebbe un ciclo), esiste sicuramente almeno un arco che non è in $T_2$. Chiamiamo questo arco $f$. Ora, dato che $f$ è in $T_1$ e non in $T_2$, sappiamo che anche lui, come $uv$, è un arco che non si trova in entrambi gli alberi. Essendo $uv$ l'arco con peso minore tra quelli che non sono in entrambi gli alberi, deduciamo che $w(f) > w(uv)$ (non può essere uguale dato che tutti i pesi sono distinti). Allora possiamo ora creare un nuovo MST in questo modo:
+\[
+T = (T_1 - f) \cup uv 
+\]
+
+Dato che $w(f) > w(uv)$, troviamo che $w(T) < w(T_1)$. Ma, essendo $T_1$ un MST per ipotesi questo è un assurdo. Dunque concludiamo che non possono esistere due MST $T_1$ e $T_2$ diversi, ossia che esiste un unico MST $T$ in $G$. $\blacksquare$
+
+
+\chapter{Divide et impera}
+
+\section{Divide et impera e ricorsione}
+
+\begin{Definizione}[Divide et impera]
+\label{def-divide-et-impera}
+Un algoritmo \textbf{divide et impera} risolve un problema dividendolo in tre fasi:
+\begin{enumerate}[label=\arabic*°]
+    \item \textbf{Divide}: si divide il problema in sottoproblemi più piccoli dello stesso tipo
+    \item \textbf{Impera}: si risolvono ricorsivamente i sottoproblemi, risolvendo direttamente quelli abbastanza piccoli (caso base)
+    \item \textbf{Combina}: si combinano le soluzioni dei sottoproblemi per ottenere la soluzione del problema originale
+\end{enumerate}
+\end{Definizione}
+
+Abbiamo già affrontato questa tecnica nel corso di Algoritmi I quando abbiamo parlato di merge sort e di quick sort, due algoritmi di ordinamento che si basano proprio sull'idea del divide et impera. Di entrambi questi algoritmi possiamo notare una caratteristica particolare, ossia che la loro implementazione classica è \textbf{ricorsiva}. Questo non è un caso: quasi tutti gli algoritmi che usano la tecnica del divide et impera sono ricorsivi. Per questo motivo ci è molto utile rispolverare un'altra nozione del corso di Algoritmi I, ossia il \textbf{Master Theorem}.
+
+\begin{Definizione}[Master Theorem]
+\label{def-master-theorem}
+Sia $T(n)$ una funzione definita dall'equazione di ricorrenza
+\[
+\bm{T(n) = a \, T(n/b) + f(n)}
+\]
+con $a \geq 1$, $b > 1$ costanti e $f(n)$ funzione asintoticamente positiva:
+\begin{enumerate}
+    \item Se $f(n) = \O(n^{\log_b a - \varepsilon})$ per qualche costante $\varepsilon > 0$, allora si ha $\bm{T(n) = \Theta(n^{\log_b a})}$
+    \item Se $f(n) = \Theta(n^{\log_b a} \log^k n)$ per qualche costante $k \geq 0$, allora si ha \mbox{$\bm{T(n) = \Theta(n^{\log_b a} \log^{k+1} n)}$}
+    \item Se $f(n) = \Omega(n^{\log_b a + \varepsilon})$ per qualche costante $\varepsilon > 0$ e se $a \, f(n/b) \leq c \, f(n)$ per qualche costante $c < 1$ e per ogni $n$ sufficientemente grande, allora si ha $\bm{T(n) = \Theta(f(n))}$
+\end{enumerate}
+\end{Definizione}
+
+Grazie a questo Master Theorem ci è possibile non solo calcolare la complessità di un algoritmo divide et impera, ma ci è soprattutto possibile calcolare, a partire da una complessità temporale da noi ricercata, l'equazione di ricorrenza che il nostro algoritmo dovrà avere. 
+
+Ad esempio, se cerchiamo un algoritmo in costo $\O(\log n)$, allora sappiamo già che avremo un'equazione di ricorrenza del tipo $T(n) = T(n/b) + \O(1)$, con $b > 1$. Infatti, un costo $\O(\log n)$ lo possiamo ottenere solo dal secondo caso quando $\log_b a = 0$, ossia quando $a = 1$, e per rientrare in questo caso dobbiamo avere $f(n) = \theta(n^{\log_b a \log^k n})$, ossia $f(n) = \Theta(n^0) = \Theta(1) = \O(1)$. \\
+Se invece cerchiamo un algoritmo con costo $\O(n \log^2 n)$, allora sappiamo già che avremo un'equazione di ricorrenza del tipo $T(n) = x T(n/x) + \O(n\log n)$, con $a = b = x$. Infatti, un costo $\O(n \log^2 n)$ lo possiamo ottenere solo dal secondo caso (nel quale rientriamo) quando abbiamo $\log_b a = 1$ e $k = 1$, ossia quando abbiamo $a = b$ e \mbox{$f(n) = \Theta(n^{\log_b a} \log n) = \Theta(n \log n) = \O(n \log n)$}. 
+
+\section{Problemi con array risolvibili con il divide et impera}
+
+\subsection{Sottoarray massimale}
+
+Preso un array $A$ di interi, cerchiamo un sottoarray che massimizza la somma (ossia la cui somma è la somma massima tra tutti i possibili sottoarray in $A$). \NB Un sottoarray è una sequenza contigua in $A$, mentre una sottosequenza è una sequenza che non deve per forza essere contigua. È importante tenere bene a mente questa differenza. 
+
+Un primo approccio a questo problema un po' ingenuo sarebbe quello di controllare tutte le sottosequenze in $A$ e trovare quella la cui somma è massima. Ovviamente questo funziona, ma ha un costo computazionale di $\O(n^3)$, dato che per ogni sottoarray dobbiamo eseguire la somma dei suoi interi, il cui costo è $\O(n)$, e ci sono in totale $\O(n^2)$ (dato che il sottoarray può iniziare da $n$ possibili posizioni e finire a $n$ possibili posizioni) sottoarray in $A$. Possiamo fare sicuramente di meglio. In particolare, possiamo arrivare ad un costo di $\O(n \log n)$.
+
+Dal costo $\O(n \log n)$ capiamo che l'algoritmo che cerchiamo deve avere un'equazione di ricorrenza del tipo $T(n) = x T(n/x) + \O(n)$, dato che ricadiamo nel secondo caso con $a = b$ e $f(n) = \O(n)$. Può quindi aver senso cercare un algoritmo ricorsivo nel quale dividiamo l'array in 2 metà \code{sx} e \code{dx} sulle quali richiamiamo ricorsivamente l'algoritmo (stiamo dunque ponendo $x = 2$) e nel quale eseguiamo delle operazioni con un costo totale di $\O(n)$. 
+
+Le chiamate ricorsive su \code{sx} e \code{dx} ci diranno quindi il sottoarray che massimizza la somma tra quelli che si trovano rispettivamente solo a sinistra e solo a destra. Con il costo $\O(n)$ che ci rimane, invece, possiamo trovare il sottoarray che massimizza la somma tra quelli che si trovano a metà tra \code{sx} e \code{dx}. Per fare ciò in tempo $\O(n)$ possiamo sfruttare due puntatori, \code{prefisso} e \code{suffisso}. Partendo da $n/2$, che è sicuramente un valore che dobbiamo prendere dato che stiamo analizzando tutti i sottoarray in mezzo tra \code{sx} e \code{dx}, \code{prefisso} ci dice fino la somma massima che troviamo a sinistra di $n/2$, mentre \code{suffisso} ci dice la somma massima che troviamo a destra di $n/2$. Ad esempio, con $A = [-1,3,4,-2,4,-3,-5,2]$, partendo dall'indice $i = n/2$ che corrisponde al numero $4$ al centro dell'array, avremo \code{prefisso = 5} ($-2+4+3$ è la somma massima che troviamo a sinistra di $n/2$) e \code{suffisso = 0} ($0$ è la somma massima che troviamo a destra, dato che tutte le altre somme possibili dei sottoarray sono negative, ossia $-3$, $-8$ e $-6$). Dato che prefisso legge tutta la metà a sinistra dell'array e suffisso tutta quella a destra, troviamo che il costo di questa operazione è $\O(n)$, proprio come volevamo. Vediamo come si traduce questo in codice:
+
+\begin{lstlisting}
+SottoarrayMax(A):
+    n = len(A)
+    if n == 0: // Array vuoto
+        return 0
+    if n == 1:
+        if A[0] < 0:
+            return 0 // Il sottoarray vuoto è la scelta migliore
+        else:
+            return A[0]
+    sottoarray_sinistro = SottoarrayMax(A[0:n/2 - 1]) // Troviamo il sottoarray massimo a sinistra
+    sottoarray_destro = SottoarrayMax(A[n/2:n-1]) // Troviamo il sottoarray massimo a destra
+    prefisso = 0
+    temp = 0
+    for i in 0,...,n/2-1:
+        temp += A[i]
+        if temp > prefisso: // Prendiamo la somma massima a sinstra di n/2
+            prefisso = temp
+    suffisso = 0
+    for i in range n/2,...,n-1:
+        temp += A[i]
+        if temp > suffissso: // Prendiamo la somma massima a destra di n/2
+            suffisso = temp
+    sottoarray_centrale = prefisso + suffisso // Somma massima tra i sottoarray centrali
+    sol = max(sottoarray_sinistra, sottoarray_destra, sottoarray_centrale) // Prendiamo la somma massima tra quelle dei 3 sottoarray trovati
+    return sol
+\end{lstlisting}
+
+\subsection{Array di interi ordinato}
+
+Preso un array $A$ di interi distinti ordinato in modo crescente, troviamo (se esiste) un indice $i$ tale che \code{A[i] = i} Se non esiste restituiamo invece \code{-1}.
+
+Ovviamente farlo a forza bruta controllando ogni elemento dell'array richiederebbe un costo di $\O(n)$, ma è possibile diminuire questo costo fino ad un $\O(\log n)$. Un costo di $\O(\log n)$ abbiamo già visto che si traduce in un'equazione di ricorrenza del tipo $T(n) = T(n/b) + \O(1)$. Questa equazione, se poniamo $b = 2$, diventa proprio la stessa della ricerca binaria. Possiamo quindi pensare di usare la ricerca binaria e modificarla in modo tale da cercare un valore tale che \mbox{\code{A[i] = i}}. Per farlo, basta controllare ad ogni ricorsione il valore di \code{A[m]} rispetto a \code{m}, dove $m = n/2$. Ci sono 3 casi da analizzare:
+\begin{itemize}
+    \item Se \code{A[i] = i} allora abbiamo trovato l'indice che volevamo e possiamo ritornarlo
+    \item Se \code{A[i] < i} allora dobbiamo cercare a destra di \code{i}, dato che a sinistra ci sono sicuramente valori \code{j} tali che \code{A[j] < j} (questo è vero perché tutti gli indici sono distinti)
+    \item Se \code{A[i] > i} allora dobbiamo cercare a sinistra di \code{i} per la stessa motivazione
+\end{itemize}
+Tutti questi controlli sono in $\O(1)$, e dato che la chiamata ricorsiva è una sola e divide sempre l'array a metà, abbiamo trovato proprio un algoritmo con l'equazione di ricorrenza che volevamo.
+
+Vediamo come si traduce questo in codice:
+\begin{lstlisting}
+ArrayOrdinato(A):
+    n = len(A)
+    if n == 0:
+        return -1
+    if n == 1:
+        if A[0] == 0:
+            return 0
+        else:
+            return -1
+    m = n/2
+    if A[m] = m:
+        return m
+    else if A[m] < m: // Cerchiamo a destra
+        return ArrayOrdinato(A[m+1:n-1])
+    else: // Cerchiamo a sinistra
+        return ArrayOrdinato(A[0:m])
+\end{lstlisting}
+
+\subsection{Majority element}
+
+\begin{Definizione}[Majority element]
+\label{def-majority-element}
+Preso un array di lunghezza $n$, un \textbf{majority element} è un elemento $\alpha$ dell'array che compare più di $n/2$ volte nell'array.
+\end{Definizione}
+
+Preso un array $A$ di lunghezza $n$, vogliamo trovare (se esiste) un majority element in $A$. Se questo non esiste, restituiamo invece \code{null}. Tutto questo vogliamo farlo in $\O(n \log n)$.
+
+Anche qui dalla complessità ricaviamo un'equazione di ricorrenza del tipo $T(n) = xT(n/x) + \O(n)$. Ipotizzando di dividere sempre l'array in due e di richiamare ricorsivamente la funzione sulle due metà, possiamo porre $x = 2$ e trovare l'equazione $T(n) = 2 T(n/2) + \O(n)$.
+
+Dividendo l'array in due e richiamando ricorsivamente la funzione troviamo un majority element \code{maj\_sx} per il sottoarray di sinistra e un majority element \code{maj\_dx} per il sottoarray di destra. Sicuramente, se un majority element esiste nel nostro array, è tra questi due. Infatti, preso un majority element, sappiamo che, dividendo l'array a metà, affinché questo sia un majority element in una delle due metà è necessario che sia presente più di $n/4$ volte nella metà. Ma, essendo presente più di $n/2$ volte nell'array, è normale che almeno in una delle due metà sia presente più di $n/4$ volte. Se infatti così non fosse avremmo che il nostro majority element è presente $\leq n/4$ in entrambe le metà, ossia che è presente $\leq n/2$ volte nell'array, e questo per definizione di majority element non è possibile.
+
+Dunque abbiamo trovato che il nostro majority element (se esiste) è uno tra \code{maj\_dx} e \code{maj\_sx}. Se questi sono uguali, allora l'elemento al loro interno è sicuramente un majority element (se è presente $> n/4$ volte in entrambi i sottoarray allora è presente $>n/2$ volte nell'array completo). Se invece sono diversi, per controllare se uno dei due sia veramente un majority element dell'array intero non ci basta far altro che scorrere l'intero array e vedere quante volte questi compaiano. Se uno dei due comprare più di $n/2$ volte allora è quello è proprio il majority element che cercavamo. Se invece così non dovessere essere, allora dovremo ritornare \code{null}, dato che nell'array non sarebbe presente alcun majority element. Tutto questo ha costo $\O(n)$, proprio come volevamo.
+
+Vediamo come si traduce questo in codice:
+\begin{lstlisting}
+MajorityElement(A):
+    n = len(A)
+    if n == 0:
+        reutrn null
+    if n == 1:
+        return A[0]
+    m = n/2
+    maj_sx = Alg(A[0:m/2 - 1]) // Cerchiamo il majority element a sinistra
+    maj_dx = Alg(A[m/2:n-1]) // Cerchiamo il majority element a destra
+    if maj_sx == null and maj_dx == null: // Non esiste il majority element
+        return null
+    if maj_sx == maj_dx: // Allora sicuramente è un majority element
+        return maj_sx
+    if maj_sx != null: // Se abbiamo un candidato a sinistra
+        count = 0
+        for i in 0,...,n-1:
+            if A[i] == maj_sx:
+                count++
+        if count > m: // Abbiamo trovato il majority element
+            return maj_sx
+    if maj_dx != null: // Se abbiamo un candidato a destra
+        count = 0
+        for i in 0,...n-1:
+            if A[i] == maj_dx:
+                count++
+        if count > m: // Abbiamo trovato il majority element
+            return maj_dx
+    return null // Se nessuno dei controlli passa non esiste nessun majority element
+\end{lstlisting}
+
+\subsection{Minimo locale}
+
+\begin{Definizione}[Minimo locale]
+\label{def-minimo-lcoale}
+Preso un array $A$ di interi distinti, un indice \code{i} è un \textbf{minimo locale} se \code{A[i] < A[i+1]} e \code{A[i] < A[i-1]}, con \code{0 < i < n-1}. Se invece \code{i = 0} basta verificare che \code{A[i] < A[i+1]}, mentre se \code{i = n-1} basta verificare che \code{A[i] < A[i-1]}. \\
+Diciamo quindi che un indice è un minimo locale se il valore a cui si riferisce è minore sia del precedente che del successivo.
+\end{Definizione}
+
+Preso un array $A$ di interi distinti vogliamo trovare un minimo locale in $A$ in tempo $\O(\log n)$. \\
+\NB Per qualsiasi array $A$ esiste sempre un minimo locale, dato che il minimo globale è anche un minimo globale.
+
+Anche qui, come per l'algoritmo visto con l'array ordinato di interi, il costo $\O(\log n)$ ci ricorda la ricerca binaria. Possiamo quindi provare ad adattarla al nostro problema. Preso \code{A[m]}, dove $m = n/2$, ci sono tre casi da analizzare:
+\begin{itemize}
+    \item Se \code{A[m-1] < A[m]}, allora \code{A[m]} non è un minimo locale, dato che ha un vicino più piccolo. In compenso, spostandoci verso sinistra i valori scendono: ci spostiamo quindi nella parte sinistra \code{A[0..m-1]}, dove siamo sicuri che esista un minimo locale. Esiste sicuramente perché i valori o continuano a scendere, e quindi \code{A[0]} è un minimo locale, o a un certo indice \code{i} iniziano a salire, e quindi \code{A[i+1]} è un minimo locale.
+    \item Se \code{A[m+1] < A[m]}, il discorso è simmetrico: ci spostiamo nella parte destra \code{A[m+1..n-1]}.
+    \item Se nessuna delle due condizioni è verificata, allora \code{A[m]} è minore di entrambi i suoi vicini (gli elementi sono distinti), e dunque $m$ è un minimo locale.
+\end{itemize}
+
+Tutti questi controlli sono in $\O(1)$, e dato che la chiamata ricoesiva è una sola e divide sempre l'array a metà, ritroviamo l'equazione di ricorrenza $T(n) = T(n/2) + \O(1)$ che rispecchia proprio il costo $\O(\log n)$.
+
+Vediamo come si traduce questo in codice:
+
+\begin{lstlisting}
+MinimoLocale(A):
+    n = len(A)
+    if n == 1: // 0 è un minimo locale se c'è solo un elemento nell'array 
+        return 0
+    if n == 2:
+        if A[0] < A[1]:
+            return 0
+        return 1
+    m = n/2
+    if A[m] > A[m-1]: // A[m] non è minimo locale: a sinistra c'è sicuro
+        return sol(A[0:m-1])
+    if A[m] > A[m+1]: // A[m] non è un minimo locale: a destra c'è sicuro
+        return m + 1 + sol(A[m+1:n-1]) 
+    return m // A[m] è un minimo locale perché minore dei suoi due vicini
+\end{lstlisting}
+
+\subsection{Distanza tra punti}
+
+Vediamo ora un problema decisamente più complesso rispetto a quelli che abbiamo visto fino ad ora.
+
+Preso un array $A$ di punti $p_1,\ldots, p_n$ cerchiamo gli inidici $i,j$ che minimizzano $dist(p_i,p_j)$ (ossia cerchiamo i punti più vicini tra loro). Risolviamo questo problema prima su una retta (ossia in $\R$) e poi nello spazio (ossia in $\R^2$)
+
+Se tutti i punti sono su una retta la soluzione è molto facile: infatti, trovandoci su una retta ogni punto corrisponde semplciemente a un valore in $\R$, dunque non basta fare altro che riordinare i punti in ordine crescente e trovare la distanza minore tra due punti adiacenti:
+
+\begin{lstlisting}
+PuntiRetta(A):
+    sort(A) // Ordiniamo i punti in modo crescente
+    min = inf
+    for i in 0,...,n-2:
+        if abs(A[i] - A[i+1]) < min:
+            min = abs(A[i] - A[i+1])
+    return min 
+\end{lstlisting}
+
+Questa soluzione ha un costo pari a $\O(n)$ ovviamente, dato che eseguiamo un semplice for con $n-1$ iterazioni di costo $\O(1)$ l'una.
+
+La situazione invece si complica sul piano. Infatti, qui non basta più ordinare i punti secondo una delle due coordinate $x$ o $y$. Questo perché due punti potrebbero essere vicinissimi lungo l'asse delle $x$ ad esempio ma lontanissimi lungo l'asse delle $y$, rendendo così il controllo su una sola delle due coordinate non sufficiente.
+
+Cerchiamo un algoritmo in costo $\O(n \log^2 n)$. Riprendendo il Master Theorem, notiamo che ci troviamo nel secondo caso, quando $a = b$ e $k = 1$. Avremo quindi un'equazione di ricorrenza del tipo $T(n) = x T(n/x) + \O(n \log n)$. Siccome ci troviamo in uno spazio bidimensionale, dividiamo il problema in due sottoproblemi (poniamo quindi $x = 2$), e troviamo quindi l'equazione di ricorrenza $T(n) = 2 T(n/2) + \O(n \log n)$. 
+
+Notiamo ora una cosa importante: il passo ricorsivo ha un costo pari a $\O(n \log n)$, che è proprio il costo classico dell'ordinamento di un array di $n$ elementi. Possiamo provare quindi a ordinare tutti i punti in base al valore dell'ascissa $x$. A questo punto, chiamiamo $m = n/2$ e definiamo gli insiemi $R = \{(x_i, y_i) \mid i \geq m\}$ e $L = \{(x_i, y_i) \mid i < m\}$ gli insiemi con rispettivamente tutti i punti la cui $x$ è maggiore o uguale a $m$ e tutti i punti la cui $x$ è minore di $m$. In $R$ ci sono quindi tutti i punti che si trovano a destra di $p_m$ e $p_m$ stesso, mentre in $L$ ci sono tutti quelli che si trovano a sinistra di $p_m$. Calcoliamo ora ricorsivamente $minL$ e $minR$, due variabili dove quindi troviamo la distanza minima tra i punti a sinistra e quella tra i punti a destra. A questo punto calcoliamo $delta = \min(minL, minR)$. Possiamo ora dire che i due punti più vicini in $A$ sono sicuramente a una distanza minore o uguale a $delta$. 
+
+Osserviamo ora una cosa importante: $\forall i < m$, se si ha $dist(x_i, x_m) > delta$ allora, se $i > 0$, $dist(x_{i-1}, x_m) > delta$, e, $\forall j > m$, si avrà anche che $dist(x_i, x_j) > delta$. Lo stesso discorso speculare può essere fatto per i punti a destra: $\forall i > m$, se si ha $dist(x_i, x_m) > delta$ allora, se $i < n-1$,$dist(x_{i+1}, x_m) > delta$, e, $\forall j < m$, si avrà anche che $dist(x_i, x_j) > delta$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{Esericzio punti.png}
+\end{figure}
+
+Siamo arrivati quindi a una situazione del genere. Sicuramente, i due punti che minimizzano $dist$ si trovano nella zona definita dalle due rette a distanza $delta$ da $x_m$. Zoomiamo proprio in questa zona:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{Esercizio punti 2.png}
+\end{figure}
+
+Definiamo ora l'insieme $S = \{(x_i, y_i) \mid |x_i - m| \leq delta\}$. In questo insieme troviamo quindi tutti i punti all'interno della zona definita dalle due rette, ossia tutti i PUNTI qui sopra rappresentati. 
+
+Ogni quadratino qui sopra rappresentato ha lato $l = delta/2$, e quindi diagonale $d = delta/\sqrt{2}$. Notiamo una cosa fondamentale: in ogni quadratino può esserci al massimo un solo punto. Infatti ogni quadratino si trova interamente da un solo lato della linea $x = m$: se contenesse due punti, questi disterebbero tra loro al più $delta/\sqrt{2}$, che è minore di $delta$, ovvero della distanza minima tra due punti dello stesso lato (destro o sinistro). Se vogliamo trovare una distanza minore di $delta$ dobbiamo quindi prendere due punti che si trovano in quadratini diversi. In particolare, per ogni punto $p$ della striscia dobbiamo analizzare solo i 15 quadratini che si trovano vicino a lui. Infatti, un punto a distanza minore di $delta$ da $p_i$ si trova sicuramente in uno di quei quadratini: non può trovarsi a più di due quadratino di distanza dato che questo porterebbe a una distanza sicuramente maggiore di $delta$. Dunque per $p_i$ dobbiamo controllare tutti i punti $p_{i+1}, \ldots, p_{i+16}$ (punti ordinati secondo $y$, così troviamo i punti che sono vicini a $p_i$ non solo in orizzontale ma anche in verticale) e verificare se la distanza tra $p_i$ e uno di questi sia minore di $delta$. Questo va poi fatto per ogni punto dell'insieme $S$, che sono $\O(n)$. Dato che questo controllo è eseguito in tempo costante (sono 15 iterazioni fisse da costo $\O(1)$), troviamo che ogni passo ricorsivo ha costo $\O(n \log n) + \O(n) = \O(n\log n)$ ($\O(n \log n)$ deriva dall'aver riordinato i diversi punti per $x$).
+
+Vediamo come si traduce questo in codice:
+\begin{lstlisting}
+PuntiPiano(P):
+    n = len(P)
+    if n <= 3: // Caso base:
+        delta = inf
+        for i in 0,...,n-1:
+            for j in i+1,...,n-1:
+                if dist(P[i], P[j]) < delta:
+                    delta = dist(P[i], P[j])
+        return delta
+    m = n/2
+    x_m = P[m].x // Ascissa del punto mediano
+    minL = ClosestPair(P[0:m-1]) // Distanza minima a sinistra
+    minR = ClosestPair(P[m:n-1]) // Distanza minima a destra
+    delta = min(minL, minR)
+    S = [] // Punti della striscia
+    for i in 0,...,n-1:
+        if abs(P[i].x - x_m) <= delta:
+            S.append(P[i])
+    sort(P) secondo y // Ordiniamo secondo y così troviamo i vicini in verticale
+    for i in 0,...,len(S)-1: // Per ogni punto in S
+        for j in i+1,...,min(i+15, len(S)-1): // Guardiamo i 15 più vicini
+            if dist(S[i], S[j]) < delta: // Se troviamo una coppia più vicina del valore delta lo aggiorniamo
+                delta = dist(S[i], S[j])
+    return delta
+\end{lstlisting}
+
+\chapter{Programmazione dinamica}
+
+\section{Cos'è la programmazione dinamica}
+
+\begin{Definizione}[Programmazione dinamica]
+\label{def-progammazione-dinamica}
+La \textbf{programmazione dinamica} è una tecnica usata per risolvere dei problemi scomponendoli in sottoproblemi più piccoli, risolvendoli uno alla volta e inserendo i diversi risultati in una tabella così da poterli riutilizzare facilmente senza doverli calcolare.
+\end{Definizione}
+
+Un problema classico che si risolve con la programmazione dinamica è il calcolo dell'n-esimo numero di Fibonacci. Sappiamo che i numeri di Fibonacci sono una successione in cui ogni numero è la somma dei due precedenti. Dunque, per calcolare il 5° numero di Fibonacci, bisogna calcolare il 3° e il 4°, e per calcolare il 4° il 3° e il 2°, e così via fino ad arrivare a $F(1) = 1$ e $F(0) = 0$, i due casi base della sequenza. Proprio per la struttura ricorsiva dei numeri di Fibonacci viene naturale creare un algoritmo per calcolare l'n-esimo numero in questo modo:
+
+\begin{lstlisting}
+FibonacciBeta(n):
+    if n <= 1:
+        return n
+    return FibonacciBeta(n-1) + FibonacciBeta(n-2)
+\end{lstlisting}
+
+Questo algoritmo funziona, ma ha un costo molto elevato. Questo perché per ogni numero $F(x)$ calcoliamo sia $F(x-1)$ che $F(x-2)$, ma senza salvarci quei valori da nessuna parte. Così, quando dobbiamo calcolare $F(x-1)$ che vale $F(x-2) + F(x-3)$, ci tocca ricalcolarci $F(x-2)$ che in realtà avevamo già calcolato, ripetendo quindi del lavoro inutile che alla fine va a costare non poco sulla complessità dell'algoritmo. Con la programmazione dinamica, invece, riusciamo a creare un algoritmo molto più efficiente:
+
+\begin{lstlisting}
+Fibonacci(n):
+    if n <= 1:
+        return n
+    F = [0] * (n+1) // Array con tutti i valori di F che ci calcoliamo man mano
+    F[0] = 0
+    F[1] = 1
+    for i in 2,...,n+1:
+        F[i] = F[i-1] + F[i-2]
+    retrun F[n]
+\end{lstlisting}
+
+Questo algoritmo è corretto e ha una complessità di $\O(n)$, molto inferiore a quella vista prima che invece era una complessità esponenziale (in particolare $\O(\phi^n)$, dove $\phi = 1.618$ è la sezione aurea).
+
+\section{Problemi sulla programmazione dinamica}
+
+\subsection{File}
+
+Preso un array $A$ con all'interno una serie di valori $f_1, \ldots, f_n$ rappresentanti la dimensione di diversi file, e presa una capacità massima $M$, cerchiamo un sottoinsieme di $A$ che minimizza lo spreco in $C$ (ossia la cui somma è massima tra tutte le somme minori di $C$).
+
+Potremmo pensare di usare in questo caso la ricorsione: per ogni elemento in $A$, verifichiamo se la sua dimensione è minore di $C$: se lo è, aprimao due chiamate ricorsive: in una lo inseriamo e richiamiamo la funzione sull'array $A$ - l'elemento in questione e con $C$ diminuito della dimensione del file appena aggiunta, e in un altra invece non lo inseriamo. Se invece la sua dimensione non è minore di $C$, facciamo una sola chiamata ricorsiva sull'array tolto l'elemento e con $C$ uguale (saltiamo quindi l'elemento). Una volta che la somma delle dimensioni di tutto l'array $A$ sarà minore di $C$, inseriamo tutti i file e ritorniamo la somma finale (questo è quindi il nostro caso base). Vediamo come si traduce ciò in codice:
+
+\begin{lstlisting}
+FileBeta(A, C):
+    n = len(A)
+    if n == 0: // Array finito
+        return 0
+    if sum(A) <= C: // Se ci entrano tutti li inseriamo
+        return  sum(A)
+    if A[n-1] <= C: // Se possiamo inserire A[n-1]
+        max1 = FileBeta(A[0:n-2], C - A[n-1]) + A[n-1] // Inseriamo il file A[n-1]
+        max2 = FileBeta(A[0:n-2], C) // Non inseriamo il file A[n-1]  
+        return max(max1, max2) // Vediamo qual è la scelta migliore
+    else: // Se non possiamo inserire A[n-1]
+        return FileBeta(A[0:n-2], C) // Andiamo avanti con gli altri
+\end{lstlisting}
+
+Questa soluzione funziona, ma ha una complessità di $\O(2^n)$, molto grande. Questo succede perché stiamo calcolando tutti i possibili sottoinsiemi di $A$ per verificare qual è il migliore, cosa che funziona ma che costa appunto un sacco. Possiamo sicuramente fare di meglio.
+
+Ragionando bene su come lavora questo algoritmo, notiamo una cosa interessante: una volta calcolato il sottoinsieme $[f_0, f_1, f_2]$, ad esempio, se noi inseriamo la somma di questi tre file in una tabella, tutti i sottoinsiemi che hanno $[f_0, f_1, f_2]$ al loro interno non dovranno più ricaclolare la somma $f_0 + f_1 + f_2$, perché gli basterà cercarla nella tabella in costo $\O(1)$. Questo ovviamente è possibile farlo per qualsiasi insieme di file. 
+
+Creiamo quindi una tabella $n \times (C+1)$: nelle righe da $0$ a $n-1$ rappresentiamo i file che possiamo utilizzare (ad esempio, nella riga $4$ possiamo utilizzare i file $f_0, f_1, f_2, f_3, f_4$), mentre nelle colonne da $0$ a $C$ rappresentiamo la capacità disponibile. Dunque, nella cella $(i,j)$ avremo come valore lo spazio massimo occupabile utilizzando i file $f_0, \ldots, f_i$ in un disco di capacità $j$. La soluzione del problema si troverà quindi nella cella $(n-1, C)$, dove possiamo utilizzare tutti i file e tutta la capacità.
+
+Chiamiamo ora questa tabella \code{m}. Per calcolare \code{m[i,j]} non ci basta far altro che controllare se $f_i \leq j$ (per verificare che l'ultimo file sia inseribile o meno). In base a cosa restituisce questo controllo avremo due valori possibili:
+\begin{itemize}
+    \item Se il controllo passa, allora avremo che \mbox{\code{m[i,j] = max(m[i-1,j], m[i-1,j-f\_i] + f\_i)}}. Come prima stiamo quindi verificando se conviene inserire $f_i$ nella soluzione finale o meno.
+    \item Se invece il controllo non passa, allora avremo che \code{m[i,j] = m[i-1, j]}. Come prima se il controllo non passa non possiamo far altro che saltare $f_i$.
+\end{itemize}
+
+Notiamo che l'idea di base è la stessa identica vista con la funzione \code{FileBeta}, ma al posto di fare diverse chiamate ricorsive che sono molto costose in questo caso cerchiamo semplicemente dei valori nella tabella. Vediamo come si traduce tutto ciò in codice:
+
+\begin{lstlisting}
+File(A,C):
+    n = len(A)
+    T = matrice n x (C+1) inizializzata a 0
+    for j in 0,...,C: // Riempiamo la prima riga che conosciamo già (vale tutti 0 finché A[0] > j e poi vale sempre A[0])
+        if A[0] <= j: // Inseriamo il file A[0] solo se la sua dimensione è minore della capienza in quella colonna 
+            T[0,j] = A[0]
+        else:
+            T[0,j] = 0
+    for i in 1,...,n-1: // Riempiamo le altre righe
+        for j in 0,...,C:
+            T[i,j] = T[i-1,j] // Per ora sappiamo questo, vediamo se possiamo aggiungere il nuovo file
+            if A[i] <= j: // Se possiamo aggiugnere il nuovo file
+                if T[i-1, j-A[i]] + A[i] > T[i,j]: // Se miglioriamo il risultato che abbiamo ottenuto fino ad ora
+                    T[i,j] = T[i-1, j-A[i]] + A[i] // Inseriamo il risultato migliore possibile
+    return T[n-1, C]
+\end{lstlisting}
+
+Il costo totale di questo algoritmo è $\O(nC)$ (per il doppio for annidato che esegue $C+1$ iterazioni $n-1$ volte), decisamente migliore rispetto al costo esponenziale $\O(2^n)$ che avevamo trovato in precedenza.
+
 
 
 \end{document}
