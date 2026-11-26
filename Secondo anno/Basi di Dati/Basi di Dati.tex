@@ -3228,7 +3228,7 @@ ChiusuraInsieme(R,F,X): // R schema, F insieme di dipendenze funzionali, X sotto
     S = {A in R | esiste Y -> V in F dove A in V e Y in Z} 
     // Aggiungo un attributo A se fa parte di una dipendenza funzionale dove a sinistra c'è un valore Y che è contenuto in Z e a destra c'è un V tale che A è contenuto in V
     while S non è sottoinsieme di Z:
-        Z = Z unione S // Z aumenta con Z
+        Z = Z unione S // Z aumenta con S
         S = {A in R se esiste Y -> V in F t.c. A in V e Y in Z} // Aggiungo nuovi valori
     // Esco dal while quando S in un giro del while non cambia più valore, ossia sono finiti gli attributi che dipendono da X
     return Z
@@ -3605,6 +3605,15 @@ Queste tre relazioni ora sappiamo che sono in 3FN, ma la Proposizione \ref{propo
 
 \subsection{Verificare che una decomposizione sia corretta}
 
+Prima di effettuare queste due verifiche definiamo formalmente cos'è una decomposizione.
+
+\begin{Definizione}[Decomposizione]
+\label{def-decomposizione}
+Preso uno schema $R$, una \textbf{decomposizione} di $R$ è una famiglia $\bm{\rho = \{R_1, \ldots, R_k\}}$ di sottoinsiemi di $R$ che ricopre $R$, ossia tale che $\bigcup_{1 \leq i \leq k} R_i = R$.
+\end{Definizione}
+
+Diamo ora delle nuove definizioni e delle nuove proposizioni che ci saranno utili per la creazione di un algoritmo che verifichi la correttezza di una decomposizione.
+
 \begin{Definizione}[Insiemi di dipendenze equivalenti]
 \label{def-insiemi-equivalenti}
 Preso uno schema $R$ e due insiemi di dipendenze funzionali $F$ e $G$, $F$ e $G$ sono \textbf{equivalenti} ($\bm{F \equiv G}$) $\iff \bm{F^+ = G^+}$.
@@ -3614,6 +3623,8 @@ Preso uno schema $R$ e due insiemi di dipendenze funzionali $F$ e $G$, $F$ e $G$
 \label{propos-lemma-chiusure-insiemi}
 Preso uno schema $R$ e due insiemi di dipendenze funzionali $F$ e $G$, $\bm{F \subseteq G^+} \iff \bm{F^+ \subseteq G^+}$.
 \end{Proposizione}
+
+\vspace{2cm}
 
 \Dimostrazione \nopagebreak
 
@@ -3638,14 +3649,68 @@ Diventa evidente che quindi un'istanza $r$ di $R$ se è legale per $F$ (ossia so
 
 \begin{Proposizione}[Corollario]
 \label{propos-corol-finale}
-$\bm{F \equiv G} \implies$ le istanze \textbf{legali su} $\bm{F}$ sono le stesse istanze\textbf{legali su} $\bm{G}$.
+$\bm{F \equiv G} \implies$ le istanze \textbf{legali su} $\bm{F}$ sono le stesse istanze \textbf{legali su} $\bm{G}$.
 \end{Proposizione}
 
 Per verificare quindi se le istanze legali su $F$ e su $G$ sono le stesse ci basta dimostrare che $F \equiv G$, e per verificare che $F \equiv G$ ci basta dimostrare che $F \subseteq G^+$ e $G \subseteq F^+$, ossia che tutte le dipendenze di $F$ siano in $G^+$ e che tutte le dipendenze di $G$ siano in $F^+$. Rimane però sempre il problema di calcolare $F^+$ e $G^+$, il cui calcolo come sappiamo può essere esponenziale. 
 
-Possiamo però evitare di calcolare $F^+$ e $G^+$ ricordando il primo lemma di chiusura che abbiamo visto, che ci dice che $X \longrightarrow Y \in F^A \iff Y \subseteq X^+_F$. Grazie a questo lemma diventa quindi evidente che per verificare che $F \equiv G$ basta prendere ogni dipendenza $X \longrightarrow Y$ di $F$ e verificare che $Y \in X^+_G$ e fare la stessa cosa con le dipendenze in $G$. \\
+Possiamo però evitare di calcolare $F^+$ e $G^+$ ricordando il primo lemma di chiusura che abbiamo visto, che ci dice che $X \longrightarrow Y \in F^A \iff Y \subseteq X^+_F$. Grazie a questo lemma diventa quindi evidente che per verificare che $F \equiv G$ basta prendere ogni dipendenza $X \longrightarrow Y$ di $F$ e verificare che $Y \subseteq X^+_G$ e fare la stessa cosa con le dipendenze in $G$. \\
 \NB $X$ e $Y$ non devono essere singoli attributi, possono essere anche delle liste con più attributi
 
+\begin{Proposizione}[Corollario]
+\label{propos-corollario-finalissimo}
+$\forall X \longrightarrow Y \in F$ si ha $\bm{Y \subseteq X^+_G}$ e $\forall X' \longrightarrow Y' \in G$ si ha $\bm{Y' \subseteq {X'}^+_F}$ $\implies \bm{F \equiv G}$.
+\end{Proposizione}
+
+A questo punto possiamo enunciare una proposizione fondamentale che ci permette ogni volta di dimostrare che una decomposizione mantenga sempre tutte le dipendenze funzionali di $R$.
+
+\begin{Proposizione}[Decomposizione che preserva le dipendenze]
+\label{propos-decomposizione-preserva-dipendenze}
+Preso uno schema $R$, un insieme di dipendenze funzionali $F$ e una decomposizione $\rho = \{R_1, \ldots, R_k\}$ di $R$, diciamo che $\rho$ \textbf{preserva} $F$ se $\bm{F \equiv G = \bigcup_{1 \leq i \leq k} \pi_{R_i}(F)}$, dove $\pi_{R_i}(F)$ è un insieme di dipendenze funzionali nato dalla proiezione delle dipendenze funzionali $F$ sul sottoschema $R_i$ (ossia tutte le dipendenze funzionali che da $R$ sono rimaste anche in $R_i$).
+\end{Proposizione}
+
+Per come è definito $G$, notiamo già che $G \subseteq F^+$ (dato che in $G$ ci sono solo dipendenze funzionali che nascono da $F$). Dunque per verificare che $F \equiv G$ ci basta verificare solo che $\forall X \longrightarrow Y \in F$ si abbia che $Y \subseteq X_G^+$, per il Corollario \ref{propos-corollario-finalissimo}. Questa verifica può essere fatta con questo semplice algoritmo:
+\begin{lstlisting}
+FContenutoInG+(F,G): // F e G insiemi di dipendenze funzionali sullo stesso schema R
+    for X -> Y in F: // Per ogni dipendenza funzionale in F
+        Calcola {X^+}_G
+        if Y non è sottoinsieme di {X^+}_G: // Basta trovarne uno per verificare che F non sia contenuto in G^+
+            return false;
+    return true;
+\end{lstlisting}
+
+\NB \code{{X\^{}+}\_G} rappresenta ovviamente $X^+_G$.
+
+Rimane però il problema di calcolare $X^+_G$. Potremmo pensare di usare l'algoritmo già visto che ci permetteva proprio di calcolare la chiusura di un insieme di attributi, ma questo non funziona. Infatti, quell'algoritmo ci richiedeva di conoscere $G$, e per come è definito $G$ sarebbe necessario calcolare $F^+$, cosa che stiamo cercando di evitare a tutti i costi dato che richiede un calcolo esponenziale. Costruiamo dunque un nuovo algoritmo, che ci permette di determinare $G$ a partire dal solo $F$:
+
+\begin{lstlisting}
+ChiusuraAPartireDaF(R,F,p,X): // R schema, F un insieme di dipendenze funzionali su R, p una decomposizione di R e X un sottoinsimee di R
+    Z = X
+    S = insieme vuoto
+    for i in 1,...,k: // Per ogni sottoschema in p
+        R_i = p[i]
+        S = S unione {(Z intersezione R_i)^+}_F intersezione R_i // La chiusura qui la possiamo calcolare con l'algoritmo classico, dato che F lo conosciamo
+    while S non è sottoinsieme di Z: // Per ogni sottoschema in p
+        Z = Z unione S
+        for i in 1,...,k:
+            R_i = p[i]
+            S = S unione {(Z intersezione R_i)^+}_F intersezione R_i
+    return Z
+\end{lstlisting}
+
+Cerchiamo di capire come funziona questo algoritmo. Prima di entrare nel while calcoliamo con un ciclo for tutti i singoli attributi presenti in $R_1, \ldots, R_k$. Una volta fatto ciò si passa alla condizione del while: se $S$ contiene al suo interno degli attributi non presenti in $Z$, li aggiungiamo a $Z$, e vediamo se, rieffettuando un giro su tutti i sottoschemi $R_i$, troviamo dei nuovi attributi in $S$ (un attributo aggiunto da $R_k$ può ad esempio sbloccare un attributo in $R_1$, per questo il while è necessario). Una volta finito di sbloccare tutti gli attributi si può ritornare $Z$, che rappresenterà appunto $X^+_G$. 
+
+Per capire meglio come funziona vediamo un esempio. Ipotizziamo di avere $R = ABC$, $F = \{A \longrightarrow B, B \longrightarrow C\}$ e $\rho = \{AB,BC\}$. Per veriricare che $F \subseteq G^+$ dobbiamo calcolare sia $A^+_G$ che $B^+_G$, e verificare che $B \in A^+_G$ e che $C \in B^+_G$. Calcoliamo dunque $A^+_G$ usando l'algoritmo appen visto:
+\begin{itemize}
+    \item Prima del while: $Z = A, S = \{AB\}$ (dato che $A_F^+ \cap AB = AB$ mentre $\varnothing_F^+ \cap AB = \varnothing$)
+    \item 1° iterazione: $Z = \{AB\}, S = \{ABC\}$ (dato che $B_F^+ \cap BC = BC$)
+    \item 2° iterazione: $Z = \{ABC\}, S = \{ABC\}$
+    \item Fine while: ritorniamo $Z = \{ABC\}$, che è proprio la chisura $A_G^+$ che ci aspettavamo.
+\end{itemize}
+
+Allo stesso modo troviamo che $B_G^+ = BC$. Dato che $B \in A^+_G$ e $C \in B^+_G$, concludiamo che la decomposizione $\rho$ preserva tutte le dipendenze originarie in $F$. 
+
+Abbiamo quindi capito come veriricare se una decomposizione preserva le dipendenze funzionali, ma non abbiamo ancora visto come verificare che in questa siano preservate anche tutte le possibili istanze legali dello schema iniziale. 
 
 
 
