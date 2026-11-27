@@ -3412,5 +3412,82 @@ Nella vita reale sono proprio le ultime due policy quelle utilizzate. La C-LOOK 
 
 Esiste, però, un'altra policy di scheduling, che non si basa solo sul ridurre il tempo di seek ma anche sul ridurre il tempo di rotation. Infatti, nonostante abbiamo già visto come il SO non possa da solo migliorare questo tempo dato che dipende da informazioni che non conosce, è possibile creare una policy che, lavorando insieme al disco riesca a migliorare in parte anche questa variabile. Questa policy è la policy \textbf{SPTF} (Shortest Positioning Time First), che sceglie proprio la richiesta con il minimo tempo di seek + rotation. Dato che non può essere quindi il SO a scegliere quale settore deve essere letto per primo, il SO manda alcuni candidati al disco (scelti usando le policy viste in precedenza) e poi il disco sceglie quello con tempo di seek + rotation minore, calcolando questi valori grazie al suo firmware interno.
 
+\section{SSD}
+
+\subsection{Dentro un SSD}
+
+Ora che sappiamo com'è fatto internamente un HDD cerchiamo di capire anche com'è fatto internamente un SSD. 
+
+Il disco principale si divide in 4 componenti:
+\begin{itemize}
+    \item Il \textbf{controller}, ossia il cervello del disco che gestisce le richieste del sistema operativo
+    \item Una piccola \textbf{DRAM} usata dal controller (vedremo tra poco in che occasione)
+    \item Tantissimi \textbf{chip NAND}, che rappresentano la memoria vera e propria. Il controller comunica con questi tramite dei canali paralleli, riuscendo quindi a parlare con più chip insieme (questo è uno dei motivi per cui l'SSD è così veloce)
+\end{itemize}
+
+Ogni chip NAND è un cosiddetto \textbf{package}, nel quale si trovano dagli 1 ai 16 \textbf{die}, impilati uno sopra l'altro. È qui che veramente i dati sono memorizzati (il chip è solo un contenitore di tanti die appunto). Questi die lavorano in parallelo, permettendo quindi di scrivere su uno e leggere da un altro contemporaneamente, ed ogni die è diviso in 2/4 \textbf{plane}. Ogni plane è poi diviso a sua volta in centinaia di migliaia di \textbf{blocchi}. Questi blocchi sono a loro volta divisi in circa \textbf{256} pagine (da $\SI{4}{KB}$ nei sistemi più vecchi e da $16$ invece in quelli più moderni), ma, nonostante ciò, il blocco rimane l'\textit{unità minima di cancellazione}. Questo significa che anche se si vuole cancellare una singola pagina bisognerà ogni volta copiare tutte le pagine del suo blocco che non sono da cancellare in un altro blocco, cancellare quel blocco, e poi ricopiare le pagine buone. Una cancellazione di una singola pagina diventa quindi molto costosa: vedremo più avanti come fa il controller dell'SSD a gestire queste cancellazioni per renderle più efficaci. Infine, ogni pagina è in realtà una \textbf{riga di celle}, decine di migliaia. Ogni cella può contenere da 1 a 4 bit, e in base al numero ne contiene distinguiamo quindi 4 possibili tipi di celle:
+\begin{itemize}
+    \item \textbf{SLC} (Single Level Cell): celle con \textbf{un solo bit}. Sono le più veloci e anche le più durature nel tempo, ma sono anche le più costose per GB.
+    \item \textbf{MLC} (Multi Level Cell): celle con \textbf{due bit}. Sono veloci e anche abbastanza durature, e anche i costi per GB diminuiscono rispetto alle SLC.
+    \item \textbf{TLC} (Triple Level Cell): celle con \textbf{tre bit}. Sono mediamente veloci e durature, e anche abbastanza economiche per GB.
+    \item \textbf{QLC} (Quad Level Cell): celle con ben \textbf{quattro bit}. Sono lente e poco durature, ma sono sicuramente le più economiche per GB.
+\end{itemize}
+
+Notiamo quindi che più i bit aumentano più le celle diventano lente e poco durature. Questo succede perchè con un bit si hanno solo $2$ livelli di carica possibili ($0$ o $1$), con due bit se ne hanno $4$ ($00,01,10,11$), con tre bit $8$ e con quattro bit $16$. Più livelli ci sono, più i margini tra un livello e l'altro diventano stretti, il che porta a più errori, una scrittura più lenta e a un usura maggiore. \\
+In generale, le SSD che noi utilizziamo tutti i giorni usano celle TLC e QLC, essendo queste le più economiche. Sono comunque abbastanza veloci: una read viene di solito effettuata tra i $25$ e i $\SI{100}{\micro\second}$, una write su una pagina vuota tra i $200$ e i $\SI{900}{\micro\second}$, e una erase (cancellazione) di un blocco tra i $2$ e i $\SI{5}{ms}$. Abbiamo specificato una write su pagina vuota perché una write su una pagina piena richiede la cancellazione della pagina per poter essere effettuata. Infatti, le SSD \textbf{non possono sovrascrivere} le pagine, dato che appunto non si possono cancellare le singole pagine.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{Zooom SSD.png}
+\caption{Rappresentazione interna di un SSD}
+\label{fig-SSD-interna}
+\end{figure}
+
+\subsection{Usura}
+
+Con il tempo le SSD iniziano a consumarsi: le celle non leggono più bene i dati e possono restituire degli errori. Questo succede per 3 motivi:
+\begin{enumerate}
+    \item La \textbf{scrittura} di una pagina \textbf{usura} l'SSD: ogni volta che una celle viene scritta o cancellata questa vinee anche danneggiata un po. Dopo diversi cicli di scrittura e cancellazione (circa 1000 per le TLC), la cella non tiene più bene la carica e diventa innaffidabile. A quel punto il controller riconosce lo stato inconsistente delle cella e smette di usarla.
+    \item Nel tempo si \textbf{perde un po' di carica}. Anche se il disco non viene usato, nel tempo la carica contenuta nelle celle tende a diminuire, facendo così svanire i dati nel giro di mesi o anni. Questo processo diventa anche più veloce su celle già usurate o se il disco si trova ad alte temperature.
+    \item La \textbf{lettura} di una pagina \textbf{disturba} anche le pagine affianco. Infatti, leggendo una pagina si vanno a toccare anche le pagine vicine a questa. Ciò non crea problemi con letture singole, ma dopo tante letture può alterare la carica delle celle accanto. Per evitare ciò, il controller è costretto a copiare il valore della pagina che sta venendo letta molte volte in un blocco nuovo.
+\end{enumerate}
+
+Notiamo quindi come siano in particolare le scritture a consumare l'SSD, e non le letture. Più scritture e cancellazioni vengono fatte, più un SSD si degrada velocemente.
+
+Da ciò capiamo che gli errori sono purtroppo normali e inevitabili all'interno di una SSD. Per questo motivo esistono dei byte in più in ogni pagina con all'interno un codice di correzzione degli errori (ECC), che il controller ad ogni lettura usa per sistemare i bit sbagliati.
+
+\subsection{Flash Translation Layer}
+
+\begin{Definizione}[Flash Translation Layer]
+\label{def-FTL}
+Il \textbf{Flash Translation Layer} (\textbf{FTL}) è il \textbf{firmware} che si trova all'interno del controller dell'SSD. Questo mostra al SO l'SSD come un semplice dispositivo a blocchi: un array di blocchi da $\SI{4}{KB}$ indirizzati da degli LBA, che si possono scrivere e leggere normalmente, molto comodo da utilizzare. 
+\end{Definizione}
+
+L'FTL esegue molti ruoli importantissimi. Tra questi troviamo la scrittura delle pagine non vuote. Per farla, in realtà l'FTL non segue tutta la procedura che avevamo ipotizzato in precedenza (ossia di copia, eliminazione e ricopia di tutte le pagine buone), perché richiede troppo tempo. Piuttosto, questo scrive la nuova pagina che andrebbe a sovrascrivere in un nuovo blocco, e mantiene in DRAM una \textbf{mapping table}, una tabella dove ad ogni indirizzo logico di una pagina ne corrisponde uno fisico. Questa serve proprio per sapere dove si trovano i dati (senza di essa l'FTL non saprebbe dove si trova il blocco a cui $LBA = 1$ fa riferimento), dunque permette al controller di riscrivere una pagina in un altro blocco senza perdere traccia di dove si trovino i dati a cui quella pagina fa riferimento. Per capire bene come fa vediamo un esempio.
+
+Ipotizziamo di avere un blocco $X = [A,B,C,D]$ (usiamo solo 4 pagine per comodità), dove ogni pagina in $X$ non è vuota. Abbiamo quindi per ora una mapping table dove a $LPA = 0$ (LPA = Logical Page Address, ossia indirizzo logico) corrisponde $PPA = 0$ (PPA = Physical Page Address, ossia indirizzo fisico), che sono gli indirizzi che puntano a $A$, a $LPA = 1$ corrisponde $PPA = 1$, che sono gli indirizzi che puntano a $B$ e così via. Ora, dal SO ci arriva l'ordine di sovrascrivere $B$ con $B'$. A questo punto l'FTL decide di scrivere $B'$ in un blocco nuovo, vuoto, chiamato $Y$. Troviamo quindi $Y = [B']$, dove a $B'$ corrisponde un indirizzo fisico $PPA = 4$. Con questa operazione il controller modifica anche la mapping table: in particolare, alla riga $LPA = 1$ cambia l'indirizzo fisico: infatti, $LPA = 1$ punterà d'ora in avanti a $PPA = 4$. In questo modo, senza cancellare nessun blocco, abbiamo effettuato una write su una pagina non vuota proprio come se la facessimo su una pagina vuota, con tempi pari quindi a $200/\SI{900}{\micro\second}$.
+
+\NB La mapping table, nonostante si trovi in RAM, deve sopravvivere anche allo spegnimento del computer. Per questo motivo, l'SSD salva nella flash (ossia nel disco vero e proprio) dei metadati, dai quali è possibile risalire alla mapping table originale.
+
+Nelle SSD moderne e di fascia alta la mapping table è proprio così come l'abbiamo descritta, ossia una tabella dove ad ogni riga corrisponde una singola pagina. Ma in quelle più vecchie o economiche questo non succede, dato che mappare una pagina singola alla volta è costoso! Addirittura per mappare $\SI{1}{TB}$ di spazio è necessaria una mapping table da $\SI{1}{GB}$ di spazio, che non è poco per la RAM di una SSD. Per questo motivo esistono altri due tipi di mappature:
+\begin{itemize}
+    \item Mappatura \textbf{per blocco}, dove ad ogni riga corrisponde un singolo blocco. Questa ovviamente non ci permette di effettuare delle riscritture rapide come quelle che abbiamo appena visto, ma pesa ben $256$ volte meno rispetto alla mappatura per pagina (dato che ci sono $256$ pagine in un blocco).
+    \item Mappatura \textbf{ibrida}, dove quasi tutti i dati sono mappati in blocchi tranne una piccola parte che è invece mappata per pagina.
+\end{itemize} 
+
+Lo svantaggio del mappare per pagina è che lascia in giro per i blocchi diverse pagine inutili, vecchie, dette \textit{stale}. Queste pagine, come la pagina $B$ nell'esempio precedente, sono pagine che sarebbero dovute essere cancellate ma che non lo sono state per risparmiare tempo. Per questo motivo nasce il \textbf{garbage collector}.
+
+\begin{Definizione}[Garbage collector]
+\label{def-garbage-collector}
+Il \textbf{garbage collector} è il componente dell'FTL che recupera lo spazio occupato dalle pagine stale.
+\end{Definizione}
+
+Il garbage collector semplicemente sceglie un blocco \textbf{vittima} (di solito quello con meno pagine valide) dal quale ricopia tutte le pagine valide in un blocco vuoto. Non appena finisce di ricopiare le pagine e di aggiornare la mapping table, il garbage collector cancella totalmente il blocco vittima, ripristinando così lo spazio che prima era sprecato dalle pagine stale.
+
+
+
+
+
+
 
 \end{document}
